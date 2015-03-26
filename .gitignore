@@ -42,8 +42,13 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# ====================
+# xcsoft
+
 *.suo
 *.sln
+*.exe
 
 bin/
 obj/
+# ====================

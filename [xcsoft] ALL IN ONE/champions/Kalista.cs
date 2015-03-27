@@ -13,7 +13,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
     {
         static Menu Menu { get { return initializer.Menu; } }
         static Orbwalking.Orbwalker Orbwalker { get { return initializer.Orbwalker; } }
-        static Obj_AI_Hero Player { get { return initializer.Player; } }
+        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
 

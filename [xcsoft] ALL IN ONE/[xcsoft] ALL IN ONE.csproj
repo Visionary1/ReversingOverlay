@@ -101,7 +101,7 @@
     <Compile Include="champions\_Fizz.cs" />
     <Compile Include="champions\_Galio.cs" />
     <Compile Include="champions\_Gangplank.cs" />
-    <Compile Include="champions\_Garen.cs" />
+    <Compile Include="champions\Garen.cs" />
     <Compile Include="champions\_Gnar.cs" />
     <Compile Include="champions\_Gragas.cs" />
     <Compile Include="champions\_Graves.cs" />
@@ -196,7 +196,7 @@
     <Compile Include="champions\_Ziggs.cs" />
     <Compile Include="champions\_Zilean.cs" />
     <Compile Include="champions\_Zyra.cs" />
-    <Compile Include="champions\__BASE.cs" />
+    <None Include="champions\__BASE.cs" />
     <Compile Include="damageIndicator.cs" />
     <Compile Include="initializer.cs" />
     <Compile Include="Program.cs" />

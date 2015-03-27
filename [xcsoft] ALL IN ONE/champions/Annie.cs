@@ -13,7 +13,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
     {
         static Menu Menu { get { return initializer.Menu; } }
         static Orbwalking.Orbwalker Orbwalker { get { return initializer.Orbwalker; } }
-        static Obj_AI_Hero Player { get { return initializer.Player; } }
+        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
 
@@ -23,7 +23,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             Q = new Spell(SpellSlot.Q, 625f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 625f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E);
+            E = new Spell(SpellSlot.E, 800f);
             R = new Spell(SpellSlot.R, 600f, TargetSelector.DamageType.Magical);
 
             Q.SetTargetted(0.25f, 1400f);
@@ -46,11 +46,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseW", "Use W", true).SetValue(true));
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
 
-            Menu.SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use Auto-KillSteal", true).SetValue(true));
-            Menu.SubMenu("Misc").AddItem(new MenuItem("miscAutoCharge", "Use Auto-StunCharge", true).SetValue(true));
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscAutoE", "Use Auto-E", true).SetValue(true));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("miscAutoCharge", "Use Auto-StunCharge", true).SetValue(true));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use Auto-KillSteal", true).SetValue(true));
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscAntigap", "Use Anti-Gapcloser", true).SetValue(true));
-            Menu.SubMenu("Misc").AddItem(new MenuItem("miscAutointer", "Use Auto-Interrupt", true).SetValue(true));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("miscinter", "Use Interrupter", true).SetValue(true));
 
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.LightPink)));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawW", "W Range", true).SetValue(new Circle(true, Color.LightPink)));
@@ -58,8 +58,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(true, Color.LightPink)));
 
             #region DamageIndicator
-            var drawDamageMenu = new MenuItem("Draw_Damage", "Draw Damage", true).SetValue(true);
-            var drawFill = new MenuItem("Draw_Fill", "Draw Damage Fill", true).SetValue(new Circle(true, Color.Red));
+            var drawDamageMenu = new MenuItem("Draw_Damage", "Draw Combo Damage", true).SetValue(true);
+            var drawFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, Color.Red));
 
             Menu.SubMenu("Drawings").AddItem(drawDamageMenu);
             Menu.SubMenu("Drawings").AddItem(drawFill);
@@ -123,7 +123,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             } 
             #endregion
 
-            #region Killsteal
+            #region Call Killsteal
             if (!Menu.Item("miscKs", true).GetValue<bool>())
                 Killsteal(); 
             #endregion
@@ -178,7 +178,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!Menu.Item("miscAutointer", true).GetValue<bool>() || Player.IsDead)
+            if (!Menu.Item("miscinter", true).GetValue<bool>() || Player.IsDead)
                 return;
 
             if (!stunIsReady)
@@ -208,7 +208,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady())
             {
-                if(Player.CountEnemiesInRange(1000) >= 1)
+                if(Player.CountEnemiesInRange(E.Range) >= 1)
                     E.Cast();
             }
 

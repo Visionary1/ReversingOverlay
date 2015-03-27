@@ -8,7 +8,7 @@ namespace _xcsoft__ALL_IN_ONE
 {
     class initializer
     {
-        internal static Obj_AI_Hero Player = ObjectManager.Player;
+        static Obj_AI_Hero Player = ObjectManager.Player;
         internal static Orbwalking.Orbwalker Orbwalker;
         internal static Menu Menu;
 

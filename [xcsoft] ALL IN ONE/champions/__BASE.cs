@@ -40,6 +40,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
 
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("miscAntigap", "Use Anti-Gapcloser", true).SetValue(true));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("miscAutointer", "Use Auto-Interrupt", true).SetValue(true));
 
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.Red)));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawW", "W Range", true).SetValue(new Circle(true, Color.Red)));
@@ -74,6 +76,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
+            AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
+            Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -115,6 +119,24 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+        }
+
+        static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
+        {
+            if (!Menu.Item("miscAntigap", true).GetValue<bool>() || Player.IsDead)
+                return;
+
+            if (Q.CanCast(gapcloser.Sender))
+                Q.Cast(gapcloser.Sender);
+        }
+
+        static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
+        {
+            if (!Menu.Item("miscAutointer", true).GetValue<bool>() || Player.IsDead)
+                return;
+
+            if (Q.CanCast(sender))
+                Q.Cast(sender);
         }
 
         static void Combo()

@@ -196,7 +196,7 @@
     <Compile Include="champions\_Ziggs.cs" />
     <Compile Include="champions\_Zilean.cs" />
     <Compile Include="champions\_Zyra.cs" />
-    <None Include="champions\__BASE.cs" />
+    <Compile Include="champions\__BASE.cs" />
     <Compile Include="damageIndicator.cs" />
     <Compile Include="initializer.cs" />
     <Compile Include="Program.cs" />

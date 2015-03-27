@@ -75,7 +75,7 @@ namespace _xcsoft__ALL_IN_ONE
                 }
             }
 
-            if (Game.MapId == (GameMapId)11 && Menu.Item("drawJunglePosition").GetValue<Boolean>())
+            if (Game.MapId == (GameMapId)11 && Menu.Item("drawJunglePosition").GetValue<bool>())
             {
                 const byte circleRadius = 100;
 

@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class Kalista
+    class Kalista//by xcsoft
     {
         static Menu Menu { get { return initializer.Menu; } }
         static Orbwalking.Orbwalker Orbwalker { get { return initializer.Orbwalker; } }
@@ -25,9 +25,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             R = new Spell(SpellSlot.R, 1400f);
 
             Q.SetSkillshot(0.25f, 40f, 1700f, true, SkillshotType.SkillshotLine);
-
-            var drawDamageMenu = new MenuItem("Draw_RDamage", "Draw (E) Damage", true).SetValue(true);
-            var drawFill = new MenuItem("Draw_Fill", "Draw (E) Damage Fill", true).SetValue(new Circle(true, Color.Red));
 
             Menu.SubMenu("Combo").AddItem(new MenuItem("comboUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("comboUseE", "Use E", true).SetValue(true));
@@ -55,6 +52,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawE", "E Range", true).SetValue(new Circle(true, Color.FromArgb(0, 230, 255))));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(false, Color.FromArgb(0, 230, 255))));
 
+            #region Damageindicator
+            var drawDamageMenu = new MenuItem("Draw_Damage", "Draw (E) Damage", true).SetValue(true);
+            var drawFill = new MenuItem("Draw_Fill", "Draw (E) Damage Fill", true).SetValue(new Circle(true, Color.Red));
+
             Menu.SubMenu("Drawings").AddItem(drawDamageMenu);
             Menu.SubMenu("Drawings").AddItem(drawFill);
 
@@ -74,7 +75,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
                 DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
-            };
+            }; 
+            #endregion
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -131,7 +133,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (sender.IsMe && args.SData.Name == "KalistaExpungeWrapper")
                     Utility.DelayAction.Add(250, Orbwalking.ResetAutoAttackTimer);
 
-            if (Menu.Item("soulboundsaver", true).GetValue<Boolean>() && sender.Type == GameObjectType.obj_AI_Hero && sender.IsEnemy && R.IsReady())
+            if (Menu.Item("soulboundsaver", true).GetValue<bool>() && sender.Type == GameObjectType.obj_AI_Hero && sender.IsEnemy && R.IsReady())
             {
                 var soulbound = HeroManager.Allies.FirstOrDefault(hero => hero.HasBuff("kalistacoopstrikeally", true) && args.Target.NetworkId == hero.NetworkId && hero.HealthPercentage() <= 20);
 
@@ -140,31 +142,113 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
         }
 
-        static void Killsteal()
+        static void Orbwalking_OnNonKillableMinion(AttackableUnit minion)
         {
-            if (!Menu.Item("killsteal", true).GetValue<Boolean>() || !E.IsReady())
+            if (!Menu.Item("lasthitassist", true).GetValue<bool>())
                 return;
 
-            var target = HeroManager.Enemies.FirstOrDefault(x => !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield) && E.CanCast(x) && (x.Health + (x.HPRegenRate / 2)) <= E.GetDamage(x));
-
-            if (E.CanCast(target))
+            if (E.CanCast((Obj_AI_Base)minion) && minion.Health <= E.GetDamage((Obj_AI_Base)minion))
                 E.Cast();
         }
 
-        static void Mobsteal()
+        static void Combo()
         {
-            if (!Menu.Item("mobsteal", true).GetValue<Boolean>() || !E.IsReady())
+            if (!Orbwalking.CanMove(10))
                 return;
 
-            var Mob = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.Health + (x.HPRegenRate / 2) <= E.GetDamage(x));
+            if (Menu.Item("comboUseQ", true).GetValue<bool>())
+            {
+                var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical, true);
 
-            if (E.CanCast(Mob))
-                E.Cast();
+                if (Q.CanCast(Qtarget) && Q.GetPrediction(Qtarget).Hitchance >= HitChance.VeryHigh && !Player.IsWindingUp && !Player.IsDashing())
+                    Q.Cast(Qtarget);
+            }
 
-            var Minion = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.Health <= E.GetDamage(x) && (x.SkinName.ToLower().Contains("siege") || x.SkinName.ToLower().Contains("super")));
+            if (Menu.Item("comboUseE", true).GetValue<bool>() && E.IsReady())
+            {
+                var Minion = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy).Where(x => x.Health <= E.GetDamage(x)).OrderBy(x => x.Health).FirstOrDefault();
+                var Target = HeroManager.Enemies.Where(x => E.CanCast(x) && E.GetDamage(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)).OrderByDescending(x => E.GetDamage(x)).FirstOrDefault();
 
-            if (E.CanCast(Minion))
-                E.Cast();
+                if (Target.Health <= E.GetDamage(Target) || (E.CanCast(Minion) && E.CanCast(Target)))
+                    E.Cast();
+            }
+        }
+
+        static void Harass()
+        {
+            if (!Orbwalking.CanMove(10) || !(Player.ManaPercentage() > Menu.Item("harassMana", true).GetValue<Slider>().Value))
+                return;
+
+            if (Menu.Item("harassUseQ", true).GetValue<bool>())
+            {
+                var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical, true);
+
+                if (Q.CanCast(Qtarget) && Q.GetPrediction(Qtarget).Hitchance >= HitChance.VeryHigh && !Player.IsWindingUp && !Player.IsDashing())
+                    Q.Cast(Qtarget);
+            }
+        }
+
+        static void Laneclear()
+        {
+            if (!Orbwalking.CanMove(10) || !(Player.ManaPercentage() > Menu.Item("laneclearMana", true).GetValue<Slider>().Value))
+                return;
+
+            var Minions = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy);
+
+            if (Minions.Count <= 0)
+                return;
+
+            if (Menu.Item("laneclearUseQ", true).GetValue<bool>() && Q.IsReady())
+            {
+                foreach (var minion in Minions.Where(x => x.Health <= Q.GetDamage(x)))
+                {
+                    var killcount = 0;
+
+                    foreach (var colminion in Q_GetCollisionMinions(Player, Player.ServerPosition.Extend(minion.ServerPosition, Q.Range)))
+                    {
+                        if (colminion.Health <= Q.GetDamage(colminion))
+                            killcount++;
+                        else
+                            break;
+                    }
+
+                    if (killcount >= Menu.Item("laneclearQnum", true).GetValue<Slider>().Value && Q.GetPrediction(minion).Hitchance >= HitChance.Medium)
+                    {
+                        Q.Cast(minion);
+                        break;
+                    }
+                }
+            }
+
+            if (Menu.Item("laneclearUseE", true).GetValue<bool>() && E.IsReady())
+            {
+                var minionkillcount = 0;
+
+                foreach (var Minion in Minions.Where(x => E.CanCast(x) && x.Health <= E.GetDamage(x))){minionkillcount++;}
+
+                if (minionkillcount >= Menu.Item("laneclearEnum", true).GetValue<Slider>().Value)
+                    E.Cast();
+            }
+        }
+
+        static void Jungleclear()
+        {
+            if (!Orbwalking.CanMove(10) || !(Player.ManaPercentage() > Menu.Item("jungleclearMana", true).GetValue<Slider>().Value))
+                return;
+
+            var Mobs = MinionManager.GetMinions(Player.ServerPosition, Orbwalking.GetRealAutoAttackRange(Player) + 100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+
+            if (Mobs.Count <= 0)
+                return;
+
+            if (Menu.Item("jungleclearUseQ", true).GetValue<bool>() && Q.CanCast(Mobs[0]))
+                Q.Cast(Mobs[0]);
+
+            if (Menu.Item("jungleclearUseE", true).GetValue<bool>() && E.CanCast(Mobs[0]))
+            {
+                if (Mobs[0].Health + (Mobs[0].HPRegenRate/2) <= E.GetDamage(Mobs[0]))
+                    E.Cast();
+            }
         }
 
         static float GetComboDamage(Obj_AI_Base enemy)
@@ -192,115 +276,31 @@ namespace _xcsoft__ALL_IN_ONE.champions
             return Collision.GetCollision(new List<SharpDX.Vector3> { targetposition }, input).OrderBy(obj => obj.Distance(source, false)).ToList();
         }
 
-        static void Orbwalking_OnNonKillableMinion(AttackableUnit minion)
+        static void Killsteal()
         {
-            if (!Menu.Item("lasthitassist", true).GetValue<Boolean>())
+            if (!Menu.Item("killsteal", true).GetValue<bool>() || !E.IsReady())
                 return;
 
-            if (E.CanCast((Obj_AI_Base)minion) && minion.Health <= E.GetDamage((Obj_AI_Base)minion))
+            var target = HeroManager.Enemies.FirstOrDefault(x => !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield) && E.CanCast(x) && (x.Health + (x.HPRegenRate / 2)) <= E.GetDamage(x));
+
+            if (E.CanCast(target))
                 E.Cast();
         }
 
-        static void Combo()
+        static void Mobsteal()
         {
-            if (!Orbwalking.CanMove(1))
+            if (!Menu.Item("mobsteal", true).GetValue<bool>() || !E.IsReady())
                 return;
 
-            if (Menu.Item("comboUseQ", true).GetValue<Boolean>())
-            {
-                var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical, true);
+            var Mob = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.Health + (x.HPRegenRate / 2) <= E.GetDamage(x));
 
-                if (Q.CanCast(Qtarget) && Q.GetPrediction(Qtarget).Hitchance >= HitChance.VeryHigh && !Player.IsWindingUp && !Player.IsDashing())
-                    Q.Cast(Qtarget);
-            }
+            if (E.CanCast(Mob))
+                E.Cast();
 
-            if (Menu.Item("comboUseE", true).GetValue<Boolean>() && E.IsReady())
-            {
-                var Minion = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy).Where(x => x.Health <= E.GetDamage(x)).OrderBy(x => x.Health).FirstOrDefault();
-                var Target = HeroManager.Enemies.Where(x => E.CanCast(x) && E.GetDamage(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)).OrderByDescending(x => E.GetDamage(x)).FirstOrDefault();
+            var Minion = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.Health <= E.GetDamage(x) && (x.SkinName.ToLower().Contains("siege") || x.SkinName.ToLower().Contains("super")));
 
-                if (Target.Health <= E.GetDamage(Target) || (E.CanCast(Minion) && E.CanCast(Target)))
-                    E.Cast();
-            }
-        }
-
-        static void Harass()
-        {
-            if (!Orbwalking.CanMove(1) || !(Player.ManaPercentage() > Menu.Item("harassMana", true).GetValue<Slider>().Value))
-                return;
-
-            if (Menu.Item("harassUseQ", true).GetValue<Boolean>())
-            {
-                var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical, true);
-
-                if (Q.CanCast(Qtarget) && Q.GetPrediction(Qtarget).Hitchance >= HitChance.VeryHigh && !Player.IsWindingUp && !Player.IsDashing())
-                    Q.Cast(Qtarget);
-            }
-        }
-
-        static void Laneclear()
-        {
-            if (!Orbwalking.CanMove(1) || !(Player.ManaPercentage() > Menu.Item("laneclearMana", true).GetValue<Slider>().Value))
-                return;
-
-            var Minions = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy);
-
-            if (Minions.Count <= 0)
-                return;
-
-            if (Menu.Item("laneclearUseQ", true).GetValue<Boolean>() && Q.IsReady())
-            {
-                //-------------------------------------------------------------------------------------------------------------------------------
-                foreach (var minion in Minions.Where(x => x.Health <= Q.GetDamage(x)))
-                {
-                    var killcount = 0;
-
-                    foreach (var colminion in Q_GetCollisionMinions(Player, Player.ServerPosition.Extend(minion.ServerPosition, Q.Range)))
-                    {
-                        if (colminion.Health <= Q.GetDamage(colminion))
-                            killcount++;
-                        else
-                            break;
-                    }
-
-                    if (killcount >= Menu.Item("laneclearQnum", true).GetValue<Slider>().Value)
-                    {
-                        Q.Cast(minion);
-                        break;
-                    }
-                }
-                //-------------------------------------------------------------------------------------------------------------------------------
-            }
-
-            if (Menu.Item("laneclearUseE", true).GetValue<Boolean>() && E.IsReady())
-            {
-                var minionkillcount = 0;
-
-                foreach (var Minion in Minions.Where(x => E.CanCast(x) && x.Health <= E.GetDamage(x))){minionkillcount++;}
-
-                if (minionkillcount >= Menu.Item("laneclearEnum", true).GetValue<Slider>().Value)
-                    E.Cast();
-            }
-        }
-
-        static void Jungleclear()
-        {
-            if (!Orbwalking.CanMove(1) || !(Player.ManaPercentage() > Menu.Item("jungleclearMana", true).GetValue<Slider>().Value))
-                return;
-
-            var Mobs = MinionManager.GetMinions(Player.ServerPosition, Orbwalking.GetRealAutoAttackRange(Player) + 100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-            if (Mobs.Count <= 0)
-                return;
-
-            if (Menu.Item("jungleclearUseQ", true).GetValue<Boolean>() && Q.CanCast(Mobs[0]))
-                Q.Cast(Mobs[0]);
-
-            if (Menu.Item("jungleclearUseE", true).GetValue<Boolean>() && E.CanCast(Mobs[0]))
-            {
-                if (Mobs[0].Health + (Mobs[0].HPRegenRate/2) <= E.GetDamage(Mobs[0]))
-                    E.Cast();
-            }
+            if (E.CanCast(Minion))
+                E.Cast();
         }
     }
 }

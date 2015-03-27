@@ -78,7 +78,7 @@
     <Compile Include="champions\_Alistar.cs" />
     <Compile Include="champions\_Amumu.cs" />
     <Compile Include="champions\_Anivia.cs" />
-    <Compile Include="champions\_Annie.cs" />
+    <Compile Include="champions\Annie.cs" />
     <Compile Include="champions\_Ashe.cs" />
     <Compile Include="champions\_Azir.cs" />
     <Compile Include="champions\_Bard.cs" />
@@ -196,7 +196,7 @@
     <Compile Include="champions\_Ziggs.cs" />
     <Compile Include="champions\_Zilean.cs" />
     <Compile Include="champions\_Zyra.cs" />
-    <Compile Include="champions\__BASE.cs" />
+    <None Include="champions\__BASE.cs" />
     <Compile Include="damageIndicator.cs" />
     <Compile Include="initializer.cs" />
     <Compile Include="Program.cs" />

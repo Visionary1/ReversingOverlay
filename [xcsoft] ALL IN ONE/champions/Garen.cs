@@ -17,6 +17,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static Spell Q, W, E, R;
 
+        //Q1: GarenQ
+        //W1: GarenW
+        //E1: GarenE
+        //R1: GarenR
+
+        //E2: garenecancle
+
+        static bool E1IsReady { get { return Player.Spellbook.GetSpell(SpellSlot.E).Name == "garenecancle" && E.IsReady(); } }
+        static bool QIsOn { get { return Player.HasBuff("GarenQ", true); } }
+
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 800f, TargetSelector.DamageType.Physical);
@@ -27,7 +37,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             R.SetTargetted(0.25f, float.MaxValue);
 
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
-            //Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
 
@@ -162,7 +171,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     Q.Cast();
             }
 
-            if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady())
+            if (Menu.Item("CbUseE", true).GetValue<bool>() && E1IsReady && !QIsOn)
             {
                 if (HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)))
                     E.Cast();
@@ -188,7 +197,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     Q.Cast();
             }
 
-            if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady())
+            if (Menu.Item("HrsUseE", true).GetValue<bool>() && E1IsReady && !QIsOn)
             {
                 if (HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)))
                     E.Cast();
@@ -208,7 +217,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     Q.Cast();
             }
 
-            if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady())
+            if (Menu.Item("LcUseE", true).GetValue<bool>() && E1IsReady)
             {
                 if (Minions.Any(x => x.IsValidTarget(E.Range)))
                     E.Cast();
@@ -228,7 +237,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     Q.Cast();
             }
 
-            if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady())
+            if (Menu.Item("JcUseE", true).GetValue<bool>() && E1IsReady)
             {
                 if (Mobs.Any(x => x.IsValidTarget(E.Range)))
                     E.Cast();

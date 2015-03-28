@@ -19,26 +19,26 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 500f, TargetSelector.DamageType.Physical);
+            Q = new Spell(SpellSlot.Q, 800f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W, 500f);
-            E = new Spell(SpellSlot.E, 165f, TargetSelector.DamageType.Physical);
+            E = new Spell(SpellSlot.E, 300f, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R, 400f, TargetSelector.DamageType.Magical);
 
             R.SetTargetted(0.25f, float.MaxValue);
 
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use W", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use E", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use R", true).SetValue(true));
+            //Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W", true).SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
 
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseQ", "Use E", true).SetValue(true));
+            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseE", "Use E", true).SetValue(true));
 
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseE", "Use E", true).SetValue(true));
 
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use E", true).SetValue(true));
+            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseE", "Use E", true).SetValue(true));
 
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscAutoW", "Use Auto-W", true).SetValue(true));
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
@@ -51,7 +51,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             #region DamageIndicator
             var drawDamageMenu = new MenuItem("Draw_Damage", "Draw Combo Damage", true).SetValue(true);
-            var drawFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, Color.Red));
+            var drawFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, Color.FromArgb(100, 255, 228, 0)));
 
             Menu.SubMenu("Drawings").AddItem(drawDamageMenu);
             Menu.SubMenu("Drawings").AddItem(drawFill);
@@ -87,16 +87,19 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Player.IsDead)
                 return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                Combo();
-
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                Harass();
-
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (Orbwalking.CanMove(10))
             {
-                Laneclear();
-                Jungleclear();
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                    Combo();
+
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                    Harass();
+
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                {
+                    Laneclear();
+                    Jungleclear();
+                }
             }
 
             #region Call Killsteal
@@ -153,19 +156,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Combo()
         {
-            if (!Orbwalking.CanMove(10))
-                return;
-
             if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())
             {
                 if (HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
                     Q.Cast();
-            }
-
-            if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady())
-            {
-                if (HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)))
-                    W.Cast();
             }
 
             if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady())
@@ -185,7 +179,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!Orbwalking.CanMove(10) || !(Player.ManaPercentage() > Menu.Item("harassMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercentage() > Menu.Item("harassMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
@@ -203,9 +197,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!Orbwalking.CanMove(10) || !(Player.ManaPercentage() > Menu.Item("laneclearMana", true).GetValue<Slider>().Value))
-                return;
-
             var Minions = MinionManager.GetMinions(Player.ServerPosition, Orbwalking.GetRealAutoAttackRange(Player) + 100, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
@@ -226,9 +217,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!Orbwalking.CanMove(10) || !(Player.ManaPercentage() > Menu.Item("jungleclearMana", true).GetValue<Slider>().Value))
-                return;
-
             var Mobs = MinionManager.GetMinions(Player.ServerPosition, Orbwalking.GetRealAutoAttackRange(Player) + 100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)

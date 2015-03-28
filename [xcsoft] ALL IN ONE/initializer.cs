@@ -22,7 +22,7 @@ namespace _xcsoft__ALL_IN_ONE
             {
                 Console.WriteLine("[xcsoft] ALL IN ONE: " + Player.ChampionName + " Not supported.");
 
-                Game.PrintChat(colorChat(Color.DodgerBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.Red, Player.ChampionName) + " Not support.");
+                Game.PrintChat(colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.Red, Player.ChampionName) + " Not support.");
                 return;
             }
 
@@ -52,7 +52,7 @@ namespace _xcsoft__ALL_IN_ONE
 
             Drawing.OnDraw += Drawing_OnDraw;
 
-            Game.PrintChat(colorChat(Color.DodgerBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.Red, Player.ChampionName) + " Loaded");
+            Game.PrintChat(colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.Red, Player.ChampionName) + " Loaded");
         }
 
         static void Drawing_OnDraw(EventArgs args)

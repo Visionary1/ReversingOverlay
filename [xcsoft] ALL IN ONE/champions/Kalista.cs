@@ -54,7 +54,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             #region Damageindicator
             var drawDamageMenu = new MenuItem("Draw_Damage", "Draw (E) Damage", true).SetValue(true);
-            var drawFill = new MenuItem("Draw_Fill", "Draw (E) Damage Fill", true).SetValue(new Circle(true, Color.Red));
+            var drawFill = new MenuItem("Draw_Fill", "Draw (E) Damage Fill", true).SetValue(new Circle(true, Color.FromArgb(100, 255, 228, 0)));
 
             Menu.SubMenu("Drawings").AddItem(drawDamageMenu);
             Menu.SubMenu("Drawings").AddItem(drawFill);
@@ -89,20 +89,30 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Player.IsDead)
                 return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                Combo();
-
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                Harass();
-
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (Orbwalking.CanMove(10))
             {
-                Laneclear();
-                Jungleclear();
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                    Combo();
+
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                    Harass();
+
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                {
+                    Laneclear();
+                    Jungleclear();
+                }
             }
 
-            Killsteal();
-            Mobsteal();
+            #region Call Killsteal
+            if (Menu.Item("killsteal", true).GetValue<bool>() && E.IsReady())
+                Killsteal(); 
+            #endregion
+
+            #region Call Mobsteal
+            if (Menu.Item("mobsteal", true).GetValue<bool>() && E.IsReady())
+                Mobsteal(); 
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -153,9 +163,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Combo()
         {
-            if (!Orbwalking.CanMove(10))
-                return;
-
             if (Menu.Item("comboUseQ", true).GetValue<bool>())
             {
                 var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical, true);
@@ -176,7 +183,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!Orbwalking.CanMove(10) || !(Player.ManaPercentage() > Menu.Item("harassMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercentage() > Menu.Item("harassMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("harassUseQ", true).GetValue<bool>())
@@ -190,7 +197,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!Orbwalking.CanMove(10) || !(Player.ManaPercentage() > Menu.Item("laneclearMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercentage() > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -233,7 +240,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!Orbwalking.CanMove(10) || !(Player.ManaPercentage() > Menu.Item("jungleclearMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercentage() > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(Player.ServerPosition, Orbwalking.GetRealAutoAttackRange(Player) + 100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
@@ -278,9 +285,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Killsteal()
         {
-            if (!Menu.Item("killsteal", true).GetValue<bool>() || !E.IsReady())
-                return;
-
             var target = HeroManager.Enemies.FirstOrDefault(x => !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield) && E.CanCast(x) && (x.Health + (x.HPRegenRate / 2)) <= E.GetDamage(x));
 
             if (E.CanCast(target))
@@ -289,9 +293,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Mobsteal()
         {
-            if (!Menu.Item("mobsteal", true).GetValue<bool>() || !E.IsReady())
-                return;
-
             var Mob = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.Health + (x.HPRegenRate / 2) <= E.GetDamage(x));
 
             if (E.CanCast(Mob))

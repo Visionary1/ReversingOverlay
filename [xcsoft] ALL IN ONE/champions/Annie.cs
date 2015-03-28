@@ -22,8 +22,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 625f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 625f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, 800f);
+            W = new Spell(SpellSlot.W, 595f, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, 500f);
             R = new Spell(SpellSlot.R, 600f, TargetSelector.DamageType.Magical);
 
             Q.SetTargetted(0.25f, 1400f);
@@ -52,14 +52,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscAntigap", "Use Anti-Gapcloser", true).SetValue(true));
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscinter", "Use Interrupter", true).SetValue(true));
 
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.LightPink)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawW", "W Range", true).SetValue(new Circle(true, Color.LightPink)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawE", "E Range", true).SetValue(new Circle(true, Color.LightPink)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(true, Color.LightPink)));
+            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.Red)));
+            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawW", "W Range", true).SetValue(new Circle(true, Color.Red)));
+            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawE", "E Range", true).SetValue(new Circle(true, Color.Red)));
+            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(true, Color.Red)));
 
             #region DamageIndicator
             var drawDamageMenu = new MenuItem("Draw_Damage", "Draw Combo Damage", true).SetValue(true);
-            var drawFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, Color.Red));
+            var drawFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, Color.FromArgb(100, 255, 228, 0)));
 
             Menu.SubMenu("Drawings").AddItem(drawDamageMenu);
             Menu.SubMenu("Drawings").AddItem(drawFill);
@@ -95,20 +95,23 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Player.IsDead)
                 return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                Combo();
-
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                Harass();
-
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (Orbwalking.CanMove(10))
             {
-                Laneclear();
-                Jungleclear();
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                    Combo();
+
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                    Harass();
+
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                {
+                    Laneclear();
+                    Jungleclear();
+                }
             }
 
             #region AutoStunCharge
-            if (Menu.Item("miscAutoCharge", true).GetValue<bool>() && !stunIsReady)
+            if (Menu.Item("miscAutoCharge", true).GetValue<bool>() && !stunIsReady && !Player.IsRecalling())
             {
                 if (Player.InFountain())
                 {
@@ -193,9 +196,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Combo()
         {
-            if (!Orbwalking.CanMove(10))
-                return;
-
             if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())
             {
                 Q.CastOnBestTarget();
@@ -216,14 +216,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 var rTarget = TargetSelector.GetTarget(R.Range+(R.Width/2), R.DamageType);
 
-                if (R.CanCast(rTarget) && rTarget.Health <= getComboDamage(rTarget) + (Player.GetAutoAttackDamage(rTarget, true) * 2) && stunIsReady)
+                if (R.CanCast(rTarget) && rTarget.Health <= getComboDamage(rTarget) + (Q.GetDamage(rTarget) * 2) && stunIsReady)
                     R.Cast(rTarget, false, true);
             }
         }
 
         static void Harass()
         {
-            if (!Orbwalking.CanMove(10) || !(Player.ManaPercentage() > Menu.Item("harassMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercentage() > Menu.Item("harassMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
@@ -239,10 +239,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!Orbwalking.CanMove(10) || !(Player.ManaPercentage() > Menu.Item("laneclearMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercentage() > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
-            var Minions = MinionManager.GetMinions(Player.ServerPosition, 625, MinionTypes.All, MinionTeam.Enemy);
+            var Minions = MinionManager.GetMinions(625f, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
                 return;
@@ -259,10 +259,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!Orbwalking.CanMove(10) || !(Player.ManaPercentage() > Menu.Item("jungleclearMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercentage() > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
-            var Mobs = MinionManager.GetMinions(Player.ServerPosition, Orbwalking.GetRealAutoAttackRange(Player) + 100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var Mobs = MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player) + 100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
                 return;

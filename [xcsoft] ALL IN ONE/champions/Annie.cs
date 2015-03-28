@@ -17,7 +17,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static Spell Q, W, E, R;
 
-        static bool stunIsReady { get { return Player.HasBuff("pyromania_particle", true); } }
+        static bool stunisReady { get { return Player.HasBuff("pyromania_particle", true); } }
 
         public static void Load()
         {
@@ -111,7 +111,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
 
             #region AutoStunCharge
-            if (Menu.Item("miscAutoCharge", true).GetValue<bool>() && !stunIsReady && !Player.IsRecalling())
+            if (Menu.Item("miscAutoCharge", true).GetValue<bool>() && !stunisReady && !Player.IsRecalling())
             {
                 if (Player.InFountain())
                 {
@@ -169,7 +169,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!Menu.Item("miscAntigap", true).GetValue<bool>() || Player.IsDead)
                 return;
 
-            if (!stunIsReady)
+            if (!stunisReady)
                 return;
 
             if (Q.CanCast(gapcloser.Sender))
@@ -184,7 +184,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!Menu.Item("miscinter", true).GetValue<bool>() || Player.IsDead)
                 return;
 
-            if (!stunIsReady)
+            if (!stunisReady)
                 return;
 
             if (Q.CanCast(sender))
@@ -216,7 +216,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 var rTarget = TargetSelector.GetTarget(R.Range+(R.Width/2), R.DamageType);
 
-                if (R.CanCast(rTarget) && rTarget.Health <= getComboDamage(rTarget) + (Q.GetDamage(rTarget) * 2) && stunIsReady)
+                if (R.CanCast(rTarget) && rTarget.Health <= getComboDamage(rTarget) + (Q.GetDamage(rTarget) * 2) && stunisReady)
                     R.Cast(rTarget, false, true);
             }
         }
@@ -286,7 +286,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Killsteal()
         {
-            foreach (var target in HeroManager.Enemies)
+            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && Q.IsKillable(target))
                     Q.Cast(target);

@@ -153,7 +153,7 @@
     <Compile Include="champions\_Rengar.cs" />
     <Compile Include="champions\_Riven.cs" />
     <Compile Include="champions\_Rumble.cs" />
-    <Compile Include="champions\_Ryze.cs" />
+    <Compile Include="champions\Ryze.cs" />
     <Compile Include="champions\_Sejuani.cs" />
     <Compile Include="champions\_Shaco.cs" />
     <Compile Include="champions\_Shen.cs" />

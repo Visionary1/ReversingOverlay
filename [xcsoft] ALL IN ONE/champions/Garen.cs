@@ -16,18 +16,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
-
-        //Q1: GarenQ
-        //W1: GarenW
-        //E1: GarenE
-        //R1: GarenR
-
-        //E2: garenecancle
-
+        
         static bool E1isReady { get { return Player.Spellbook.GetSpell(SpellSlot.E).Name == "GarenE" && E.IsReady(); } }
         static bool QisOn { get { return Player.HasBuff("GarenQ", true); } }
 
-        static bool isSpinning { get { return Player.HasBuff("GarenE", true); } }
+        static bool imSpinning { get { return Player.HasBuff("GarenE", true); } }
 
         public static void Load()
         {
@@ -113,7 +106,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 }
             }
 
-            Orbwalker.SetAttack(!isSpinning);
+            Orbwalker.SetAttack(!imSpinning);
 
             #region Call Killsteal
             if (!Menu.Item("miscKs", true).GetValue<bool>())
@@ -223,7 +216,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Menu.Item("LcUseE", true).GetValue<bool>() && E1isReady)
             {
-                if (Minions.Any(x => x.IsValidTarget(E.Range)))
+                if (Minions.Count(x => x.IsValidTarget(E.Range)) >= 3)
                     E.Cast();
             }
         }
@@ -250,7 +243,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Killsteal()
         {
-            foreach (var target in HeroManager.Enemies)
+            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && Q.IsKillable(target))
                     Q.Cast(target);

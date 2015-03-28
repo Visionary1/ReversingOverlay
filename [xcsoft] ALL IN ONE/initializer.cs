@@ -17,16 +17,20 @@ namespace _xcsoft__ALL_IN_ONE
 
         internal static void init()
         {
+            Menu = new Menu("[xcsoft] ALL IN ONE", "xcsoft_ALL_IN_ONE", true);
+
             try { Console.WriteLine("[xcsoft] ALL IN ONE: " + Type.GetType("_xcsoft__ALL_IN_ONE.champions." + Player.ChampionName).Name + " Support."); }
             catch
             {
-                Console.WriteLine("[xcsoft] ALL IN ONE: " + Player.ChampionName + " Not supported.");
+                Console.WriteLine("[xcsoft] ALL IN ONE: " + Player.ChampionName + " Not support.");
 
-                Game.PrintChat(colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.Red, Player.ChampionName) + " Not support.");
+                Game.PrintChat(colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.DarkGray, Player.ChampionName) + " Not support.");
+
+                Menu.AddToMainMenu();
+                Menu.AddItem(new MenuItem("SORRY", "Sorry, " + Player.ChampionName + " Not support"));
                 return;
             }
 
-            Menu = new Menu("[xcsoft] ALL IN ONE", "xcsoft_ALL_IN_ONE", true);
             Menu.AddToMainMenu();
 
             Orbwalker = new Orbwalking.Orbwalker(Menu.AddSubMenu(new Menu(Player.ChampionName + ": Orbwalker", "Orbwalker")));
@@ -39,13 +43,14 @@ namespace _xcsoft__ALL_IN_ONE
             Menu.AddSubMenu(new Menu(Player.ChampionName + ": Misc", "Misc"));
             Menu.AddSubMenu(new Menu(Player.ChampionName + ": Drawings", "Drawings"));
 
+            Menu.AddItem(new MenuItem("blank", string.Empty));
             Menu.AddItem(new MenuItem("EN", "Work In Progress!"));
             Menu.AddItem(new MenuItem("KR", "작업중입니다!"));
 
             Type.GetType("_xcsoft__ALL_IN_ONE.champions." + Player.ChampionName).GetMethod("Load").Invoke(null, null);
 
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("blank1", string.Empty));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("txt1", "--PUBLIC OPTIONS--"));
+            Menu.SubMenu("Drawings").AddItem(new MenuItem("blank", string.Empty));
+            Menu.SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));
 
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawAARange", "Auto-Attack Real Range").SetValue(new Circle(true, Color.Silver)));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawAATarget", "Auto-Attack Target").SetValue(new Circle(true, Color.Red)));

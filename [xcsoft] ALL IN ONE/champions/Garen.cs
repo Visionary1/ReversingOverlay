@@ -24,7 +24,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         //E2: garenecancle
 
-        static bool E1IsReady { get { return Player.Spellbook.GetSpell(SpellSlot.E).Name == "garenecancle" && E.IsReady(); } }
+        static bool E1IsReady { get { return Player.Spellbook.GetSpell(SpellSlot.E).Name == "GarenE" && E.IsReady(); } }
         static bool QIsOn { get { return Player.HasBuff("GarenQ", true); } }
 
         public static void Load()

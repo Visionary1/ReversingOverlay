@@ -39,7 +39,8 @@ namespace _xcsoft__ALL_IN_ONE
             Menu.AddSubMenu(new Menu(Player.ChampionName + ": Misc", "Misc"));
             Menu.AddSubMenu(new Menu(Player.ChampionName + ": Drawings", "Drawings"));
 
-            Menu.AddItem(new MenuItem("KR", "안녕하세요!"));
+            Menu.AddItem(new MenuItem("EN", "Work In Progress!"));
+            Menu.AddItem(new MenuItem("KR", "작업중입니다!"));
 
             Type.GetType("_xcsoft__ALL_IN_ONE.champions." + Player.ChampionName).GetMethod("Load").Invoke(null, null);
 

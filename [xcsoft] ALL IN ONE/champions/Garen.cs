@@ -19,7 +19,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
         
         static bool E1isReady { get { return Player.Spellbook.GetSpell(SpellSlot.E).Name == "GarenE" && E.IsReady(); } }
         static bool QisOn { get { return Player.HasBuff("GarenQ", true); } }
-
         static bool imSpinning { get { return Player.HasBuff("GarenE", true); } }
 
         public static void Load()
@@ -185,9 +184,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!(Player.ManaPercentage() > Menu.Item("harassMana", true).GetValue<Slider>().Value))
-                return;
-
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
             {
                 if (HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
@@ -263,8 +259,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
 
-            if (E.IsReady())
-                damage += E.GetDamage(enemy);
+            if (E1isReady)
+                damage += E.GetDamage(enemy) * 5;
 
             if (R.IsReady())
                 damage += R.GetDamage(enemy);

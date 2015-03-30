@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class Ryze
+    class Ryze//by xcsoft
     {
         static Menu Menu { get { return initializer.Menu; } }
         static Orbwalking.Orbwalker Orbwalker { get { return initializer.Orbwalker; } }
@@ -31,7 +31,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
-            //Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
 
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseW", "Use W", true).SetValue(true));
@@ -55,7 +55,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.Red)));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawW", "W Range", true).SetValue(new Circle(true, Color.Red)));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawE", "E Range", true).SetValue(new Circle(true, Color.Red)));
-            //Menu.SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(true, Color.Red)));
 
             #region DamageIndicator
             var drawDamageMenu = new MenuItem("Draw_Damage", "Draw Combo Damage", true).SetValue(true);
@@ -172,11 +171,17 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 E.CastOnBestTarget();
             }
+
+            if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
+            {
+                if(!Q.IsReady() && !E.IsReady() && xcsoft_lib.HealthPercentage(Player) < 90)
+                    R.Cast();
+            }
         }
 
         static void Harass()
         {
-            if (!(Player.ManaPercentage() > Menu.Item("harassMana", true).GetValue<Slider>().Value))
+            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("harassMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
@@ -197,7 +202,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!(Player.ManaPercentage() > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -230,7 +235,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!(Player.ManaPercentage() > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

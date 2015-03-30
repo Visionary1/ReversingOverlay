@@ -223,7 +223,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!(Player.ManaPercentage() > Menu.Item("harassMana", true).GetValue<Slider>().Value))
+            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("harassMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
@@ -239,7 +239,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!(Player.ManaPercentage() > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(625f, MinionTypes.All, MinionTeam.Enemy);
@@ -259,7 +259,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!(Player.ManaPercentage() > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player) + 100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class __BASE
+    class Vi
     {
         static Menu Menu { get { return initializer.Menu; } }
         static Orbwalking.Orbwalker Orbwalker { get { return initializer.Orbwalker; } }
@@ -19,24 +19,30 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q);
-            W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E);
-            R = new Spell(SpellSlot.R);
+            //Q = new Spell(SpellSlot.Q, 850f, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, 190f, TargetSelector.DamageType.Physical);
+            E = new Spell(SpellSlot.E, 200f, TargetSelector.DamageType.Physical);//splash 600
+            R = new Spell(SpellSlot.R, 800f, TargetSelector.DamageType.Physical);
 
-            Q.SetSkillshot(0.25f, 50f, 2000f, true, SkillshotType.SkillshotLine);
-            Q.SetCharged(" ", " ", 750, 1550, 1.5f);
-            Q.SetTargetted(0.25f, 2000f);
+            Q.SetSkillshot(0f, 90f, 1500f, false, SkillshotType.SkillshotLine);
+            //Q.SetCharged("ViQ", "ViQ", 100, 850, 1f);
+
+            R.SetTargetted(0.25f, 1500f);
 
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
 
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
 
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
@@ -44,7 +50,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscAutointer", "Use Interrupter", true).SetValue(true));
 
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.Red)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawW", "W Range", true).SetValue(new Circle(true, Color.Red)));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawE", "E Range", true).SetValue(new Circle(true, Color.Red)));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(true, Color.Red)));
 
@@ -78,6 +83,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
+            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -87,8 +93,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Orbwalking.CanMove(10))
             {
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                    Combo();
+                //if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                    //Combo();
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                     Harass();
@@ -99,6 +105,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     Jungleclear();
                 }
             }
+
+            //Orbwalker.SetAttack(!Q.IsCharging);
 
             #region Killsteal
             if (!Menu.Item("miscKs", true).GetValue<bool>())
@@ -112,15 +120,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             var drawQ = Menu.Item("drawQ", true).GetValue<Circle>();
-            var drawW = Menu.Item("drawW", true).GetValue<Circle>();
             var drawE = Menu.Item("drawE", true).GetValue<Circle>();
             var drawR = Menu.Item("drawR", true).GetValue<Circle>();
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
-
-            if (W.IsReady() && drawW.Active)
-                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
 
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
@@ -147,10 +151,37 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 Q.Cast(sender);
         }
 
+        static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
+        {
+            var Target = (Obj_AI_Base)target;
+
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            {
+                if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady())
+                    E.Cast();
+            }
+
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && xcsoft_lib.ManaPercentage(Player) > Menu.Item("harassMana", true).GetValue<Slider>().Value)
+            {
+                if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady())
+                    E.Cast();
+            }
+        }
+
         static void Combo()
         {
             if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())
-            { }
+            {
+                var qTarget = TargetSelector.GetTarget(R.ChargedMaxRange, R.DamageType);
+
+                if (Q.IsCharging)
+                {
+                    if (Q.GetPrediction(qTarget).Hitchance >= HitChance.High)
+                        Q.Cast(qTarget);
+                }
+                else
+                    Q.StartCharging();
+            }
 
             if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady())
             { }
@@ -232,9 +263,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 if (Q.CanCast(target) && Q.IsKillable(target))
                     Q.Cast(target);
-
-                if (W.CanCast(target) && W.IsKillable(target))
-                    W.Cast(target);
 
                 if (E.CanCast(target) && E.IsKillable(target))
                     E.Cast(target);

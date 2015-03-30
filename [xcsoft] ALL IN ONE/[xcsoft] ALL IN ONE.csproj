@@ -181,7 +181,7 @@
     <Compile Include="champions\_Vayne.cs" />
     <Compile Include="champions\_Veigar.cs" />
     <Compile Include="champions\_VelKoz.cs" />
-    <Compile Include="champions\_Vi.cs" />
+    <Compile Include="champions\Vi.cs" />
     <Compile Include="champions\_Viktor.cs" />
     <Compile Include="champions\_Vladimir.cs" />
     <Compile Include="champions\_Volibear.cs" />
@@ -196,6 +196,7 @@
     <Compile Include="champions\_Ziggs.cs" />
     <Compile Include="champions\_Zilean.cs" />
     <Compile Include="champions\_Zyra.cs" />
+    <Compile Include="xcsoft_lib.cs" />
     <None Include="champions\__BASE.cs" />
     <Compile Include="damageIndicator.cs" />
     <Compile Include="initializer.cs" />

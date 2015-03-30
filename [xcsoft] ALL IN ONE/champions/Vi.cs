@@ -19,13 +19,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         public static void Load()
         {
-            //Q = new Spell(SpellSlot.Q, 850f, TargetSelector.DamageType.Physical);
+            Q = new Spell(SpellSlot.Q, 850f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W, 190f, TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 200f, TargetSelector.DamageType.Physical);//splash 600
             R = new Spell(SpellSlot.R, 800f, TargetSelector.DamageType.Physical);
 
             Q.SetSkillshot(0f, 90f, 1500f, false, SkillshotType.SkillshotLine);
-            //Q.SetCharged("ViQ", "ViQ", 100, 850, 1f);
+            Q.SetCharged("ViQ", "ViQ", 100, 850, 1f);
 
             R.SetTargetted(0.25f, 1500f);
 
@@ -93,8 +93,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Orbwalking.CanMove(10))
             {
-                //if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                    //Combo();
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                    Combo();
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                     Harass();
@@ -106,7 +106,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 }
             }
 
-            //Orbwalker.SetAttack(!Q.IsCharging);
+            Orbwalker.SetAttack(!Q.IsCharging);
 
             #region Killsteal
             if (!Menu.Item("miscKs", true).GetValue<bool>())

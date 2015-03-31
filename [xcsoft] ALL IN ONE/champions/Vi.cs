@@ -17,14 +17,18 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static Spell Q, W, E, R;
 
+        const byte defaltRange = 190;
+
+        static bool QisAllGood(Obj_AI_Base target) { return Q.IsReady() && Q.IsCharging && target.IsValidTarget(Q.Range) && Q.GetPrediction(target).Hitchance >= HitChance.High; }
+
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 850f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W, 190f, TargetSelector.DamageType.Physical);
-            E = new Spell(SpellSlot.E, 200f, TargetSelector.DamageType.Physical);//splash 600
+            E = new Spell(SpellSlot.E, 240f, TargetSelector.DamageType.Physical);//splash 600
             R = new Spell(SpellSlot.R, 800f, TargetSelector.DamageType.Physical);
 
-            Q.SetSkillshot(0f, 90f, 1500f, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 50f, 1500f, false, SkillshotType.SkillshotLine);
             Q.SetCharged("ViQ", "ViQ", 100, 850, 1f);
 
             R.SetTargetted(0.25f, 1500f);
@@ -138,7 +142,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!Menu.Item("miscAntigap", true).GetValue<bool>() || Player.IsDead)
                 return;
 
-            if (Q.CanCast(gapcloser.Sender))
+            if (QisAllGood(gapcloser.Sender))
                 Q.Cast(gapcloser.Sender);
         }
 
@@ -147,23 +151,38 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!Menu.Item("miscAutointer", true).GetValue<bool>() || Player.IsDead)
                 return;
 
-            if (Q.CanCast(sender))
+            if (QisAllGood(sender))
                 Q.Cast(sender);
+
+            if (R.CanCast(sender) && args.DangerLevel >= Interrupter2.DangerLevel.High)
+                R.Cast(sender);
         }
 
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
+            if (!unit.IsMe || !Orbwalking.CanMove(10) || !E.IsReady())
+                return;
+
             var Target = (Obj_AI_Base)target;
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady())
+                if (Menu.Item("CbUseE", true).GetValue<bool>())
                     E.Cast();
             }
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && xcsoft_lib.ManaPercentage(Player) > Menu.Item("harassMana", true).GetValue<Slider>().Value)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed )
             {
-                if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady())
+                if (Menu.Item("HrsUseE", true).GetValue<bool>() && xcsoft_lib.ManaPercentage(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value)
+                    E.Cast();
+            }
+
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            {
+                if (Menu.Item("LcUseE", true).GetValue<bool>() && xcsoft_lib.ManaPercentage(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value)
+                    E.Cast();
+
+                if (Menu.Item("JcUseE", true).GetValue<bool>() && xcsoft_lib.ManaPercentage(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value)
                     E.Cast();
             }
         }
@@ -172,36 +191,38 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())
             {
-                var qTarget = TargetSelector.GetTarget(R.ChargedMaxRange, R.DamageType);
+                var qTarget = TargetSelector.GetTarget(Q.ChargedMaxRange, Q.DamageType);
 
-                if (Q.IsCharging)
-                {
-                    if (Q.GetPrediction(qTarget).Hitchance >= HitChance.High)
-                        Q.Cast(qTarget);
-                }
-                else
+                if (QisAllGood(qTarget))
+                    Q.Cast(qTarget);
+
+                if (!Q.IsCharging)
                     Q.StartCharging();
             }
 
-            if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady())
-            { }
-
             if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady())
-            { }
+            {
+                var eTarget = TargetSelector.GetTarget(E.Range, E.DamageType);
+
+                if (!eTarget.IsValidTarget(defaltRange))
+                    E.Cast();
+            }
 
             if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
-            { }
+            {
+                var rTarget = TargetSelector.GetTarget(R.Range, R.DamageType);
+
+                if (R.CanCast(rTarget) && rTarget.Health <= getComboDamage(rTarget) + (Q.GetDamage(rTarget) * 2))
+                    R.Cast(rTarget);
+            }
         }
 
         static void Harass()
         {
-            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("harassMana", true).GetValue<Slider>().Value))
+            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
-            { }
-
-            if (Menu.Item("HrsUseW", true).GetValue<bool>() && W.IsReady())
             { }
 
             if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady())
@@ -224,9 +245,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Menu.Item("LcUseQ", true).GetValue<bool>() && Q.IsReady())
             { }
 
-            if (Menu.Item("LcUseW", true).GetValue<bool>() && W.IsReady())
-            { }
-
             if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady())
             { }
 
@@ -247,9 +265,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Menu.Item("JcUseQ", true).GetValue<bool>() && Q.IsReady())
             { }
 
-            if (Menu.Item("JcUseW", true).GetValue<bool>() && W.IsReady())
-            { }
-
             if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady())
             { }
 
@@ -261,7 +276,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (Q.CanCast(target) && Q.IsKillable(target))
+                if (Q.IsReady() && target.IsValidTarget(Q.ChargedMaxRange) && Q.IsCharging && Q.IsKillable(target) && Q.GetPrediction(target).Hitchance >= HitChance.High)
                     Q.Cast(target);
 
                 if (E.CanCast(target) && E.IsKillable(target))

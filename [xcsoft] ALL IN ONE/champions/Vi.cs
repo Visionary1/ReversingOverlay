@@ -160,10 +160,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (!unit.IsMe || !Orbwalking.CanMove(10) || !E.IsReady())
-                return;
-
             var Target = (Obj_AI_Base)target;
+
+            if (!unit.IsMe || !Orbwalking.CanMove(10) || !E.IsReady() || Target == null)
+                return;
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
@@ -196,7 +196,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 if (QisAllGood(qTarget))
                     Q.Cast(qTarget);
 
-                if (!Q.IsCharging)
+                if (!Q.IsCharging && qTarget != null)
                     Q.StartCharging();
             }
 
@@ -204,7 +204,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 var eTarget = TargetSelector.GetTarget(E.Range, E.DamageType);
 
-                if (!eTarget.IsValidTarget(defaltRange))
+                if (!eTarget.IsValidTarget(defaltRange) && eTarget.IsValidTarget(E.Range))
                     E.Cast();
             }
 

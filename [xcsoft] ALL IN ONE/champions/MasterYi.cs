@@ -117,8 +117,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (sender.IsMe && args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                Utility.DelayAction.Add(20, Orbwalking.ResetAutoAttackTimer);
-                Utility.DelayAction.Add(20, Wcancel);
+                Utility.DelayAction.Add(25, Orbwalking.ResetAutoAttackTimer);
+                Utility.DelayAction.Add(25, Wcancel);
             }
         }
 

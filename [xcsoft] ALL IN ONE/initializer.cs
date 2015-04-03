@@ -49,6 +49,7 @@ namespace _xcsoft__ALL_IN_ONE
             Menu.AddItem(new MenuItem("KR", "작업중입니다!"));
 
             //ha........  sandbox pls..
+            #region ChampLoad
             switch (Player.ChampionName)
             {
                 case "MasterYi":
@@ -71,7 +72,8 @@ namespace _xcsoft__ALL_IN_ONE
                     break;
                 default:
                     break;
-            }
+            } 
+            #endregion
 
             Menu.SubMenu("Drawings").AddItem(new MenuItem("blank", string.Empty));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));

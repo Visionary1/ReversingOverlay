@@ -72,7 +72,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
-            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
+            //Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
         }
 
@@ -85,9 +85,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    Harass();
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 {
@@ -118,33 +115,38 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!Menu.Item("CbUseW", true).GetValue<bool>())
                 return;
 
-            if (sender.IsMe && args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name && Player.GetEnemiesInRange(Orbwalking.GetRealAutoAttackRange(Player) + 30).Any() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (sender.IsMe && args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                Orbwalking.ResetAutoAttackTimer();
-                Player.IssueOrder(GameObjectOrder.AttackTo, Game.CursorPos);
+                Utility.DelayAction.Add(20, Orbwalking.ResetAutoAttackTimer);
+                Utility.DelayAction.Add(20, Wcancel);
             }
         }
 
-        static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        static void Wcancel()
         {
-            if (!args.Unit.IsMe)
-                return;
-
-            if (Menu.Item("CbUseE", true).GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                E.Cast();
-
-            if ((Menu.Item("LcUseE", true).GetValue<bool>() || Menu.Item("JcUseE", true).GetValue<bool>()) && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-                E.Cast();
+            Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
         }
+
+        //static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        //{
+        //    if (!args.Unit.IsMe)
+        //        return;
+
+        //    if (Menu.Item("CbUseE", true).GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !E.IsReady())
+        //        E.Cast();
+
+        //    if ((Menu.Item("LcUseE", true).GetValue<bool>() || Menu.Item("JcUseE", true).GetValue<bool>()) && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && !E.IsReady())
+        //        E.Cast();
+        //}
 
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
 
-            if (!unit.IsMe || !Orbwalking.CanMove(10))
+            if (!unit.IsMe || Target == null || !Orbwalking.CanMove(10))
                 return;
 
-            if (Menu.Item("CbUseW", true).GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (Menu.Item("CbUseW", true).GetValue<bool>() &&  HeroManager.Enemies.Any(x=> Orbwalking.InAutoAttackRange(x)) && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && W.IsReady())
                 W.Cast();
         }
 
@@ -152,15 +154,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())
                 Q.CastOnBestTarget();
-        }
 
-        static void Harass()
-        {
-            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
-                return;
-
-            if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
-                Q.CastOnBestTarget();
+            if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+                E.Cast();
         }
 
         static void Laneclear()
@@ -189,6 +185,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Menu.Item("JcUseQ", true).GetValue<bool>() && Q.IsReady())
                 Q.Cast(Mobs[0]);
+
+            if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady() && Mobs.Any(x => Orbwalking.InAutoAttackRange(x)))
+                E.Cast();
         }
 
         static void Killsteal()

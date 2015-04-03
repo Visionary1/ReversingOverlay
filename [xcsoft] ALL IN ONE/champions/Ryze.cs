@@ -25,7 +25,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             R = new Spell(SpellSlot.R);
 
             Q.SetTargetted(0.25f, 2000f);
-            W.SetTargetted(0.25f, 2000f);
+            W.SetTargetted(0.25f, float.MaxValue);
             E.SetTargetted(0.25f, 2000f);
 
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
@@ -40,7 +40,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseW", "Use W", true).SetValue(true));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use E", true).SetValue(true));
+            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
@@ -174,7 +174,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
             {
-                if(!Q.IsReady() && !E.IsReady() && xcsoft_lib.HealthPercentage(Player) < 90)
+                if(!Q.IsReady() && !E.IsReady() && xcsoft_lib.HealthPercentage(Player) <= 98)
                     R.Cast();
             }
         }

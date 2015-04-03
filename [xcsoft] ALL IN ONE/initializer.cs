@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Reflection;
 
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -19,15 +20,15 @@ namespace _xcsoft__ALL_IN_ONE
         {
             Menu = new Menu("[xcsoft] ALL IN ONE", "xcsoft_ALL_IN_ONE", true);
 
-            try { Console.WriteLine("[xcsoft] ALL IN ONE: " + Type.GetType("_xcsoft__ALL_IN_ONE.champions." + Player.ChampionName).Name + " Support."); }
+            try { Console.WriteLine("[xcsoft] ALL IN ONE: " + Type.GetType("_xcsoft__ALL_IN_ONE.champions." + Player.ChampionName).Name + " Supported."); }
             catch
             {
-                Console.WriteLine("[xcsoft] ALL IN ONE: " + Player.ChampionName + " Not support.");
+                Console.WriteLine("[xcsoft] ALL IN ONE: " + Player.ChampionName + " Not supported.");
 
-                Game.PrintChat(colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.DarkGray, Player.ChampionName) + " Not support.");
+                Game.PrintChat(colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.DarkGray, Player.ChampionName) + " Not supported.");
 
                 Menu.AddToMainMenu();
-                Menu.AddItem(new MenuItem("SORRY", "Sorry, " + Player.ChampionName + " Not support"));
+                Menu.AddItem(new MenuItem("SORRY", "Sorry, " + Player.ChampionName + " Not supported"));
                 return;
             }
 
@@ -47,7 +48,30 @@ namespace _xcsoft__ALL_IN_ONE
             Menu.AddItem(new MenuItem("EN", "Work In Progress!"));
             Menu.AddItem(new MenuItem("KR", "작업중입니다!"));
 
-            Type.GetType("_xcsoft__ALL_IN_ONE.champions." + Player.ChampionName).GetMethod("Load").Invoke(null, null);
+            //ha........  sandbox pls..
+            switch (Player.ChampionName)
+            {
+                case "MasterYi":
+                    champions.MasterYi.Load();
+                    break;
+                case "Annie":
+                    champions.Annie.Load();
+                    break;
+                case "Garen":
+                    champions.Garen.Load();
+                    break;
+                case "Kalista":
+                    champions.Kalista.Load();
+                    break;
+                case "Ryze":
+                    champions.Ryze.Load();
+                    break;
+                case "Vi":
+                    champions.Vi.Load();
+                    break;
+                default:
+                    break;
+            }
 
             Menu.SubMenu("Drawings").AddItem(new MenuItem("blank", string.Empty));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));

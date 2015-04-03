@@ -20,16 +20,17 @@ namespace _xcsoft__ALL_IN_ONE.champions
         const byte defaltRange = 190;
 
         static bool QisAllGood(Obj_AI_Base target) { return Q.IsReady() && Q.IsCharging && target.IsValidTarget(Q.Range) && Q.GetPrediction(target).Hitchance >= HitChance.High; }
+        static int getViWStacks(Obj_AI_Base target) {var stacks = target.Buffs.Find(x => x.Name == "viwproc" && x.Caster.NetworkId == Player.NetworkId && x.IsValidBuff()); return stacks != null ? stacks.Count : 0; }
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 850f, TargetSelector.DamageType.Physical);
+            Q = new Spell(SpellSlot.Q, 840f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W, 190f, TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 240f, TargetSelector.DamageType.Physical);//splash 600
             R = new Spell(SpellSlot.R, 800f, TargetSelector.DamageType.Physical);
 
             Q.SetSkillshot(0.25f, 50f, 1500f, false, SkillshotType.SkillshotLine);
-            Q.SetCharged("ViQ", "ViQ", 100, 850, 1f);
+            Q.SetCharged("ViQ", "ViQ", 100, 840, 1f);
 
             R.SetTargetted(0.25f, 1500f);
 
@@ -41,11 +42,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use Q", true).SetValue(true));
+            //Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
+            //Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
 
@@ -135,6 +136,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+
+
         }
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
@@ -223,13 +226,23 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
-            { }
+            {
+                var qTarget = TargetSelector.GetTarget(Q.ChargedMaxRange, Q.DamageType);
+
+                if (QisAllGood(qTarget))
+                    Q.Cast(qTarget);
+
+                if (!Q.IsCharging && qTarget != null)
+                    Q.StartCharging();
+            }
 
             if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady())
-            { }
+            {
+                var eTarget = TargetSelector.GetTarget(E.Range, E.DamageType);
 
-            if (Menu.Item("HrsUseR", true).GetValue<bool>() && R.IsReady())
-            { }
+                if (!eTarget.IsValidTarget(defaltRange) && eTarget.IsValidTarget(E.Range))
+                    E.Cast();
+            }
         }
 
         static void Laneclear()
@@ -244,12 +257,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Menu.Item("LcUseQ", true).GetValue<bool>() && Q.IsReady())
             { }
-
-            if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady())
-            { }
-
-            if (Menu.Item("LcUseR", true).GetValue<bool>() && R.IsReady())
-            { }
         }
 
         static void Jungleclear()
@@ -263,12 +270,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (Menu.Item("JcUseQ", true).GetValue<bool>() && Q.IsReady())
-            { }
-
-            if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady())
-            { }
-
-            if (Menu.Item("JcUseR", true).GetValue<bool>() && R.IsReady())
             { }
         }
 
@@ -294,11 +295,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
 
-            if (W.IsReady())
+            if(getViWStacks(enemy) == 2)
                 damage += W.GetDamage(enemy);
 
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage(enemy) * E.Instance.Ammo;
 
             if (R.IsReady())
                 damage += R.GetDamage(enemy);

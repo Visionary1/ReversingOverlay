@@ -18,6 +18,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static Spell Q, W, E, R;
 
         static void Wcancel() { Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
+        static void Rcast() { R.Cast(); }
 
         public static void Load()
         {
@@ -139,7 +140,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                         E.Cast();
 
                     if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
-                        R.Cast();
+                        Utility.DelayAction.Add(200, Rcast);
                 }
             }
 

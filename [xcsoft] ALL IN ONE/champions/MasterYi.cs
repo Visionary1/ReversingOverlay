@@ -115,10 +115,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!Menu.Item("CbUseW", true).GetValue<bool>())
                 return;
 
-            if (sender.IsMe && args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (sender.IsMe && args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && HeroManager.Enemies.Any(x => x.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)+450)))
             {
-                Utility.DelayAction.Add(25, Orbwalking.ResetAutoAttackTimer);
-                Utility.DelayAction.Add(25, Wcancel);
+                Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+                Utility.DelayAction.Add(50, Wcancel);
             }
         }
 

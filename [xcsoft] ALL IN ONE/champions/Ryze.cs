@@ -266,13 +266,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x=>x.Health))
             {
-                if (Q.CanCast(target) && Q.IsKillable(target))
+                if (Q.CanCast(target) && xcsoftlib.Killable(target, Q))
                     Q.Cast(target);
 
-                if (W.CanCast(target) && W.IsKillable(target))
+                if (W.CanCast(target) && xcsoftlib.Killable(target, W))
                     W.Cast(target);
 
-                if (E.CanCast(target) && E.IsKillable(target))
+                if (E.CanCast(target) && xcsoftlib.Killable(target, E))
                     E.Cast(target);
             }
         }

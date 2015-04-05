@@ -20,7 +20,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         const byte defaltRange = 190;
 
         static bool QisAllGood(Obj_AI_Base target) { return Q.IsReady() && Q.IsCharging && target.IsValidTarget(Q.Range) && Q.GetPrediction(target).Hitchance >= HitChance.High; }
-        static int getViWStacks(Obj_AI_Base target) {var stacks = target.Buffs.Find(x => x.Name == "viwproc" && x.Caster.NetworkId == Player.NetworkId && x.IsValidBuff()); return stacks != null ? stacks.Count : 0; }
+        static int getViWStacks(Obj_AI_Base target) { var stacks = xcsoftlib.getBuffInstance("viwproc", Player); return stacks != null ? stacks.Count : 0; }
 
         public static void Load()
         {
@@ -280,10 +280,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 if (Q.IsReady() && target.IsValidTarget(Q.ChargedMaxRange) && Q.IsCharging && Q.IsKillable(target) && Q.GetPrediction(target).Hitchance >= HitChance.High)
                     Q.Cast(target);
 
-                if (E.CanCast(target) && E.IsKillable(target))
+                if (E.CanCast(target) && xcsoftlib.Killable(target, E))
                     E.Cast(target);
 
-                if (R.CanCast(target) && R.IsKillable(target))
+                if (R.CanCast(target) && xcsoftlib.Killable(target, R))
                     R.Cast(target);
             }
         }

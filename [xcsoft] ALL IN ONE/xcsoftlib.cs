@@ -35,9 +35,24 @@ namespace _xcsoft__ALL_IN_ONE
             return Collision.GetCollision(new List<SharpDX.Vector3> { targetPos }, input).OrderBy(obj => obj.Distance(source, false)).ToList();
         }
 
-        internal static BuffInstance getBuffInstance(string buffname)
+        internal static BuffInstance getBuffInstance(string buffName)
         {
-            return ObjectManager.Player.Buffs.Find(x => x.Name == buffname);
+            return ObjectManager.Player.Buffs.Find(x => x.Name == buffName && x.IsValidBuff());
+        }
+
+        internal static BuffInstance getBuffInstance(string buffName, Obj_AI_Base buffCaster)
+        {
+            return ObjectManager.Player.Buffs.Find(x => x.Name == buffName && x.Caster.NetworkId == buffCaster.NetworkId && x.IsValidBuff());
+        }
+
+        internal static bool Killable(Obj_AI_Base target, float damage)
+        {
+            return target.Health + target.HPRegenRate <= damage;
+        }
+
+        internal static bool Killable(Obj_AI_Base target, Spell spell)
+        {
+            return target.Health + (target.HPRegenRate/2) <= spell.GetDamage(target);
         }
     }
 }

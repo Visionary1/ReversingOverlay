@@ -304,6 +304,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
 
+            if(!Player.IsWindingUp)
+                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+
             return damage;
         }
     }

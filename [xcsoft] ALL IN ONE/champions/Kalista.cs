@@ -11,8 +11,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class Kalista//by xcsoft
     {
-        static Menu Menu { get { return initializer.Menu; } }
-        static Orbwalking.Orbwalker Orbwalker { get { return initializer.Orbwalker; } }
+        static Menu Menu { get { return xcsoftMenu.Menu; } }
+        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
@@ -145,7 +145,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Menu.Item("soulboundsaver", true).GetValue<bool>() && sender.Type == GameObjectType.obj_AI_Hero && sender.IsEnemy && R.IsReady())
             {
-                var soulbound = HeroManager.Allies.FirstOrDefault(hero => hero.HasBuff("kalistacoopstrikeally", true) && args.Target.NetworkId == hero.NetworkId && xcsoftlib.getHealthPercent(hero) <= 20);
+                var soulbound = HeroManager.Allies.FirstOrDefault(hero => hero.HasBuff("kalistacoopstrikeally", true) && args.Target.NetworkId == hero.NetworkId && xcsoftFunc.getHealthPercent(hero) <= 20);
 
                 if (soulbound != null)
                     R.Cast();
@@ -183,7 +183,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!(xcsoftlib.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("harassUseQ", true).GetValue<bool>())
@@ -197,7 +197,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!(xcsoftlib.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -211,7 +211,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 {
                     var killcount = 0;
 
-                    foreach (var colminion in xcsoftlib.getCollisionMinions(Player, Player.ServerPosition.Extend(minion.ServerPosition, Q.Range), Q.Delay, Q.Width, Q.Speed))
+                    foreach (var colminion in xcsoftFunc.getCollisionMinions(Player, Player.ServerPosition.Extend(minion.ServerPosition, Q.Range), Q.Delay, Q.Width, Q.Speed))
                     {
                         if (colminion.Health <= Q.GetDamage(colminion))
                             killcount++;
@@ -221,7 +221,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
                     if (killcount >= Menu.Item("laneclearQnum", true).GetValue<Slider>().Value && Q.GetPrediction(minion).Hitchance >= HitChance.Medium)
                     {
-                        Q.Cast(minion);
+                        Q.Cast(minion.ServerPosition);
                         break;
                     }
                 }
@@ -240,7 +240,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!(xcsoftlib.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(Player.ServerPosition, Orbwalking.GetRealAutoAttackRange(Player) + 100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

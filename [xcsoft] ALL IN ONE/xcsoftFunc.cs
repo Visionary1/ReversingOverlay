@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 
 namespace _xcsoft__ALL_IN_ONE
 {
-    internal static class xcsoftlib
+    static class xcsoftFunc
     {
         internal static float getHealthPercent(this Obj_AI_Base unit)
         {
@@ -20,14 +20,14 @@ namespace _xcsoft__ALL_IN_ONE
             return unit.Mana / unit.MaxMana * 100;
         }
 
-        internal static List<Obj_AI_Base> getCollisionMinions(Obj_AI_Hero source, SharpDX.Vector3 targetPos, float delay, float width, float speed)
+        internal static List<Obj_AI_Base> getCollisionMinions(Obj_AI_Hero source, SharpDX.Vector3 targetPos, float predDelay, float predWidth, float predSpeed)
         {
             var input = new PredictionInput
             {
                 Unit = source,
-                Radius = width,
-                Delay = delay,
-                Speed = speed,
+                Radius = predWidth,
+                Delay = predDelay,
+                Speed = predSpeed,
             };
 
             input.CollisionObjects[0] = CollisionableObjects.Minions;
@@ -45,14 +45,24 @@ namespace _xcsoft__ALL_IN_ONE
             return ObjectManager.Player.Buffs.Find(x => x.Name == buffName && x.Caster.NetworkId == buffCaster.NetworkId && x.IsValidBuff());
         }
 
-        internal static bool Killable(Obj_AI_Base target, float damage)
+        internal static bool isKillable(Obj_AI_Base target, float damage)
         {
             return target.Health + target.HPRegenRate <= damage;
         }
 
-        internal static bool Killable(Obj_AI_Base target, Spell spell)
+        internal static bool isKillable(Obj_AI_Base target, Spell spell)
         {
-            return target.Health + (target.HPRegenRate/2) <= spell.GetDamage(target);
+            return target.Health + target.HPRegenRate <= spell.GetDamage(target);
+        }
+
+        internal static void sendDebugMsg(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+        internal static bool anyoneValidInRange(float range)
+        {
+            return HeroManager.Enemies.Any(x => x.IsValidTarget(range));
         }
     }
 }

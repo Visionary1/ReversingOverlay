@@ -10,70 +10,38 @@ namespace _xcsoft__ALL_IN_ONE
     class initializer
     {
         static Obj_AI_Hero Player = ObjectManager.Player;
-        internal static Orbwalking.Orbwalker Orbwalker;
-        internal static Menu Menu;
+        static Menu Menu { get { return xcsoftMenu.Menu; } }
+        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
 
         static String colorChat(Color color, String text) { return "<font color = \"" + colorToHex(color) + "\">" + text + "</font>"; }
         static String colorToHex(Color c) { return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2"); }
 
-        internal static void init()
+        internal static void initialize()
         {
-            Menu = new Menu("[xcsoft] ALL IN ONE", "xcsoft_ALL_IN_ONE", true);
-
-            try { Console.WriteLine("[xcsoft] ALL IN ONE: " + Type.GetType("_xcsoft__ALL_IN_ONE.champions." + Player.ChampionName).Name + " Supported."); }
+            xcsoftMenu.initialize("[xcsoft] ALL IN ONE");
+            
+            try 
+            { 
+                xcsoftFunc.sendDebugMsg("[xcsoft] ALL IN ONE: " + Type.GetType("_xcsoft__ALL_IN_ONE.champions." + Player.ChampionName).Name + " Supported."); 
+            }
             catch
             {
-                Console.WriteLine("[xcsoft] ALL IN ONE: " + Player.ChampionName + " Not supported.");
-
+                xcsoftFunc.sendDebugMsg("[xcsoft] ALL IN ONE: " + Player.ChampionName + " Not supported.");
                 Game.PrintChat(colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.DarkGray, Player.ChampionName) + " Not supported.");
 
-                Menu.AddToMainMenu();
-                Menu.AddItem(new MenuItem("SORRY", "Sorry, " + Player.ChampionName + " Not supported"));
+                xcsoftMenu.addItem("Sorry, " + Player.ChampionName + " Not supported");
                 return;
             }
 
-            Menu.AddToMainMenu();
+            xcsoftMenu.addOrbwalker(Player.ChampionName);
+            xcsoftMenu.addTargetSelector(Player.ChampionName);
+            xcsoftMenu.addSubMenu_ChampTemplate(Player.ChampionName);
 
-            Orbwalker = new Orbwalking.Orbwalker(Menu.AddSubMenu(new Menu(Player.ChampionName + ": Orbwalker", "Orbwalker")));
-            TargetSelector.AddToMenu(Menu.AddSubMenu(new Menu(Player.ChampionName + ": Target Selector", "Target Selector")));
+            xcsoftMenu.addItem("blank", string.Empty);
+            xcsoftMenu.addItem("Work In Progress!");
+            xcsoftMenu.addItem("작업중입니다!");
 
-            Menu.AddSubMenu(new Menu(Player.ChampionName + ": Combo", "Combo"));
-            Menu.AddSubMenu(new Menu(Player.ChampionName + ": Harass", "Harass"));
-            Menu.AddSubMenu(new Menu(Player.ChampionName + ": Laneclear", "Laneclear"));
-            Menu.AddSubMenu(new Menu(Player.ChampionName + ": Jungleclear", "Jungleclear"));
-            Menu.AddSubMenu(new Menu(Player.ChampionName + ": Misc", "Misc"));
-            Menu.AddSubMenu(new Menu(Player.ChampionName + ": Drawings", "Drawings"));
-
-            Menu.AddItem(new MenuItem("blank", string.Empty));
-            Menu.AddItem(new MenuItem("EN", "Work In Progress!"));
-            Menu.AddItem(new MenuItem("KR", "작업중입니다!"));
-
-            //ha........  sandbox pls..
-            #region ChampLoad
-            switch (Player.ChampionName)
-            {
-                case "MasterYi":
-                    champions.MasterYi.Load();
-                    break;
-                case "Annie":
-                    champions.Annie.Load();
-                    break;
-                case "Garen":
-                    champions.Garen.Load();
-                    break;
-                case "Kalista":
-                    champions.Kalista.Load();
-                    break;
-                case "Ryze":
-                    champions.Ryze.Load();
-                    break;
-                case "Vi":
-                    champions.Vi.Load();
-                    break;
-                default:
-                    break;
-            } 
-            #endregion
+            champLoader.Load(Player.ChampionName);
 
             Menu.SubMenu("Drawings").AddItem(new MenuItem("blank", string.Empty));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));
@@ -86,7 +54,7 @@ namespace _xcsoft__ALL_IN_ONE
 
             Drawing.OnDraw += Drawing_OnDraw;
 
-            Game.PrintChat(colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.Red, Player.ChampionName) + " Loaded");
+            Game.PrintChat(colorChat(Color.DodgerBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.Red, Player.ChampionName) + " Loaded");
         }
 
         static void Drawing_OnDraw(EventArgs args)

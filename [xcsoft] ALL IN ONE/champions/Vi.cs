@@ -11,8 +11,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class Vi
     {
-        static Menu Menu { get { return initializer.Menu; } }
-        static Orbwalking.Orbwalker Orbwalker { get { return initializer.Orbwalker; } }
+        static Menu Menu { get { return xcsoftMenu.Menu; } }
+        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
@@ -20,7 +20,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         const byte defaltRange = 190;
 
         static bool QisAllGood(Obj_AI_Base target) { return Q.IsReady() && Q.IsCharging && target.IsValidTarget(Q.Range) && Q.GetPrediction(target).Hitchance >= HitChance.High; }
-        static int getViWStacks(Obj_AI_Base target) { var stacks = xcsoftlib.getBuffInstance("viwproc", Player); return stacks != null ? stacks.Count : 0; }
+        static int getViWStacks(Obj_AI_Base target) { var stacks = xcsoftFunc.getBuffInstance("viwproc", Player); return stacks != null ? stacks.Count : 0; }
 
         public static void Load()
         {
@@ -176,16 +176,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed )
             {
-                if (Menu.Item("HrsUseE", true).GetValue<bool>() && xcsoftlib.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value)
+                if (Menu.Item("HrsUseE", true).GetValue<bool>() && xcsoftFunc.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value)
                     E.Cast();
             }
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                if (Menu.Item("LcUseE", true).GetValue<bool>() && xcsoftlib.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value)
+                if (Menu.Item("LcUseE", true).GetValue<bool>() && xcsoftFunc.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value)
                     E.Cast();
 
-                if (Menu.Item("JcUseE", true).GetValue<bool>() && xcsoftlib.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value)
+                if (Menu.Item("JcUseE", true).GetValue<bool>() && xcsoftFunc.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value)
                     E.Cast();
             }
         }
@@ -222,7 +222,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!(xcsoftlib.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
@@ -247,7 +247,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!(xcsoftlib.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -261,7 +261,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!(xcsoftlib.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
@@ -280,10 +280,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 if (Q.IsReady() && target.IsValidTarget(Q.ChargedMaxRange) && Q.IsCharging && Q.IsKillable(target) && Q.GetPrediction(target).Hitchance >= HitChance.High)
                     Q.Cast(target);
 
-                if (E.CanCast(target) && xcsoftlib.Killable(target, E))
+                if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
                     E.Cast(target);
 
-                if (R.CanCast(target) && xcsoftlib.Killable(target, R))
+                if (R.CanCast(target) && xcsoftFunc.isKillable(target, R))
                     R.Cast(target);
             }
         }

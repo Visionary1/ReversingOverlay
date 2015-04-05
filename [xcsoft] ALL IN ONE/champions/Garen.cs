@@ -11,8 +11,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class Garen//by xcsoft
     {
-        static Menu Menu { get { return initializer.Menu; } }
-        static Orbwalking.Orbwalker Orbwalker { get { return initializer.Orbwalker; } }
+        static Menu Menu { get { return xcsoftMenu.Menu; } }
+        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
@@ -241,13 +241,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (Q.CanCast(target) && xcsoftlib.Killable(target, Q))
+                if (Q.CanCast(target) && xcsoftFunc.isKillable(target, Q))
                     Q.Cast(target);
 
-                if (E.CanCast(target) && xcsoftlib.Killable(target, E))
+                if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
                     E.Cast(target);
 
-                if (R.CanCast(target) && xcsoftlib.Killable(target, R))
+                if (R.CanCast(target) && xcsoftFunc.isKillable(target, R))
                     R.Cast(target);
             }
         }

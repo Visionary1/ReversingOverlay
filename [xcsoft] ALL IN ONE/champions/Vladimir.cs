@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class Ryze//by xcsoft
+    class Vladimir
     {
         static Menu Menu { get { return xcsoftMenu.Menu; } }
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
@@ -19,42 +19,42 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 625f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 600f, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 280f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 600f, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R);
+            R = new Spell(SpellSlot.R, 650f, TargetSelector.DamageType.Magical);
 
-            Q.SetTargetted(0.25f, 2000f);
-            W.SetTargetted(0.25f, float.MaxValue);
-            E.SetTargetted(0.25f, 2000f);
+            Q.SetTargetted(0.25f, float.MaxValue);
+            R.SetSkillshot(0.389f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
+            xcsoftMenu.addComboitems(new object[][] { new object[] 
+            { "Q", true }, new object[] 
+            { "W", false }, new object[] 
+            { "E", true }, new object[] 
+            { "R", true } });
 
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseW", "Use W", true).SetValue(true));
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
+            xcsoftMenu.addHarassitems(new object[][] { new object[] 
+            { "Q", true }, new object[] 
+            { "E", true } }, false);
 
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseW", "Use W", true).SetValue(true));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
+            xcsoftMenu.addLanclearitems(new object[][] { new object[] 
+            { "Q", true}, new object[] 
+            { "E", true}}, false);
 
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseW", "Use W", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
+            xcsoftMenu.addJungleclearitems(new object[][] { new object[] 
+            { "Q", true }, new object[] 
+            { "E", true } }, false);
 
-            Menu.SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
-            Menu.SubMenu("Misc").AddItem(new MenuItem("miscAntigap", "Use Anti-Gapcloser", true).SetValue(true));
-            Menu.SubMenu("Misc").AddItem(new MenuItem("miscAutointer", "Use Interrupter", true).SetValue(true));
+            xcsoftMenu.addMiscitems(new object[][] { new object[] 
+            { "Killsteal" ,true}, new object[] 
+            { "Anti-Gapcloser", true }, new object[] 
+            { "Interrupter", true} });
 
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.Red)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawW", "W Range", true).SetValue(new Circle(true, Color.Red)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawE", "E Range", true).SetValue(new Circle(true, Color.Red)));
+            xcsoftMenu.addDrawingsitems(new object[][] { new object[] 
+            { "Q Range", new Circle(true, Color.GreenYellow) }, new object[] 
+            { "W Range", new Circle(false, Color.GreenYellow) }, new object[] 
+            { "E Range", new Circle(true, Color.GreenYellow) }, new object[] 
+            { "R Range", new Circle(false, Color.GreenYellow) } });
 
             #region DamageIndicator
             var drawDamageMenu = new MenuItem("Draw_Damage", "Draw Combo Damage", true).SetValue(true);
@@ -85,7 +85,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-            Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -109,7 +108,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
 
             #region Killsteal
-            if (!Menu.Item("miscKs", true).GetValue<bool>())
+            if (!Menu.Item("MiscKillsteal", true).GetValue<bool>())
                 Killsteal();
             #endregion
         }
@@ -119,10 +118,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = Menu.Item("drawQ", true).GetValue<Circle>();
-            var drawW = Menu.Item("drawW", true).GetValue<Circle>();
-            var drawE = Menu.Item("drawE", true).GetValue<Circle>();
-            var drawR = Menu.Item("drawR", true).GetValue<Circle>();
+            var drawQ = Menu.Item("DrawQ Range", true).GetValue<Circle>();
+            var drawW = Menu.Item("DrawW Range", true).GetValue<Circle>();
+            var drawE = Menu.Item("DrawE Range", true).GetValue<Circle>();
+            var drawR = Menu.Item("DrawR Range", true).GetValue<Circle>();
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
@@ -139,72 +138,55 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!Menu.Item("miscAntigap", true).GetValue<bool>() || Player.IsDead)
+            if (!Menu.Item("MiscAnti-Gapcloser", true).GetValue<bool>() || Player.IsDead)
                 return;
 
-            if (W.CanCast(gapcloser.Sender))
-                W.Cast(gapcloser.Sender);
-        }
-
-        static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
-        {
-            if (!Menu.Item("miscAutointer", true).GetValue<bool>() || Player.IsDead)
-                return;
-
-            if (W.CanCast(sender))
-                W.Cast(sender);
+            if (Q.CanCast(gapcloser.Sender))
+                Q.Cast(gapcloser.Sender);
         }
 
         static void Combo()
         {
             if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())
-            {
                 Q.CastOnBestTarget();
-            }
 
             if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady())
             {
-                W.CastOnBestTarget();
+                if (xcsoftFunc.anyoneValidInRange(W.Range))
+                    W.Cast();
             }
 
             if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady())
             {
-                E.CastOnBestTarget();
+                if (xcsoftFunc.anyoneValidInRange(E.Range))
+                    E.Cast();
             }
 
             if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
             {
-                if(!Q.IsReady() && !E.IsReady() && xcsoftFunc.getHealthPercent(Player) <= 98)
-                    R.Cast();
+                var rTarget = HeroManager.Enemies.FirstOrDefault(x=> R.GetPrediction(x, true).Hitchance >= HitChance.High);
+
+                if(rTarget != null)
+                    R.Cast(rTarget, false, true);
             }
         }
 
         static void Harass()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
-                return;
-
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
-            {
-                Q.CastOnBestTarget();
-            }
-
-            if (Menu.Item("HrsUseW", true).GetValue<bool>() && W.IsReady())
-            {
-                W.CastOnBestTarget();
+            { 
+                Q.CastOnBestTarget(); 
             }
 
             if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady())
             {
-                E.CastOnBestTarget();
+                if (xcsoftFunc.anyoneValidInRange(E.Range))
+                    E.Cast(); 
             }
         }
 
         static void Laneclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
-                return;
-
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
@@ -212,32 +194,21 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Menu.Item("LcUseQ", true).GetValue<bool>() && Q.IsReady())
             {
-                var qTarget = Minions.Where(x => Q.CanCast(x) && Q.IsKillable(x)).OrderByDescending(x => x.Health).FirstOrDefault();
+                var qTarget = Minions.FirstOrDefault(x => x.IsValidTarget(Q.Range));
 
-                if (Q.CanCast(qTarget))
+                if (qTarget != null)
                     Q.Cast(qTarget);
-            }
-
-            if (Menu.Item("LcUseW", true).GetValue<bool>() && W.IsReady())
-            {
-                var wTarget = Minions.Where(x => W.CanCast(x) && W.IsKillable(x)).OrderByDescending(x => x.Health).FirstOrDefault();
-
-                if (W.CanCast(wTarget))
-                    W.Cast(wTarget);
             }
 
             if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady())
             {
-                if (E.CanCast(Minions[0]))
-                    E.Cast(Minions[0]);
+                if (Minions.Any(x => x.IsValidTarget(E.Range)))
+                    E.Cast();
             }
         }
 
         static void Jungleclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
-                return;
-
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
@@ -245,32 +216,25 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Menu.Item("JcUseQ", true).GetValue<bool>() && Q.IsReady())
             {
-                if (Q.CanCast(Mobs[0]))
-                    Q.Cast(Mobs[0]);
-            }
+                var qTarget = Mobs.FirstOrDefault(x => x.IsValidTarget(Q.Range));
 
-            if (Menu.Item("JcUseW", true).GetValue<bool>() && W.IsReady())
-            {
-                if (Q.CanCast(Mobs[0]))
-                    Q.Cast(Mobs[0]);
+                if (qTarget != null)
+                    Q.Cast(qTarget);
             }
 
             if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady())
             {
-                if (E.CanCast(Mobs[0]))
-                    E.Cast(Mobs[0]);
+                if (Mobs.Any(x => x.IsValidTarget(E.Range)))
+                    E.Cast();
             }
         }
 
         static void Killsteal()
         {
-            foreach (var target in HeroManager.Enemies.OrderByDescending(x=>x.Health))
+            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && xcsoftFunc.isKillable(target, Q))
                     Q.Cast(target);
-
-                if (W.CanCast(target) && xcsoftFunc.isKillable(target, W))
-                    W.Cast(target);
 
                 if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
                     E.Cast(target);
@@ -289,6 +253,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
+
+            if (R.IsReady())
+                damage += R.GetDamage(enemy);
 
             return damage;
         }

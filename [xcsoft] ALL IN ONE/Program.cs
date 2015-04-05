@@ -13,7 +13,7 @@ namespace _xcsoft__ALL_IN_ONE
 
         static void Game_OnGameLoad(EventArgs args)
         {
-            initializer.init();
+            initializer.initialize();
         }
     }
 }

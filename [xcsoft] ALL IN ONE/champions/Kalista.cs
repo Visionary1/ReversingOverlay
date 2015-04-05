@@ -268,8 +268,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             return damage;
         }
 
-        
-
         static void Killsteal()
         {
             var target = HeroManager.Enemies.FirstOrDefault(x => !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield) && E.CanCast(x) && (x.Health + (x.HPRegenRate / 2)) <= E.GetDamage(x));

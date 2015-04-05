@@ -174,14 +174,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
             {
-                if(!Q.IsReady() && !E.IsReady() && xcsoft_lib.HealthPercentage(Player) <= 98)
+                if(!Q.IsReady() && !E.IsReady() && xcsoftlib.getHealthPercent(Player) <= 98)
                     R.Cast();
             }
         }
 
         static void Harass()
         {
-            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftlib.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
@@ -202,7 +202,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftlib.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -235,7 +235,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftlib.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

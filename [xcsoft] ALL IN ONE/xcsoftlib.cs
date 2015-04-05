@@ -8,19 +8,19 @@ using LeagueSharp.Common;
 
 namespace _xcsoft__ALL_IN_ONE
 {
-    internal static class xcsoft_lib
+    internal static class xcsoftlib
     {
-        internal static float HealthPercentage(this Obj_AI_Base unit)
+        internal static float getHealthPercent(this Obj_AI_Base unit)
         {
             return unit.Health / unit.MaxHealth * 100;
         }
 
-        internal static float ManaPercentage(this Obj_AI_Base unit)
+        internal static float getManaPercent(this Obj_AI_Base unit)
         {
             return unit.Mana / unit.MaxMana * 100;
         }
 
-        internal static List<Obj_AI_Base> GetCollisionMinions(Obj_AI_Hero source, SharpDX.Vector3 targetPos, float delay, float width, float speed)
+        internal static List<Obj_AI_Base> getCollisionMinions(Obj_AI_Hero source, SharpDX.Vector3 targetPos, float delay, float width, float speed)
         {
             var input = new PredictionInput
             {
@@ -33,6 +33,11 @@ namespace _xcsoft__ALL_IN_ONE
             input.CollisionObjects[0] = CollisionableObjects.Minions;
 
             return Collision.GetCollision(new List<SharpDX.Vector3> { targetPos }, input).OrderBy(obj => obj.Distance(source, false)).ToList();
+        }
+
+        internal static BuffInstance getBuffInstance(string buffname)
+        {
+            return ObjectManager.Player.Buffs.Find(x => x.Name == buffname);
         }
     }
 }

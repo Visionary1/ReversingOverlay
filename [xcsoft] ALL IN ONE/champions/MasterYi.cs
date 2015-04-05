@@ -18,7 +18,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static Spell Q, W, E, R;
 
         static void Wcancel() { Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
-        static void Rcast() { R.Cast(); }
 
         public static void Load()
         {
@@ -47,6 +46,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
 
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.Red)));
+            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawRTimer", "R Timer", true).SetValue(new Circle(true, Color.LightGreen)));
 
             #region DamageIndicator
             var drawDamageMenu = new MenuItem("Draw_Damage", "Draw Combo Damage", true).SetValue(true);
@@ -112,9 +112,21 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             var drawQ = Menu.Item("drawQ", true).GetValue<Circle>();
+            var drawRTimer = Menu.Item("drawRTimer", true).GetValue<Circle>();
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+
+            if (drawRTimer.Active)
+            {
+                var buff = xcsoftlib.getBuffInstance("Highlander");
+
+                if (buff != null)
+                {
+                    var pos_temp = Drawing.WorldToScreen(Player.Position);
+                    Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R: " + (buff.EndTime - Game.ClockTime).ToString("0.00"));
+                }
+            }
         }
 
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -138,9 +150,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 {
                     if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady())
                         E.Cast();
-
-                    if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
-                        Utility.DelayAction.Add(200, Rcast);
                 }
             }
 
@@ -155,10 +164,15 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!unit.IsMe || Target == null)
                 return;
 
-            if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady()
-                && HeroManager.Enemies.Any(x=> Orbwalking.InAutoAttackRange(x)) 
-                && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                W.Cast();
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            {
+                if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady()
+                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+                    W.Cast();
+
+                if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
+                    R.Cast();
+            }
         }
 
         static void Combo()
@@ -173,7 +187,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftlib.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
@@ -182,7 +196,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftlib.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -196,7 +210,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!(xcsoft_lib.ManaPercentage(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftlib.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

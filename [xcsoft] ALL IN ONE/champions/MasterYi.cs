@@ -121,10 +121,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!sender.IsMe || Player.IsDead)
                 return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && args.Target.Type != GameObjectType.obj_AI_Minion)
             {
                 if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name
-                    && HeroManager.Enemies.Any(x => x.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 450)))
+                    && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
                 {
                     if (Menu.Item("CbUseW", true).GetValue<bool>())
                     {
@@ -135,8 +135,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
                 if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name)
                 {
-                    Utility.DelayAction.Add(250, Orbwalking.ResetAutoAttackTimer);
-
                     if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady())
                         E.Cast();
 
@@ -144,6 +142,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
                         R.Cast();
                 }
             }
+
+            if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name)
+                Utility.DelayAction.Add(100, Orbwalking.ResetAutoAttackTimer);
         }
 
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)

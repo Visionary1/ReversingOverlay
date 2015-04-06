@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class Vladimir
+    class Vladimir//by xcsoft
     {
         static Menu Menu { get { return xcsoftMenu.Menu; } }
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
@@ -25,7 +25,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             Q = new Spell(SpellSlot.Q, 600f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 300f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, 610f, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, 590f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 625f, TargetSelector.DamageType.Magical);
 
             Q.SetTargetted(0.25f, float.MaxValue);
@@ -52,7 +52,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.addMiscitems(new object[][] { new object[] 
             { "Killsteal" ,true}, new object[] 
             { "Anti-Gapcloser", true }, new object[] 
-            { "Auto-E For Stacks", true} });
+            { "Auto-E For Keep Stacks", true} });
 
             xcsoftMenu.addDrawingsitems(new object[][] { new object[] 
             { "Q Range", new Circle(true, Color.GreenYellow) }, new object[] 
@@ -120,7 +120,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             #endregion
 
             #region AutoE
-            if (Menu.Item("MiscAuto-E For Stacks", true).GetValue<bool>())
+            if (Menu.Item("MiscAuto-E For Keep Stacks", true).GetValue<bool>() && !Player.IsRecalling())
                 AutoE(); 
             #endregion
         }
@@ -148,10 +148,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
 
-            if(drawWTimer.Active)
+            if (drawWTimer.Active && getWBuffDuration > 0)
             {
                 var pos_temp = Drawing.WorldToScreen(Player.Position);
-                Drawing.DrawText(pos_temp[0], pos_temp[1], drawWTimer.Color, "Pool: " + getWBuffDuration.ToString("0.00"));
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawWTimer.Color, "W: " + getWBuffDuration.ToString("0.00"));
             }
         }
 

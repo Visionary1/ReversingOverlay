@@ -19,6 +19,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Wcancel() { Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
 
+        static float getRBuffDuration { get { var buff = xcsoftFunc.getBuffInstance("Highlander"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 600f);
@@ -117,15 +119,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
 
-            if (drawRTimer.Active)
+            if (drawRTimer.Active && getRBuffDuration > 0)
             {
-                var buff = xcsoftFunc.getBuffInstance("Highlander");
-
-                if (buff != null)
-                {
-                    var pos_temp = Drawing.WorldToScreen(Player.Position);
-                    Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R: " + (buff.EndTime - Game.ClockTime).ToString("0.00"));
-                }
+                var pos_temp = Drawing.WorldToScreen(Player.Position);
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R: " + getRBuffDuration.ToString("0.00"));
             }
         }
 

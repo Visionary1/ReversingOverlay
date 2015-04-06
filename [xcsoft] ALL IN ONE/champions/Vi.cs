@@ -20,7 +20,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         const byte defaltRange = 190;
 
         static bool QisAllGood(Obj_AI_Base target) { return Q.IsReady() && Q.IsCharging && target.IsValidTarget(Q.Range) && Q.GetPrediction(target).Hitchance >= HitChance.High; }
-        static int getViWStacks(Obj_AI_Base target) { var stacks = xcsoftFunc.getBuffInstance("viwproc", Player); return stacks != null ? stacks.Count : 0; }
+        static int getWBuffStacks(Obj_AI_Base target) { var stacks = xcsoftFunc.getBuffInstance("viwproc", Player); return stacks != null ? stacks.Count : 0; }
 
         public static void Load()
         {
@@ -295,7 +295,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
 
-            if(getViWStacks(enemy) == 2)
+            if(getWBuffStacks(enemy) == 2)
                 damage += W.GetDamage(enemy);
 
             if (E.IsReady())

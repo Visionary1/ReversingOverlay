@@ -140,7 +140,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsMe && args.SData.Name == "KalistaExpungeWrapper")
+            if (sender.IsMe && args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.E).Name)
                     Utility.DelayAction.Add(250, Orbwalking.ResetAutoAttackTimer);
 
             if (Menu.Item("soulboundsaver", true).GetValue<bool>() && sender.Type == GameObjectType.obj_AI_Hero && sender.IsEnemy && R.IsReady())

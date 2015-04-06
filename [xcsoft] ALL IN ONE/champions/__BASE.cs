@@ -113,7 +113,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
 
             #region Killsteal
-            if (!Menu.Item("MiscKillsteal", true).GetValue<bool>())
+            if (Menu.Item("MiscKillsteal", true).GetValue<bool>())
                 Killsteal();
             #endregion
         }

@@ -17,12 +17,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static Spell Q, W, E, R;
 
+        static int getEBuffStacks { get { var buff = xcsoftFunc.getBuffInstance("vladimirtidesofbloodcost"); return buff != null ? buff.Count : 0; } }
+        static float getEBuffDuration { get { var buff = xcsoftFunc.getBuffInstance("vladimirtidesofbloodcost"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getWBuffDuration { get { var buff = xcsoftFunc.getBuffInstance("VladimirSanguinePool"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 600f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 280f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, 600f, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 650f, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 300f, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, 610f, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 625f, TargetSelector.DamageType.Magical);
 
             Q.SetTargetted(0.25f, float.MaxValue);
             R.SetSkillshot(0.389f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
@@ -48,13 +52,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.addMiscitems(new object[][] { new object[] 
             { "Killsteal" ,true}, new object[] 
             { "Anti-Gapcloser", true }, new object[] 
-            { "Interrupter", true} });
+            { "Auto-E For Stacks", true} });
 
             xcsoftMenu.addDrawingsitems(new object[][] { new object[] 
             { "Q Range", new Circle(true, Color.GreenYellow) }, new object[] 
             { "W Range", new Circle(false, Color.GreenYellow) }, new object[] 
             { "E Range", new Circle(true, Color.GreenYellow) }, new object[] 
-            { "R Range", new Circle(false, Color.GreenYellow) } });
+            { "R Range", new Circle(false, Color.GreenYellow) }, new object[] 
+            { "W Timer", new Circle(false, Color.GreenYellow) } });
 
             #region DamageIndicator
             var drawDamageMenu = new MenuItem("Draw_Damage", "Draw Combo Damage", true).SetValue(true);
@@ -107,9 +112,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 }
             }
 
+            Orbwalker.SetAttack(!Player.HasBuff("VladimirSanguinePool"));
+
             #region Killsteal
-            if (!Menu.Item("MiscKillsteal", true).GetValue<bool>())
+            if (Menu.Item("MiscKillsteal", true).GetValue<bool>())
                 Killsteal();
+            #endregion
+
+            #region AutoE
+            if (Menu.Item("MiscAuto-E For Stacks", true).GetValue<bool>())
+                AutoE(); 
             #endregion
         }
 
@@ -122,6 +134,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             var drawW = Menu.Item("DrawW Range", true).GetValue<Circle>();
             var drawE = Menu.Item("DrawE Range", true).GetValue<Circle>();
             var drawR = Menu.Item("DrawR Range", true).GetValue<Circle>();
+            var drawWTimer = Menu.Item("DrawW Timer", true).GetValue<Circle>();
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
@@ -134,6 +147,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+
+            if(drawWTimer.Active)
+            {
+                var pos_temp = Drawing.WorldToScreen(Player.Position);
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawWTimer.Color, "Pool: " + getWBuffDuration.ToString("0.00"));
+            }
         }
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
@@ -194,7 +213,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Menu.Item("LcUseQ", true).GetValue<bool>() && Q.IsReady())
             {
-                var qTarget = Minions.FirstOrDefault(x => x.IsValidTarget(Q.Range));
+                var qTarget = Minions.Where(x => x.IsValidTarget(Q.Range) && Q.IsKillable(x)).OrderByDescending(x=>x.Health).FirstOrDefault();
 
                 if (qTarget != null)
                     Q.Cast(qTarget);
@@ -239,6 +258,18 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
                     E.Cast(target);
             }
+        }
+
+        static void AutoE()
+        {
+            if (!E.IsReady())
+                return;
+
+            if (getEBuffStacks < 4)
+                E.Cast();
+
+            if (getEBuffStacks == 4 && getEBuffDuration <= 0.5f)
+                E.Cast();
         }
 
         static float getComboDamage(Obj_AI_Base enemy)

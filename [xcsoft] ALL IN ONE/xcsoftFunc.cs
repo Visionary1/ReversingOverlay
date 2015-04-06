@@ -64,5 +64,15 @@ namespace _xcsoft__ALL_IN_ONE
         {
             return HeroManager.Enemies.Any(x => x.IsValidTarget(range));
         }
+
+        internal static String colorChat(System.Drawing.Color color, String text) 
+        { 
+            return "<font color = \"" + colorToHex(color) + "\">" + text + "</font>"; 
+        }
+
+        internal static String colorToHex(System.Drawing.Color c)
+        { 
+            return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2"); 
+        }
     }
 }

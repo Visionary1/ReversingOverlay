@@ -13,8 +13,7 @@ namespace _xcsoft__ALL_IN_ONE
         static Menu Menu { get { return xcsoftMenu.Menu; } }
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
 
-        static String colorChat(Color color, String text) { return "<font color = \"" + colorToHex(color) + "\">" + text + "</font>"; }
-        static String colorToHex(Color c) { return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2"); }
+        
 
         internal static void initialize()
         {
@@ -27,7 +26,7 @@ namespace _xcsoft__ALL_IN_ONE
             catch
             {
                 xcsoftFunc.sendDebugMsg("[xcsoft] ALL IN ONE: " + Player.ChampionName + " Not supported.");
-                Game.PrintChat(colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.DarkGray, Player.ChampionName) + " Not supported.");
+                Game.PrintChat(xcsoftFunc.colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + xcsoftFunc.colorChat(Color.DarkGray, Player.ChampionName) + " Not supported.");
 
                 xcsoftMenu.addItem("Sorry, " + Player.ChampionName + " Not supported");
                 return;
@@ -54,7 +53,7 @@ namespace _xcsoft__ALL_IN_ONE
 
             Drawing.OnDraw += Drawing_OnDraw;
 
-            Game.PrintChat(colorChat(Color.DodgerBlue, "[xcsoft] ALL IN ONE: ") + colorChat(Color.Red, Player.ChampionName) + " Loaded");
+            Game.PrintChat(xcsoftFunc.colorChat(Color.DodgerBlue, "[xcsoft] ALL IN ONE: ") + xcsoftFunc.colorChat(Color.Red, Player.ChampionName) + " Loaded");
         }
 
         static void Drawing_OnDraw(EventArgs args)

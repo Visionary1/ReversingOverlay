@@ -34,7 +34,7 @@ namespace _xcsoft__ALL_IN_ONE
             { "Auto-Attack Target",     new Circle(true, Color.Red)},           new object[] 
             { "Minion Last Hit",        new Circle(true, Color.GreenYellow)},   new object[] 
             { "Minion Near Kill",       new Circle(true, Color.Gray)},          new object[] 
-            { "Jungle Position",        true                                            }});
+            { "Jungle Position",        true                                    }}, false);
 
             Drawing.OnDraw += Drawing_OnDraw;
 
@@ -47,7 +47,7 @@ namespace _xcsoft__ALL_IN_ONE
                 return;
 
             var drawMinionLastHit = xcsoftMenu.Drawings.getCircleValue("Minion Last Hit", false);
-            var drawMinionNearKill = xcsoftMenu.Drawings.getCircleValue("Minion Near Kill", false);
+            var drawMinionNearKill = xcsoftMenu.Drawings.getCircleValue("Minion Near Kill",false);
 
             if (drawMinionLastHit.Active || drawMinionNearKill.Active)
             {
@@ -61,7 +61,7 @@ namespace _xcsoft__ALL_IN_ONE
                 }
             }
 
-            if (Game.MapId == (GameMapId)11 && xcsoftMenu.Drawings.getBoolValue("Jungle Position", false))
+            if (Game.MapId == (GameMapId)11 && xcsoftMenu.Drawings.getBoolValue("Jungle Position",false))
             {
                 const byte circleRadius = 100;
 

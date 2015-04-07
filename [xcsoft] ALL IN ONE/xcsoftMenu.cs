@@ -483,11 +483,11 @@ namespace _xcsoft__ALL_IN_ONE
 
         internal static class Drawings
         {
-            internal static void addItems(object[][] items)
+            internal static void addItems(object[][] items, bool champUniq = true)
             {
                 for (int i = 0; i < items.Length; i++)
                 {
-                    Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings." + items[i][0].ToString(), items[i][0].ToString(), true).SetValue(items[i][1]));
+                    Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings." + items[i][0].ToString(), items[i][0].ToString(), champUniq).SetValue(items[i][1]));
                 }
             }
 

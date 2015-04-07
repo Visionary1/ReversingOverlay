@@ -61,7 +61,7 @@ namespace _xcsoft__ALL_IN_ONE
                 }
             }
 
-            if (Game.MapId == (GameMapId)11 && xcsoftMenu.Drawings.getBoolValue("Jungle Position"), false)
+            if (Game.MapId == (GameMapId)11 && xcsoftMenu.Drawings.getBoolValue("Jungle Position", false))
             {
                 const byte circleRadius = 100;
 

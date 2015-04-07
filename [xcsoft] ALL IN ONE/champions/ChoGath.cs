@@ -29,23 +29,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             xcsoftMenu.Combo.addUseQ();
             xcsoftMenu.Combo.addUseW();
-            xcsoftMenu.Combo.addUseE();
             xcsoftMenu.Combo.addUseR();
 
             xcsoftMenu.Harass.addUseQ();
             xcsoftMenu.Harass.addUseW();
-            xcsoftMenu.Harass.addUseE();
-            xcsoftMenu.Harass.addUseR();
 
             xcsoftMenu.Laneclear.addUseQ();
             xcsoftMenu.Laneclear.addUseW();
-            xcsoftMenu.Laneclear.addUseE();
-            xcsoftMenu.Laneclear.addUseR();
 
             xcsoftMenu.Jungleclear.addUseQ();
             xcsoftMenu.Jungleclear.addUseW();
-            xcsoftMenu.Jungleclear.addUseE();
-            xcsoftMenu.Jungleclear.addUseR();
 
             xcsoftMenu.Misc.addUseKillsteal();
             xcsoftMenu.Misc.addUseAntiGapcloser();
@@ -134,16 +127,22 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Combo()
         {
             if (xcsoftMenu.Combo.UseQ && Q.IsReady())
-            { }
+            {
+                Q.CastOnBestTarget();
+            }
 
             if (xcsoftMenu.Combo.UseW && W.IsReady())
-            { }
-
-            if (xcsoftMenu.Combo.UseE && E.IsReady())
-            { }
+            {
+                W.CastOnBestTarget();
+            }
 
             if (xcsoftMenu.Combo.UseR && R.IsReady())
-            { }
+            {
+                var rTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && xcsoftFunc.isKillable(x, R)).OrderByDescending(x => x.Health).FirstOrDefault();
+
+                if (rTarget != null)
+                    R.CastOnUnit(rTarget);
+            }
         }
 
         static void Harass()
@@ -152,16 +151,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (xcsoftMenu.Harass.UseQ && Q.IsReady())
-            { }
+            {
+                Q.CastOnBestTarget();
+            }
 
             if (xcsoftMenu.Harass.UseW && W.IsReady())
-            { }
-
-            if (xcsoftMenu.Harass.UseE && E.IsReady())
-            { }
-
-            if (xcsoftMenu.Harass.UseR && R.IsReady())
-            { }
+            {
+                W.CastOnBestTarget();
+            }
         }
 
         static void Laneclear()
@@ -175,16 +172,18 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (xcsoftMenu.Laneclear.UseQ && Q.IsReady())
-            { }
+            {
+                var Qloc = Q.GetCircularFarmLocation(Minions);
+
+                if (Qloc.MinionsHit >= 3)
+                    Q.Cast(Qloc.Position);
+            }
 
             if (xcsoftMenu.Laneclear.UseW && W.IsReady())
-            { }
-
-            if (xcsoftMenu.Laneclear.UseE && E.IsReady())
-            { }
-
-            if (xcsoftMenu.Laneclear.UseR && R.IsReady())
-            { }
+            {
+                if (W.CanCast(Minions.FirstOrDefault()))
+                    W.Cast(Minions.FirstOrDefault());
+            }
         }
 
         static void Jungleclear()
@@ -198,16 +197,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (xcsoftMenu.Jungleclear.UseQ && Q.IsReady())
-            { }
+            {
+                if (Q.CanCast(Mobs.FirstOrDefault()))
+                    Q.Cast(Mobs.FirstOrDefault());
+            }
 
             if (xcsoftMenu.Jungleclear.UseW && W.IsReady())
-            { }
-
-            if (xcsoftMenu.Jungleclear.UseE && E.IsReady())
-            { }
-
-            if (xcsoftMenu.Jungleclear.UseR && R.IsReady())
-            { }
+            {
+                if (W.CanCast(Mobs.FirstOrDefault()))
+                    W.Cast(Mobs.FirstOrDefault());
+            }
         }
 
         static void Killsteal()
@@ -219,9 +218,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
                 if (W.CanCast(target) && xcsoftFunc.isKillable(target, W))
                     W.Cast(target);
-
-                if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
-                    E.Cast(target);
 
                 if (R.CanCast(target) && xcsoftFunc.isKillable(target, R))
                     R.Cast(target);

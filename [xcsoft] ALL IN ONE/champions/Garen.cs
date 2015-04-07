@@ -11,7 +11,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class Garen//by xcsoft
     {
-        static Menu Menu { get { return xcsoftMenu.Menu; } }
+        static Menu Menu { get { return xcsoftMenu.Menu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
@@ -52,31 +52,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawE", "E Range", true).SetValue(new Circle(true, Color.Red)));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(true, Color.Red)));
 
-            #region DamageIndicator
-            var drawDamageMenu = new MenuItem("Draw_Damage", "Draw Combo Damage", true).SetValue(true);
-            var drawFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, Color.FromArgb(100, 255, 228, 0)));
-
-            Menu.SubMenu("Drawings").AddItem(drawDamageMenu);
-            Menu.SubMenu("Drawings").AddItem(drawFill);
-
-            DamageIndicator.DamageToUnit = getComboDamage;
-            DamageIndicator.Enabled = drawDamageMenu.GetValue<bool>();
-            DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
-            DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
-
-            drawDamageMenu.ValueChanged +=
-            delegate(object sender, OnValueChangeEventArgs eventArgs)
-            {
-                DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
-            };
-
-            drawFill.ValueChanged +=
-            delegate(object sender, OnValueChangeEventArgs eventArgs)
-            {
-                DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
-                DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
-            };
-            #endregion
+            xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;

@@ -9,74 +9,58 @@ namespace _xcsoft__ALL_IN_ONE
 {
     class initializer
     {
-        static Obj_AI_Hero Player = ObjectManager.Player;
-        static Menu Menu { get { return xcsoftMenu.Menu; } }
-        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
-
-        
-
         internal static void initialize()
         {
             xcsoftMenu.initialize("[xcsoft] ALL IN ONE");
-            
-            try 
-            { 
-                xcsoftFunc.sendDebugMsg("[xcsoft] ALL IN ONE: " + Type.GetType("_xcsoft__ALL_IN_ONE.champions." + Player.ChampionName).Name + " Supported."); 
-            }
-            catch
-            {
-                xcsoftFunc.sendDebugMsg("[xcsoft] ALL IN ONE: " + Player.ChampionName + " Not supported.");
-                Game.PrintChat(xcsoftFunc.colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + xcsoftFunc.colorChat(Color.DarkGray, Player.ChampionName) + " Not supported.");
 
-                xcsoftMenu.addItem("Sorry, " + Player.ChampionName + " Not supported");
-                return;
-            }
+            xcsoftFunc.champSupportedCheck("[xcsoft] ALL IN ONE", "_xcsoft__ALL_IN_ONE.champions");
 
-            xcsoftMenu.addOrbwalker(Player.ChampionName);
-            xcsoftMenu.addTargetSelector(Player.ChampionName);
-            xcsoftMenu.addSubMenu_ChampTemplate(Player.ChampionName);
+            xcsoftMenu.addOrbwalker(ObjectManager.Player.ChampionName);
+            xcsoftMenu.addTargetSelector(ObjectManager.Player.ChampionName);
+            xcsoftMenu.addSubMenu_ChampTemplate(ObjectManager.Player.ChampionName);
 
-            xcsoftMenu.addItem("blank", string.Empty);
+            xcsoftMenu.addBlankItem();
             xcsoftMenu.addItem("Work In Progress!");
             xcsoftMenu.addItem("작업중입니다!");
 
-            champLoader.Load(Player.ChampionName);
+            champLoader.Load(ObjectManager.Player.ChampionName);
 
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("blank", string.Empty));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));
+            xcsoftMenu.Drawings.addBlankItem();
+            xcsoftMenu.Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));
 
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawAARange", "Auto-Attack Real Range").SetValue(new Circle(true, Color.Silver)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawAATarget", "Auto-Attack Target").SetValue(new Circle(true, Color.Red)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawMinionLastHit", "Minion Last Hit").SetValue(new Circle(true, Color.GreenYellow)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawMinionNearKill", "Minion Near Kill").SetValue(new Circle(true, Color.Gray)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawJunglePosition", "Jungle Position").SetValue(true));
+            xcsoftMenu.Drawings.addItems(new object[][] { new object[] 
+            { "Auto-Attack Real Range", new Circle(true, Color.Silver)},        new object[] 
+            { "Auto-Attack Target",     new Circle(true, Color.Red)},           new object[] 
+            { "Minion Last Hit",        new Circle(true, Color.GreenYellow)},   new object[] 
+            { "Minion Near Kill",       new Circle(true, Color.Gray)},          new object[] 
+            { "Jungle Position",        true                                            }});
 
             Drawing.OnDraw += Drawing_OnDraw;
 
-            Game.PrintChat(xcsoftFunc.colorChat(Color.DodgerBlue, "[xcsoft] ALL IN ONE: ") + xcsoftFunc.colorChat(Color.Red, Player.ChampionName) + " Loaded");
+            Game.PrintChat(xcsoftFunc.colorChat(Color.DodgerBlue, "[xcsoft] ALL IN ONE: ") + xcsoftFunc.colorChat(Color.Red, ObjectManager.Player.ChampionName) + " Loaded");
         }
 
         static void Drawing_OnDraw(EventArgs args)
         {
-            if (Player.IsDead)
+            if (ObjectManager.Player.IsDead)
                 return;
 
-            var drawMinionLastHit = Menu.Item("drawMinionLastHit").GetValue<Circle>();
-            var drawMinionNearKill = Menu.Item("drawMinionNearKill").GetValue<Circle>();
+            var drawMinionLastHit = xcsoftMenu.Drawings.getCircleValue("MinionLastHit");
+            var drawMinionNearKill = xcsoftMenu.Drawings.getCircleValue("MinionNearKill");
 
             if (drawMinionLastHit.Active || drawMinionNearKill.Active)
             {
-                foreach (var minion in MinionManager.GetMinions(Player.Position, Player.AttackRange + Player.BoundingRadius + 300))
+                foreach (var minion in MinionManager.GetMinions(ObjectManager.Player.Position, ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius + 300))
                 {
-                    if (drawMinionLastHit.Active && Player.GetAutoAttackDamage(minion, true) >= minion.Health)
+                    if (drawMinionLastHit.Active && ObjectManager.Player.GetAutoAttackDamage(minion, true) >= minion.Health)
                         Render.Circle.DrawCircle(minion.Position, minion.BoundingRadius, drawMinionLastHit.Color, 5);
                     else
-                    if (drawMinionNearKill.Active && Player.GetAutoAttackDamage(minion, true) * 2 >= minion.Health)
+                        if (drawMinionNearKill.Active && ObjectManager.Player.GetAutoAttackDamage(minion, true) * 2 >= minion.Health)
                         Render.Circle.DrawCircle(minion.Position, minion.BoundingRadius, drawMinionNearKill.Color, 5);
                 }
             }
 
-            if (Game.MapId == (GameMapId)11 && Menu.Item("drawJunglePosition").GetValue<bool>())
+            if (Game.MapId == (GameMapId)11 && xcsoftMenu.Drawings.getBoolValue("JunglePosition"))
             {
                 const byte circleRadius = 100;
 
@@ -95,15 +79,15 @@ namespace _xcsoft__ALL_IN_ONE
                 Render.Circle.DrawCircle(new SharpDX.Vector3(7001.741f, 9915.717f, 54.02466f), circleRadius, Color.Red, 5); // red team: wariaths                    
             }
 
-            var drawAA = Menu.Item("drawAARange").GetValue<Circle>();
-            var drawTarget = Menu.Item("drawAATarget").GetValue<Circle>();
+            var drawAA = xcsoftMenu.Drawings.getCircleValue("Auto-Attack Real Range");
+            var drawTarget = xcsoftMenu.Drawings.getCircleValue("Auto-Attack Target");
 
             if (drawAA.Active)
-                Render.Circle.DrawCircle(Player.Position, Orbwalking.GetRealAutoAttackRange(Player), drawAA.Color);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player), drawAA.Color);
 
             if (drawTarget.Active)
             {
-                var aaTarget = Orbwalker.GetTarget();
+                var aaTarget = xcsoftMenu.Orbwalker.GetTarget();
 
                 if (aaTarget != null)
                     Render.Circle.DrawCircle(aaTarget.Position, aaTarget.BoundingRadius + 15, drawTarget.Color, 6);

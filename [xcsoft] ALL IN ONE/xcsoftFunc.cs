@@ -8,14 +8,14 @@ using LeagueSharp.Common;
 
 namespace _xcsoft__ALL_IN_ONE
 {
-    static class xcsoftFunc
+    static class xcsoftFunc//by xcsoft
     {
-        internal static float getHealthPercent(this Obj_AI_Base unit)
+        internal static float getHealthPercent(Obj_AI_Base unit)
         {
             return unit.Health / unit.MaxHealth * 100;
         }
 
-        internal static float getManaPercent(this Obj_AI_Base unit)
+        internal static float getManaPercent(Obj_AI_Base unit)
         {
             return unit.Mana / unit.MaxMana * 100;
         }
@@ -50,9 +50,9 @@ namespace _xcsoft__ALL_IN_ONE
             return target.Health + target.HPRegenRate <= damage;
         }
 
-        internal static bool isKillable(Obj_AI_Base target, Spell spell)
+        internal static bool isKillable(Obj_AI_Base target, Spell spell, int stage = 0)
         {
-            return target.Health + target.HPRegenRate <= spell.GetDamage(target);
+            return target.Health + (target.HPRegenRate/2) <= spell.GetDamage(target, stage);
         }
 
         internal static void sendDebugMsg(string message)
@@ -73,6 +73,22 @@ namespace _xcsoft__ALL_IN_ONE
         internal static String colorToHex(System.Drawing.Color c)
         { 
             return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2"); 
+        }
+
+        internal static void champSupportedCheck(string tag, string checkNamespace)
+        {
+            try
+            {
+                xcsoftFunc.sendDebugMsg(tag + Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " Supported.");
+            }
+            catch
+            {
+                xcsoftFunc.sendDebugMsg(tag + ObjectManager.Player.ChampionName + " Not supported.");
+                Game.PrintChat(xcsoftFunc.colorChat(System.Drawing.Color.MediumBlue, tag) + xcsoftFunc.colorChat(System.Drawing.Color.DarkGray, ObjectManager.Player.ChampionName) + " Not supported.");
+
+                xcsoftMenu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported");
+                return;
+            }
         }
     }
 }

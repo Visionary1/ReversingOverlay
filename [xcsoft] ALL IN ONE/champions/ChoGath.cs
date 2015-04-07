@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class __BASE
+    class ChoGath
     {
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
@@ -18,14 +18,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q);
-            W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E);
-            R = new Spell(SpellSlot.R);
+            Q = new Spell(SpellSlot.Q, 950f,  TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 700f, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, 500f,  TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 175f,  TargetSelector.DamageType.True);
 
-            Q.SetSkillshot(0.25f, 50f, 2000f, true, SkillshotType.SkillshotLine);
-            Q.SetCharged(" ", " ", 750, 1550, 1.5f);
-            Q.SetTargetted(0.25f, 2000f);
+            Q.SetSkillshot(1.2f, 250f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            W.SetSkillshot(0.60f, 300f, 1750f, false, SkillshotType.SkillshotCircle);
+            R.SetTargetted(0.25f, float.MaxValue);
 
             xcsoftMenu.Combo.addUseQ();
             xcsoftMenu.Combo.addUseW();

@@ -34,6 +34,9 @@ namespace _xcsoft__ALL_IN_ONE
                 case "Vladimir":
                     champions.Vladimir.Load();
                     break;
+                case "ChoGath":
+                    champions.ChoGath.Load();
+                    break;
                 default:
                     break;
             } 

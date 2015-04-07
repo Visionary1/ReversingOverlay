@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using LeagueSharp;
 
 namespace _xcsoft__ALL_IN_ONE
 {
@@ -38,8 +36,26 @@ namespace _xcsoft__ALL_IN_ONE
                     champions.Chogath.Load();
                     break;
                 default:
+                    xcsoftFunc.sendDebugMsg("챔프 지원안함.");
                     break;
             } 
+        }
+
+        internal static bool champSupportedCheck(string tag, string checkNamespace)
+        {
+            try
+            {
+                xcsoftFunc.sendDebugMsg(tag + Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " Supported.");
+                return true;
+            }
+            catch
+            {
+                xcsoftFunc.sendDebugMsg(tag + ObjectManager.Player.ChampionName + " Not supported.");
+                Game.PrintChat(xcsoftFunc.colorChat(System.Drawing.Color.MediumBlue, tag) + xcsoftFunc.colorChat(System.Drawing.Color.DarkGray, ObjectManager.Player.ChampionName) + " Not supported.");
+
+                xcsoftMenu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported");
+                return false;
+            }
         }
     }
 }

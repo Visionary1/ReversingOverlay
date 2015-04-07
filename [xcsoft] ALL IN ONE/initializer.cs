@@ -13,18 +13,8 @@ namespace _xcsoft__ALL_IN_ONE
         {
             xcsoftMenu.initialize("[xcsoft] ALL IN ONE");
 
-            try
-            {
-                xcsoftFunc.sendDebugMsg("[xcsoft] ALL IN ONE" + Type.GetType("_xcsoft__ALL_IN_ONE.champions." + ObjectManager.Player.ChampionName).Name + " Supported.");
-            }
-            catch
-            {
-                xcsoftFunc.sendDebugMsg("[xcsoft] ALL IN ONE" + ObjectManager.Player.ChampionName + " Not supported.");
-                Game.PrintChat(xcsoftFunc.colorChat(System.Drawing.Color.MediumBlue, "[xcsoft] ALL IN ONE") + xcsoftFunc.colorChat(System.Drawing.Color.DarkGray, ObjectManager.Player.ChampionName) + " Not supported.");
-
-                xcsoftMenu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported");
+            if (!champLoader.champSupportedCheck("[xcsoft] ALL IN ONE", "_xcsoft__ALL_IN_ONE.champions."))
                 return;
-            }
 
             xcsoftMenu.addOrbwalker(ObjectManager.Player.ChampionName);
             xcsoftMenu.addTargetSelector(ObjectManager.Player.ChampionName);

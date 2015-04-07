@@ -13,7 +13,7 @@ namespace _xcsoft__ALL_IN_ONE
         {
             xcsoftMenu.initialize("[xcsoft] ALL IN ONE");
 
-            if (!champLoader.champSupportedCheck("[xcsoft] ALL IN ONE", "_xcsoft__ALL_IN_ONE.champions."))
+            if (!champLoader.champSupportedCheck("[xcsoft] ALL IN ONE: ", "_xcsoft__ALL_IN_ONE.champions."))
                 return;
 
             xcsoftMenu.addOrbwalker(ObjectManager.Player.ChampionName);
@@ -47,7 +47,7 @@ namespace _xcsoft__ALL_IN_ONE
                 return;
 
             var drawMinionLastHit = xcsoftMenu.Drawings.getCircleValue("Minion Last Hit", false);
-            var drawMinionNearKill = xcsoftMenu.Drawings.getCircleValue("Minion Near Kill",false);
+            var drawMinionNearKill = xcsoftMenu.Drawings.getCircleValue("Minion Near Kill", false);
 
             if (drawMinionLastHit.Active || drawMinionNearKill.Active)
             {
@@ -61,7 +61,7 @@ namespace _xcsoft__ALL_IN_ONE
                 }
             }
 
-            if (Game.MapId == (GameMapId)11 && xcsoftMenu.Drawings.getBoolValue("Jungle Position",false))
+            if (Game.MapId == (GameMapId)11 && xcsoftMenu.Drawings.getBoolValue("Jungle Position", false))
             {
                 const byte circleRadius = 100;
 

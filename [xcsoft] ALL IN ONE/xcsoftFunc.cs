@@ -55,9 +55,12 @@ namespace _xcsoft__ALL_IN_ONE
             return target.Health + (target.HPRegenRate/2) <= spell.GetDamage(target, stage);
         }
 
-        internal static void sendDebugMsg(string message)
+        internal static void sendDebugMsg(string message, bool printchat = true, string tag = "xcsoft_DebugMsg: ")
         {
-            Console.WriteLine(message);
+            if (printchat)
+                Game.PrintChat(tag + message);
+
+            Console.WriteLine(tag + message);
         }
 
         internal static bool anyoneValidInRange(float range)

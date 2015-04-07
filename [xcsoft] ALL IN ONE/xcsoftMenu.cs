@@ -20,19 +20,43 @@ namespace _xcsoft__ALL_IN_ONE
                     Menu_Manual.SubMenu("Combo").AddItem(new MenuItem("Combo." + items[i][0].ToString(), items[i][0].ToString(), true).SetValue(items[i][1]));
             }
 
-            internal static Circle getCircleValue(string itemName)
+            internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Combo." + itemName, true).GetValue<Circle>();
+                try
+                {
+                    return Menu_Manual.Item("Combo." + itemName, champUniq).GetValue<Circle>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Circle(false, System.Drawing.Color.Red);
+                }
             }
 
-            internal static Boolean getBoolValue(string itemName)
+            internal static Boolean getBoolValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Combo." + itemName, true).GetValue<Boolean>();
+                try
+                {
+                    return Menu_Manual.Item("Combo." + itemName, champUniq).GetValue<Boolean>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return false;
+                }
             }
 
-            internal static Slider getSliderValue(string itemName)
+            internal static Slider getSliderValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Combo." + itemName, true).GetValue<Slider>();
+                try
+                {
+                    return Menu_Manual.Item("Combo." + itemName, champUniq).GetValue<Slider>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Slider();
+                }
             }
 
             internal static void addUseQ(bool enable = true)
@@ -87,19 +111,43 @@ namespace _xcsoft__ALL_IN_ONE
                     Menu_Manual.SubMenu("Harass").AddItem(new MenuItem("Harass.ifMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
             }
 
-            internal static Circle getCircleValue(string itemName)
+            internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Harass." + itemName, true).GetValue<Circle>();
+                try
+                {
+                    return Menu_Manual.Item("Harass." + itemName, champUniq).GetValue<Circle>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: "+ itemName);
+                    return new Circle(false, System.Drawing.Color.Red);
+                }
             }
 
-            internal static Boolean getBoolValue(string itemName)
+            internal static Boolean getBoolValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Harass." + itemName, true).GetValue<Boolean>();
+                try
+                {
+                    return Menu_Manual.Item("Harass." + itemName, champUniq).GetValue<Boolean>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return false;
+                }
             }
 
-            internal static Slider getSliderValue(string itemName)
+            internal static Slider getSliderValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Harass." + itemName, true).GetValue<Slider>();
+                try
+                {
+                    return Menu_Manual.Item("Harass." + itemName, champUniq).GetValue<Slider>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Slider();
+                }
             }
 
             internal static void addUseQ(bool enable = true)
@@ -164,19 +212,43 @@ namespace _xcsoft__ALL_IN_ONE
                     Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Laneclear.ifMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
             }
 
-            internal static Circle getCircleValue(string itemName)
+            internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Laneclear." + itemName, true).GetValue<Circle>();
+                try
+                {
+                    return Menu_Manual.Item("Laneclear." + itemName, champUniq).GetValue<Circle>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Circle(false, System.Drawing.Color.Red);
+                }
             }
 
-            internal static Boolean getBoolValue(string itemName)
+            internal static Boolean getBoolValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Laneclear." + itemName, true).GetValue<Boolean>();
+                try
+                {
+                    return Menu_Manual.Item("Laneclear." + itemName, champUniq).GetValue<Boolean>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return false;
+                }
             }
 
-            internal static Slider getSliderValue(string itemName)
+            internal static Slider getSliderValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Laneclear." + itemName, true).GetValue<Slider>();
+                try
+                {
+                    return Menu_Manual.Item("Laneclear." + itemName, champUniq).GetValue<Slider>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Slider();
+                }
             }
 
             internal static void addUseQ(bool enable = true)
@@ -241,19 +313,43 @@ namespace _xcsoft__ALL_IN_ONE
                     Menu_Manual.SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear.ifMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
             }
 
-            internal static Circle getCircleValue(string itemName)
+            internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Jungleclear." + itemName, true).GetValue<Circle>();
+                try
+                {
+                    return Menu_Manual.Item("Jungleclear." + itemName, champUniq).GetValue<Circle>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Circle(false, System.Drawing.Color.Red);
+                }
             }
 
-            internal static Boolean getBoolValue(string itemName)
+            internal static Boolean getBoolValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Jungleclear." + itemName, true).GetValue<Boolean>();
+                try
+                {
+                    return Menu_Manual.Item("Jungleclear." + itemName, champUniq).GetValue<Boolean>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return false;
+                }
             }
 
-            internal static Slider getSliderValue(string itemName)
+            internal static Slider getSliderValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Jungleclear." + itemName, true).GetValue<Slider>();
+                try
+                {
+                    return Menu_Manual.Item("Jungleclear." + itemName, champUniq).GetValue<Slider>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Slider();
+                }
             }
 
             internal static void addUseQ(bool enable = true)
@@ -315,19 +411,43 @@ namespace _xcsoft__ALL_IN_ONE
                     Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc." + items[i][0].ToString(), items[i][0].ToString(), true).SetValue(items[i][1]));
             }
 
-            internal static Circle getCircleValue(string itemName)
+            internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Misc." + itemName, true).GetValue<Circle>();
+                try
+                {
+                    return Menu_Manual.Item("Misc." + itemName, champUniq).GetValue<Circle>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Circle(false, System.Drawing.Color.Red);
+                }
             }
 
-            internal static Boolean getBoolValue(string itemName)
+            internal static Boolean getBoolValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Misc." + itemName, true).GetValue<Boolean>();
+                try
+                {
+                    return Menu_Manual.Item("Misc." + itemName, champUniq).GetValue<Boolean>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return false;
+                }
             }
 
-            internal static Slider getSliderValue(string itemName)
+            internal static Slider getSliderValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Misc." + itemName, true).GetValue<Slider>();
+                try
+                {
+                    return Menu_Manual.Item("Misc." + itemName, champUniq).GetValue<Slider>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Slider();
+                }
             }
 
             internal static void addUseKillsteal(bool enable = true)
@@ -371,19 +491,43 @@ namespace _xcsoft__ALL_IN_ONE
                 }
             }
 
-            internal static Circle getCircleValue(string itemName)
+            internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Drawings." + itemName, true).GetValue<Circle>();
+                try
+                {
+                    return Menu_Manual.Item("Drawings." + itemName, champUniq).GetValue<Circle>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Circle(false, System.Drawing.Color.Red);
+                }
             }
 
-            internal static Boolean getBoolValue(string itemName)
+            internal static Boolean getBoolValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Drawings." + itemName, true).GetValue<Boolean>();
+                try
+                {
+                    return Menu_Manual.Item("Drawings." + itemName, champUniq).GetValue<Boolean>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return false;
+                }
             }
 
-            internal static Slider getSliderValue(string itemName)
+            internal static Slider getSliderValue(string itemName, bool champUniq = true)
             {
-                return Menu_Manual.Item("Drawings." + itemName, true).GetValue<Slider>();
+                try
+                {
+                    return Menu_Manual.Item("Drawings." + itemName, champUniq).GetValue<Slider>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Slider();
+                }
             }
 
             internal static void addBlankItem()

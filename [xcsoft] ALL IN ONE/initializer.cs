@@ -46,8 +46,8 @@ namespace _xcsoft__ALL_IN_ONE
             if (ObjectManager.Player.IsDead)
                 return;
 
-            var drawMinionLastHit = xcsoftMenu.Drawings.getCircleValue("MinionLastHit");
-            var drawMinionNearKill = xcsoftMenu.Drawings.getCircleValue("MinionNearKill");
+            var drawMinionLastHit = xcsoftMenu.Drawings.getCircleValue("Minion Last Hit", false);
+            var drawMinionNearKill = xcsoftMenu.Drawings.getCircleValue("Minion Near Kill", false);
 
             if (drawMinionLastHit.Active || drawMinionNearKill.Active)
             {
@@ -61,7 +61,7 @@ namespace _xcsoft__ALL_IN_ONE
                 }
             }
 
-            if (Game.MapId == (GameMapId)11 && xcsoftMenu.Drawings.getBoolValue("JunglePosition"))
+            if (Game.MapId == (GameMapId)11 && xcsoftMenu.Drawings.getBoolValue("Jungle Position"), false)
             {
                 const byte circleRadius = 100;
 
@@ -80,8 +80,8 @@ namespace _xcsoft__ALL_IN_ONE
                 Render.Circle.DrawCircle(new SharpDX.Vector3(7001.741f, 9915.717f, 54.02466f), circleRadius, Color.Red, 5); // red team: wariaths                    
             }
 
-            var drawAA = xcsoftMenu.Drawings.getCircleValue("Auto-Attack Real Range");
-            var drawTarget = xcsoftMenu.Drawings.getCircleValue("Auto-Attack Target");
+            var drawAA = xcsoftMenu.Drawings.getCircleValue("Auto-Attack Real Range", false);
+            var drawTarget = xcsoftMenu.Drawings.getCircleValue("Auto-Attack Target", false);
 
             if (drawAA.Active)
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player), drawAA.Color);

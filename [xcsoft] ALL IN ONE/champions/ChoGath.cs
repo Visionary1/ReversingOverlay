@@ -19,12 +19,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 950f,  TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 700f, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 500f,  TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 175f,  TargetSelector.DamageType.True);
 
-            Q.SetSkillshot(1.2f, 250f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            W.SetSkillshot(0.60f, 300f, 1750f, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(0.75f, 250f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            W.SetSkillshot(0.60f, 60f * (float)Math.PI / 180f, float.MaxValue, false, SkillshotType.SkillshotCone);
             R.SetTargetted(0.25f, float.MaxValue);
 
             xcsoftMenu.Combo.addUseQ();

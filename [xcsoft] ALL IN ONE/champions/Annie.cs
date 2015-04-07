@@ -27,7 +27,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             R = new Spell(SpellSlot.R, 600f, TargetSelector.DamageType.Magical);
 
             Q.SetTargetted(0.25f, 1400f);
-            W.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, float.MaxValue, false, SkillshotType.SkillshotCone);
+            W.SetSkillshot(0.25f, 60f * (float)Math.PI / 180f, float.MaxValue, false, SkillshotType.SkillshotCone);
             R.SetSkillshot(0.25f, 250f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));

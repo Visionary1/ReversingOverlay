@@ -198,10 +198,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (xcsoftMenu.Jungleclear.UseQ && Q.IsReady())
-            { }
+            {
+                if (Q.CanCast(Mobs.FirstOrDefault()))
+                    Q.Cast(Mobs.FirstOrDefault());
+            }
 
             if (xcsoftMenu.Jungleclear.UseW && W.IsReady())
-            { }
+            {
+                if (W.CanCast(Mobs.FirstOrDefault()))
+                    W.Cast(Mobs.FirstOrDefault());
+            }
 
             if (xcsoftMenu.Jungleclear.UseE && E.IsReady())
             { }

@@ -233,6 +233,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
                 if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
                     E.Cast(target);
+
+                if (R.CanCast(target) && xcsoftFunc.isKillable(target, R))
+                    R.Cast(target, false, true);
             }
         }
 

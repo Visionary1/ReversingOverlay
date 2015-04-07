@@ -74,21 +74,5 @@ namespace _xcsoft__ALL_IN_ONE
         { 
             return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2"); 
         }
-
-        internal static void champSupportedCheck(string tag, string checkNamespace)
-        {
-            try
-            {
-                xcsoftFunc.sendDebugMsg(tag + Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " Supported.");
-            }
-            catch
-            {
-                xcsoftFunc.sendDebugMsg(tag + ObjectManager.Player.ChampionName + " Not supported.");
-                Game.PrintChat(xcsoftFunc.colorChat(System.Drawing.Color.MediumBlue, tag) + xcsoftFunc.colorChat(System.Drawing.Color.DarkGray, ObjectManager.Player.ChampionName) + " Not supported.");
-
-                xcsoftMenu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported");
-                return;
-            }
-        }
     }
 }

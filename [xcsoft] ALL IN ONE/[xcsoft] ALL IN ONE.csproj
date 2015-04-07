@@ -87,7 +87,7 @@
     <None Include="champions\_Braum.cs" />
     <None Include="champions\_Caitlyn.cs" />
     <None Include="champions\_Cassiopeia.cs" />
-    <Compile Include="champions\ChoGath.cs" />
+    <Compile Include="champions\Chogath.cs" />
     <None Include="champions\_Corki.cs" />
     <None Include="champions\_Darius.cs" />
     <None Include="champions\_Diana.cs" />

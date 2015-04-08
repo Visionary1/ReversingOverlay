@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class Chogath
+    class Lulu
     {
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
@@ -18,27 +18,35 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 950f,  TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, 500f,  TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 275f,  TargetSelector.DamageType.True);
+            Q = new Spell(SpellSlot.Q, 925f, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 650f);
+            E = new Spell(SpellSlot.E, 650f, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 900f);
 
-            Q.SetSkillshot(1.25f, 250f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            W.SetSkillshot(0.60f, 60f * (float)Math.PI / 180f, float.MaxValue, false, SkillshotType.SkillshotCone);
+            Q.SetSkillshot(0.25f, 60f, 1450f, true, SkillshotType.SkillshotLine);
+            W.SetTargetted(0.25f, float.MaxValue);
+            E.SetTargetted(0.25f, float.MaxValue);
             R.SetTargetted(0.25f, float.MaxValue);
 
             xcsoftMenu.Combo.addUseQ();
             xcsoftMenu.Combo.addUseW();
+            xcsoftMenu.Combo.addUseE();
             xcsoftMenu.Combo.addUseR();
 
             xcsoftMenu.Harass.addUseQ();
             xcsoftMenu.Harass.addUseW();
+            xcsoftMenu.Harass.addUseE();
+            xcsoftMenu.Harass.addUseR();
 
             xcsoftMenu.Laneclear.addUseQ();
             xcsoftMenu.Laneclear.addUseW();
+            xcsoftMenu.Laneclear.addUseE();
+            xcsoftMenu.Laneclear.addUseR();
 
             xcsoftMenu.Jungleclear.addUseQ();
             xcsoftMenu.Jungleclear.addUseW();
+            xcsoftMenu.Jungleclear.addUseE();
+            xcsoftMenu.Jungleclear.addUseR();
 
             xcsoftMenu.Misc.addUseKillsteal();
             xcsoftMenu.Misc.addUseAntiGapcloser();
@@ -112,7 +120,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (Q.CanCast(gapcloser.Sender))
-                Q.Cast(gapcloser.Sender,false, true);
+                Q.Cast(gapcloser.Sender);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -121,28 +129,22 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (Q.CanCast(sender))
-                Q.Cast(sender, false, true);
+                Q.Cast(sender);
         }
 
         static void Combo()
         {
             if (xcsoftMenu.Combo.UseQ && Q.IsReady())
-            {
-                Q.CastOnBestTarget(0f, false, true);
-            }
+            { }
 
             if (xcsoftMenu.Combo.UseW && W.IsReady())
-            {
-                W.CastOnBestTarget(0f, false, true);
-            }
+            { }
+
+            if (xcsoftMenu.Combo.UseE && E.IsReady())
+            { }
 
             if (xcsoftMenu.Combo.UseR && R.IsReady())
-            {
-                var rTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && xcsoftFunc.isKillable(x, R)).OrderByDescending(x => x.Health).FirstOrDefault();
-
-                if (rTarget != null)
-                    R.CastOnUnit(rTarget);
-            }
+            { }
         }
 
         static void Harass()
@@ -151,14 +153,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (xcsoftMenu.Harass.UseQ && Q.IsReady())
-            {
-                Q.CastOnBestTarget(0f, false, true);
-            }
+            { }
 
             if (xcsoftMenu.Harass.UseW && W.IsReady())
-            {
-                W.CastOnBestTarget(0f, false, true);
-            }
+            { }
+
+            if (xcsoftMenu.Harass.UseE && E.IsReady())
+            { }
+
+            if (xcsoftMenu.Harass.UseR && R.IsReady())
+            { }
         }
 
         static void Laneclear()
@@ -172,18 +176,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (xcsoftMenu.Laneclear.UseQ && Q.IsReady())
-            {
-                var Qloc = Q.GetCircularFarmLocation(Minions);
-
-                if (Qloc.MinionsHit >= 3)
-                    Q.Cast(Qloc.Position);
-            }
+            { }
 
             if (xcsoftMenu.Laneclear.UseW && W.IsReady())
-            {
-                if (W.CanCast(Minions.FirstOrDefault()))
-                    W.Cast(Minions.FirstOrDefault(), false, true);
-            }
+            { }
+
+            if (xcsoftMenu.Laneclear.UseE && E.IsReady())
+            { }
+
+            if (xcsoftMenu.Laneclear.UseR && R.IsReady())
+            { }
         }
 
         static void Jungleclear()
@@ -199,14 +201,20 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (xcsoftMenu.Jungleclear.UseQ && Q.IsReady())
             {
                 if (Q.CanCast(Mobs.FirstOrDefault()))
-                    Q.Cast(Mobs.FirstOrDefault(), false, true);
+                    Q.Cast(Mobs.FirstOrDefault());
             }
 
             if (xcsoftMenu.Jungleclear.UseW && W.IsReady())
             {
                 if (W.CanCast(Mobs.FirstOrDefault()))
-                    W.Cast(Mobs.FirstOrDefault(), false, true);
+                    W.Cast(Mobs.FirstOrDefault());
             }
+
+            if (xcsoftMenu.Jungleclear.UseE && E.IsReady())
+            { }
+
+            if (xcsoftMenu.Jungleclear.UseR && R.IsReady())
+            { }
         }
 
         static void Killsteal()
@@ -214,13 +222,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && xcsoftFunc.isKillable(target, Q))
-                    Q.Cast(target, false, true);
+                    Q.Cast(target);
 
-                if (W.CanCast(target) && xcsoftFunc.isKillable(target, W))
-                    W.Cast(target, false, true);
-
-                if (R.CanCast(target) && xcsoftFunc.isKillable(target, R))
-                    R.Cast(target);
+                if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
+                    E.Cast(target);
             }
         }
 
@@ -231,14 +236,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
 
-            if (W.IsReady())
-                damage += W.GetDamage(enemy);
-
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
 
-            if (R.IsReady())
-                damage += R.GetDamage(enemy);
+            if (!Player.IsWindingUp)
+                damage += (float)Player.GetAutoAttackDamage(enemy, true) + (float)Player.GetAutoAttackDamage(enemy, false);
 
             return damage;
         }

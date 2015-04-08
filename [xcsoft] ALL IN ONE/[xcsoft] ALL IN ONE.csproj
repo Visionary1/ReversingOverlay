@@ -127,7 +127,7 @@
     <None Include="champions\_Leona.cs" />
     <None Include="champions\_Lissandra.cs" />
     <None Include="champions\_Lucian.cs" />
-    <None Include="champions\_Lulu.cs" />
+    <Compile Include="champions\Lulu.cs" />
     <None Include="champions\_Lux.cs" />
     <None Include="champions\_Malphite.cs" />
     <None Include="champions\_Malzahar.cs" />

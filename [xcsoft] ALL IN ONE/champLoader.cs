@@ -45,12 +45,12 @@ namespace _xcsoft__ALL_IN_ONE
         {
             try
             {
-                xcsoftFunc.sendDebugMsg(tag + Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " Supported.");
+                xcsoftFunc.sendDebugMsg(tag + Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " Supported.", false);
                 return true;
             }
             catch
             {
-                xcsoftFunc.sendDebugMsg(tag + ObjectManager.Player.ChampionName + " Not supported.");
+                xcsoftFunc.sendDebugMsg(tag + ObjectManager.Player.ChampionName + " Not supported.", false);
                 Game.PrintChat(xcsoftFunc.colorChat(System.Drawing.Color.MediumBlue, tag) + xcsoftFunc.colorChat(System.Drawing.Color.DarkGray, ObjectManager.Player.ChampionName) + " Not supported.");
 
                 xcsoftMenu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported");

@@ -11,6 +11,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class Lulu
     {
+        //만들다 자러감 by xcsoft
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 

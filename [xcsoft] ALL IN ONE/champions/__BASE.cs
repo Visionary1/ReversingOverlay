@@ -170,8 +170,17 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Combo()
         {
             //콤보모드. 인게임에서 스페이스바키를 누르면 아래코드가 실행되는겁니다.
+
             if (xcsoftMenu.Combo.UseQ && Q.IsReady())
-            { }
+            {
+                //타겟셀렉터를 이용해서 Q 사거리내에서 최적의 타겟을 구합니다.
+                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+
+                //qTarget이 null(없음)이 아니고 맞을확률이 높을경우 qTarget에게 Q시전
+                if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= HitChance.High)
+                    Q.Cast(qTarget);
+                    
+            }
 
             if (xcsoftMenu.Combo.UseW && W.IsReady())
             { }

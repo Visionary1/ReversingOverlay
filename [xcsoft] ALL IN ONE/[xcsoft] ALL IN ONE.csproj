@@ -97,7 +97,7 @@
     <Compile Include="champions\_Evelynn.cs" />
     <Compile Include="champions\_Ezreal.cs" />
     <Compile Include="champions\_Fiddlesticks.cs" />
-    <Compile Include="champions\_Fiora.cs" />
+    <Compile Include="champions\Fiora.cs" />
     <Compile Include="champions\_Fizz.cs" />
     <Compile Include="champions\_Galio.cs" />
     <Compile Include="champions\_Gangplank.cs" />

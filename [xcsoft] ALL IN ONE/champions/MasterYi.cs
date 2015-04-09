@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +14,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static Menu Menu { get { return xcsoftMenu.Menu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-
+        static Items.Item tiamatItem, hydraItem;
+		
         static Spell Q, W, E, R;
 
         static void Wcancel() { Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
@@ -23,15 +24,19 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 600f,  TargetSelector.DamageType.Physical);
+            Q = new Spell(SpellSlot.Q, 600f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W);
             E = new Spell(SpellSlot.E);
             R = new Spell(SpellSlot.R);
 
             Q.SetTargetted(0.25f, float.MaxValue);
+            hydraItem = new Items.Item(3074, 250f);
+            tiamatItem = new Items.Item(3077, 250f);
 
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W (Auto-Attack Reset)", true).SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseWHP", "적체력 % <=", true).SetValue(new Slider(60, 0, 100)));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseH", "히드라", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
 
@@ -50,7 +55,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.Red)));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawRTimer", "R Timer", true).SetValue(new Circle(true, Color.LightGreen)));
 
-            xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
+			xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -78,7 +83,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 }
             }
 
-            Orbwalker.SetAttack(Player.IsTargetable);
+			Orbwalker.SetAttack(Player.IsTargetable);
 
             #region Killsteal
             if (Menu.Item("miscKs", true).GetValue<bool>())
@@ -116,8 +121,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 {
                     if (Menu.Item("CbUseW", true).GetValue<bool>())
                     {
-                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
-                        Utility.DelayAction.Add(50, Wcancel);
+                        Utility.DelayAction.Add(30, Orbwalking.ResetAutoAttackTimer);
+                        Utility.DelayAction.Add(30, Wcancel);
                     }
                 }
 
@@ -127,11 +132,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
                         E.Cast();
                 }
             }
+
         }
 
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
+			//var TargetHP = Menu.Item("CbUseWHP").GetValue<Slider>().Value;
 
             if (!unit.IsMe || Target == null)
                 return;
@@ -139,12 +146,24 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady()
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
+					//&& Target.HealthPercentage() <= TargetHP
+					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
+
                     W.Cast();
 
                 if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
-                    R.Cast();
-            }
+					R.Cast();
+				
+				if (Menu.Item("CbUseH", true).GetValue<bool>()// && !W.IsReady()
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+				{
+					if(tiamatItem.IsReady())
+						tiamatItem.Cast();
+					else if(hydraItem.IsReady())
+						hydraItem.Cast();
+				}
+			}
         }
 
         static void Combo()
@@ -215,9 +234,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 damage += Q.GetDamage(enemy);
 
             if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true) + (float)(Player.GetAutoAttackDamage(enemy, false)) * 7;
-
+                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+			if(W.IsReady())
+                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+				
             return damage;
         }
     }
 }
+

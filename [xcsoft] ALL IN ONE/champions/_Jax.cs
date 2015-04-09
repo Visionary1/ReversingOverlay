@@ -6,7 +6,7 @@ using LeagueSharp.Common;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class _TwistedFate
+    class _Jax
     {
     }
 }

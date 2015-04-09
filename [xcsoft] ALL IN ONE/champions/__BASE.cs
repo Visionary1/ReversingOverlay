@@ -176,7 +176,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 //타겟셀렉터를 이용해서 Q 사거리내에서 최적의 타겟을 구합니다.
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
 
-                //qTarget이 null(없음)이 아니고 맞을확률이 높을경우 qTarget에게 Q시전
+                //qTarget이 null(없음)이 아니고 맞을확률이 높을경우 qTarget에게 Q시전. 스펠이 타겟팅인경우 프리딕션 사용 x
                 if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= HitChance.High)
                     Q.Cast(qTarget);
                     

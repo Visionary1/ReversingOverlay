@@ -60,7 +60,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Misc.addUseInterrupter();//Misc서브메뉴에 Use Interrupter 옵션 추가.
 
             xcsoftMenu.Drawings.addQrange();//Drawings서브메뉴에 Q Range 옵션추가.
-            
+
             // Drawings 서브메뉴에 데미지표시기 추가하는 메소드.
             xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
 
@@ -116,6 +116,18 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
         }
+                static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
+        {
+            //안티갭클로저 이벤트. 적챔피언이 달라붙는 스킬을 사용할때마다 발동합니다.
+
+            //misc서브메뉴에 Use Anti-Gapcloser옵션이 On이 아니거나, 플레이어가 죽은상태면 리턴
+            if (!xcsoftMenu.Misc.UseAntiGapcloser || Player.IsDead)
+                return;
+
+            //Q스펠을 gapcloser.Sender(달라붙는스킬을 시전한 챔피언)에게 사용할 수 있으면 E스펠을 gapcloser.Sender에게 시전.
+            if (E.CanCast(gapcloser.Sender))
+                E.Cast(gapcloser.Sender);
+        }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
         {
@@ -146,12 +158,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
 
             if (xcsoftMenu.Combo.UseW && W.IsReady())
-            {
-                var wTarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-
-                if (!wTarget.IsValidTarget(defaltRange) && wTarget.IsValidTarget(W.Range))
-                    W.Cast();
-            }
+            { }
 
             if (xcsoftMenu.Combo.UseE && E.IsReady())
             { }

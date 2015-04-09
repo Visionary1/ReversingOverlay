@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class Urgot
+    class Urgot//by fakker
     {
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
@@ -23,15 +23,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Q2 = new Spell(SpellSlot.Q, 1200f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W);
             E = new Spell(SpellSlot.E, 900f, TargetSelector.DamageType.Physical);
-            R = new Spell(SpellSlot.R, float.MaxValue);
-            
-
+            R = new Spell(SpellSlot.R);
          
             Q.SetSkillshot(0.25f, 60f, 1600f, true, SkillshotType.SkillshotLine);
             Q2.SetSkillshot(0.25f, 60f, 1600f, true, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.25f, 210f, 1500f, false, SkillshotType.SkillshotCircle);
-
-
 
             xcsoftMenu.Combo.addUseQ();
             xcsoftMenu.Combo.addUseW();
@@ -57,11 +53,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Drawings.addQrange();
             xcsoftMenu.Drawings.addErange();
             xcsoftMenu.Drawings.addRrange();
-
            
             xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
 
-            
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
@@ -70,12 +64,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Game_OnUpdate(EventArgs args)
         {
-            R.Range = 150 * R.Level + 400;
-
             if (Player.IsDead)
                 return;
 
-            //이 부분은 건드릴 필요가 없음. 현재 사용자가 누르고있는 오브워커 버튼에따른 함수 호출.
+            R.Range = 150 * R.Level + 400;
+
             if (Orbwalking.CanMove(10))
             {
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
@@ -91,14 +84,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 }
             }
 
-            //메인메뉴->Misc서브메뉴에서 Use Killsteal 옵션이 On인경우 킬스틸 함수 호출.
             if (xcsoftMenu.Misc.UseKillsteal)
                 Killsteal();
         }
 
         static void Drawing_OnDraw(EventArgs args)
         {
-           
             if (Player.IsDead)
                 return;
 
@@ -119,11 +110,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-          
             if (!xcsoftMenu.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
-            if (Q.CanCast(gapcloser.Sender) && W.IsReady())
+            if (Q.CanCast(gapcloser.Sender))
             {
                 W.Cast();
                 Q.Cast(gapcloser.Sender);
@@ -135,8 +125,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!xcsoftMenu.Misc.UseInterrupter || Player.IsDead)
                 return;
 
-
-            if (R.CanCast(sender) && sender.IsEnemy && R.IsInRange(sender) && args.DangerLevel == Interrupter2.DangerLevel.High)
+            if (R.CanCast(sender) && args.DangerLevel == Interrupter2.DangerLevel.High)
                 R.Cast(sender);
         }
 
@@ -206,14 +195,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (xcsoftMenu.Laneclear.UseQ && Q.IsReady())
             {
                 if (Q.CanCast(Minions.FirstOrDefault()))
-                    Q.Cast(Minions.FirstOrDefault(), false);
+                    Q.Cast(Minions.FirstOrDefault());
             }
-
         }
 
         static void Jungleclear()
         {
-            
             if (!(Player.ManaPercent > xcsoftMenu.Jungleclear.ifMana))
                 return;
 
@@ -233,27 +220,22 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 if (E.CanCast(Mobs.FirstOrDefault()))
                     E.Cast(Mobs.FirstOrDefault(), false, true);
             }
-
         }
 
         static void Killsteal()
         {
-         
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-             
                 if (Q.CanCast(target) && xcsoftFunc.isKillable(target, Q))
                     Q.Cast(target);
 
                 if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
                     E.Cast(target);
-
             }
         }
 
         static float getComboDamage(Obj_AI_Base enemy)
         {
-            
             float damage = 0;
 
             if (Q.IsReady())

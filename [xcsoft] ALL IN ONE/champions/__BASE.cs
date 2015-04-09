@@ -12,11 +12,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
     class __BASE
     {
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }//메뉴에있는 오브워커(xcsoftMenu.Orbwalker)를 쓰기편하게 오브젝트명 Orbwalker로 단축한것.
-        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }//Player오브젝트 = 말그대로 플레이어 챔피언입니다. 이 메소드로 챔피언을 움직인다던지 스킬을 쓴다던지 다 됩니다.
+        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }//Player오브젝트 = 말그대로 플레이어 챔피언입니다. 이 오브젝트로 챔피언을 움직인다던지 스킬을 쓴다던지 다 됩니다.
 
-        //******************
-        //공동개발자용 주석
-        //******************
+        //**********************************************************
+        //공동개발자용 주석 문제가 있으면 언제든지 Skype: LSxcsoft
+        //***********************************************************
 
         //스펠 변수 선언.
         static Spell Q, W, E, R;
@@ -42,7 +42,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             //메뉴에 아이템추가. xcsoftMenu 클래스로 간편하게 만들어놨음 아래처럼 필요한 옵션만 추가하면 되고, 문제있으면 저한테 물어보세요.
 
-            //메인메뉴.서브메뉴.원하는메소드();
+            //메인메뉴.서브메뉴.메소드 혹은 함수명();
 
             xcsoftMenu.Combo.addUseQ();//Combo서브메뉴에 Use Q 옵션 추가
             xcsoftMenu.Combo.addUseW();

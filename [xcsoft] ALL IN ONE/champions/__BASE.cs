@@ -11,53 +11,72 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class __BASE
     {
-        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
-        static Obj_AI_Hero Player { get { return ObjectManager.Player; } } // fakker test kappa
+        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }//메뉴에있는 오브워커(xcsoftMenu.Orbwalker)를 쓰기편하게 오브젝트명 Orbwalker로 단축한것.
+        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }//Player오브젝트 = 말그대로 플레이어 챔피언입니다. 이 메소드로 챔피언을 움직인다던지 스킬을 쓴다던지 다 됩니다.
 
+        //******************
+        //공동개발자용 주석
+        //******************
+
+        //스펠 변수 선언.
         static Spell Q, W, E, R;
 
-        public static void Load()
+        public static void Load()//챔피언 로드부분. 게임 로딩이 끝나자마자 제일먼저 실행되는 부분입니다.
         {
-            Q = new Spell(SpellSlot.Q);
-            W = new Spell(SpellSlot.W);
+            //스펠 설정
+
+            //스펠슬롯, 스펠사거리, 데미지타입(마뎀, 물뎀, 고정뎀)
+            Q = new Spell(SpellSlot.Q, 500f, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E);
             R = new Spell(SpellSlot.R);
 
+            //스펠 프리딕션 설정
+            
+            //Q가 스킬샷(투사체)인경우 설정하는 예제
+            //스킬시전전 딜레이, 스킬샷범위(두께), 투사체속도, 미니언에 막히는가안막히는가(막히면 true,안막히면 false)
             Q.SetSkillshot(0.25f, 50f, 2000f, true, SkillshotType.SkillshotLine);
+            
             Q.SetCharged(" ", " ", 750, 1550, 1.5f);
             Q.SetTargetted(0.25f, 2000f);
 
-            xcsoftMenu.Combo.addUseQ();
+            //메뉴에 아이템추가. xcsoftMenu 클래스로 간편하게 만들어놨음 아래처럼 필요한 옵션만 추가하면 되고, 문제있으면 저한테 물어보세요.
+
+            //메인메뉴.서브메뉴.원하는메소드();
+
+            xcsoftMenu.Combo.addUseQ();//Combo서브메뉴에 Use Q 옵션 추가
             xcsoftMenu.Combo.addUseW();
             xcsoftMenu.Combo.addUseE();
             xcsoftMenu.Combo.addUseR();
 
-            xcsoftMenu.Harass.addUseQ();
+            xcsoftMenu.Harass.addUseQ();//Harass서브메뉴에 Use Q 옵션 추가
             xcsoftMenu.Harass.addUseW();
             xcsoftMenu.Harass.addUseE();
             xcsoftMenu.Harass.addUseR();
 
-            xcsoftMenu.Laneclear.addUseQ();
+            xcsoftMenu.Laneclear.addUseQ();//..위와 같음
             xcsoftMenu.Laneclear.addUseW();
             xcsoftMenu.Laneclear.addUseE();
             xcsoftMenu.Laneclear.addUseR();
 
-            xcsoftMenu.Jungleclear.addUseQ();
+            xcsoftMenu.Jungleclear.addUseQ();//..위와 같음
             xcsoftMenu.Jungleclear.addUseW();
             xcsoftMenu.Jungleclear.addUseE();
             xcsoftMenu.Jungleclear.addUseR();
 
-            xcsoftMenu.Misc.addUseKillsteal();
-            xcsoftMenu.Misc.addUseAntiGapcloser();
-            xcsoftMenu.Misc.addUseInterrupter();
+            xcsoftMenu.Misc.addUseKillsteal();//Misc서브메뉴에 Use Killsteal 옵션 추가
+            xcsoftMenu.Misc.addUseAntiGapcloser();//Misc서브메뉴에 Use Anti-Gapcloser 옵션추가
+            xcsoftMenu.Misc.addUseInterrupter();//Misc서브메뉴에 Use Interrupter 옵션 추가.
 
-            xcsoftMenu.Drawings.addQrange();
+            xcsoftMenu.Drawings.addQrange();//Drawings서브메뉴에 Q Range 옵션추가.
             xcsoftMenu.Drawings.addWrange();
             xcsoftMenu.Drawings.addErange();
             xcsoftMenu.Drawings.addRrange();
 
+            // Drawings 서브메뉴에 데미지표시기 추가하는 메소드.
             xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
 
+            //이벤트들 추가.
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
@@ -66,9 +85,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Game_OnUpdate(EventArgs args)
         {
+            //0.01초 마다 발동하는 이벤트. 여기에 코드를 쓰면 0.01초마다 실행됩니다
+
+            //플레이어가 죽어있는상태면 리턴 (return코드 아래부분 실행안한다는 뜻.)
             if (Player.IsDead)
                 return;
 
+            //이 부분은 건드릴 필요가 없음. 현재 사용자가 누르고있는 오브워커 버튼에따른 함수 호출.
             if (Orbwalking.CanMove(10))
             {
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
@@ -84,22 +107,27 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 }
             }
 
-            #region Killsteal
+            //메인메뉴->Misc서브메뉴에서 Use Killsteal 옵션이 On인경우 킬스틸 함수 호출.
             if (xcsoftMenu.Misc.UseKillsteal)
                 Killsteal();
-            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
         {
+            //그리기 이벤트입니다. 1초에 프레임수만큼 실행됨
+
+            //플레이어가 죽어있는상태면 리턴 (return코드 아래부분 실행안한다는 뜻.)
             if (Player.IsDead)
                 return;
 
+            //Drawings 설정 정보를 변수에 불러오는겁니다.
+            //사용하지 않는 옵션은 지우세요 인게임에서 오류납니다.
             var drawQ = xcsoftMenu.Drawings.DrawQRange;
             var drawW = xcsoftMenu.Drawings.DrawWRange;
             var drawE = xcsoftMenu.Drawings.DrawERange;
             var drawR = xcsoftMenu.Drawings.DrawRRange;
 
+            //Q스펠이 준비상태(쿨타임아닌상태)이고 Q Range옵션이 On 이면 Q사거리를 플레이어 챔피언위치에다가 그리는겁니다. 이하동문
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
 
@@ -115,24 +143,33 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
+            //안티갭클로저 이벤트. 적챔피언이 달라붙는 스킬을 사용할때마다 발동합니다.
+
+            //misc서브메뉴에 Use Anti-Gapcloser옵션이 On이 아니거나, 플레이어가 죽은상태면 리턴
             if (!xcsoftMenu.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
+            //Q스펠을 gapcloser.Sender(달라붙는스킬을 시전한 챔피언)에게 사용할 수 있으면 Q스펠을 gapcloser.Sender에게 시전.
             if (Q.CanCast(gapcloser.Sender))
                 Q.Cast(gapcloser.Sender);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
         {
+            //인터럽터 이벤트. 카타리나R 피들스틱W 이런 채널링스킬들이 발동할때 이부분이 실행됩니다.
+
+            //Misc서브메뉴에 Use Interrupter옵션이 On이 아니거나, 플레이어가 죽은상태이면 리턴
             if (!xcsoftMenu.Misc.UseInterrupter || Player.IsDead)
                 return;
 
+            //Q스펠을 sender(채널링스킬을 시전한 챔피언)에게 사용할 수 있으면 Q스펠을 sender에게 시전.
             if (Q.CanCast(sender))
                 Q.Cast(sender);
         }
 
         static void Combo()
         {
+            //콤보모드. 인게임에서 스페이스바키를 누르면 아래코드가 실행되는겁니다.
             if (xcsoftMenu.Combo.UseQ && Q.IsReady())
             { }
 
@@ -148,6 +185,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
+            //하래스모드. 인게임에서 C키를 누르면 아래코드가 실행되는겁니다.
             if (!(Player.ManaPercent > xcsoftMenu.Harass.ifMana))
                 return;
 
@@ -166,6 +204,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
+            //래인클리어모드. 인게임에서 V키를 누르면 아래코드가 실행되는겁니다.
             if (!(Player.ManaPercent > xcsoftMenu.Laneclear.ifMana))
                 return;
 
@@ -189,6 +228,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
+            //정글클리어모드. 인게임에서 V키를 누르면 아래코드가 실행되는겁니다.
             if (!(Player.ManaPercent > xcsoftMenu.Jungleclear.ifMana))
                 return;
 
@@ -218,8 +258,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Killsteal()
         {
+            //킬스틸부분 적챔프가 킬각일때 스펠을 시전합니다.
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
+                //데미지가 있고 적챔프에게 시전할 수 있는 스펠만 남겨두고 지우세요. 인게임에서 오류납니다.
+
+                //Q스펠을 target한테 사용할 수 있고 target이 Q데미지를 입으면 죽는 체력일 경우 Q스펠 target에게 시전. 이하동문
                 if (Q.CanCast(target) && xcsoftFunc.isKillable(target, Q))
                     Q.Cast(target);
 
@@ -236,8 +280,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static float getComboDamage(Obj_AI_Base enemy)
         {
+            //콤보데미지 계산부분입니다. 여기에서 계산한 데미지가 데미지표시기에 출력되는겁니다.
             float damage = 0;
 
+            //Q스펠이 준비상태일때 적 챔프에게 Q스펠 시전했을경우 입혀지는 데미지 추가. 이하동문
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
 

@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class TwistedFate
+    class Jax
     {
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }//메뉴에있는 오브워커(xcsoftMenu.Orbwalker)를 쓰기편하게 오브젝트명 Orbwalker로 단축한것.
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }//Player오브젝트 = 말그대로 플레이어 챔피언입니다. 이 오브젝트로 챔피언을 움직인다던지 스킬을 쓴다던지 다 됩니다.
@@ -26,19 +26,15 @@ namespace _xcsoft__ALL_IN_ONE.champions
             //스펠 설정
 
             //스펠슬롯, 스펠사거리, 데미지타입(마뎀, 물뎀, 고정뎀)
-            Q = new Spell(SpellSlot.Q, 500f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E);
+            Q = new Spell(SpellSlot.Q, 500f, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, float.MaxValue, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, float.MaxValue, TargetSelector.DamageType.physical);
             R = new Spell(SpellSlot.R);
 
             //스펠 프리딕션 설정
 
             //Q가 스킬샷(투사체)인경우 설정하는 예제
             //스킬시전전 딜레이, 스킬샷범위(두께), 투사체속도, 미니언에 막히는가안막히는가(막히면 true,안막히면 false)
-            Q.SetSkillshot(0.25f, 50f, 2000f, true, SkillshotType.SkillshotLine);
-
-            Q.SetCharged(" ", " ", 750, 1550, 1.5f);
-            Q.SetTargetted(0.25f, 2000f);
 
             //메뉴에 아이템추가. xcsoftMenu 클래스로 간편하게 만들어놨음 아래처럼 필요한 옵션만 추가하면 되고, 문제있으면 저한테 물어보세요.
 
@@ -52,26 +48,19 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Harass.addUseQ();//Harass서브메뉴에 Use Q 옵션 추가
             xcsoftMenu.Harass.addUseW();
             xcsoftMenu.Harass.addUseE();
-            xcsoftMenu.Harass.addUseR();
 
-            xcsoftMenu.Laneclear.addUseQ();//..위와 같음
             xcsoftMenu.Laneclear.addUseW();
             xcsoftMenu.Laneclear.addUseE();
-            xcsoftMenu.Laneclear.addUseR();
 
             xcsoftMenu.Jungleclear.addUseQ();//..위와 같음
             xcsoftMenu.Jungleclear.addUseW();
             xcsoftMenu.Jungleclear.addUseE();
-            xcsoftMenu.Jungleclear.addUseR();
 
             xcsoftMenu.Misc.addUseKillsteal();//Misc서브메뉴에 Use Killsteal 옵션 추가
             xcsoftMenu.Misc.addUseAntiGapcloser();//Misc서브메뉴에 Use Anti-Gapcloser 옵션추가
             xcsoftMenu.Misc.addUseInterrupter();//Misc서브메뉴에 Use Interrupter 옵션 추가.
 
             xcsoftMenu.Drawings.addQrange();//Drawings서브메뉴에 Q Range 옵션추가.
-            xcsoftMenu.Drawings.addWrange();
-            xcsoftMenu.Drawings.addErange();
-            xcsoftMenu.Drawings.addRrange();
 
             // Drawings 서브메뉴에 데미지표시기 추가하는 메소드.
             xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
@@ -197,9 +186,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (xcsoftMenu.Harass.UseE && E.IsReady())
             { }
-
-            if (xcsoftMenu.Harass.UseR && R.IsReady())
-            { }
         }
 
         static void Laneclear()
@@ -213,16 +199,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Minions.Count <= 0)
                 return;
 
-            if (xcsoftMenu.Laneclear.UseQ && Q.IsReady())
-            { }
 
             if (xcsoftMenu.Laneclear.UseW && W.IsReady())
             { }
 
             if (xcsoftMenu.Laneclear.UseE && E.IsReady())
-            { }
-
-            if (xcsoftMenu.Laneclear.UseR && R.IsReady())
             { }
         }
 
@@ -269,12 +250,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
                 if (W.CanCast(target) && xcsoftFunc.isKillable(target, W))
                     W.Cast(target);
-
-                if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
-                    E.Cast(target);
-
-                if (R.CanCast(target) && xcsoftFunc.isKillable(target, R))
-                    R.Cast(target);
             }
         }
 

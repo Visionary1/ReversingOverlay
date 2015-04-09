@@ -55,7 +55,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Misc.addUseInterrupter();
 
             xcsoftMenu.Drawings.addQrange();
-            xcsoftMenu.Drawings.addWrange();
             xcsoftMenu.Drawings.addErange();
             xcsoftMenu.Drawings.addRrange();
 
@@ -104,15 +103,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             var drawQ = xcsoftMenu.Drawings.DrawQRange;
-            var drawW = xcsoftMenu.Drawings.DrawWRange;
             var drawE = xcsoftMenu.Drawings.DrawERange;
             var drawR = xcsoftMenu.Drawings.DrawRRange;
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
 
-            if (W.IsReady() && drawW.Active)
-                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
 
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
@@ -263,14 +259,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
 
-            if (W.IsReady())
-                damage += W.GetDamage(enemy);
-
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
 
-            if (R.IsReady())
-                damage += R.GetDamage(enemy);
 
             return damage;
         }

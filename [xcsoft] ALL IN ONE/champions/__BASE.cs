@@ -53,16 +53,19 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Harass.addUseW();
             xcsoftMenu.Harass.addUseE();
             xcsoftMenu.Harass.addUseR();
+            xcsoftMenu.Harass.addifMana(60);//마나제한 옵션 추가 (기본60%)
 
             xcsoftMenu.Laneclear.addUseQ();//..위와 같음
             xcsoftMenu.Laneclear.addUseW();
             xcsoftMenu.Laneclear.addUseE();
             xcsoftMenu.Laneclear.addUseR();
+            xcsoftMenu.Harass.addifMana();//마나제한 옵션 추가 (기본60%)
 
             xcsoftMenu.Jungleclear.addUseQ();//..위와 같음
             xcsoftMenu.Jungleclear.addUseW();
             xcsoftMenu.Jungleclear.addUseE();
             xcsoftMenu.Jungleclear.addUseR();
+            xcsoftMenu.Harass.addifMana();//마나제한 옵션 추가 (기본60%)
 
             xcsoftMenu.Misc.addUseKillsteal();//Misc서브메뉴에 Use Killsteal 옵션 추가
             xcsoftMenu.Misc.addUseAntiGapcloser();//Misc서브메뉴에 Use Anti-Gapcloser 옵션추가
@@ -195,6 +198,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Harass()
         {
             //하래스모드. 인게임에서 C키를 누르면 아래코드가 실행되는겁니다.
+
+            //마나 체크
             if (!(Player.ManaPercent > xcsoftMenu.Harass.ifMana))
                 return;
 
@@ -214,9 +219,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Laneclear()
         {
             //래인클리어모드. 인게임에서 V키를 누르면 아래코드가 실행되는겁니다.
+
+            //마나 체크
             if (!(Player.ManaPercent > xcsoftMenu.Laneclear.ifMana))
                 return;
 
+            //1000범위내에 있는 적군 미니언들을 리스트형식으로 구해온다.
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
@@ -238,9 +246,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Jungleclear()
         {
             //정글클리어모드. 인게임에서 V키를 누르면 아래코드가 실행되는겁니다.
+
+            //마나 체크
             if (!(Player.ManaPercent > xcsoftMenu.Jungleclear.ifMana))
                 return;
 
+            //1000범위내에 있는 중립 미니언(정글몹)들을 리스트형식으로 구해온다.
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
@@ -248,6 +259,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (xcsoftMenu.Jungleclear.UseQ && Q.IsReady())
             {
+                //Mobs.FirstOrDefault() Mobs 리스트의 첫번째 항목을 반환(FirstOrDefault)
                 if (Q.CanCast(Mobs.FirstOrDefault()))
                     Q.Cast(Mobs.FirstOrDefault());
             }
@@ -292,7 +304,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             //콤보데미지 계산부분입니다. 여기에서 계산한 데미지가 데미지표시기에 출력되는겁니다.
             float damage = 0;
 
-            //Q스펠이 준비상태일때 적 챔프에게 Q스펠 시전했을경우 입혀지는 데미지 추가. 이하동문
+            //Q스펠이 준비상태일때 적 챔프에게 Q스펠 시전했을경우 입혀지는 (방어력, 마저, 방관, 마관 모두 계산된)데미지 추가. 이하동문
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
 

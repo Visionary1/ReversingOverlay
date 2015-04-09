@@ -20,6 +20,11 @@ namespace _xcsoft__ALL_IN_ONE
                     Menu_Manual.SubMenu("Combo").AddItem(new MenuItem("Combo." + items[i][0].ToString(), items[i][0].ToString(), true).SetValue(items[i][1]));
             }
 
+            internal static void addItem(string itemDisplayName, object value, bool champUniq = true)
+            {
+                Menu_Manual.SubMenu("Combo").AddItem(new MenuItem("Combo." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
+            }
+
             internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
                 try
@@ -109,6 +114,11 @@ namespace _xcsoft__ALL_IN_ONE
 
                 if (ifMana)
                     Menu_Manual.SubMenu("Harass").AddItem(new MenuItem("Harass.ifMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
+            }
+
+            internal static void addItem(string itemDisplayName, object value, bool champUniq = true)
+            {
+                Menu_Manual.SubMenu("Harass").AddItem(new MenuItem("Harass." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
             }
 
             internal static Circle getCircleValue(string itemName, bool champUniq = true)
@@ -212,6 +222,11 @@ namespace _xcsoft__ALL_IN_ONE
                     Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Laneclear.ifMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
             }
 
+            internal static void addItem(string itemDisplayName, object value, bool champUniq = true)
+            {
+                Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Laneclear." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
+            }
+
             internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
                 try
@@ -313,6 +328,11 @@ namespace _xcsoft__ALL_IN_ONE
                     Menu_Manual.SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear.ifMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
             }
 
+            internal static void addItem(string itemDisplayName, object value, bool champUniq = true)
+            {
+                Menu_Manual.SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
+            }
+
             internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
                 try
@@ -411,6 +431,11 @@ namespace _xcsoft__ALL_IN_ONE
                     Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc." + items[i][0].ToString(), items[i][0].ToString(), true).SetValue(items[i][1]));
             }
 
+            internal static void addItem(string itemDisplayName, object value, bool champUniq = true)
+            {
+                Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
+            }
+
             internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
                 try
@@ -489,6 +514,11 @@ namespace _xcsoft__ALL_IN_ONE
                 {
                     Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings." + items[i][0].ToString(), items[i][0].ToString(), champUniq).SetValue(items[i][1]));
                 }
+            }
+
+            internal static void addItem(string itemDisplayName, object value, bool champUniq = true)
+            {
+                Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
             }
 
             internal static Circle getCircleValue(string itemName, bool champUniq = true)

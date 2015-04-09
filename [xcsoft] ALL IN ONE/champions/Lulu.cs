@@ -119,8 +119,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!xcsoftMenu.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
-            if (Q.CanCast(gapcloser.Sender))
-                Q.Cast(gapcloser.Sender);
+            if (W.CanCast(gapcloser.Sender))
+                W.Cast(gapcloser.Sender);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -128,8 +128,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!xcsoftMenu.Misc.UseInterrupter || Player.IsDead)
                 return;
 
-            if (Q.CanCast(sender))
-                Q.Cast(sender);
+            if (W.CanCast(sender))
+                W.Cast(sender);
         }
 
         static void Combo()

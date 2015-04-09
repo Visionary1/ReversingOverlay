@@ -98,7 +98,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             var drawQ = Menu.Item("drawQ", true).GetValue<Circle>();
             var drawW = Menu.Item("drawW", true).GetValue<Circle>();
             var drawE = Menu.Item("drawE", true).GetValue<Circle>();
-            var drawR = Menu.Item("drawR", true).GetValue<Circle>();
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
@@ -108,9 +107,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
-
-            if (R.IsReady() && drawR.Active)
-                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)

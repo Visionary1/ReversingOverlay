@@ -33,12 +33,15 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             xcsoftMenu.Harass.addUseQ();
             xcsoftMenu.Harass.addUseW();
+            xcsoftMenu.Harass.addifMana();
 
             xcsoftMenu.Laneclear.addUseQ();
             xcsoftMenu.Laneclear.addUseW();
+            xcsoftMenu.Laneclear.addifMana();
 
             xcsoftMenu.Jungleclear.addUseQ();
             xcsoftMenu.Jungleclear.addUseW();
+            xcsoftMenu.Jungleclear.addifMana();
 
             xcsoftMenu.Misc.addUseKillsteal();
             xcsoftMenu.Misc.addUseAntiGapcloser();
@@ -46,7 +49,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             xcsoftMenu.Drawings.addQrange();
             xcsoftMenu.Drawings.addWrange();
-            xcsoftMenu.Drawings.addErange();
             xcsoftMenu.Drawings.addRrange();
 
             xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
@@ -90,7 +92,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             var drawQ = xcsoftMenu.Drawings.DrawQRange;
             var drawW = xcsoftMenu.Drawings.DrawWRange;
-            var drawE = xcsoftMenu.Drawings.DrawERange;
             var drawR = xcsoftMenu.Drawings.DrawRRange;
 
             if (Q.IsReady() && drawQ.Active)
@@ -98,9 +99,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (W.IsReady() && drawW.Active)
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
-
-            if (E.IsReady() && drawE.Active)
-                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
 
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);

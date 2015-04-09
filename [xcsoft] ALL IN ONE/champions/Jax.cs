@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class __BASE
+    class Jax
     {
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }//메뉴에있는 오브워커(xcsoftMenu.Orbwalker)를 쓰기편하게 오브젝트명 Orbwalker로 단축한것.
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }//Player오브젝트 = 말그대로 플레이어 챔피언입니다. 이 오브젝트로 챔피언을 움직인다던지 스킬을 쓴다던지 다 됩니다.
@@ -26,19 +26,15 @@ namespace _xcsoft__ALL_IN_ONE.champions
             //스펠 설정
 
             //스펠슬롯, 스펠사거리, 데미지타입(마뎀, 물뎀, 고정뎀)
-            Q = new Spell(SpellSlot.Q, 500f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E);
+            Q = new Spell(SpellSlot.Q, 700f, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, float.MaxValue, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, float.MaxValue, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R);
 
             //스펠 프리딕션 설정
-            
+
             //Q가 스킬샷(투사체)인경우 설정하는 예제
             //스킬시전전 딜레이, 스킬샷범위(두께), 투사체속도, 미니언에 막히는가안막히는가(막히면 true,안막히면 false)
-            Q.SetSkillshot(0.25f, 50f, 2000f, true, SkillshotType.SkillshotLine);
-            
-            Q.SetCharged(" ", " ", 750, 1550, 1.5f);
-            Q.SetTargetted(0.25f, 2000f);
 
             //메뉴에 아이템추가. xcsoftMenu 클래스로 간편하게 만들어놨음 아래처럼 필요한 옵션만 추가하면 되고, 문제있으면 저한테 물어보세요.
 
@@ -52,27 +48,19 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Harass.addUseQ();//Harass서브메뉴에 Use Q 옵션 추가
             xcsoftMenu.Harass.addUseW();
             xcsoftMenu.Harass.addUseE();
-            xcsoftMenu.Harass.addUseR();
 
-            xcsoftMenu.Laneclear.addUseQ();//..위와 같음
-            xcsoftMenu.Laneclear.addUseW();
+            xcsoftMenu.Laneclear.addUseW();//Laneclear서브메뉴에 Use W 옵션 추가
             xcsoftMenu.Laneclear.addUseE();
-            xcsoftMenu.Laneclear.addUseR();
 
-            xcsoftMenu.Jungleclear.addUseQ();//..위와 같음
+            xcsoftMenu.Jungleclear.addUseQ();//Jungleclear서브메뉴에 Use Q 옵션 추가
             xcsoftMenu.Jungleclear.addUseW();
             xcsoftMenu.Jungleclear.addUseE();
-            xcsoftMenu.Jungleclear.addUseR();
 
             xcsoftMenu.Misc.addUseKillsteal();//Misc서브메뉴에 Use Killsteal 옵션 추가
-            xcsoftMenu.Misc.addUseAntiGapcloser();//Misc서브메뉴에 Use Anti-Gapcloser 옵션추가
             xcsoftMenu.Misc.addUseInterrupter();//Misc서브메뉴에 Use Interrupter 옵션 추가.
 
             xcsoftMenu.Drawings.addQrange();//Drawings서브메뉴에 Q Range 옵션추가.
-            xcsoftMenu.Drawings.addWrange();
-            xcsoftMenu.Drawings.addErange();
-            xcsoftMenu.Drawings.addRrange();
-
+            
             // Drawings 서브메뉴에 데미지표시기 추가하는 메소드.
             xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
 
@@ -123,35 +111,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             //Drawings 설정 정보를 변수에 불러오는겁니다.
             //사용하지 않는 옵션은 지우세요 인게임에서 오류납니다.
             var drawQ = xcsoftMenu.Drawings.DrawQRange;
-            var drawW = xcsoftMenu.Drawings.DrawWRange;
-            var drawE = xcsoftMenu.Drawings.DrawERange;
-            var drawR = xcsoftMenu.Drawings.DrawRRange;
 
             //Q스펠이 준비상태(쿨타임아닌상태)이고 Q Range옵션이 On 이면 Q사거리를 플레이어 챔피언위치에다가 그리는겁니다. 이하동문
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
-
-            if (W.IsReady() && drawW.Active)
-                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
-
-            if (E.IsReady() && drawE.Active)
-                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
-
-            if (R.IsReady() && drawR.Active)
-                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
-        }
-
-        static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
-        {
-            //안티갭클로저 이벤트. 적챔피언이 달라붙는 스킬을 사용할때마다 발동합니다.
-
-            //misc서브메뉴에 Use Anti-Gapcloser옵션이 On이 아니거나, 플레이어가 죽은상태면 리턴
-            if (!xcsoftMenu.Misc.UseAntiGapcloser || Player.IsDead)
-                return;
-
-            //Q스펠을 gapcloser.Sender(달라붙는스킬을 시전한 챔피언)에게 사용할 수 있으면 Q스펠을 gapcloser.Sender에게 시전.
-            if (Q.CanCast(gapcloser.Sender))
-                Q.Cast(gapcloser.Sender);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -162,28 +125,33 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!xcsoftMenu.Misc.UseInterrupter || Player.IsDead)
                 return;
 
-            //Q스펠을 sender(채널링스킬을 시전한 챔피언)에게 사용할 수 있으면 Q스펠을 sender에게 시전.
-            if (Q.CanCast(sender))
-                Q.Cast(sender);
+            //E스펠을 sender(채널링스킬을 시전한 챔피언)에게 사용할 수 있으면 E스펠을 sender에게 시전.
+            if (E.CanCast(sender))
+                E.Cast(sender);
         }
 
         static void Combo()
         {
             //콤보모드. 인게임에서 스페이스바키를 누르면 아래코드가 실행되는겁니다.
-
             if (xcsoftMenu.Combo.UseQ && Q.IsReady())
             {
-                //타겟셀렉터를 이용해서 Q 사거리내에서 최적의 타겟을 구합니다.
+                //타겟셀렉터를 이용해서 Q 사거리내에서 최적의 타겟을 구합니다. 
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
 
-                //qTarget이 null(없음)이 아니고 맞을확률이 높을경우 qTarget에게 Q시전. 스펠이 타겟팅인경우 프리딕션 사용 x
+
+                //qTarget이 null(없음)이 아니고 맞을확률이 높을경우 qTarget에게 Q시전. 스펠이 타겟팅인경우 프리딕션 사용 x 
                 if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= HitChance.High)
                     Q.Cast(qTarget);
-                    
+
             }
 
             if (xcsoftMenu.Combo.UseW && W.IsReady())
-            { }
+            {
+                var wTarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+
+                if (!wTarget.IsValidTarget(defaltRange) && wTarget.IsValidTarget(W.Range))
+                    W.Cast();
+            }
 
             if (xcsoftMenu.Combo.UseE && E.IsReady())
             { }
@@ -199,15 +167,21 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (xcsoftMenu.Harass.UseQ && Q.IsReady())
-            { }
+            {
+                //타겟셀렉터를 이용해서 Q 사거리내에서 최적의 타겟을 구합니다. 
+                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+
+
+                //qTarget이 null(없음)이 아니고 맞을확률이 높을경우 qTarget에게 Q시전. 스펠이 타겟팅인경우 프리딕션 사용 x 
+                if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= HitChance.High)
+                    Q.Cast(qTarget);
+
+            }
 
             if (xcsoftMenu.Harass.UseW && W.IsReady())
             { }
 
             if (xcsoftMenu.Harass.UseE && E.IsReady())
-            { }
-
-            if (xcsoftMenu.Harass.UseR && R.IsReady())
             { }
         }
 
@@ -222,16 +196,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Minions.Count <= 0)
                 return;
 
-            if (xcsoftMenu.Laneclear.UseQ && Q.IsReady())
-            { }
-
             if (xcsoftMenu.Laneclear.UseW && W.IsReady())
             { }
 
             if (xcsoftMenu.Laneclear.UseE && E.IsReady())
-            { }
-
-            if (xcsoftMenu.Laneclear.UseR && R.IsReady())
             { }
         }
 
@@ -259,10 +227,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
 
             if (xcsoftMenu.Jungleclear.UseE && E.IsReady())
-            { }
-
-            if (xcsoftMenu.Jungleclear.UseR && R.IsReady())
-            { }
+            {
+                if (E.CanCast(Mobs.FirstOrDefault()))
+                    E.Cast(Mobs.FirstOrDefault());
+            }
         }
 
         static void Killsteal()
@@ -275,15 +243,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 //Q스펠을 target한테 사용할 수 있고 target이 Q데미지를 입으면 죽는 체력일 경우 Q스펠 target에게 시전. 이하동문
                 if (Q.CanCast(target) && xcsoftFunc.isKillable(target, Q))
                     Q.Cast(target);
-
-                if (W.CanCast(target) && xcsoftFunc.isKillable(target, W))
-                    W.Cast(target);
-
-                if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
-                    E.Cast(target);
-
-                if (R.CanCast(target) && xcsoftFunc.isKillable(target, R))
-                    R.Cast(target);
             }
         }
 

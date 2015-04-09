@@ -35,15 +35,12 @@ namespace _xcsoft__ALL_IN_ONE
                 case "Chogath":
                     champions.Chogath.Load();
                     break;
-<<<<<<< HEAD
                 case "Urgot":
                     champions.Urgot.Load();
                     break;
-=======
                 //case "Jax":
                 //    champions.Jax.Load();
                 //    break;
->>>>>>> 6c3557f4341bfd076029d229df3778d27af92b82
                 default:
                     xcsoftFunc.sendDebugMsg("챔프 지원안함.");
                     break;

@@ -59,13 +59,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Laneclear.addUseW();
             xcsoftMenu.Laneclear.addUseE();
             xcsoftMenu.Laneclear.addUseR();
-            xcsoftMenu.Harass.addifMana();//마나제한 옵션 추가 (기본60%)
+            xcsoftMenu.Laneclear.addifMana();//마나제한 옵션 추가 (기본60%)
 
             xcsoftMenu.Jungleclear.addUseQ();//..위와 같음
             xcsoftMenu.Jungleclear.addUseW();
             xcsoftMenu.Jungleclear.addUseE();
             xcsoftMenu.Jungleclear.addUseR();
-            xcsoftMenu.Harass.addifMana();//마나제한 옵션 추가 (기본60%)
+            xcsoftMenu.Jungleclear.addifMana();//마나제한 옵션 추가 (기본60%)
 
             xcsoftMenu.Misc.addUseKillsteal();//Misc서브메뉴에 Use Killsteal 옵션 추가
             xcsoftMenu.Misc.addUseAntiGapcloser();//Misc서브메뉴에 Use Anti-Gapcloser 옵션추가

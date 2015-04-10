@@ -19,8 +19,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 		
         static Spell Q, W, E, R;
 
-        static float getQBuffDuration { get { var buff = xcsoftFunc.getBuffInstance("fioraqcd"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static float getEBuffDuration { get { var buff = xcsoftFunc.getBuffInstance("burstofspeed"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getQBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "fioraqcd"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getEBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "burstofspeed"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
         {

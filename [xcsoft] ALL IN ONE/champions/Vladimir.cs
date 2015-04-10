@@ -16,9 +16,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static Spell Q, W, E, R;
 
-        static int getEBuffStacks { get { var buff = xcsoftFunc.getBuffInstance("vladimirtidesofbloodcost"); return buff != null ? buff.Count : 0; } }
-        static float getEBuffDuration { get { var buff = xcsoftFunc.getBuffInstance("vladimirtidesofbloodcost"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static float getWBuffDuration { get { var buff = xcsoftFunc.getBuffInstance("VladimirSanguinePool"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static int getEBuffStacks { get { var buff = xcsoftFunc.getBuffInstance(Player, "vladimirtidesofbloodcost"); return buff != null ? buff.Count : 0; } }
+        static float getEBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "vladimirtidesofbloodcost"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getWBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "VladimirSanguinePool"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
         {

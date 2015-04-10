@@ -34,14 +34,14 @@ namespace _xcsoft__ALL_IN_ONE
             return Collision.GetCollision(new List<SharpDX.Vector3> { targetPos }, input).OrderBy(obj => obj.Distance(source, false)).ToList();
         }
 
-        internal static BuffInstance getBuffInstance(string buffName)
+        internal static BuffInstance getBuffInstance(Obj_AI_Base target, string buffName)
         {
-            return ObjectManager.Player.Buffs.Find(x => x.Name == buffName && x.IsValidBuff());
+            return target.Buffs.Find(x => x.Name == buffName && x.IsValidBuff());
         }
 
-        internal static BuffInstance getBuffInstance(string buffName, Obj_AI_Base buffCaster)
+        internal static BuffInstance getBuffInstance(Obj_AI_Base target, string buffName, Obj_AI_Base buffCaster)
         {
-            return ObjectManager.Player.Buffs.Find(x => x.Name == buffName && x.Caster.NetworkId == buffCaster.NetworkId && x.IsValidBuff());
+            return target.Buffs.Find(x => x.Name == buffName && x.Caster.NetworkId == buffCaster.NetworkId && x.IsValidBuff());
         }
 
         internal static bool isKillable(Obj_AI_Base target, float damage)

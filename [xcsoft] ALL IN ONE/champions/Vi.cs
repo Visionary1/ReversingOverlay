@@ -20,7 +20,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         const byte defaltRange = 190;
 
         static bool QisAllGood(Obj_AI_Base target) { return Q.IsReady() && Q.IsCharging && target.IsValidTarget(Q.Range) && Q.GetPrediction(target).Hitchance >= HitChance.High; }
-        static int getWBuffStacks(Obj_AI_Base target) { var stacks = xcsoftFunc.getBuffInstance("viwproc", Player); return stacks != null ? stacks.Count : 0; }
+        static int getWBuffStacks(Obj_AI_Base target) { var stacks = xcsoftFunc.getBuffInstance(Player, "viwproc", Player); return stacks != null ? stacks.Count : 0; }
 
         public static void Load()
         {

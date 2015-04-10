@@ -11,6 +11,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class Lulu
     {
+        
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
@@ -19,11 +20,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 925f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 650f);
+            W = new Spell(SpellSlot.W, 650f);//lulufaeriburn
             E = new Spell(SpellSlot.E, 650f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 900f);
 
-            Q.SetSkillshot(0.25f, 60f, 1450f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 60f, 1450f, false, SkillshotType.SkillshotLine);
             W.SetTargetted(0.25f, float.MaxValue);
             E.SetTargetted(0.25f, float.MaxValue);
             R.SetTargetted(0.25f, float.MaxValue);
@@ -34,12 +35,15 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             xcsoftMenu.Harass.addUseQ();
             xcsoftMenu.Harass.addUseE();
+            xcsoftMenu.Harass.addifMana();
 
             xcsoftMenu.Laneclear.addUseQ();
             xcsoftMenu.Laneclear.addUseE();
+            xcsoftMenu.Laneclear.addifMana();
 
             xcsoftMenu.Jungleclear.addUseQ();
             xcsoftMenu.Jungleclear.addUseE();
+            xcsoftMenu.Jungleclear.addifMana();
 
             xcsoftMenu.Misc.addHitchanceSelector();
             xcsoftMenu.Misc.addUseKillsteal();
@@ -81,6 +85,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (xcsoftMenu.Misc.UseKillsteal)
                 Killsteal();
+
+            Q.MinHitChance = xcsoftMenu.Misc.SelectedHitchance;
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -128,10 +134,22 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             if (xcsoftMenu.Combo.UseQ && Q.IsReady())
             {
-                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+                var faeritarget = HeroManager.Enemies.FirstOrDefault(x => xcsoftFunc.getBuffInstance(Player, "lulufaeriburn", Player) != null);
 
-                if (Q.CanCast(qTarget) && Q.GetPrediction(qTarget).Hitchance >= xcsoftMenu.Misc.SelectedHitchance)
+                if (faeritarget != null)
+                {
+                    Q.UpdateSourcePosition(faeritarget.ServerPosition, faeritarget.ServerPosition);
+
+                    Q.Cast(faeritarget);
+                }
+                else
+                {
+                    Q.UpdateSourcePosition();
+
+                    var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+
                     Q.Cast(qTarget);
+                }
             }
 
             if (xcsoftMenu.Combo.UseW && W.IsReady())
@@ -152,10 +170,22 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (xcsoftMenu.Harass.UseQ && Q.IsReady())
             {
-                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+                var faeritarget = HeroManager.Enemies.FirstOrDefault(x => xcsoftFunc.getBuffInstance(Player, "lulufaeriburn", Player) != null);
 
-                if (Q.CanCast(qTarget) && Q.GetPrediction(qTarget).Hitchance >= xcsoftMenu.Misc.SelectedHitchance)
+                if (faeritarget != null)
+                {
+                    Q.UpdateSourcePosition(faeritarget.ServerPosition, faeritarget.ServerPosition);
+
+                    Q.Cast(faeritarget);
+                }
+                else
+                {
+                    Q.UpdateSourcePosition();
+
+                    var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+
                     Q.Cast(qTarget);
+                }
             }
 
             if (xcsoftMenu.Harass.UseE && E.IsReady())

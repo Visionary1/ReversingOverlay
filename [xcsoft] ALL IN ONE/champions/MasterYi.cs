@@ -20,7 +20,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Wcancel() { Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
 
-        static float getRBuffDuration { get { var buff = xcsoftFunc.getBuffInstance("Highlander"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getRBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "Highlander"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
         {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -8,7 +7,7 @@ using LeagueSharp.Common;
 
 namespace _xcsoft__ALL_IN_ONE
 {
-    static class xcsoftFunc//by xcsoft
+    static class xcsoftFunc
     {
         internal static float getHealthPercent(Obj_AI_Base unit)
         {

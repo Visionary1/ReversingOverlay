@@ -6,7 +6,6 @@ namespace _xcsoft__ALL_IN_ONE
 {
     class champLoader
     {
-        //For SandBox
         internal static void Load(string champName)
         {
             switch (champName)
@@ -44,7 +43,7 @@ namespace _xcsoft__ALL_IN_ONE
                 case "Fiora":
                     champions.Fiora.Load();
                     break;
-                case "Lulu":
+                case "Lulu"://xcsoft가 추가함. 기록해두면 좋음.
                     champions.Lulu.Load();
                     break;
                 case "Nautilus":

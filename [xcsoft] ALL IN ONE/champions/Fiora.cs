@@ -251,7 +251,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 				}
 		}
 				
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 		if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
                     		&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
@@ -266,7 +266,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 				R.Cast(rtarget);
 				}
 				
-				if (Menu.Item("CbUseH", true).GetValue<bool>()// && !W.IsReady()
+				if (Menu.Item("CbUseH", true).GetValue<bool>()
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
 				{
 					if(tiamatItem.IsReady())
@@ -359,14 +359,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
-				/*
-			if(tiamatItem.IsReady())
-				damage += tiamatItem.GetDamage(enemy);
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
-				
-			if(hydraItem.IsReady())
-				damage += hydraItem.GetDamage(enemy);
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);*/
+
 			if(E.IsReady())
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
 				

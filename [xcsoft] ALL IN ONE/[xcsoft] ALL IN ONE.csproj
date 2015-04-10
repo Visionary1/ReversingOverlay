@@ -188,7 +188,7 @@
     <Compile Include="champions\_Warwick.cs" />
     <Compile Include="champions\_Wukong.cs" />
     <Compile Include="champions\_Xerath.cs" />
-    <Compile Include="champions\_XinZhao.cs" />
+    <Compile Include="champions\XinZhao.cs" />
     <Compile Include="champions\_Yasuo.cs" />
     <Compile Include="champions\_Yorick.cs" />
     <Compile Include="champions\_Zac.cs" />

@@ -31,7 +31,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Combo.addUseQ();
             xcsoftMenu.Combo.addUseW();
             xcsoftMenu.Combo.addUseE();
-            xcsoftMenu.Combo.addUseR();
 
             xcsoftMenu.Harass.addUseQ();
             xcsoftMenu.Harass.addUseE();
@@ -136,13 +135,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
 
             if (xcsoftMenu.Combo.UseW && W.IsReady())
-            { }
+            {
+                W.CastOnBestTarget();
+            }
 
             if (xcsoftMenu.Combo.UseE && E.IsReady())
-            { }
-
-            if (xcsoftMenu.Combo.UseR && R.IsReady())
-            { }
+            {
+                E.CastOnBestTarget();
+            }
         }
 
         static void Harass()
@@ -158,14 +158,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     Q.Cast(qTarget);
             }
 
-            if (xcsoftMenu.Harass.UseW && W.IsReady())
-            { }
-
             if (xcsoftMenu.Harass.UseE && E.IsReady())
-            { }
-
-            if (xcsoftMenu.Harass.UseR && R.IsReady())
-            { }
+            {
+                E.CastOnBestTarget();
+            }
         }
 
         static void Laneclear()
@@ -179,16 +175,20 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (xcsoftMenu.Laneclear.UseQ && Q.IsReady())
-            { }
+            {
+                var qloc = Q.GetLineFarmLocation(Minions);
 
-            if (xcsoftMenu.Laneclear.UseW && W.IsReady())
-            { }
+                if (qloc.MinionsHit >= 3)
+                    Q.Cast(qloc.Position);
+            }
 
             if (xcsoftMenu.Laneclear.UseE && E.IsReady())
-            { }
+            {
+                var eTarget = Minions.Where(x => x.IsValidTarget(E.Range) && xcsoftFunc.isKillable(x, E)).OrderByDescending(x => x.Health).FirstOrDefault();
 
-            if (xcsoftMenu.Laneclear.UseR && R.IsReady())
-            { }
+                if (eTarget != null)
+                    E.Cast(eTarget);
+            }
         }
 
         static void Jungleclear()
@@ -207,17 +207,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     Q.Cast(Mobs.FirstOrDefault());
             }
 
-            if (xcsoftMenu.Jungleclear.UseW && W.IsReady())
-            {
-                if (W.CanCast(Mobs.FirstOrDefault()))
-                    W.Cast(Mobs.FirstOrDefault());
-            }
-
             if (xcsoftMenu.Jungleclear.UseE && E.IsReady())
-            { }
-
-            if (xcsoftMenu.Jungleclear.UseR && R.IsReady())
-            { }
+            {
+                if (E.CanCast(Mobs.FirstOrDefault()))
+                    E.Cast(Mobs.FirstOrDefault());
+            }
         }
 
         static void Killsteal()

@@ -49,6 +49,9 @@ namespace _xcsoft__ALL_IN_ONE
                 case "Nautilus":
                     champions.Nautilus.Load();
                     break;
+                case "Graves":
+                    champions.Graves.Load();
+                    break;
                 default:
                     xcsoftFunc.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

@@ -38,7 +38,7 @@ namespace _xcsoft__ALL_IN_ONE
 
             Drawing.OnDraw += Drawing_OnDraw;
 
-            Game.PrintChat(xcsoftFunc.colorChat(Color.DodgerBlue, "[xcsoft] ALL IN ONE: ") + xcsoftFunc.colorChat(Color.Red, ObjectManager.Player.ChampionName) + " Loaded");
+            Game.PrintChat(xcsoftFunc.colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + xcsoftFunc.colorChat(Color.Red, ObjectManager.Player.ChampionName) + " Loaded");
         }
 
         static void Drawing_OnDraw(EventArgs args)

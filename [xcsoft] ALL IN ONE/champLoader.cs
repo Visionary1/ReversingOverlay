@@ -45,7 +45,7 @@ namespace _xcsoft__ALL_IN_ONE
                     champions.Fiora.Load();
                     break;
                 default:
-                    xcsoftFunc.sendDebugMsg("챔프 지원안함.");
+                    xcsoftFunc.sendDebugMsg("Champ Not Supported.");
                     break;
             } 
         }
@@ -55,7 +55,6 @@ namespace _xcsoft__ALL_IN_ONE
             try
             {
                 xcsoftFunc.sendDebugMsg(tag + Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " Supported.", false);
-                return true;
             }
             catch
             {
@@ -65,6 +64,8 @@ namespace _xcsoft__ALL_IN_ONE
                 xcsoftMenu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported");
                 return false;
             }
+
+            return true;
         }
     }
 }

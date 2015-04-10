@@ -186,7 +186,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Harass()
         {
             //하래스모드. 인게임에서 C키를 누르면 아래코드가 실행되는겁니다.
-            if (!(Player.ManaPercent > xcsoftMenu.Harass.ifMana))
+            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Harass.ifMana))
                 return;
 
             if (xcsoftMenu.Harass.UseQ && Q.IsReady())
@@ -205,7 +205,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Laneclear()
         {
             //래인클리어모드. 인게임에서 V키를 누르면 아래코드가 실행되는겁니다.
-            if (!(Player.ManaPercent > xcsoftMenu.Laneclear.ifMana))
+            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Laneclear.ifMana))
                 return;
 
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -229,7 +229,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Jungleclear()
         {
             //정글클리어모드. 인게임에서 V키를 누르면 아래코드가 실행되는겁니다.
-            if (!(Player.ManaPercent > xcsoftMenu.Jungleclear.ifMana))
+            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Jungleclear.ifMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

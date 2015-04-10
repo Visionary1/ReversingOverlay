@@ -152,16 +152,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed )
             {
-                if (Menu.Item("HrsUseE", true).GetValue<bool>() && Player.ManaPercent > Menu.Item("HrsMana", true).GetValue<Slider>().Value)
+                if (Menu.Item("HrsUseE", true).GetValue<bool>() && xcsoftFunc.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value)
                     E.Cast();
             }
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                if (Menu.Item("LcUseE", true).GetValue<bool>() && Player.ManaPercent > Menu.Item("LcMana", true).GetValue<Slider>().Value)
+                if (Menu.Item("LcUseE", true).GetValue<bool>() && xcsoftFunc.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value)
                     E.Cast();
 
-                if (Menu.Item("JcUseE", true).GetValue<bool>() && Player.ManaPercent > Menu.Item("JcMana", true).GetValue<Slider>().Value)
+                if (Menu.Item("JcUseE", true).GetValue<bool>() && xcsoftFunc.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value)
                     E.Cast();
             }
         }
@@ -198,7 +198,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!(Player.ManaPercent > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
@@ -223,7 +223,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!(Player.ManaPercent > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -237,7 +237,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!(Player.ManaPercent > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

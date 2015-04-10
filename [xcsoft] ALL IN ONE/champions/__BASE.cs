@@ -200,7 +200,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             //하래스모드. 인게임에서 C키를 누르면 아래코드가 실행되는겁니다.
 
             //마나 체크
-            if (!(Player.ManaPercent > xcsoftMenu.Harass.ifMana))
+            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Harass.ifMana))
                 return;
 
             if (xcsoftMenu.Harass.UseQ && Q.IsReady())
@@ -221,7 +221,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             //래인클리어모드. 인게임에서 V키를 누르면 아래코드가 실행되는겁니다.
 
             //마나 체크
-            if (!(Player.ManaPercent > xcsoftMenu.Laneclear.ifMana))
+            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Laneclear.ifMana))
                 return;
 
             //1000범위내에 있는 적군 미니언들을 리스트형식으로 구해온다.
@@ -248,7 +248,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             //정글클리어모드. 인게임에서 V키를 누르면 아래코드가 실행되는겁니다.
 
             //마나 체크
-            if (!(Player.ManaPercent > xcsoftMenu.Jungleclear.ifMana))
+            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Jungleclear.ifMana))
                 return;
 
             //1000범위내에 있는 중립 미니언(정글몹)들을 리스트형식으로 구해온다.

@@ -268,22 +268,22 @@ namespace _xcsoft__ALL_IN_ONE
 
             internal static void addUseQ(bool enable = true)
             {
-                Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Harass.Use Q", "Use Q", true).SetValue(enable));
+                Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Laneclear.Use Q", "Use Q", true).SetValue(enable));
             }
 
             internal static void addUseW(bool enable = true)
             {
-                Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Harass.Use W", "Use W", true).SetValue(enable));
+                Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Laneclear.Use W", "Use W", true).SetValue(enable));
             }
 
             internal static void addUseE(bool enable = true)
             {
-                Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Harass.Use E", "Use E", true).SetValue(enable));
+                Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Laneclear.Use E", "Use E", true).SetValue(enable));
             }
 
             internal static void addUseR(bool enable = true)
             {
-                Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Harass.Use R", "Use R", true).SetValue(enable));
+                Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Laneclear.Use R", "Use R", true).SetValue(enable));
             }
 
             internal static void addifMana(int value = 60)

@@ -490,6 +490,11 @@ namespace _xcsoft__ALL_IN_ONE
                 Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc.Use Anti-Gapcloser", "Use Anti-Gapcloser", true).SetValue(enable));
             }
 
+            internal static void addHitchanceSelector()
+            {
+                Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc.Hitchance", "Hitchance", true).SetValue(new StringList(new string[] { "Low", "Medium", "High", "Very High" }, 3)));
+            }
+
             internal static bool UseKillsteal
             {
                 get { return Menu_Manual.Item("Misc.Use Killsteal", true).GetValue<bool>(); }
@@ -503,6 +508,26 @@ namespace _xcsoft__ALL_IN_ONE
             internal static bool UseAntiGapcloser
             {
                 get { return Menu_Manual.Item("Misc.Use Anti-Gapcloser", true).GetValue<bool>(); }
+            }
+
+            internal static HitChance SelectedHitchance
+            {
+                get 
+                {
+                    switch (Menu_Manual.Item("Misc.Hitchance", true).GetValue<StringList>().SelectedValue)
+                    {
+                        case "Low":
+                            return HitChance.Low;
+                        case "Medium":
+                            return HitChance.Medium;
+                        case "High":
+                            return HitChance.High;
+                        case "Very High":
+                            return HitChance.VeryHigh;
+                        default:
+                            return HitChance.High;
+                    }
+                }
             }
         }
 

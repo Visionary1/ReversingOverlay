@@ -44,8 +44,11 @@ namespace _xcsoft__ALL_IN_ONE
                 case "Fiora":
                     champions.Fiora.Load();
                     break;
+                case "Lulu":
+                    champions.Lulu.Load();
+                    break;
                 default:
-                    xcsoftFunc.sendDebugMsg("Champ Not Supported.");
+                    xcsoftFunc.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;
             } 
         }

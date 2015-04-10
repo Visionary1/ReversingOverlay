@@ -35,20 +35,15 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Combo.addUseR();
 
             xcsoftMenu.Harass.addUseQ();
-            xcsoftMenu.Harass.addUseW();
             xcsoftMenu.Harass.addUseE();
-            xcsoftMenu.Harass.addUseR();
 
             xcsoftMenu.Laneclear.addUseQ();
-            xcsoftMenu.Laneclear.addUseW();
             xcsoftMenu.Laneclear.addUseE();
-            xcsoftMenu.Laneclear.addUseR();
 
             xcsoftMenu.Jungleclear.addUseQ();
-            xcsoftMenu.Jungleclear.addUseW();
             xcsoftMenu.Jungleclear.addUseE();
-            xcsoftMenu.Jungleclear.addUseR();
 
+            xcsoftMenu.Misc.addHitchanceSelector();
             xcsoftMenu.Misc.addUseKillsteal();
             xcsoftMenu.Misc.addUseAntiGapcloser();
             xcsoftMenu.Misc.addUseInterrupter();
@@ -86,10 +81,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 }
             }
 
-            #region Killsteal
             if (xcsoftMenu.Misc.UseKillsteal)
                 Killsteal();
-            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -136,7 +129,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Combo()
         {
             if (xcsoftMenu.Combo.UseQ && Q.IsReady())
-            { }
+            {
+                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+
+                if (Q.CanCast(qTarget) && Q.GetPrediction(qTarget).Hitchance >= xcsoftMenu.Misc.SelectedHitchance)
+                    Q.Cast(qTarget);
+            }
 
             if (xcsoftMenu.Combo.UseW && W.IsReady())
             { }
@@ -154,7 +152,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (xcsoftMenu.Harass.UseQ && Q.IsReady())
-            { }
+            {
+                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+
+                if (Q.CanCast(qTarget) && Q.GetPrediction(qTarget).Hitchance >= xcsoftMenu.Misc.SelectedHitchance)
+                    Q.Cast(qTarget);
+            }
 
             if (xcsoftMenu.Harass.UseW && W.IsReady())
             { }

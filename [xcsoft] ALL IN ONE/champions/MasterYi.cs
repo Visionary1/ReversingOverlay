@@ -234,9 +234,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 damage += Q.GetDamage(enemy);
 
             if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
-			if(W.IsReady())
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+                damage += (float)Player.GetAutoAttackDamage(enemy, true) + (float)Player.GetAutoAttackDamage(enemy, false) * 7;
 				
             return damage;
         }

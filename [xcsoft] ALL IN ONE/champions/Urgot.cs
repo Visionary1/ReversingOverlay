@@ -214,6 +214,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 if (Q.CanCast(Mobs.FirstOrDefault()))
                     Q.Cast(Mobs.FirstOrDefault());
+                /*if(Q2.CanCast(Mobs.FirstOrDefault()))
+                    Q2.Cast(Mobs.FirstOrDefault());*/
             }
 
             if (xcsoftMenu.Jungleclear.UseE && E.IsReady())

@@ -1,1 +1,9 @@
-I'll be sure finished it
+# TeamProejct
+**Director**
+xcsoft
+
+**Collaborator**
+Yours
+GBKTV
+CoreBoard
+Fakker

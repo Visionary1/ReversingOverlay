@@ -121,8 +121,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 {
                     if (Menu.Item("CbUseW", true).GetValue<bool>())
                     {
-                        Utility.DelayAction.Add(30, Orbwalking.ResetAutoAttackTimer);
-                        Utility.DelayAction.Add(30, Wcancel);
+                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+                        Utility.DelayAction.Add(50, Wcancel);
                     }
                 }
 

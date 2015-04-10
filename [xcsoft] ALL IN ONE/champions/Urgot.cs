@@ -22,7 +22,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Q = new Spell(SpellSlot.Q, 1000f, TargetSelector.DamageType.Physical);
             Q2 = new Spell(SpellSlot.Q, 1200f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E, 900f, TargetSelector.DamageType.Physical);
+            E = new Spell(SpellSlot.E, 1000f, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R);
          
             Q.SetSkillshot(0.25f, 60f, 1600f, true, SkillshotType.SkillshotLine);
@@ -39,7 +39,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Harass.addifMana(60);
 
             xcsoftMenu.Laneclear.addUseQ();
-            xcsoftMenu.Laneclear.addUseE();
             xcsoftMenu.Laneclear.addifMana(70);
 
             xcsoftMenu.Jungleclear.addUseQ();
@@ -193,7 +192,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Minions.Count <= 0)
                 return;
 
-            if (xcsoftMenu.Laneclear.UseQ && Q.IsReady())
+            if (xcsoftMenu.Laneclear.UseQ && Q.IsReady() && !Player.IsWindingUp)
             {
                 if (Q.CanCast(Minions.FirstOrDefault()))
                     Q.Cast(Minions.FirstOrDefault());
@@ -214,8 +213,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 if (Q.CanCast(Mobs.FirstOrDefault()))
                     Q.Cast(Mobs.FirstOrDefault());
-                /*if(Q2.CanCast(Mobs.FirstOrDefault()))
-                    Q2.Cast(Mobs.FirstOrDefault());*/
             }
 
             if (xcsoftMenu.Jungleclear.UseE && E.IsReady())

@@ -67,6 +67,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Jungleclear.addUseR();
             xcsoftMenu.Jungleclear.addifMana();//마나제한 옵션 추가 (기본20%)
 
+            xcsoftMenu.Misc.addHitchanceSelector();//Misc서브메뉴에 HitchanceSelector 추가. 기본값 High. 히트찬스를 사용하지 않거나 않으려면 지우세요.
             xcsoftMenu.Misc.addUseKillsteal();//Misc서브메뉴에 Use Killsteal 옵션 추가
             xcsoftMenu.Misc.addUseAntiGapcloser();//Misc서브메뉴에 Use Anti-Gapcloser 옵션추가
             xcsoftMenu.Misc.addUseInterrupter();//Misc서브메뉴에 Use Interrupter 옵션 추가.
@@ -179,8 +180,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 //타겟셀렉터를 이용해서 Q 사거리내에서 최적의 타겟을 구합니다.
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
 
-                //qTarget이 null(없음)이 아니고 맞을확률이 높을경우 qTarget에게 Q시전. 스펠이 타겟팅인경우 프리딕션 사용 x
-                if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= HitChance.High)
+                //qTarget이 null(없음)이 아니고 맞을확률이 메뉴에서 선택한 히트찬스랑 같거나 높을경우 qTarget에게 Q시전. 스펠이 타겟팅인경우 프리딕션 사용 x
+                if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= xcsoftMenu.Misc.SelectedHitchance)
                     Q.Cast(qTarget);
                     
             }

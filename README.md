@@ -3,9 +3,9 @@
 xcsoft
 
 **Collaborator**
-Yours
-GBKTV
-CoreBoard
+Yours,
+GBKTV,
+CoreBoard,
 Fakker
 
 **Contributor**

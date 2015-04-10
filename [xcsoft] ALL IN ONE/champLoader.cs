@@ -47,6 +47,9 @@ namespace _xcsoft__ALL_IN_ONE
                 case "Lulu":
                     champions.Lulu.Load();
                     break;
+                case "Nautilus":
+                    champions.Nautilus.Load();
+                    break;
                 default:
                     xcsoftFunc.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

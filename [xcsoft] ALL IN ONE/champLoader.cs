@@ -40,7 +40,7 @@ namespace _xcsoft__ALL_IN_ONE
                 case "Jax":
                     champions.Jax.Load();
                     break;
-                case "Fiora":
+                case "Fiora"://Added by RL144
                     champions.Fiora.Load();
                     break;
                 case "Lulu"://xcsoft가 추가함. 기록해두면 좋음.
@@ -51,6 +51,9 @@ namespace _xcsoft__ALL_IN_ONE
                     break;
                 case "Graves":
                     champions.Graves.Load();
+                    break;
+                case "XinZhao"://Added by RL144
+                    champions.XinZhao.Load();
                     break;
                 default:
                     xcsoftFunc.sendDebugMsg("(champLoader)Champ Not Supported.", true);

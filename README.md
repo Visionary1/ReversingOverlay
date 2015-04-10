@@ -1,12 +1,12 @@
 # TeamProejct
-**Director**
-xcsoft
+##Director
++ xcsoft
 
-**Collaborator**
-Yours,
-GBKTV,
-CoreBoard,
-Fakker
+##Collaborator
++ Yours
++ GBKTV
++ CoreBoard
++ Fakker
 
-**Contributor**
-RL114
+##Contributor
++ RL114

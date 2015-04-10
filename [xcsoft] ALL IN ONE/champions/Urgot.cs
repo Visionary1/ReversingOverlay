@@ -27,7 +27,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
          
             Q.SetSkillshot(0.25f, 60f, 1600f, true, SkillshotType.SkillshotLine);
             Q2.SetSkillshot(0.25f, 60f, 1600f, false, SkillshotType.SkillshotLine);
-            E.SetSkillshot(0.25f, 210f, 1500f, false, SkillshotType.SkillshotCircle);
+            E.SetSkillshot(0.25f, 250f, 1500f, false, SkillshotType.SkillshotCircle);
 
             xcsoftMenu.Combo.addUseQ();
             xcsoftMenu.Combo.addUseW();

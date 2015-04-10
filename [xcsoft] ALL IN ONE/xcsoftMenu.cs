@@ -492,7 +492,7 @@ namespace _xcsoft__ALL_IN_ONE
 
             internal static void addHitchanceSelector()
             {
-                Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc.Hitchance", "Hitchance", true).SetValue(new StringList(new string[] { "Low", "Medium", "High", "Very High" }, 3)));
+                Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc.Hitchance", "Hitchance", true).SetValue(new StringList(new string[] { "Low", "Medium", "High", "Very High" }, 2)));
             }
 
             internal static bool UseKillsteal

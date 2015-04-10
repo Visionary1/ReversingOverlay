@@ -63,7 +63,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
            
             xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
 
-            //이벤트들 추가.
+
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;

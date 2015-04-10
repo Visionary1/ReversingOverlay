@@ -14,11 +14,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static Menu Menu { get { return xcsoftMenu.Menu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
+
         static Items.Item tiamatItem, hydraItem;
 		
         static Spell Q, W, E, R;
-
-        static void Wcancel() { Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
 
         static float getQBuffDuration { get { var buff = xcsoftFunc.getBuffInstance("fioraqcd"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static float getEBuffDuration { get { var buff = xcsoftFunc.getBuffInstance("burstofspeed"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
@@ -31,8 +30,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             R = new Spell(SpellSlot.R, 400f, TargetSelector.DamageType.Physical);
 
             Q.SetTargetted(0.25f, float.MaxValue);
-            hydraItem = new Items.Item(3074, 250f);
-            tiamatItem = new Items.Item(3077, 250f);
+            hydraItem = new Items.Item((int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
+            tiamatItem = new Items.Item((int)ItemId.Tiamat_Melee_Only, 250f);
 
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQD", "Distance", true).SetValue(new Slider(150, 50, 600)));

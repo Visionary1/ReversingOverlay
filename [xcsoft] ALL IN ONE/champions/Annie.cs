@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class Annie//by xcsoft
+    class Annie
     {
         static Menu Menu { get { return xcsoftMenu.Menu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }

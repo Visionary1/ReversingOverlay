@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class MasterYi//by xcsoft
+    class MasterYi
     {
         static Menu Menu { get { return xcsoftMenu.Menu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
@@ -30,8 +30,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             R = new Spell(SpellSlot.R);
 
             Q.SetTargetted(0.25f, float.MaxValue);
-            hydraItem = new Items.Item(3074, 250f);
-            tiamatItem = new Items.Item(3077, 250f);
+            hydraItem = new Items.Item((int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
+            tiamatItem = new Items.Item((int)ItemId.Tiamat_Melee_Only, 250f);
 
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W (Auto-Attack Reset)", true).SetValue(true));

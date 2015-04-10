@@ -392,7 +392,7 @@ namespace _xcsoft__ALL_IN_ONE
                 Menu_Manual.SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear.Use R", "Use R", true).SetValue(enable));
             }
 
-            internal static void addifMana(int value = 60)
+            internal static void addifMana(int value = 20)
             {
                 Menu_Manual.SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear.ifMana", "if Mana % >", true).SetValue(new Slider(value, 0, 100)));
             }

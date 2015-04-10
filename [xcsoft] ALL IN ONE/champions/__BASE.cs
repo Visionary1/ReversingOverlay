@@ -34,7 +34,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             //스펠 프리딕션 설정
             
             //Q가 스킬샷(투사체)인경우 설정하는 예제
-            //스킬시전전 딜레이, 스킬샷범위(두께), 투사체속도, 미니언에 막히는가안막히는가(막히면 true,안막히면 false)
+            //스킬시전전 딜레이, 스킬샷범위(두께), 투사체속도, 미니언에 막히는가안막히는가(막히면 true,안막히면 false), 스킬샷 타입(Line, Cone, Circle)
             Q.SetSkillshot(0.25f, 50f, 2000f, true, SkillshotType.SkillshotLine);
             
             Q.SetCharged(" ", " ", 750, 1550, 1.5f);
@@ -65,7 +65,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Jungleclear.addUseW();
             xcsoftMenu.Jungleclear.addUseE();
             xcsoftMenu.Jungleclear.addUseR();
-            xcsoftMenu.Jungleclear.addifMana();//마나제한 옵션 추가 (기본60%)
+            xcsoftMenu.Jungleclear.addifMana();//마나제한 옵션 추가 (기본20%)
 
             xcsoftMenu.Misc.addUseKillsteal();//Misc서브메뉴에 Use Killsteal 옵션 추가
             xcsoftMenu.Misc.addUseAntiGapcloser();//Misc서브메뉴에 Use Anti-Gapcloser 옵션추가

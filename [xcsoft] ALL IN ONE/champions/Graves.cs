@@ -37,7 +37,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             xcsoftMenu.Combo.addUseQ();
             xcsoftMenu.Combo.addUseW();
-            xcsoftMenu.Combo.addUseE();
             xcsoftMenu.Combo.addUseR();
 
 
@@ -50,10 +49,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Jungleclear.addUseQ();
             xcsoftMenu.Jungleclear.addifMana(80);
 
-            xcsoftMenu.Misc.addHitchanceSelector();
             xcsoftMenu.Misc.addItem("Use E on Gap Closer", true);
             xcsoftMenu.Misc.addUseKillsteal();
-            xcsoftMenu.Misc.addUseInterrupter();
 
             xcsoftMenu.Drawings.addQrange();
             xcsoftMenu.Drawings.addWrange();

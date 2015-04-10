@@ -49,6 +49,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Combo.addUseE();
             xcsoftMenu.Combo.addUseR();
 
+            //아래코드로 메뉴아이템명, 벨류 직접 추가가능. 다른 서브메뉴에서도 가능. 
+            xcsoftMenu.Combo.addItem("Use Hydra", true);
+            //값 불러올때는 이런식
+            xcsoftMenu.Combo.getBoolValue("Use Hydra");
+
             xcsoftMenu.Harass.addUseQ();//Harass서브메뉴에 Use Q 옵션 추가
             xcsoftMenu.Harass.addUseW();
             xcsoftMenu.Harass.addUseE();

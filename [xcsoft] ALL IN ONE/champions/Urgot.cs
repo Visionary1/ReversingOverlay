@@ -26,7 +26,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             R = new Spell(SpellSlot.R);
          
             Q.SetSkillshot(0.25f, 60f, 1600f, true, SkillshotType.SkillshotLine);
-            Q2.SetSkillshot(0.25f, 60f, 1600f, true, SkillshotType.SkillshotLine);
+            Q2.SetSkillshot(0.25f, 60f, 1600f, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.25f, 210f, 1500f, false, SkillshotType.SkillshotCircle);
 
             xcsoftMenu.Combo.addUseQ();
@@ -35,16 +35,17 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Combo.addUseR();
 
             xcsoftMenu.Harass.addUseQ();
-            xcsoftMenu.Harass.addUseW();
             xcsoftMenu.Harass.addUseE();
+            xcsoftMenu.Harass.addifMana(60);
 
             xcsoftMenu.Laneclear.addUseQ();
-            xcsoftMenu.Laneclear.addUseW();
             xcsoftMenu.Laneclear.addUseE();
+            xcsoftMenu.Laneclear.addifMana(70);
 
             xcsoftMenu.Jungleclear.addUseQ();
             xcsoftMenu.Jungleclear.addUseW();
             xcsoftMenu.Jungleclear.addUseE();
+            xcsoftMenu.Jungleclear.addifMana(60);
 
             xcsoftMenu.Misc.addUseKillsteal();
             xcsoftMenu.Misc.addUseAntiGapcloser();
@@ -138,7 +139,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 if(Q2target != null && Q2target.HasBuff("urgotcorrosivedebuff"))
                 {
                    W.Cast();
-                   Q2.Cast();
+                   Q2.Cast(Q2target);
                 }
                 else
                 {
@@ -153,7 +154,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 var eTarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
 
-                if (eTarget != null && Q.GetPrediction(eTarget).Hitchance >= HitChance.VeryHigh)
+                if (eTarget != null && Q.GetPrediction(eTarget).Hitchance >= HitChance.Medium)
                     E.Cast(eTarget);
             }
 
@@ -219,6 +220,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 if (E.CanCast(Mobs.FirstOrDefault()))
                     E.Cast(Mobs.FirstOrDefault(), false, true);
+            }
+            if (xcsoftMenu.Jungleclear.UseE && W.IsReady())
+            {
+                if (W.CanCast(Mobs.FirstOrDefault()))
+                    W.Cast();
             }
         }
 

@@ -104,7 +104,7 @@
     <Compile Include="champions\Garen.cs" />
     <Compile Include="champions\_Gnar.cs" />
     <Compile Include="champions\_Gragas.cs" />
-    <Compile Include="champions\_Graves.cs" />
+    <Compile Include="champions\Graves.cs" />
     <Compile Include="champions\_Hecarim.cs" />
     <Compile Include="champions\_Heimerdinger.cs" />
     <Compile Include="champions\_Irelia.cs" />

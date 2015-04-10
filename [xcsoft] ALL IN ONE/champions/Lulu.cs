@@ -180,7 +180,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 }
                 else
                 {
-                    Q.UpdateSourcePosition();
+                    Q.UpdateSourcePosition(Player.ServerPosition, Player.ServerPosition);
 
                     var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
 

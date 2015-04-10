@@ -46,6 +46,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Jungleclear.addUseE();
             xcsoftMenu.Jungleclear.addifMana(60);
 
+            xcsoftMenu.Misc.addHitchanceSelector();
+
             xcsoftMenu.Misc.addUseKillsteal();
             xcsoftMenu.Misc.addUseAntiGapcloser();
             xcsoftMenu.Misc.addUseInterrupter();
@@ -144,7 +146,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 {
                    var qTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
 
-                   if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= HitChance.High)
+                   if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= xcsoftMenu.Misc.SelectedHitchance)
                        Q.Cast(qTarget);
                 }
             }
@@ -153,7 +155,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 var eTarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
 
-                if (eTarget != null && Q.GetPrediction(eTarget).Hitchance >= HitChance.Medium)
+                if (eTarget != null && Q.GetPrediction(eTarget).Hitchance >= xcsoftMenu.Misc.SelectedHitchance)
                     E.Cast(eTarget);
             }
 
@@ -177,7 +179,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 var qTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
 
-                if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= HitChance.High)
+                if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= xcsoftMenu.Misc.SelectedHitchance)
                     Q.Cast(qTarget);
             }
         }

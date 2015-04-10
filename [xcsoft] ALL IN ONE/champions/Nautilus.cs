@@ -42,6 +42,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Jungleclear.addUseE();
             xcsoftMenu.Jungleclear.addifMana();
 
+            xcsoftMenu.Misc.addHitchanceSelector();
+
             xcsoftMenu.Misc.addUseKillsteal();
             xcsoftMenu.Misc.addUseAntiGapcloser();
             xcsoftMenu.Misc.addUseInterrupter();
@@ -150,8 +152,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
                
                 var qTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 
-               
-                if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= HitChance.High && qTarget.IsValidTarget(Q.Range))
+
+                if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= xcsoftMenu.Misc.SelectedHitchance && qTarget.IsValidTarget(Q.Range))
                     Q.Cast(qTarget);
 
             }

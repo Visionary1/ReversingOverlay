@@ -142,6 +142,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser) 
             // cradits to Asuna & ijabba
         {
+            if (!xcsoftMenu.Misc.getBoolValue("Use E on Gap Closer") || Player.IsDead)
+                return;
+
             var extended = gapcloser.Start.Extend(Player.Position, gapcloser.Start.Distance(Player.ServerPosition) + E.Range);
 
             if (IsSafePosition(extended))
@@ -279,7 +282,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             return
                 HeroManager.Enemies.Where(
-                    hero => hero.IsValidTarget(range, true, position) && hero.HealthPercentage() <= 15).ToList();
+                    hero => hero.IsValidTarget(range, true, position) && xcsoftFunc.getHealthPercent(hero) <= 15).ToList();
         }
 
 

@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 
 namespace _xcsoft__ALL_IN_ONE.champions
 {
-    class XinZhao /rl144
+    class XinZhao //rl144
     {
         static Menu Menu { get { return xcsoftMenu.Menu_Manual; } } //메뉴얼 오브워커 넣기는 했지만. 음..
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
@@ -65,7 +65,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Misc.addUseInterrupter();
             xcsoftMenu.Drawings.addErange();
             xcsoftMenu.Drawings.addRrange();
-            xcsoftMenu.Drawings.addItem("drawWTimer", true);
+            xcsoftMenu.Drawings.addItem("W Timer", new Circle(true, Color.LightGreen));
 			
 			xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
 
@@ -116,16 +116,17 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             var drawE = xcsoftMenu.Drawings.DrawERange;
             var drawR = xcsoftMenu.Drawings.DrawRRange;
-			var drawWTimer = xcsoftMenu.Drawings.getBoolValue("drawWTimer");
+			var drawWTimer = xcsoftMenu.Drawings.getCircleValue("W Timer");
 
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
-            if (drawWTimer && getWBuffDuration > 0)
+
+            if (drawWTimer.Active && getWBuffDuration > 0)
             {
                 var pos_temp = Drawing.WorldToScreen(Player.Position);
-                Drawing.DrawText(pos_temp[0], pos_temp[1], Color.LightGreen, "W: " + getWBuffDuration.ToString("0.00"));
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawWTimer.Color, "W: " + getWBuffDuration.ToString("0.00"));
             }
         }
 		

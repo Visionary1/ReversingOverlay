@@ -20,14 +20,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Wcancel() { Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
 
-        static List<Items.Item> itemsList = new List<Items.Item>(); //척후병 샤브르
-	static Spell Smite;
-	static SpellSlot smiteSlot = SpellSlot.Unknown;
-	static Items.Item s0, s1, s2, s3, s4;
-        static float smrange = 700f;
+        static List<Items.Item> itemsList = new List<Items.Item>(); //Red Smite
+	static Spell Smite; //Red Smite
+	static SpellSlot smiteSlot = SpellSlot.Unknown; //Red Smite
+	static Items.Item s0, s1, s2, s3, s4; //Red Smite
+        static float smrange = 700f; //Red Smite
 		
         static float getQBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "fioraqcd"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static float getWBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "FioraRiposteBuff"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getWBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "FioraRiposte"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static float getEBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "FioraFlurry"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
@@ -42,21 +42,21 @@ namespace _xcsoft__ALL_IN_ONE.champions
             tiamatItem = new Items.Item((int)ItemId.Tiamat_Melee_Only, 250f);
 
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQD", "최소거리(Least Distance)", true).SetValue(new Slider(150, 0, 600)));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQD", "Q Least Distance", true).SetValue(new Slider(150, 0, 600)));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W (AABlock)", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseH", "Hidra", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseE", "E(평캔-AAC)", true).SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseE", "E(평캔)", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
 
 //            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseE", "E(평캔-AAC)", true).SetValue(true));
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseH", "히드라(평캔-AAC)", true).SetValue(true));
+            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseE", "E(평캔)", true).SetValue(true));
+            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseH", "히드라(AAC)", true).SetValue(true));
 
 			
 			
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseH", "히드라(평캔-AAC)", true).SetValue(true));
+            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseH", "히드라(AAC)", true).SetValue(true));
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
@@ -69,10 +69,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
 			
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.Red)));
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(true, Color.Blue)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQTimer", "Q Timer", true).SetValue(new Circle(true, Color.LightGreen)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawWTimer", "W Timer", true).SetValue(new Circle(true, Color.Black)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawETimer", "E Timer", true).SetValue(new Circle(true, Color.LightBlue)));
-			xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
+            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQTimer", "Q Timer", true).SetValue(new Circle(false, Color.LightGreen)));
+            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawWTimer", "W Timer", true).SetValue(new Circle(false, Color.Black)));
+            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawETimer", "E Timer", true).SetValue(new Circle(true, Color.Red)));
+	
+		xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -80,7 +81,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Orbwalking.OnAttack += Orbwalking_OnAttack;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
 			
-			InitializeItems();
+		InitializeItems(); // RedSmite
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -108,7 +109,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 Killsteal();
             #endregion
 			
-			setSmiteSlot();
+			setSmiteSlot(); //RedSmite
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -124,7 +125,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
-            if (R.IsReady() && drawQ.Active)
+            if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
             if (drawQTimer.Active && getQBuffDuration > 0)
             {
@@ -143,7 +144,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
         }
 		
-        static void setSmiteSlot()
+        static void setSmiteSlot() //Red Smite
         {
             foreach (var spell in ObjectManager.Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteduel", StringComparison.CurrentCultureIgnoreCase)))
             {
@@ -153,7 +154,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
         }
 		
-        static bool CheckInv()
+        static bool CheckInv() //Red Smite
         {
             bool b = false;
             foreach(var item in itemsList)
@@ -165,8 +166,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
             return b;
         }
-		
-        static void InitializeItems()
+		 
+        static void InitializeItems() //Red Smite
         {
             s0 = new Items.Item(3714, smrange);
             itemsList.Add(s0);
@@ -187,22 +188,22 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         }
 
-		static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)
+		static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target) //AA Block
 		{
-            var Target = (Obj_AI_Base)target;
+            		var Target = (Obj_AI_Base)target;
             
 			if(unit.IsEnemy && target.IsMe)
 			W.Cast();
 			else if (!unit.IsMe || Target == null)
                 return;
 				
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) //Red Smite
 				{
 					if (!CheckInv())
 					return;
-                    Smite.Slot = smiteSlot;
+                    			Smite.Slot = smiteSlot;
 					if(smiteSlot.IsReady())
-                    Player.Spellbook.CastSpell(smiteSlot, Target);
+            				Player.Spellbook.CastSpell(smiteSlot, Target);
 				}
 		}
 		
@@ -219,9 +220,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
 				if(Minions.Count + Mobs.Count <= 0)
 				return;
 				
-                if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady()
-					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
-                {    
+                		if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady()
+				&& !tiamatItem.IsReady() && !hydraItem.IsReady())
+				{    
 				E.Cast();
 				}
 				if (Menu.Item("LcUseH", true).GetValue<bool>())
@@ -234,28 +235,28 @@ namespace _xcsoft__ALL_IN_ONE.champions
 			}
 			
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-            {
-                if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
-                    E.Cast();
+            	{
+		                if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
+	                    	&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
+				&& !tiamatItem.IsReady() && !hydraItem.IsReady())
+		                    E.Cast();
 				
-				if (Menu.Item("HrsUseH", true).GetValue<bool>()// && !W.IsReady()
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+				if (Menu.Item("HrsUseH", true).GetValue<bool>()
+				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
 				{
 					if(tiamatItem.IsReady())
 						tiamatItem.Cast();
 					else if(hydraItem.IsReady())
 						hydraItem.Cast();
 				}
-			}
+		}
 				
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
-                    E.Cast();
+                		if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
+                    		&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
+				&& !tiamatItem.IsReady() && !hydraItem.IsReady())
+                    		E.Cast();
 					
 				foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
 				{
@@ -278,25 +279,24 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Combo()
         {
-            if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady() 
+ 		if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady() 
                 && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
                 W.Cast();
 
-            /*if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())  <- 코드에 문제가 있어 주석처리함.
+    		if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())  //<- Q 진입
                 {
-				var qd = Menu.Item("CbUseQD").GetValue<Slider>().Value;
-				var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-				if(qTarget.Distance(Player.ServerPosition) >= qd || getQBuffDuration < 1)
-					//Q.CastOnBestTarget();
-					Q.Cast(qTarget);
-				}*/
+		var qd = Menu.Item("CbUseQD", true).GetValue<Slider>().Value;
+		var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+		var fqTarget = TargetSelector.GetTarget(Q.Range * 2, Q.DamageType);
+		var fminion = ObjectManager.Get<Obj_AI_Minion>().Any(t => !t.IsAlly && Player.Distance(t.Position) <= 600 && fqTarget.Distance(t.Position) <= 600);
+		if(qTarget.Distance(Player.ServerPosition) >= qd || getQBuffDuration < 1)
+			Q.Cast(qTarget);
+			
+		if(fqTarget.Distance(Player.ServerPosition) > 600 //Chasing Enemy
+		&& ObjectManager.Get<Obj_AI_Minion>().Any(t => !t.IsAlly && Player.Distance(t.Position) <= 600 && fqTarget.Distance(t.Position) <= 600))
+			Q.Cast(fminion);
+		}
 				
-            if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())
-            {
-                Q.CastOnBestTarget();
-            }
-				
-
         }
 
         static void Harass()
@@ -328,15 +328,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 				
             if (Menu.Item("JcUseW", true).GetValue<bool>() && W.IsReady())
                 W.Cast();
-				
-			
-			/*if (Mobs[0].Distance(Player.ServerPosition) < Menu.Item("CbUseQD").GetValue<Slider>().Value)
-			return;*/
-            /*if (Menu.Item("JcUseQ", true).GetValue<bool>() && Q.IsReady())
-                {  <- 코드에 문제가 있어 임시로 주석차리함.
-					Q.Cast(Mobs[0]);
-				}*/  
-			
 			
             if (Menu.Item("JcUseQ", true).GetValue<bool>() && Q.IsReady())
                 Q.Cast(Mobs[0]);

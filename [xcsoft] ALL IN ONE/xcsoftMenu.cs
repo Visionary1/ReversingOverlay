@@ -216,6 +216,112 @@ namespace _xcsoft__ALL_IN_ONE
             internal static void addItems(object[][] items, bool ifMana)
             {
                 for (int i = 0; i < items.Length; i++)
+                    Menu_Manual.SubMenu("Lasthit").AddItem(new MenuItem("Lasthit." + items[i][0].ToString(), items[i][0].ToString(), true).SetValue(items[i][1]));
+
+                if (ifMana)
+                    Menu_Manual.SubMenu("Lasthit").AddItem(new MenuItem("Lasthit.ifMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
+            }
+
+            internal static void addItem(string itemDisplayName, object value, bool champUniq = true)
+            {
+                Menu_Manual.SubMenu("Lasthit").AddItem(new MenuItem("Lasthit." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
+            }
+
+            internal static Circle getCircleValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Lasthit." + itemName, champUniq).GetValue<Circle>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Circle(false, System.Drawing.Color.Red);
+                }
+            }
+
+            internal static Boolean getBoolValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Lasthit." + itemName, champUniq).GetValue<Boolean>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return false;
+                }
+            }
+
+            internal static Slider getSliderValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Lasthit." + itemName, champUniq).GetValue<Slider>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new Slider();
+                }
+            }
+
+            internal static void addUseQ(bool enable = true)
+            {
+                Menu_Manual.SubMenu("Lasthit").AddItem(new MenuItem("Lasthit.Use Q", "Use Q", true).SetValue(enable));
+            }
+
+            internal static void addUseW(bool enable = true)
+            {
+                Menu_Manual.SubMenu("Lasthit").AddItem(new MenuItem("Lasthit.Use W", "Use W", true).SetValue(enable));
+            }
+
+            internal static void addUseE(bool enable = true)
+            {
+                Menu_Manual.SubMenu("Lasthit").AddItem(new MenuItem("Lasthit.Use E", "Use E", true).SetValue(enable));
+            }
+
+            internal static void addUseR(bool enable = true)
+            {
+                Menu_Manual.SubMenu("Lasthit").AddItem(new MenuItem("Lasthit.Use R", "Use R", true).SetValue(enable));
+            }
+
+            internal static void addifMana(int value = 60)
+            {
+                Menu_Manual.SubMenu("Lasthit").AddItem(new MenuItem("Lasthit.ifMana", "if Mana % >", true).SetValue(new Slider(value, 0, 100)));
+            }
+
+            internal static bool UseQ
+            {
+                get { return Menu_Manual.Item("Lasthit.Use Q", true).GetValue<bool>(); }
+            }
+
+            internal static bool UseW
+            {
+                get { return Menu_Manual.Item("Lasthit.Use W", true).GetValue<bool>(); }
+            }
+
+            internal static bool UseE
+            {
+                get { return Menu_Manual.Item("Lasthit.Use E", true).GetValue<bool>(); }
+            }
+
+            internal static bool UseR
+            {
+                get { return Menu_Manual.Item("Lasthit.Use R", true).GetValue<bool>(); }
+            }
+
+            internal static int ifMana
+            {
+                get { return Menu_Manual.Item("Lasthit.ifMana", true).GetValue<Slider>().Value; }
+            }
+        }
+
+        internal static class Laneclear
+        {
+            internal static void addItems(object[][] items, bool ifMana)
+            {
+                for (int i = 0; i < items.Length; i++)
                     Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Laneclear." + items[i][0].ToString(), items[i][0].ToString(), true).SetValue(items[i][1]));
 
                 if (ifMana)
@@ -691,6 +797,7 @@ namespace _xcsoft__ALL_IN_ONE
         {
             addSubMenu("Combo", "Combo");
             addSubMenu("Harass", "Harass");
+            addSubMenu("Lasthit", "Lasthit");
             addSubMenu("Laneclear", "Laneclear");
             addSubMenu("Jungleclear", "Jungleclear");
             addSubMenu("Misc", "Misc");
@@ -704,6 +811,7 @@ namespace _xcsoft__ALL_IN_ONE
 
             addSubMenu("Combo", tag + "Combo");
             addSubMenu("Harass", tag + "Harass");
+            addSubMenu("Lasthit", "Lasthit");
             addSubMenu("Laneclear", tag + "Laneclear");
             addSubMenu("Jungleclear", tag + "Jungleclear");
             addSubMenu("Misc", tag + "Misc");

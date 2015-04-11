@@ -10,36 +10,36 @@ namespace _xcsoft__ALL_IN_ONE
         {
             switch (champName)
             {
-                case "MasterYi":
+                case "MasterYi"://Added by xcsoft
                     champions.MasterYi.Load();
                     break;
-                case "Annie":
+                case "Annie"://Added by xcsoft
                     champions.Annie.Load();
                     break;
-                case "Garen":
+                case "Garen"://Added by xcsoft
                     champions.Garen.Load();
                     break;
-                case "Kalista":
+                case "Kalista"://Added by xcsoft
                     champions.Kalista.Load();
                     break;
-                case "Ryze":
+                case "Ryze"://Added by xcsoft
                     champions.Ryze.Load();
                     break;
-                case "Vi":
+                case "Vi"://Added by xcsoft
                     champions.Vi.Load();
                     break;
-                case "Vladimir":
+                case "Vladimir"://Added by xcsoft
                     champions.Vladimir.Load();
                     break;
-                case "Chogath":
+                case "Chogath"://Added by xcsoft
                     champions.Chogath.Load();
                     break;
                 case "Urgot":
                     champions.Urgot.Load();
                     break;
-                case "Jax":
-                    champions._Jax.Load();
-                    break;
+                //case "Jax":
+                //    champions._Jax.Load();
+                //    break;
                 case "Fiora"://Added by RL144
                     champions.Fiora.Load();
                     break;

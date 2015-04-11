@@ -55,6 +55,9 @@ namespace _xcsoft__ALL_IN_ONE
                 case "XinZhao"://Added by RL144
                     champions.XinZhao.Load();
                     break;
+                case "Katarina"://Added by xcsoft
+                    champions.XinZhao.Load();
+                    break;
                 default:
                     xcsoftFunc.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

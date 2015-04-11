@@ -56,7 +56,7 @@ namespace _xcsoft__ALL_IN_ONE
                     champions.XinZhao.Load();
                     break;
                 case "Katarina"://Added by xcsoft
-                    champions.XinZhao.Load();
+                    champions.Katarina.Load();
                     break;
                 default:
                     xcsoftFunc.sendDebugMsg("(champLoader)Champ Not Supported.", true);

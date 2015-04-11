@@ -811,7 +811,7 @@ namespace _xcsoft__ALL_IN_ONE
 
             addSubMenu("Combo", tag + "Combo");
             addSubMenu("Harass", tag + "Harass");
-            addSubMenu("Lasthit", "Lasthit");
+            addSubMenu("Lasthit", tag + "Lasthit");
             addSubMenu("Laneclear", tag + "Laneclear");
             addSubMenu("Jungleclear", tag + "Jungleclear");
             addSubMenu("Misc", tag + "Misc");

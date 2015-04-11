@@ -51,11 +51,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             //Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseE", "Use E(Auto-Attack Reset)", true).SetValue(true));
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseH", "Use Hydra (Auto-Attack Reset)", true).SetValue(true));
+            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseH", "Use Hydra (Auto-Attack Reset)", true).SetValue(true));
+            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));

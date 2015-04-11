@@ -99,7 +99,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     Jungleclear();
                 }
             }
-			Orbwalker.SetAttack(Player.IsTargetable);
+
             #region Killsteal
             if (xcsoftMenu.Misc.UseKillsteal)
                 Killsteal();

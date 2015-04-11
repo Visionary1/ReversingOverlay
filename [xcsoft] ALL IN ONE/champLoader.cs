@@ -38,7 +38,7 @@ namespace _xcsoft__ALL_IN_ONE
                     champions.Urgot.Load();
                     break;
                 case "Jax":
-                    champions.Jax.Load();
+                    champions._Jax.Load();
                     break;
                 case "Fiora"://Added by RL144
                     champions.Fiora.Load();

@@ -36,8 +36,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W (Auto-Attack Reset)", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseWHP", "적체력 % <=", true).SetValue(new Slider(60, 0, 100)));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseH", "히드라", true).SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
 
@@ -139,7 +138,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
-			//var TargetHP = Menu.Item("CbUseWHP").GetValue<Slider>().Value;
 
             if (!unit.IsMe || Target == null)
                 return;
@@ -148,15 +146,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady()
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-					//&& Target.HealthPercentage() <= TargetHP
 					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
-
                     W.Cast();
 
                 if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
 					R.Cast();
 				
-				if (Menu.Item("CbUseH", true).GetValue<bool>()// && !W.IsReady()
+				if (Menu.Item("CbUseH", true).GetValue<bool>()
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
 				{
 					if(tiamatItem.IsReady())
@@ -235,7 +231,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 damage += Q.GetDamage(enemy);
 
             if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true) + (float)Player.GetAutoAttackDamage(enemy, false) * 7;
+                damage += (float)Player.GetAutoAttackDamage(enemy, true) + (float)Player.GetAutoAttackDamage(enemy, false) * 5;
 				
             return damage;
         }

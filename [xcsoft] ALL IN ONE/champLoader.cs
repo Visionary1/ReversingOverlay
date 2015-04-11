@@ -58,6 +58,9 @@ namespace _xcsoft__ALL_IN_ONE
                 case "Katarina"://Added by xcsoft
                     champions.Katarina.Load();
                     break;
+                case "Veigar"://Added by RL144
+                    champions.Veigar.Load();
+                    break;
                 default:
                     xcsoftFunc.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

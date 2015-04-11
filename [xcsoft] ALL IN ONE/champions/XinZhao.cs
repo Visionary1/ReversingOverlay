@@ -300,7 +300,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Laneclear.ifMana))
                 return;
 
-				var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
+				var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
 
 				if (Minions.Count <= 0)
                 return;
@@ -325,7 +325,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Jungleclear.ifMana))
                 return;
 
-            var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
                 return;

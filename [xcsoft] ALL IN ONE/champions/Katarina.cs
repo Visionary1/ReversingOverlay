@@ -118,10 +118,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (xcsoftMenu.Combo.UseE && E.IsReady())
             {
-                E.CastOnBestTarget();
-
-                if (xcsoftMenu.Combo.UseW && W.IsReady())
-                W.Cast();
+                if(E.CastOnBestTarget() ==  Spell.CastStates.SuccessfullyCasted)
+                {
+                    if (xcsoftMenu.Combo.UseW && W.IsReady())
+                        W.Cast();
+                }
             }
 
             if (xcsoftMenu.Combo.UseR && R.IsReady())

@@ -46,7 +46,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Misc.addUseKillsteal();
 
             xcsoftMenu.Drawings.addQrange();
-            xcsoftMenu.Drawings.addWrange(false);
+            xcsoftMenu.Drawings.addWrange();
             xcsoftMenu.Drawings.addErange();
             xcsoftMenu.Drawings.addRrange();
 
@@ -119,11 +119,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (xcsoftMenu.Combo.UseE && E.IsReady())
             {
                 E.CastOnBestTarget();
+
+                if (xcsoftMenu.Combo.UseW && W.IsReady())
+                W.Cast();
             }
 
             if (xcsoftMenu.Combo.UseR && R.IsReady())
             {
-                if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(100)))
                     R.Cast();
             }
         }

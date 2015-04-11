@@ -147,7 +147,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (xcsoftMenu.Harass.UseE && E.IsReady())
             {
-                E.CastOnBestTarget();
+                if (E.CastOnBestTarget() == Spell.CastStates.SuccessfullyCasted)
+                {
+                    if (xcsoftMenu.Combo.UseW && W.IsReady())
+                        W.Cast();
+                }
             }
         }
 

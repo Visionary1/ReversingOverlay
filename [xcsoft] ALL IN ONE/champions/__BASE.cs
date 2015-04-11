@@ -60,6 +60,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Harass.addUseR();
             xcsoftMenu.Harass.addifMana(60);//마나제한 옵션 추가 (기본60%)
 
+            xcsoftMenu.Lasthit.addUseQ();
+            xcsoftMenu.Lasthit.addifMana();
+
             xcsoftMenu.Laneclear.addUseQ();//..위와 같음
             xcsoftMenu.Laneclear.addUseW();
             xcsoftMenu.Laneclear.addUseE();
@@ -108,6 +111,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                     Harass();
+
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
+                    Lasthit();
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 {
@@ -222,11 +228,35 @@ namespace _xcsoft__ALL_IN_ONE.champions
             { }
         }
 
+        static void Lasthit()
+        {
+            //라스트힛모드 인게임에서 X키를 누르면 아래코드가 실행되는겁니다.
+
+            //마나 체크. 사용하지않으면 지우세요.
+            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Lasthit.ifMana))
+                return;
+
+            //1000범위내에 있는 적군 미니언들을 리스트형식으로 구해온다.
+            var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
+
+            if (Minions.Count <= 0)
+                return;
+
+            if(xcsoftMenu.Lasthit.UseQ && Q.IsReady())
+            {
+                //Q스펠로 미니언막타친다는 내용
+                var qTarget = Minions.FirstOrDefault(x=>x.IsValidTarget(Q.Range) && xcsoftFunc.isKillable(x, Q));
+
+                if (qTarget != null)
+                    Q.Cast(qTarget);
+            }
+        }
+
         static void Laneclear()
         {
             //래인클리어모드. 인게임에서 V키를 누르면 아래코드가 실행되는겁니다.
 
-            //마나 체크
+            //마나 체크. 사용하지않으면 지우세요.
             if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Laneclear.ifMana))
                 return;
 
@@ -253,7 +283,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             //정글클리어모드. 인게임에서 V키를 누르면 아래코드가 실행되는겁니다.
 
-            //마나 체크
+            //마나 체크. 사용하지않으면 지우세요.
             if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Jungleclear.ifMana))
                 return;
 

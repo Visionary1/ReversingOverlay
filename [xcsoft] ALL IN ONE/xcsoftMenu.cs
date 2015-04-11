@@ -211,7 +211,7 @@ namespace _xcsoft__ALL_IN_ONE
             }
         }
 
-        internal static class Laneclear
+        internal static class Lasthit
         {
             internal static void addItems(object[][] items, bool ifMana)
             {

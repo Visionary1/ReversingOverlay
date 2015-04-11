@@ -10,15 +10,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class XinZhao //rl144
     {
-        static Menu Menu { get { return xcsoftMenu.Menu_Manual; } } //메뉴얼 오브워커 넣기는 했지만. 음..
+        static Menu Menu { get { return xcsoftMenu.Menu_Manual; } } //메뉴얼 오브워커 넣기는 했지만. 음.. 
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Items.Item tiamatItem, hydraItem; //히드라 평캔을 위함
 
         static Spell Q, W, E, R;
-
-        static void Wcancel() { Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
-
         static List<Items.Item> itemsList = new List<Items.Item>(); //척후병 샤브르
 		static Spell Smite;
 		static SpellSlot smiteSlot = SpellSlot.Unknown;
@@ -55,9 +52,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Laneclear.addItem("Use Hydra", true);
             xcsoftMenu.Laneclear.addifMana();
 
+
             xcsoftMenu.Jungleclear.addUseQ();
             xcsoftMenu.Jungleclear.addUseW();
             xcsoftMenu.Jungleclear.addUseE();
+            xcsoftMenu.Jungleclear.addItem("Use Hydra", true);
             xcsoftMenu.Jungleclear.addifMana();
 
             xcsoftMenu.Misc.addUseKillsteal();
@@ -122,7 +121,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
-
             if (drawWTimer.Active && getWBuffDuration > 0)
             {
                 var pos_temp = Drawing.WorldToScreen(Player.Position);
@@ -190,7 +188,17 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             if (!sender.IsMe || Player.IsDead)
                 return;
-
+				
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && args.Target.Type != GameObjectType.obj_AI_Minion)
+            {
+                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name
+                    && HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)))
+					{
+                    if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady())
+                        W.Cast();
+					}
+                
+            }
         }
 
 		static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)
@@ -218,19 +226,18 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-				var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
-				var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+				var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
+				var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+
 				if(Minions.Count + Mobs.Count <= 0)
 				return;
 				
-				if (xcsoftMenu.Laneclear.getBoolValue("Use Hydra") && !Q.IsReady()
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-				{
-					if(tiamatItem.IsReady())
-						tiamatItem.Cast();
-					else if(hydraItem.IsReady())
-						hydraItem.Cast();
-				}
+				if (Minions.Count >= 1)
+				AALaneclear();
+				
+				if (Mobs.Count >= 1)
+				AAJungleclear();
+				
 			}
 			
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
@@ -238,12 +245,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 if (xcsoftMenu.Combo.UseQ && Q.IsReady()
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                     Q.Cast();
-					
-                if (xcsoftMenu.Combo.UseW && W.IsReady()
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                    W.Cast();
 				
-				if (xcsoftMenu.Combo.getBoolValue("Use Hydra") && !Q.IsReady()
+				if (xcsoftMenu.Combo.getBoolValue("Use Hydra")
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
 				{
 					if(tiamatItem.IsReady())
@@ -257,14 +260,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 if (xcsoftMenu.Combo.UseQ && Q.IsReady()
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                    Q.Cast();
-					
-                if (xcsoftMenu.Combo.UseW && W.IsReady()
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                    W.Cast();
-					
+                    Q.Cast();					
 				
-				if (xcsoftMenu.Combo.getBoolValue("Use Hydra") && !Q.IsReady()
+				if (xcsoftMenu.Combo.getBoolValue("Use Hydra")
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
 				{
 					if(tiamatItem.IsReady())
@@ -296,6 +294,57 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
         }
+		
+        static void AALaneclear()
+        {
+            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Laneclear.ifMana))
+                return;
+
+				var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
+
+				if (Minions.Count <= 0)
+                return;
+				
+                if (xcsoftMenu.Laneclear.UseQ && Q.IsReady())
+                    Q.Cast();
+					
+                if (xcsoftMenu.Laneclear.UseW && W.IsReady())
+                    W.Cast();
+					
+				if (xcsoftMenu.Laneclear.getBoolValue("Use Hydra") && !Q.IsReady())
+				{
+					if(tiamatItem.IsReady())
+						tiamatItem.Cast();
+					else if(hydraItem.IsReady())
+						hydraItem.Cast();
+				}
+        }
+
+        static void AAJungleclear()
+        {
+            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Jungleclear.ifMana))
+                return;
+
+            var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+
+            if (Mobs.Count <= 0)
+                return;
+				
+                if (xcsoftMenu.Jungleclear.UseQ && Q.IsReady())
+                    Q.Cast();
+					
+                if (xcsoftMenu.Jungleclear.UseW && W.IsReady())
+                    W.Cast();
+					
+				if (xcsoftMenu.Jungleclear.getBoolValue("Use Hydra") && !Q.IsReady())
+				{
+					if(tiamatItem.IsReady())
+						tiamatItem.Cast();
+					else if(hydraItem.IsReady())
+						hydraItem.Cast();
+				}			
+        }
+
 
         static void Laneclear()
         {
@@ -304,6 +353,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
 
+            if (Minions.Count <= 0)
+                return;
+				
+            if (xcsoftMenu.Laneclear.UseE && E.IsReady())
+                E.Cast(Minions[0]);
         }
 
         static void Jungleclear()
@@ -319,9 +373,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
 			
             if (xcsoftMenu.Jungleclear.UseE && E.IsReady())
                 E.Cast(Mobs[0]);
-				
-
-
         }
 
         static void Killsteal()
@@ -340,7 +391,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Q.IsReady())
 			{
                 damage += Q.GetDamage(enemy);
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+                damage += (float)Player.GetAutoAttackDamage(enemy, true); //평캔 스펠 사용시 평타 데미지 추가
 			}
             if (E.IsReady())
                 damage += E.GetDamage(enemy);

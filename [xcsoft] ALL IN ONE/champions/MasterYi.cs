@@ -44,10 +44,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseE", "Use E", true).SetValue(true));
+            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
 
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
@@ -141,26 +143,79 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (!unit.IsMe || Target == null)
                 return;
+                
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            {
+            var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
+		
+		if(Mobs.Count + Minions.Count <= 0)
+            	return;
+            	if(Mobs.Count >= 1)
+            	AAJungleclear();
+            	if(Minions.Count >= 1)
+            	AALaneclear();
+            }
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady()
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
-                    W.Cast();
-
-                if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
-					R.Cast();
-				
-				if (Menu.Item("CbUseH", true).GetValue<bool>()
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-				{
-					if(tiamatItem.IsReady())
-						tiamatItem.Cast();
-					else if(hydraItem.IsReady())
-						hydraItem.Cast();
-				}
+	                if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady()
+	                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
+				&& !tiamatItem.IsReady() && !hydraItem.IsReady())
+	                    W.Cast();
+	
+	                if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
+						R.Cast();
+					
+			if (Menu.Item("CbUseH", true).GetValue<bool>()
+			&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+			{
+				if(tiamatItem.IsReady())
+					tiamatItem.Cast();
+				else if(hydraItem.IsReady())
+					hydraItem.Cast();
 			}
+		}
+        }
+
+        static void AALaneclear()
+        {
+        	 if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+                return;
+
+		var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
+
+		if (Minions.Count <= 0)
+                return;
+				
+
+		if (Menu.Item("LcUseH", true).GetValue<bool>())
+		{
+			if(tiamatItem.IsReady())
+				tiamatItem.Cast();
+			else if(hydraItem.IsReady())
+				hydraItem.Cast();
+		}
+        }
+
+        static void AAJungleclear()
+        {
+            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+                return;
+
+            var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+
+            if (Mobs.Count <= 0)
+                return;
+				
+	
+		if (Menu.Item("JcUseH", true).GetValue<bool>())
+		{
+			if(tiamatItem.IsReady())
+				tiamatItem.Cast();
+			else if(hydraItem.IsReady())
+				hydraItem.Cast();
+		}	
         }
 
         static void Combo()

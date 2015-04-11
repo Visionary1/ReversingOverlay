@@ -7,6 +7,4 @@
 + GBKTV
 + CoreBoard
 + Fakker
-
-##Contributor
 + RL244

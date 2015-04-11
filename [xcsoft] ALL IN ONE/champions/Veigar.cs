@@ -23,13 +23,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             Q = new Spell(SpellSlot.Q, 950f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 900f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, 1075f);
+            E = new Spell(SpellSlot.E, 1040f);
             R = new Spell(SpellSlot.R, 650f, TargetSelector.DamageType.Magical);
 
 			
             Q.SetSkillshot(0.25f, 70f, 2000f, false, SkillshotType.SkillshotLine);
             W.SetSkillshot(1.25f, 112.5f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            E.SetSkillshot(0.50f, 375f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            E.SetSkillshot(0.5f, 340f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             R.SetTargetted(0.25f, 1400f);
             
             xcsoftMenu.Combo.addUseQ();

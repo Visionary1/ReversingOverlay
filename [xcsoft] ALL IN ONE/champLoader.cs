@@ -34,7 +34,7 @@ namespace _xcsoft__ALL_IN_ONE
                 case "Chogath"://Added by xcsoft
                     champions.Chogath.Load();
                     break;
-                case "Urgot":
+                case "Urgot"://Added by fakker
                     champions.Urgot.Load();
                     break;
                 //case "Jax":
@@ -46,11 +46,14 @@ namespace _xcsoft__ALL_IN_ONE
                 case "Lulu"://xcsoft가 추가함. 기록해두면 좋음.
                     champions.Lulu.Load();
                     break;
-                case "Nautilus":
+                case "Nautilus": //Added by fakker
                     champions.Nautilus.Load();
                     break;
-                case "Graves":
+                case "Graves"://Added by fakker , 95% from sharpshooter
                     champions.Graves.Load();
+                    break;
+                case "Sivir"://Added by fakker , 95% from sharpshooter
+                    champions.Sivir.Load();
                     break;
                 case "XinZhao"://Added by RL144
                     champions.XinZhao.Load();

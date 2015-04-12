@@ -197,6 +197,7 @@
     <Compile Include="champions\_Zilean.cs" />
     <Compile Include="champions\_Zyra.cs" />
     <Compile Include="champLoader.cs" />
+    <Compile Include="utility\Activator.cs" />
     <Compile Include="xcsoftMenu.cs" />
     <Compile Include="xcsoftFunc.cs" />
     <Compile Include="champions\__BASE.cs" />

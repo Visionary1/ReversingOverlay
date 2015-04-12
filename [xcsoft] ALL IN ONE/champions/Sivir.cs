@@ -33,9 +33,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Combo.addUseQ();
             xcsoftMenu.Combo.addUseW();
             xcsoftMenu.Combo.addUseE();
-            xcsoftMenu.Combo.addUseR();
-
-
 
             xcsoftMenu.Harass.addUseQ();
             xcsoftMenu.Harass.addUseW();

@@ -7,7 +7,7 @@ using LeagueSharp.Common;
 
 namespace _xcsoft__ALL_IN_ONE
 {
-    internal static class xcsoftMenu
+    class xcsoftMenu
     {
         internal static Menu Menu_Manual;
         internal static Orbwalking.Orbwalker Orbwalker;

@@ -14,8 +14,6 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static Menu Menu { get { return xcsoftMenu.Menu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-
-        static Items.Item tiamatItem, hydraItem;
 		
         static Spell Q, W, E, R;
 
@@ -31,12 +29,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
             R = new Spell(SpellSlot.R);
 
             Q.SetTargetted(0.25f, float.MaxValue);
-            hydraItem = new Items.Item((int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
-            tiamatItem = new Items.Item((int)ItemId.Tiamat_Melee_Only, 250f);
 
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W (Auto-Attack Reset)", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
 
@@ -44,12 +39,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
 
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
@@ -118,8 +111,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && args.Target.Type != GameObjectType.obj_AI_Minion)
             {
-                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name
-                    && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
+                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
                 {
                     if (Menu.Item("CbUseW", true).GetValue<bool>())
                     {
@@ -144,78 +136,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!unit.IsMe || Target == null)
                 return;
                 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-            {
-            var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-            var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
-		
-		if(Mobs.Count + Minions.Count <= 0)
-            	return;
-            	if(Mobs.Count >= 1)
-            	AAJungleclear();
-            	if(Minions.Count >= 1)
-            	AALaneclear();
-            }
-
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-	                if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady()
-	                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-				&& !tiamatItem.IsReady() && !hydraItem.IsReady())
-	                    W.Cast();
+	            if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+	                W.Cast();
 	
-	                if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
-						R.Cast();
-					
-			if (Menu.Item("CbUseH", true).GetValue<bool>()
-			&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-			{
-				if(tiamatItem.IsReady())
-					tiamatItem.Cast();
-				else if(hydraItem.IsReady())
-					hydraItem.Cast();
-			}
-		}
-        }
-
-        static void AALaneclear()
-        {
-        	 if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
-                return;
-
-		var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
-
-		if (Minions.Count <= 0)
-                return;
-				
-
-		if (Menu.Item("LcUseH", true).GetValue<bool>())
-		{
-			if(tiamatItem.IsReady())
-				tiamatItem.Cast();
-			else if(hydraItem.IsReady())
-				hydraItem.Cast();
-		}
-        }
-
-        static void AAJungleclear()
-        {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
-                return;
-
-            var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-            if (Mobs.Count <= 0)
-                return;
-				
-	
-		if (Menu.Item("JcUseH", true).GetValue<bool>())
-		{
-			if(tiamatItem.IsReady())
-				tiamatItem.Cast();
-			else if(hydraItem.IsReady())
-				hydraItem.Cast();
-		}	
+	            if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
+				    R.Cast();
+		    }
         }
 
         static void Combo()
@@ -223,8 +151,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())
                 Q.CastOnBestTarget();
 
-            if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady() 
-                && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+            if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                 E.Cast();
         }
 
@@ -248,7 +175,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (Menu.Item("LcUseQ", true).GetValue<bool>() && Q.IsReady())
-                Q.Cast(Minions[0]);
+                Q.Cast(Minions.FirstOrDefault());
         }
 
         static void Jungleclear()
@@ -262,10 +189,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (Menu.Item("JcUseQ", true).GetValue<bool>() && Q.IsReady())
-                Q.Cast(Mobs[0]);
+                Q.Cast(Mobs.FirstOrDefault());
 
-            if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady() 
-                && Mobs.Any(x => Orbwalking.InAutoAttackRange(x)))
+            if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady() && Mobs.Any(x => Orbwalking.InAutoAttackRange(x)))
                 E.Cast();
         }
 

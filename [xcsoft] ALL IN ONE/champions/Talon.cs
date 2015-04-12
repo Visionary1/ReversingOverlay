@@ -61,8 +61,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Jungleclear.addifMana();
 
             xcsoftMenu.Misc.addUseKillsteal();
-            xcsoftMenu.Misc.addUseAntiGapcloser();
-            xcsoftMenu.Misc.addUseInterrupter();
+            //xcsoftMenu.Misc.addUseAntiGapcloser();
+            //xcsoftMenu.Misc.addUseInterrupter();
             xcsoftMenu.Drawings.addWrange();
             xcsoftMenu.Drawings.addErange();
             xcsoftMenu.Drawings.addRrange();
@@ -77,8 +77,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             Orbwalking.OnAttack += Orbwalking_OnAttack;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
-            AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-            Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
+            //AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
+            //Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
 			
 			InitializeItems();
         }
@@ -122,25 +122,23 @@ namespace _xcsoft__ALL_IN_ONE.champions
 			var drawQTimer = xcsoftMenu.Drawings.getCircleValue("Q Timer");
 			var drawETimer = xcsoftMenu.Drawings.getCircleValue("E Timer");
 			var drawRTimer = xcsoftMenu.Drawings.getCircleValue("R Timer");
+
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+
+            var pos_temp = Drawing.WorldToScreen(Player.Position);
+
             if (drawQTimer.Active && getQBuffDuration > 0)
-            {
-                var pos_temp = Drawing.WorldToScreen(Player.Position);
                 Drawing.DrawText(pos_temp[0], pos_temp[1], drawQTimer.Color, "Q: " + getQBuffDuration.ToString("0.00"));
-            }
+
             if (drawETimer.Active && getEBuffDuration > 0)
-            {
-                var pos_temp = Drawing.WorldToScreen(Player.Position);
                 Drawing.DrawText(pos_temp[0], pos_temp[1], drawETimer.Color, "E: " + getEBuffDuration.ToString("0.00"));
-            }
+
             if (drawRTimer.Active && getRBuffDuration > 0)
-            {
-                var pos_temp = Drawing.WorldToScreen(Player.Position);
                 Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R: " + getRBuffDuration.ToString("0.00"));
-            }
         }
 		
         static void setSmiteSlot()
@@ -350,17 +348,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Mobs.Count <= 0)
                 return;
 				
-                if (xcsoftMenu.Jungleclear.UseQ && Q.IsReady())
-                    Q.Cast();
+            if (xcsoftMenu.Jungleclear.UseQ && Q.IsReady())
+                Q.Cast();
 					
-					
-				if (xcsoftMenu.Jungleclear.getBoolValue("Use Hydra"))
-				{
-					if(tiamatItem.IsReady())
-						tiamatItem.Cast();
-					else if(hydraItem.IsReady())
-						hydraItem.Cast();
-				}			
+			if (xcsoftMenu.Jungleclear.getBoolValue("Use Hydra"))
+			{
+			    if(tiamatItem.IsReady())
+			        tiamatItem.Cast();
+				else if(hydraItem.IsReady())
+				    hydraItem.Cast();
+			}			
         }
 
 
@@ -377,6 +374,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 				
             if (xcsoftMenu.Laneclear.UseW && W.IsReady())
                 W.Cast(Minions[0]);
+
             if (xcsoftMenu.Laneclear.UseE && E.IsReady())
                 E.Cast(Minions[0]);
         }
@@ -391,9 +389,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Mobs.Count <= 0)
                 return;
 
-			
             if (xcsoftMenu.Jungleclear.UseW && W.IsReady())
                 W.Cast(Mobs[0]);
+
             if (xcsoftMenu.Jungleclear.UseE && E.IsReady())
                 E.Cast(Mobs[0]);
         }
@@ -412,13 +410,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
             float damage = 0;
 
             if (Q.IsReady())
-			{
                 damage += Q.GetDamage(enemy);
-			}
+
             if (W.IsReady())
                 damage += W.GetDamage(enemy);
 
-				
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
 
@@ -427,6 +423,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (E.IsReady())
                 damage = damage * 3 * E.Level;
+
             return damage;
         }
     }

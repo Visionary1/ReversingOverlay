@@ -21,9 +21,8 @@ namespace _xcsoft__ALL_IN_ONE
             xcsoftMenu.addSubMenu_ChampTemplate(ObjectManager.Player.ChampionName);
 
             champLoader.Load(ObjectManager.Player.ChampionName);
-            utility.Activator.Load();
 
-            xcsoftMenu.Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Blank", string.Empty));
+            xcsoftMenu.Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("BLANK0", string.Empty));
             xcsoftMenu.Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));
 
             xcsoftMenu.Drawings.addItems(new object[][] { new object[] 
@@ -32,6 +31,8 @@ namespace _xcsoft__ALL_IN_ONE
             { "Minion Last Hit",        new Circle(true, Color.GreenYellow)},   new object[] 
             { "Minion Near Kill",       new Circle(true, Color.Gray)},          new object[] 
             { "Jungle Position",        true                                    }}, false);
+
+            //utility.Activator.Load();
 
             Drawing.OnDraw += Drawing_OnDraw;
 

@@ -14,7 +14,6 @@ namespace _xcsoft__ALL_IN_ONE.utility
         //http://www.lolking.net/items/
 
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
-        static Menu Menu { get { return xcsoftMenu.Menu_Manual.SubMenu("Activator"); } }
 
         internal static List<Items.Item> afterAttackItems;
 
@@ -22,7 +21,9 @@ namespace _xcsoft__ALL_IN_ONE.utility
         {
             xcsoftMenu.addSubMenu("Activator");
 
-            Menu.AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
+            xcsoftMenu.Menu_Manual.SubMenu("Activator").AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
+
+            xcsoftMenu.Menu_Manual.SubMenu("Activator").SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use314", "Use 3143113")).SetValue(true);
 
             items_initialize();
 
@@ -36,7 +37,7 @@ namespace _xcsoft__ALL_IN_ONE.utility
 
             foreach (var item in afterAttackItems)
             {
-                Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use " + item.ToString(), "Use " + item.ToString())).SetValue(true);
+                xcsoftMenu.Menu_Manual.SubMenu("Activator").SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use " + item.Id.ToString(), "Use "+item.Id.ToString())).SetValue(true);
             }
         }
 
@@ -53,8 +54,8 @@ namespace _xcsoft__ALL_IN_ONE.utility
                 Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
                 return;
 
-            foreach (var item in afterAttackItems.Where(x => x.IsReady() && Menu.Item("AfterAttack.Use " + x.ToString()).GetValue<bool>()))
-                item.Cast();
+            //foreach (var item in afterAttackItems.Where(x => x.IsReady() && xcsoftMenu.Menu_Manual.SubMenu("Activator").Item("AfterAttack.Use " + x.ToString()).GetValue<bool>()))
+            //    item.Cast();
         }
     }
 }

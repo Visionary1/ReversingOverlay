@@ -35,6 +35,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Harass.addUseW();
             xcsoftMenu.Harass.addUseE(false);
 
+            xcsoftMenu.Lasthit.addUseQ();
+            xcsoftMenu.Lasthit.addUseW();
+
             xcsoftMenu.Laneclear.addUseQ();
             xcsoftMenu.Laneclear.addUseW();
             xcsoftMenu.Laneclear.addUseE(false);
@@ -68,6 +71,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                     Harass();
+
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
+                    Lasthit();
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 {
@@ -152,6 +158,28 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     if (xcsoftMenu.Combo.UseW && W.IsReady())
                         W.Cast();
                 }
+            }
+        }
+
+        static void Lasthit()
+        {
+            var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
+
+            if (Minions.Count <= 0)
+                return;
+
+            if(xcsoftMenu.Lasthit.UseQ && Q.IsReady())
+            {
+                var qTarget = Minions.Where(x => x.IsValidTarget(Q.Range) && xcsoftFunc.isKillable(x, Q)).OrderBy(x => x.Health).FirstOrDefault();
+
+                if (qTarget != null)
+                    Q.Cast(qTarget);
+            }
+
+            if (xcsoftMenu.Lasthit.UseW && W.IsReady())
+            {
+                if (Minions.Any(x => x.IsValidTarget(W.Range) && xcsoftFunc.isKillable(x, W)))
+                    W.Cast();
             }
         }
 

@@ -7,6 +7,10 @@ namespace _xcsoft__ALL_IN_ONE.utility
 {
     class Activator
     {
+        //아이템 목록 && 설명
+        //http://lol.inven.co.kr/dataninfo/item/list.php
+        //http://www.lolking.net/items/
+
         internal static void Load()
         {
             xcsoftMenu.addSubMenu("Activator");

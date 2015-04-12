@@ -43,7 +43,7 @@ namespace _xcsoft__ALL_IN_ONE.utility
             if (!unit.IsMe || Target == null)
                 return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
                 if (Hydra.IsReady())
                     Hydra.Cast();

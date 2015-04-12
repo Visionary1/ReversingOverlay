@@ -160,7 +160,7 @@
     <Compile Include="champions\_Shyvana.cs" />
     <Compile Include="champions\_Singed.cs" />
     <Compile Include="champions\_Sion.cs" />
-    <Compile Include="champions\_Sivir.cs" />
+    <Compile Include="champions\Sivir.cs" />
     <Compile Include="champions\_Skarner.cs" />
     <Compile Include="champions\_Sona.cs" />
     <Compile Include="champions\_Soraka.cs" />

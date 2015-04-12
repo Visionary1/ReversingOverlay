@@ -34,7 +34,7 @@ namespace _xcsoft__ALL_IN_ONE
                 catch
                 {
                     xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
-                    return new Circle(false, System.Drawing.Color.Red);
+                    return new Circle();
                 }
             }
 
@@ -61,6 +61,32 @@ namespace _xcsoft__ALL_IN_ONE
                 {
                     xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
                     return new Slider();
+                }
+            }
+
+            internal static StringList getStringListValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Combo." + itemName, champUniq).GetValue<StringList>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new StringList();
+                }
+            }
+
+            internal static KeyBind getKeyBindValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Combo." + itemName, champUniq).GetValue<KeyBind>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new KeyBind();
                 }
             }
 
@@ -157,6 +183,32 @@ namespace _xcsoft__ALL_IN_ONE
                 {
                     xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
                     return new Slider();
+                }
+            }
+
+            internal static StringList getStringListValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Harass." + itemName, champUniq).GetValue<StringList>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new StringList();
+                }
+            }
+
+            internal static KeyBind getKeyBindValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Harass." + itemName, champUniq).GetValue<KeyBind>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new KeyBind();
                 }
             }
 
@@ -266,6 +318,32 @@ namespace _xcsoft__ALL_IN_ONE
                 }
             }
 
+            internal static StringList getStringListValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Lasthit." + itemName, champUniq).GetValue<StringList>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new StringList();
+                }
+            }
+
+            internal static KeyBind getKeyBindValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Lasthit." + itemName, champUniq).GetValue<KeyBind>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new KeyBind();
+                }
+            }
+
             internal static void addUseQ(bool enable = true)
             {
                 Menu_Manual.SubMenu("Lasthit").AddItem(new MenuItem("Lasthit.Use Q", "Use Q", true).SetValue(enable));
@@ -369,6 +447,32 @@ namespace _xcsoft__ALL_IN_ONE
                 {
                     xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
                     return new Slider();
+                }
+            }
+
+            internal static StringList getStringListValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Laneclear." + itemName, champUniq).GetValue<StringList>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new StringList();
+                }
+            }
+
+            internal static KeyBind getKeyBindValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Laneclear." + itemName, champUniq).GetValue<KeyBind>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new KeyBind();
                 }
             }
 
@@ -478,6 +582,32 @@ namespace _xcsoft__ALL_IN_ONE
                 }
             }
 
+            internal static StringList getStringListValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Jungleclear." + itemName, champUniq).GetValue<StringList>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new StringList();
+                }
+            }
+
+            internal static KeyBind getKeyBindValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Jungleclear." + itemName, champUniq).GetValue<KeyBind>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new KeyBind();
+                }
+            }
+
             internal static void addUseQ(bool enable = true)
             {
                 Menu_Manual.SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear.Use Q", "Use Q", true).SetValue(enable));
@@ -581,6 +711,32 @@ namespace _xcsoft__ALL_IN_ONE
                 }
             }
 
+            internal static StringList getStringListValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Misc." + itemName, champUniq).GetValue<StringList>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new StringList();
+                }
+            }
+
+            internal static KeyBind getKeyBindValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Misc." + itemName, champUniq).GetValue<KeyBind>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new KeyBind();
+                }
+            }
+
             internal static void addUseKillsteal(bool enable = true)
             {
                 Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc.Use Killsteal", "Use Killsteal", true).SetValue(enable));
@@ -596,9 +752,30 @@ namespace _xcsoft__ALL_IN_ONE
                 Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc.Use Anti-Gapcloser", "Use Anti-Gapcloser", true).SetValue(enable));
             }
 
-            internal static void addHitchanceSelector()
+            internal static void addHitchanceSelector(HitChance defaultHitchance = HitChance.High)
             {
-                Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc.Hitchance", "Hitchance", true).SetValue(new StringList(new string[] { "Low", "Medium", "High", "Very High" }, 2)));
+                int defaultindex;
+
+                switch (defaultHitchance)
+                {
+                    case HitChance.Low:
+                        defaultindex = 0;
+                        break;
+                    case HitChance.Medium:
+                        defaultindex = 1;
+                        break;
+                    case HitChance.High:
+                        defaultindex = 2;
+                        break;
+                    case HitChance.VeryHigh:
+                        defaultindex = 3;
+                        break;
+                    default:
+                        defaultindex = 2;
+                        break;
+                }
+
+                Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc.Hitchance", "Hitchance", true).SetValue(new StringList(new string[] { "Low", "Medium", "High", "Very High" }, defaultindex)));
             }
 
             internal static bool UseKillsteal
@@ -691,15 +868,36 @@ namespace _xcsoft__ALL_IN_ONE
                 }
             }
 
-            internal static void addBlankItem()
+            internal static StringList getStringListValue(string itemName, bool champUniq = true)
             {
-                Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings.BLANK", string.Empty));
+                try
+                {
+                    return Menu_Manual.Item("Drawings." + itemName, champUniq).GetValue<StringList>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new StringList();
+                }
+            }
+
+            internal static KeyBind getKeyBindValue(string itemName, bool champUniq = true)
+            {
+                try
+                {
+                    return Menu_Manual.Item("Drawings." + itemName, champUniq).GetValue<KeyBind>();
+                }
+                catch
+                {
+                    xcsoftFunc.sendDebugMsg("ERROR: " + itemName);
+                    return new KeyBind();
+                }
             }
 
             internal static void addDamageIndicator(DamageIndicator.DamageToUnitDelegate damage)
             {
-                var drawDamageMenu = new MenuItem("Draw_Damage", "Draw Combo Damage", true).SetValue(true);
-                var drawDamageFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, System.Drawing.Color.FromArgb(100, 255, 228, 0)));
+                var drawDamageMenu = new MenuItem("Draw_Damage", "DamageIndicator", true).SetValue(true);
+                var drawDamageFill = new MenuItem("Draw_Fill", "DamageIndicator Fill", true).SetValue(new Circle(true, System.Drawing.Color.FromArgb(100, 255, 228, 0)));
 
                 Menu_Manual.SubMenu("Drawings").AddItem(drawDamageMenu);
                 Menu_Manual.SubMenu("Drawings").AddItem(drawDamageFill);
@@ -848,16 +1046,6 @@ namespace _xcsoft__ALL_IN_ONE
             Menu_Manual.AddItem(new MenuItem(Name, DisplayName, ChampionUniq).SetValue(Value));
         }
 
-        internal static void addItemChampionUniq(string Name, string DisplayName, object Value)
-        {
-            Menu_Manual.AddItem(new MenuItem(Name, DisplayName, true).SetValue(Value));
-        }
-
-        internal static void addBlankItem()
-        {
-            Menu_Manual.AddItem(new MenuItem("BLANK", string.Empty));
-        }
-
         internal static Circle getCircleValue(string itemName)
         {
             return Menu_Manual.Item(itemName).GetValue<Circle>();
@@ -871,6 +1059,16 @@ namespace _xcsoft__ALL_IN_ONE
         internal static Slider getSliderValue(string itemName)
         {
             return Menu_Manual.Item(itemName).GetValue<Slider>();
+        }
+
+        internal static StringList getStringListValue(string itemName)
+        {
+            return Menu_Manual.Item(itemName).GetValue<StringList>();
+        }
+
+        internal static KeyBind getKeyBindValue(string itemName)
+        {
+            return Menu_Manual.Item(itemName).GetValue<KeyBind>();
         }
     }
 }

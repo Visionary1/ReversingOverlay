@@ -20,8 +20,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 925f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 650f);//lulufaeriburn
-            E = new Spell(SpellSlot.E, 650f, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 650f);
+            E = new Spell(SpellSlot.E, 650f, TargetSelector.DamageType.Magical);//lulufaeriburn
             R = new Spell(SpellSlot.R, 900f);
 
             Q.SetSkillshot(0.25f, 60f, 1450f, false, SkillshotType.SkillshotLine);

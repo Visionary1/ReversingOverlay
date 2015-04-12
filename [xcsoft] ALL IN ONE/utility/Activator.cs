@@ -14,14 +14,17 @@ namespace _xcsoft__ALL_IN_ONE.utility
         //http://www.lolking.net/items/
 
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
+        static Menu Menu { get { return xcsoftMenu.Menu_Manual.SubMenu("Activator"); } }
 
-        internal static List<Items.Item> afterAttackItems = new List<Items.Item>();
+        static List<Items.Item> afterAttackItems = new List<Items.Item>();
+
+        internal static bool afterAttack_AllitemsAreCasted { get { return !utility.Activator.afterAttackItems.Any(x => x.IsReady() && Menu.Item("AfterAttack.Use " + x.ToString()).GetValue<bool>()); } }
 
         internal static void Load()
         {
             xcsoftMenu.addSubMenu("Activator");
 
-            xcsoftMenu.Menu_Manual.SubMenu("Activator").AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
+            Menu.AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
 
             items_initialize();
 
@@ -30,11 +33,15 @@ namespace _xcsoft__ALL_IN_ONE.utility
 
         static void items_initialize()
         {
-            afterAttackItems.Add(new Items.Item((int)ItemId.Tiamat_Melee_Only, 250f));
-            afterAttackItems.Add(new Items.Item((int)ItemId.Ravenous_Hydra_Melee_Only, 250f));
+            addAfterAttackitem("Hydra", (int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
+            addAfterAttackitem("Tiamat", (int)ItemId.Tiamat_Melee_Only, 250f);
+        }
 
-            foreach (var item in afterAttackItems)
-                xcsoftMenu.Menu_Manual.SubMenu("Activator").SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use " + item.Id.ToString() , "Use " + item.Id.ToString())).SetValue(true);
+        static void addAfterAttackitem(string itemName,int itemId,float itemRange)
+        {
+            afterAttackItems.Add(new Items.Item(itemId,itemRange));
+
+            Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use " + itemId.ToString(), "Use " + itemName)).SetValue(true);
         }
 
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -50,7 +57,7 @@ namespace _xcsoft__ALL_IN_ONE.utility
                 Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
                 return;
 
-            foreach (var item in afterAttackItems.Where(x => x.IsReady() && xcsoftMenu.Menu_Manual.SubMenu("Activator").Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()))
+            foreach (var item in afterAttackItems.Where(x => x.IsReady() && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()))
                 item.Cast();
         }
     }

@@ -32,7 +32,7 @@ namespace _xcsoft__ALL_IN_ONE
             { "Minion Near Kill",       new Circle(true, Color.Gray)},          new object[] 
             { "Jungle Position",        true                                    }}, false);
 
-            //utility.Activator.Load();
+            utility.Activator.Load();
 
             Drawing.OnDraw += Drawing_OnDraw;
 

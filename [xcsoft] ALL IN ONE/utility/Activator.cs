@@ -15,15 +15,13 @@ namespace _xcsoft__ALL_IN_ONE.utility
 
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
 
-        internal static List<Items.Item> afterAttackItems;
+        internal static List<Items.Item> afterAttackItems = new List<Items.Item>();
 
         internal static void Load()
         {
             xcsoftMenu.addSubMenu("Activator");
 
             xcsoftMenu.Menu_Manual.SubMenu("Activator").AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
-
-            xcsoftMenu.Menu_Manual.SubMenu("Activator").SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use314", "Use 3143113")).SetValue(true);
 
             items_initialize();
 
@@ -36,9 +34,7 @@ namespace _xcsoft__ALL_IN_ONE.utility
             afterAttackItems.Add(new Items.Item((int)ItemId.Ravenous_Hydra_Melee_Only, 250f));
 
             foreach (var item in afterAttackItems)
-            {
-                xcsoftMenu.Menu_Manual.SubMenu("Activator").SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use " + item.Id.ToString(), "Use "+item.Id.ToString())).SetValue(true);
-            }
+                xcsoftMenu.Menu_Manual.SubMenu("Activator").SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use " + item.Id.ToString() , "Use " + item.Id.ToString())).SetValue(true);
         }
 
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -54,8 +50,8 @@ namespace _xcsoft__ALL_IN_ONE.utility
                 Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
                 return;
 
-            //foreach (var item in afterAttackItems.Where(x => x.IsReady() && xcsoftMenu.Menu_Manual.SubMenu("Activator").Item("AfterAttack.Use " + x.ToString()).GetValue<bool>()))
-            //    item.Cast();
+            foreach (var item in afterAttackItems.Where(x => x.IsReady() && xcsoftMenu.Menu_Manual.SubMenu("Activator").Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()))
+                item.Cast();
         }
     }
 }

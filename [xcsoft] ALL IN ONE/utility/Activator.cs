@@ -16,41 +16,45 @@ namespace _xcsoft__ALL_IN_ONE.utility
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
         static Menu Menu { get { return xcsoftMenu.Menu_Manual.SubMenu("Activator"); } }
 
-        static Items.Item Hydra, Tiamat;
+        internal static List<Items.Item> afterAttackItems;
 
         internal static void Load()
         {
-            Items_initialize();
-
             xcsoftMenu.addSubMenu("Activator");
 
-            Menu.AddItem(new MenuItem("Use Tiamat", "Use Tiamat").SetValue(true));
-            Menu.AddItem(new MenuItem("Use Hydra", "Use Hydra").SetValue(true));
+            Menu.AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
+
+            items_initialize();
 
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
         }
 
-        static void Items_initialize()
+        static void items_initialize()
         {
-            Tiamat = new Items.Item((int)ItemId.Tiamat_Melee_Only, 250f);
-            Hydra = new Items.Item((int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
+            afterAttackItems.Add(new Items.Item((int)ItemId.Tiamat_Melee_Only, 250f));
+            afterAttackItems.Add(new Items.Item((int)ItemId.Ravenous_Hydra_Melee_Only, 250f));
+
+            foreach (var item in afterAttackItems)
+            {
+                Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use " + item.ToString(), "Use " + item.ToString())).SetValue(true);
+            }
         }
 
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            var Target = (Obj_AI_Base)target;
-
-            if (!unit.IsMe || Target == null)
+            if (!unit.IsMe || target == null)
                 return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-            {
-                if (Hydra.IsReady())
-                    Hydra.Cast();
+            if (target.Type != GameObjectType.obj_AI_Base && 
+                target.Type != GameObjectType.obj_AI_Minion && 
+                target.Type != GameObjectType.obj_AI_Hero &&
+                Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo &&
+                Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed &&
+                Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
+                return;
 
-                if (Tiamat.IsReady())
-                    Tiamat.Cast();
-            }
+            foreach (var item in afterAttackItems.Where(x => x.IsReady() && Menu.Item("AfterAttack.Use " + x.ToString()).GetValue<bool>()))
+                item.Cast();
         }
     }
 }

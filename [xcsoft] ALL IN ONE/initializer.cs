@@ -21,6 +21,7 @@ namespace _xcsoft__ALL_IN_ONE
             xcsoftMenu.addSubMenu_ChampTemplate(ObjectManager.Player.ChampionName);
 
             champLoader.Load(ObjectManager.Player.ChampionName);
+            utility.Activator.Load();
 
             xcsoftMenu.Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Blank", string.Empty));
             xcsoftMenu.Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));

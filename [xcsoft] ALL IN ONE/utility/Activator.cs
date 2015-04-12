@@ -22,7 +22,7 @@ namespace _xcsoft__ALL_IN_ONE.utility
 
         internal static void Load()
         {
-            xcsoftMenu.addSubMenu("Activator");
+            xcsoftMenu.addSubMenu("Simple Activator");
 
             Menu.AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
 
@@ -33,11 +33,11 @@ namespace _xcsoft__ALL_IN_ONE.utility
 
         static void items_initialize()
         {
-            addAfterAttackitem("Hydra", (int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
-            addAfterAttackitem("Tiamat", (int)ItemId.Tiamat_Melee_Only, 250f);
+            additem_AfterAttack("Hydra", (int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
+            additem_AfterAttack("Tiamat", (int)ItemId.Tiamat_Melee_Only, 250f);
         }
 
-        static void addAfterAttackitem(string itemName,int itemId,float itemRange)
+        static void additem_AfterAttack(string itemName, int itemId, float itemRange)
         {
             afterAttackItems.Add(new Items.Item(itemId,itemRange));
 
@@ -49,16 +49,20 @@ namespace _xcsoft__ALL_IN_ONE.utility
             if (!unit.IsMe || target == null)
                 return;
 
-            if (target.Type != GameObjectType.obj_AI_Base && 
-                target.Type != GameObjectType.obj_AI_Minion && 
-                target.Type != GameObjectType.obj_AI_Hero &&
-                Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo &&
-                Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed &&
-                Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
+            if (target.Type != GameObjectType.obj_AI_Minion && target.Type != GameObjectType.obj_AI_Hero)
                 return;
 
-            foreach (var item in afterAttackItems.Where(x => x.IsReady() && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()))
-                item.Cast();
+            if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            {
+                foreach (var item in afterAttackItems.Where(x => x.IsReady() && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>() && HeroManager.Enemies.Any(z => z.IsValidTarget(x.Range))))
+                {
+                    if (!item.Cast())
+                        item.Cast((Obj_AI_Base)target);
+
+                    break;
+                }
+            }
+            
         }
     }
 }

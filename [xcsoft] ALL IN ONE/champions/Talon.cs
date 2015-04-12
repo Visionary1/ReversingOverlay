@@ -422,7 +422,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 //                damage += (float)Player.GetAutoAttackDamage(enemy, true);
 
             if (E.IsReady())
-                damage = damage * 3 * E.Level;
+                damage = damage * (1+0.03f * E.Level);
 
             return damage;
         }

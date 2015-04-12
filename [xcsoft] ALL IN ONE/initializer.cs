@@ -20,13 +20,9 @@ namespace _xcsoft__ALL_IN_ONE
             xcsoftMenu.addTargetSelector(ObjectManager.Player.ChampionName);
             xcsoftMenu.addSubMenu_ChampTemplate(ObjectManager.Player.ChampionName);
 
-            xcsoftMenu.addBlankItem();
-            xcsoftMenu.addItem("Work In Progress!");
-            xcsoftMenu.addItem("작업중입니다!");
-
             champLoader.Load(ObjectManager.Player.ChampionName);
 
-            xcsoftMenu.Drawings.addBlankItem();
+            xcsoftMenu.Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Blank", string.Empty));
             xcsoftMenu.Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));
 
             xcsoftMenu.Drawings.addItems(new object[][] { new object[] 

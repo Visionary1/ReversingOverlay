@@ -22,8 +22,8 @@ namespace _xcsoft__ALL_IN_ONE.utility
             Menu = new Menu("[xcsoft] AIO: Activator", "xcsoft_AIOActivator", true);
             Menu.AddToMainMenu();
 
-            Menu.AddSubMenu(new Menu("BeforeAttack", "BeforeAttack"));
-            Menu.AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
+            Menu.AddSubMenu(new Menu("Activator: BeforeAttack", "BeforeAttack"));
+            Menu.AddSubMenu(new Menu("Activator: AfterAttack", "AfterAttack"));
 
             additems();
             

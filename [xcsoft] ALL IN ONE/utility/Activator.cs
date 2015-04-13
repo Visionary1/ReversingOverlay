@@ -52,9 +52,9 @@ namespace _xcsoft__ALL_IN_ONE.utility
             if (target.Type != GameObjectType.obj_AI_Minion && target.Type != GameObjectType.obj_AI_Hero)
                 return;
 
-            if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            foreach (var item in afterAttackItems.Where(x => x.IsReady() && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()))
             {
-                foreach (var item in afterAttackItems.Where(x => x.IsReady() && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>() && HeroManager.Enemies.Any(z => z.IsValidTarget(x.Range))))
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(item.Range)) || MinionManager.GetMinions(item.Range,  MinionTypes.All, MinionTeam.NotAlly).Any())
                 {
                     if (!item.Cast())
                         item.Cast((Obj_AI_Base)target);
@@ -62,7 +62,6 @@ namespace _xcsoft__ALL_IN_ONE.utility
                     break;
                 }
             }
-            
         }
     }
 }

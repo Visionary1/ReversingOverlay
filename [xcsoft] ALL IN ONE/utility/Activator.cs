@@ -54,7 +54,7 @@ namespace _xcsoft__ALL_IN_ONE.utility
             if (target.Type != GameObjectType.obj_AI_Minion && target.Type != GameObjectType.obj_AI_Hero)
                 return;
 
-            var itemone = afterAttackItems.FirstOrDefault(x => x.IsReady() && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>());
+            var itemone = afterAttackItems.FirstOrDefault(x => x.IsReady() && x.IsInRange(target.Position) && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>());
 
             if (itemone != null)
             {

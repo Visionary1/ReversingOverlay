@@ -14,7 +14,7 @@ namespace _xcsoft__ALL_IN_ONE.utility
         //http://www.lolking.net/items/
 
         static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
-        static Menu Menu { get { return xcsoftMenu.Menu_Manual.SubMenu("Activator"); } }
+        static Menu Menu { get { return xcsoftMenu.Menu_Manual.SubMenu("Simple Activator"); } }
 
         static List<Items.Item> afterAttackItems = new List<Items.Item>();
 

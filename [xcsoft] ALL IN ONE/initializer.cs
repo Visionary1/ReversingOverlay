@@ -11,7 +11,7 @@ namespace _xcsoft__ALL_IN_ONE
     {
         internal static void initialize()
         {
-            xcsoftMenu.initialize("[xcsoft] ALL IN ONE");
+            xcsoftMenu.initialize("[xcsoft] AIO: Champion");
 
             if (!champLoader.champSupportedCheck("[xcsoft] ALL IN ONE: ", "_xcsoft__ALL_IN_ONE.champions."))
                 return;

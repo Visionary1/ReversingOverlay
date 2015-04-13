@@ -46,12 +46,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Harass.addUseE();
             xcsoftMenu.Harass.addifMana();
 
+            xcsoftMenu.Lasthit.isEmpty();
+
             xcsoftMenu.Laneclear.addUseQ();
             xcsoftMenu.Laneclear.addUseW();
             xcsoftMenu.Laneclear.addUseE();
             xcsoftMenu.Laneclear.addItem("Use Hydra", true);
             xcsoftMenu.Laneclear.addifMana();
-
 
             xcsoftMenu.Jungleclear.addUseQ();
             xcsoftMenu.Jungleclear.addUseW();

@@ -25,6 +25,11 @@ namespace _xcsoft__ALL_IN_ONE
                 Menu_Manual.SubMenu("Combo").AddItem(new MenuItem("Combo." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
             }
 
+            internal static void isEmpty()
+            {
+                Menu_Manual.SubMenu("Combo").AddItem(new MenuItem("Combo.isEmpty", "Empty :D", true));
+            }
+
             internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
                 try
@@ -145,6 +150,11 @@ namespace _xcsoft__ALL_IN_ONE
             internal static void addItem(string itemDisplayName, object value, bool champUniq = true)
             {
                 Menu_Manual.SubMenu("Harass").AddItem(new MenuItem("Harass." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
+            }
+
+            internal static void isEmpty()
+            {
+                Menu_Manual.SubMenu("Harass").AddItem(new MenuItem("Harass.isEmpty", "Empty :D", true));
             }
 
             internal static Circle getCircleValue(string itemName, bool champUniq = true)
@@ -279,6 +289,11 @@ namespace _xcsoft__ALL_IN_ONE
                 Menu_Manual.SubMenu("Lasthit").AddItem(new MenuItem("Lasthit." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
             }
 
+            internal static void isEmpty()
+            {
+                Menu_Manual.SubMenu("Lasthit").AddItem(new MenuItem("Lasthit.isEmpty", "Empty :D", true));
+            }
+
             internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
                 try
@@ -409,6 +424,11 @@ namespace _xcsoft__ALL_IN_ONE
             internal static void addItem(string itemDisplayName, object value, bool champUniq = true)
             {
                 Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Laneclear." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
+            }
+
+            internal static void isEmpty()
+            {
+                Menu_Manual.SubMenu("Laneclear").AddItem(new MenuItem("Laneclear.isEmpty", "Empty :D", true));
             }
 
             internal static Circle getCircleValue(string itemName, bool champUniq = true)
@@ -543,6 +563,11 @@ namespace _xcsoft__ALL_IN_ONE
                 Menu_Manual.SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
             }
 
+            internal static void isEmpty()
+            {
+                Menu_Manual.SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear.isEmpty", "Empty :D", true));
+            }
+
             internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
                 try
@@ -670,6 +695,11 @@ namespace _xcsoft__ALL_IN_ONE
             internal static void addItem(string itemDisplayName, object value, bool champUniq = true)
             {
                 Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
+            }
+
+            internal static void isEmpty()
+            {
+                Menu_Manual.SubMenu("Misc").AddItem(new MenuItem("Misc.isEmpty", "Empty :D", true));
             }
 
             internal static Circle getCircleValue(string itemName, bool champUniq = true)
@@ -829,6 +859,11 @@ namespace _xcsoft__ALL_IN_ONE
                 Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings." + itemDisplayName, itemDisplayName, champUniq).SetValue(value));
             }
 
+            internal static void isEmpty()
+            {
+                Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings.isEmpty", "Empty :D", true));
+            }
+
             internal static Circle getCircleValue(string itemName, bool champUniq = true)
             {
                 try
@@ -962,7 +997,6 @@ namespace _xcsoft__ALL_IN_ONE
             }
         }
 
-        //------------------------
         internal static void initialize(string RootMenuDisplayName)
         {
             Menu_Manual = new Menu(RootMenuDisplayName, RootMenuDisplayName, true);
@@ -989,6 +1023,16 @@ namespace _xcsoft__ALL_IN_ONE
         internal static void addTargetSelector(string tag)
         {
             TargetSelector.AddToMenu(Menu_Manual.AddSubMenu(new Menu((tag != string.Empty ? tag + ": " : string.Empty) + "Target Selector", "Target Selector")));
+        }
+
+        internal static void addOrbwalker()
+        {
+            Orbwalker = new Orbwalking.Orbwalker(Menu_Manual.AddSubMenu(new Menu("Orbwalker", "Orbwalker")));
+        }
+
+        internal static void addTargetSelector()
+        {
+            TargetSelector.AddToMenu(Menu_Manual.AddSubMenu(new Menu("Target Selector", "Target Selector")));
         }
 
         internal static void addSubMenu_ChampTemplate()

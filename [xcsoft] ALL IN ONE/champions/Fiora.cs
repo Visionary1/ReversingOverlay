@@ -53,7 +53,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
-			
+            xcsoftMenu.Lasthit.isEmpty();
 			
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseH", "Use Hydra", true).SetValue(true));

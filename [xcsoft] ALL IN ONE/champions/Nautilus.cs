@@ -33,6 +33,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Combo.addUseE();
             xcsoftMenu.Combo.addUseR();
 
+            xcsoftMenu.Harass.isEmpty();
+
+            xcsoftMenu.Lasthit.isEmpty();
 
             xcsoftMenu.Laneclear.addUseW();
             xcsoftMenu.Laneclear.addUseE();

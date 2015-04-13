@@ -40,6 +40,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             { "Use Q", true },                                      new object[] 
             { "Use E", true }                                       }, false);
 
+            xcsoftMenu.Lasthit.isEmpty();
+
             xcsoftMenu.Laneclear.addItems(new object[][] { new object[] 
             { "Use Q", true},                                       new object[] 
             { "Use E", true}                                        }, false);

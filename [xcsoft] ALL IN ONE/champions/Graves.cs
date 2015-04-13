@@ -43,6 +43,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
             xcsoftMenu.Harass.addUseQ();
             xcsoftMenu.Harass.addifMana(70);
 
+            xcsoftMenu.Lasthit.isEmpty();
+
             xcsoftMenu.Laneclear.addUseQ();
             xcsoftMenu.Laneclear.addifMana(80);
 

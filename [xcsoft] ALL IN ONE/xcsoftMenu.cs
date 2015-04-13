@@ -958,22 +958,22 @@ namespace _xcsoft__ALL_IN_ONE
 
             internal static void addQrange(bool enable = true)
             {
-                Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings.Q Range", "Q Range", true).SetValue(new Circle(enable, System.Drawing.Color.FromArgb(150, System.Drawing.Color.GreenYellow))));
+                Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings.Q Range", "Q Range", true).SetValue(new Circle(enable, System.Drawing.Color.FromArgb(200, System.Drawing.Color.GreenYellow))));
             }
 
             internal static void addWrange(bool enable = true)
             {
-                Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings.W Range", "W Range", true).SetValue(new Circle(enable, System.Drawing.Color.FromArgb(150, System.Drawing.Color.GreenYellow))));
+                Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings.W Range", "W Range", true).SetValue(new Circle(enable, System.Drawing.Color.FromArgb(200, System.Drawing.Color.GreenYellow))));
             }
 
             internal static void addErange(bool enable = true)
             {
-                Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings.E Range", "E Range", true).SetValue(new Circle(enable, System.Drawing.Color.FromArgb(150, System.Drawing.Color.GreenYellow))));
+                Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings.E Range", "E Range", true).SetValue(new Circle(enable, System.Drawing.Color.FromArgb(200, System.Drawing.Color.GreenYellow))));
             }
 
             internal static void addRrange(bool enable = true)
             {
-                Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings.R Range", "R Range", true).SetValue(new Circle(enable, System.Drawing.Color.FromArgb(150, System.Drawing.Color.GreenYellow))));
+                Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("Drawings.R Range", "R Range", true).SetValue(new Circle(enable, System.Drawing.Color.FromArgb(200, System.Drawing.Color.GreenYellow))));
             }
 
             internal static Circle DrawQRange

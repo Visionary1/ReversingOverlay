@@ -23,7 +23,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             E = new Spell(SpellSlot.E, 700f);
             R = new Spell(SpellSlot.R, 550f);
 
-            Q.SetTargetted(0.25f, 2000f);
+            Q.SetTargetted(0.25f, 1800f);
             E.SetTargetted(0.25f, float.MaxValue);
             
             xcsoftMenu.Combo.addUseQ();
@@ -133,7 +133,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (xcsoftMenu.Combo.UseR && R.IsReady())
             {
-                if (HeroManager.Enemies.Any(x => x.IsValidTarget(100)))
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)) && R.Instance.Name == "KatarinaR")
+                    R.Cast();
+                else
                     R.Cast();
             }
         }
@@ -249,7 +251,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 if (W.CanCast(target) && xcsoftFunc.isKillable(target, W))
                     W.Cast();
 
-                if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
+                if (E.CanCast(target) && xcsoftFunc.isKillable(target, E.GetDamage(target) + Q.GetDamage(target) + W.GetDamage(target)))
                     E.Cast(target);
 
                 if (R.CanCast(target) && xcsoftFunc.isKillable(target, R))

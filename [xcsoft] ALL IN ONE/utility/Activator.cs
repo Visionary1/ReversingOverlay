@@ -30,9 +30,9 @@ namespace _xcsoft__ALL_IN_ONE.utility
             Menu.AddSubMenu(new Menu("Activator: AfterAttack", "AfterAttack"));
 
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Health Potion", "Use Health Potion")).SetValue(true);
-            Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.HealthPercent", "Use Health Potion")).SetValue(new Slider(50, 0, 100));
+            Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifHealthPercent", "if Health Percent <")).SetValue(new Slider(50, 0, 100));
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Mana Potion", "Use Mana Potion")).SetValue(true);
-            Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ManaPercent", "Use Mana Potion")).SetValue(new Slider(50,0,100));
+            Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(50,0,100));
 
             Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
             Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);
@@ -96,7 +96,6 @@ namespace _xcsoft__ALL_IN_ONE.utility
 
         //PotionManager part of Marksman
         static List<Potion> potions;
-        static List<Items.Item> PotionList = new List<Items.Item>();
         
         enum PotionType
         {
@@ -150,22 +149,22 @@ namespace _xcsoft__ALL_IN_ONE.utility
                 {
                     if (Menu.Item("AutoPotion.Use Health Potion").GetValue<bool>())
                     {
-                        if (ObjectManager.Player.HealthPercent <= Menu.Item("AutoPotion.HealthPercent").GetValue<Slider>().Value)
+                        if (xcsoftFunc.getHealthPercent(ObjectManager.Player) <= Menu.Item("AutoPotion.ifHealthPercent").GetValue<Slider>().Value)
                         {
                             var healthSlot = GetPotionSlot(PotionType.Health);
 
-                            if (!IsBuffActive(PotionType.Health))
+                            if (!IsBuffActive(PotionType.Health) && healthSlot != null)
                                 ObjectManager.Player.Spellbook.CastSpell(healthSlot.SpellSlot);
                         }
                     }
 
                     if (Menu.Item("AutoPotion.Use Mana Potion").GetValue<bool>())
                     {
-                        if (ObjectManager.Player.ManaPercent <= Menu.Item("AutoPotion.ManaPercent").GetValue<Slider>().Value)
+                        if (xcsoftFunc.getManaPercent(ObjectManager.Player) <= Menu.Item("AutoPotion.ifManaPercent").GetValue<Slider>().Value)
                         {
                             var manaSlot = GetPotionSlot(PotionType.Mana);
 
-                            if (!IsBuffActive(PotionType.Mana))
+                            if (!IsBuffActive(PotionType.Mana) && manaSlot != null)
                                 ObjectManager.Player.Spellbook.CastSpell(manaSlot.SpellSlot);
                         }
                     }

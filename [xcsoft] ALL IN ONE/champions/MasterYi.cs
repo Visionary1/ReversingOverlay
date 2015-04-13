@@ -138,7 +138,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)) && utility.Activator.afterAttack_AllitemsAreCasted)
+                if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)) && utility.Activator.AfterAttack.AllitemsAreCasted)
 	                W.Cast();
 	
 	            if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())

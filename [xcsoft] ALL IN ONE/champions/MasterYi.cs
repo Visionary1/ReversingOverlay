@@ -49,7 +49,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             Menu.SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
 
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.Red)));
+            xcsoftMenu.Drawings.addQrange();
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawRTimer", "R Timer", true).SetValue(new Circle(true, Color.LightGreen)));
 
 			xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
@@ -93,7 +93,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = Menu.Item("drawQ", true).GetValue<Circle>();
+            var drawQ = xcsoftMenu.Drawings.DrawQRange;
             var drawRTimer = Menu.Item("drawRTimer", true).GetValue<Circle>();
 
             if (Q.IsReady() && drawQ.Active)

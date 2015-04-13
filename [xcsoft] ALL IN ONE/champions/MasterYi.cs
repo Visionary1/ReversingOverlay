@@ -19,6 +19,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Wcancel() { Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
 
+        static float getPBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "doublestrike"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static float getRBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "Highlander"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
@@ -51,6 +52,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             xcsoftMenu.Drawings.addQrange();
             Menu.SubMenu("Drawings").AddItem(new MenuItem("drawRTimer", "R Timer", true).SetValue(new Circle(true, Color.LightGreen)));
+            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawPTimer", "P Timer", true).SetValue(new Circle(true, Color.LightGreen)));
 
 			xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
 
@@ -95,6 +97,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             var drawQ = xcsoftMenu.Drawings.DrawQRange;
             var drawRTimer = Menu.Item("drawRTimer", true).GetValue<Circle>();
+            var drawPTimer = Menu.Item("drawPTimer", true).GetValue<Circle>();
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
@@ -103,6 +106,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
                 var pos_temp = Drawing.WorldToScreen(Player.Position);
                 Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R: " + getRBuffDuration.ToString("0.00"));
+            }
+            if (drawPTimer.Active && getPBuffDuration > 0)
+            {
+                var pos_temp = Drawing.WorldToScreen(Player.Position);
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawPTimer.Color, "P: " + getPBuffDuration.ToString("0.00"));
             }
         }
 
@@ -210,11 +218,32 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             float damage = 0;
 
-            if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+		if (Q.IsReady())
+                	damage += Q.GetDamage(enemy);
+				
+		if (E.IsReady())
+                	damage += E.GetDamage(enemy);
+				
+		if (getPBuffDuration > 0)
+                	damage += (float)Player.GetAutoAttackDamage(enemy, true) / 2;
+				
+		if (W.IsReady())
+                	damage += (float)Player.GetAutoAttackDamage(enemy, true);
+				
+		if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
+		{
+			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
+			damage += (float)Player.GetAutoAttackDamage(enemy, true);
+		}
+		
+		if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
+		{
+			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
+			damage += (float)Player.GetAutoAttackDamage(enemy, true);
+		}
 
-            if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true) + (float)Player.GetAutoAttackDamage(enemy, false) * 5;
+		if(!Player.IsWindingUp)
+			damage += (float)Player.GetAutoAttackDamage(enemy, true);
 				
             return damage;
         }

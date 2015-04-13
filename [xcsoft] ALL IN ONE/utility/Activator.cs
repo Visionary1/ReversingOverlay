@@ -191,8 +191,8 @@ namespace _xcsoft__ALL_IN_ONE.utility
 
                 foreach (var item in BeforeAttack.itemsList.Where(x => x.IsReady() && x.IsInRange(args.Target.Position) && Menu.Item("BeforeAttack.Use " + x.Id.ToString()).GetValue<bool>()))
                 {
-                    if (!item.Cast()) 
-                        item.Cast((Obj_AI_Base)args.Target);
+                    if (!Items.UseItem(item.Id))
+                        Items.UseItem(item.Id, (Obj_AI_Base)args.Target);
                 }
             }
         }
@@ -218,8 +218,8 @@ namespace _xcsoft__ALL_IN_ONE.utility
 
                 if (itemone != null)
                 {
-                    if (!itemone.Cast())
-                        itemone.Cast((Obj_AI_Base)target);
+                    if (!Items.UseItem(itemone.Id))
+                        Items.UseItem(itemone.Id, (Obj_AI_Base)target);
                 }
             }
         }

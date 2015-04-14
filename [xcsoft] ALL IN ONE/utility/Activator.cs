@@ -45,14 +45,22 @@ namespace _xcsoft__ALL_IN_ONE.utility
             Orbwalking.AfterAttack += AfterAttack.Orbwalking_AfterAttack;
         }
 
+        internal class item
+        {
+            internal string Name { get; set; }
+            internal int Id { get; set; }
+            internal float Range { get; set; }
+            internal bool isTargeted { get; set; }
+        }
+
         static void additems()
         {
             BeforeAttack.additem("Youmuu", (int)ItemId.Youmuus_Ghostblade, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player));
 
             AfterAttack.additem("Tiamat", (int)ItemId.Tiamat_Melee_Only, 250f);
             AfterAttack.additem("Hydra", (int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
-            AfterAttack.additem("Bilgewater", (int)ItemId.Bilgewater_Cutlass, 450f);
-            AfterAttack.additem("BoTRK", (int)ItemId.Blade_of_the_Ruined_King, 450f);
+            AfterAttack.additem("Bilgewater", (int)ItemId.Bilgewater_Cutlass, 450f, true);
+            AfterAttack.additem("BoTRK", (int)ItemId.Blade_of_the_Ruined_King, 450f, true);
         }
 
         static void addPotions()
@@ -131,13 +139,13 @@ namespace _xcsoft__ALL_IN_ONE.utility
 
         internal class OnUpdate
         {
-            internal static List<Items.Item> itemsList = new List<Items.Item>();
+            internal static List<item> itemsList = new List<item>();
 
-            internal static void additem(string itemName, int itemId, float itemRange)
+            internal static void additem(string itemName, int itemid, float itemRange, bool itemisTargeted = false)
             {
-                itemsList.Add(new Items.Item(itemId, itemRange));
+                itemsList.Add(new item { Name = itemName, Id = itemid, Range = itemRange, isTargeted = itemisTargeted });
 
-                Menu.SubMenu("OnUpdate").AddItem(new MenuItem("OnUpdate.Use " + itemId.ToString(), "Use " + itemName)).SetValue(true);
+                Menu.SubMenu("OnUpdate").AddItem(new MenuItem("OnUpdate.Use " + itemid.ToString(), "Use " + itemName)).SetValue(true);
             }
 
             internal static void Game_OnUpdate(EventArgs args)
@@ -175,13 +183,13 @@ namespace _xcsoft__ALL_IN_ONE.utility
 
         internal class BeforeAttack
         {
-            internal static List<Items.Item> itemsList = new List<Items.Item>();
+            internal static List<item> itemsList = new List<item>();
 
-            internal static void additem(string itemName, int itemId, float itemRange)
+            internal static void additem(string itemName, int itemid, float itemRange, bool itemisTargeted= false)
             {
-                itemsList.Add(new Items.Item(itemId, itemRange));
+                itemsList.Add(new item { Name = itemName, Id = itemid, Range = itemRange, isTargeted = itemisTargeted });
 
-                Menu.SubMenu("BeforeAttack").AddItem(new MenuItem("BeforeAttack.Use " + itemId.ToString(), "Use " + itemName)).SetValue(true);
+                Menu.SubMenu("BeforeAttack").AddItem(new MenuItem("BeforeAttack.Use " + itemid.ToString(), "Use " + itemName)).SetValue(true);
             }
 
             internal static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
@@ -189,24 +197,26 @@ namespace _xcsoft__ALL_IN_ONE.utility
                 if (!args.Unit.IsMe || args.Target == null || args.Unit.IsDead || args.Target.IsDead || args.Target.Type != GameObjectType.obj_AI_Hero)
                     return;
 
-                foreach (var item in BeforeAttack.itemsList.Where(x => x.IsReady() && x.IsInRange(args.Target.Position) && Menu.Item("BeforeAttack.Use " + x.Id.ToString()).GetValue<bool>()))
+                foreach (var item in BeforeAttack.itemsList.Where(x => Items.CanUseItem((int)x.Id) && args.Target.IsValidTarget(x.Range) && Menu.Item("BeforeAttack.Use " + x.Id.ToString()).GetValue<bool>()))
                 {
-                    if (!Items.UseItem(item.Id))
+                    if (item.isTargeted)
                         Items.UseItem(item.Id, (Obj_AI_Base)args.Target);
+                    else
+                        Items.UseItem(item.Id);
                 }
             }
         }
 
         internal class AfterAttack
         {
-            internal static List<Items.Item> itemsList = new List<Items.Item>();
-            internal static bool AllitemsAreCasted { get { return !utility.Activator.AfterAttack.itemsList.Any(x => x.IsReady() && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()); } }
+            internal static List<item> itemsList = new List<item>();
+            internal static bool ALLCancleItemsAreCasted { get { return !utility.Activator.AfterAttack.itemsList.Any(x => Items.CanUseItem((int)x.Id) && !x.isTargeted && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()); } }
 
-            internal static void additem(string itemName, int itemId, float itemRange)
+            internal static void additem(string itemName, int itemid, float itemRange, bool itemisTargeted = false)
             {
-                itemsList.Add(new Items.Item(itemId, itemRange));
+                itemsList.Add(new item { Name = itemName, Id = itemid, Range = itemRange, isTargeted = itemisTargeted });
 
-                Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use " + itemId.ToString(), "Use " + itemName)).SetValue(true);
+                Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use " + itemid.ToString(), "Use " + itemName)).SetValue(true);
             }
 
             internal static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -214,12 +224,14 @@ namespace _xcsoft__ALL_IN_ONE.utility
                 if (!unit.IsMe || target == null || target.IsDead || unit.IsDead || (target.Type != GameObjectType.obj_AI_Minion && target.Type != GameObjectType.obj_AI_Hero))
                     return;
 
-                var itemone = AfterAttack.itemsList.FirstOrDefault(x => x.IsReady() && x.IsInRange(target.Position) && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>());
+                var itemone = AfterAttack.itemsList.FirstOrDefault(x => Items.CanUseItem((int)x.Id) && target.IsValidTarget(x.Range) && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>());
 
                 if (itemone != null)
                 {
-                    if (!Items.UseItem(itemone.Id))
+                    if (itemone.isTargeted)
                         Items.UseItem(itemone.Id, (Obj_AI_Base)target);
+                    else
+                        Items.UseItem(itemone.Id);
                 }
             }
         }

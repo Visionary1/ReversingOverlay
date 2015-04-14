@@ -132,6 +132,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
                 if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name)
                 {
+                    Orbwalking.ResetAutoAttackTimer();
+
                     if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady())
                         E.Cast();
                 }

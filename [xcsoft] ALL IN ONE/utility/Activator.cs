@@ -25,17 +25,17 @@ namespace _xcsoft__ALL_IN_ONE.utility
 
             Menu.AddSubMenu(new Menu("Activator: Auto-Potion", "AutoPotion"));
             Menu.AddSubMenu(new Menu("Activator: Auto-Spell", "AutoSpell"));
-            Menu.AddSubMenu(new Menu("Activator: ComboMode", "ComboMode"));
+            //Menu.AddSubMenu(new Menu("Activator: ComboMode", "ComboMode"));
             Menu.AddSubMenu(new Menu("Activator: BeforeAttack", "BeforeAttack"));
             Menu.AddSubMenu(new Menu("Activator: AfterAttack", "AfterAttack"));
 
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Health Potion", "Use Health Potion")).SetValue(true);
-            Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifHealthPercent", "if Health Percent <")).SetValue(new Slider(50, 0, 100));
+            Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifHealthPercent", "if Health Percent <")).SetValue(new Slider(55, 0, 100));
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Mana Potion", "Use Mana Potion")).SetValue(true);
-            Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(50,0,100));
+            Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(55,0,100));
 
-            Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
-            Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);
+            //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
+            //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);
 
             additems();
             addPotions();

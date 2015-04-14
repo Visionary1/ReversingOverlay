@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>_xcsoft__ALL_IN_ONE</RootNamespace>
-    <AssemblyName>[xcsoft] ALL IN ONE</AssemblyName>
+    <AssemblyName>ALL In One</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>게시\</PublishUrl>

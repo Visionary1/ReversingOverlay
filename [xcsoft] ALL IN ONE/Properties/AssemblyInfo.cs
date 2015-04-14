@@ -2,13 +2,13 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("[xcsoft] ALL")]
+[assembly: AssemblyTitle("ALL In One")]
 [assembly: AssemblyDescription("I'm still alive")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("[xcsoft] ALL")]
-[assembly: AssemblyCopyright("no copyright")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyProduct("ALL In One")]
+[assembly: AssemblyCopyright("")]
+[assembly: AssemblyTrademark("xcsoft_Team™")]
 [assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]

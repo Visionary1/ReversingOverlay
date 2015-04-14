@@ -18,6 +18,16 @@ namespace _xcsoft__ALL_IN_ONE
 
             xcsoftMenu.addOrbwalker(ObjectManager.Player.ChampionName);
             xcsoftMenu.addTargetSelector(ObjectManager.Player.ChampionName);
+
+            xcsoftMenu.addSubMenu("Infomation");
+            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.1", "만든 사람들"));
+            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.2", ""));
+            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.3", "xcsoft"));
+            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.4", "fakker"));
+            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.5", "GBKTV"));
+            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.6", "rl224"));
+            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.6", "Coreboard"));
+
             xcsoftMenu.addSubMenu_ChampTemplate(ObjectManager.Player.ChampionName);
 
             champLoader.Load(ObjectManager.Player.ChampionName);
@@ -36,7 +46,7 @@ namespace _xcsoft__ALL_IN_ONE
 
             Drawing.OnDraw += Drawing_OnDraw;
 
-            Game.PrintChat(xcsoftFunc.colorChat(Color.LightSkyBlue, "[xcsoft] ALL IN ONE: ") + xcsoftFunc.colorChat(Color.Red, ObjectManager.Player.ChampionName) + " Loaded");
+            Game.PrintChat(xcsoftFunc.colorChat(Color.LightSkyBlue, "[xcsoft] All In One: ") + xcsoftFunc.colorChat(Color.Red, ObjectManager.Player.ChampionName) + " Loaded");
         }
 
         static void Drawing_OnDraw(EventArgs args)

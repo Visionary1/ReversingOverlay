@@ -135,9 +135,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (!xcsoftMenu.Combo.UseE || Player.IsDead)
                 return;
 
-            if (sender is Obj_AI_Hero && sender.IsEnemy && args.Target.IsMe && !args.SData.IsAutoAttack() && E.IsReady())
+
+            if (sender is Obj_AI_Hero && sender.IsEnemy && args.Target.IsMe && !args.SData.IsAutoAttack() && E.IsReady() && !args.SData.Name.Contains("summoner") && args.SData.Name != "TormentedSoil") 
                 E.Cast();
 
+
+            //xcsoftFunc.sendDebugMsg(args.SData.Name);
         }
         static float getBuffDuration // afterattack tempfix
         {

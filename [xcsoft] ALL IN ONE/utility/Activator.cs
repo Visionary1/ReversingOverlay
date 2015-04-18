@@ -15,27 +15,24 @@ namespace _xcsoft__ALL_IN_ONE.utility
         //https://mirror.enha.kr/wiki/%EB%A6%AC%EA%B7%B8%20%EC%98%A4%EB%B8%8C%20%EB%A0%88%EC%A0%84%EB%93%9C/%EA%B3%B5%EA%B2%A9%20%EC%95%84%EC%9D%B4%ED%85%9C
         //http://leagueoflegends.wikia.com/wiki/Category:Items
 
-        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
-        internal static Menu Menu;
+        static Orbwalking.Orbwalker Orbwalker { get { return ALL_IN_ONE_Menu.Orbwalker; } }
+        internal static Menu Menu {get{return ALL_IN_ONE_Menu.MainMenu_Manual.SubMenu("Activator");}}
 
         internal static void Load()
         {
-            Menu = new Menu("[xcsoft] AIO: Activator", "xcsoft_AIOActivator", true);
-            Menu.AddToMainMenu();
-
-            Menu.AddSubMenu(new Menu("Activator: Auto-Potion", "AutoPotion"));
-            Menu.AddSubMenu(new Menu("Activator: Auto-Spell", "AutoSpell"));
+            Menu.AddSubMenu(new Menu("Auto-Potion", "AutoPotion"));
+            Menu.AddSubMenu(new Menu("Auto-Spell", "AutoSpell"));
             //Menu.AddSubMenu(new Menu("Activator: ComboMode", "ComboMode"));
-            Menu.AddSubMenu(new Menu("Activator: BeforeAttack", "BeforeAttack"));
-            Menu.AddSubMenu(new Menu("Activator: AfterAttack", "AfterAttack"));
+            Menu.AddSubMenu(new Menu("BeforeAttack", "BeforeAttack"));
+            Menu.AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
 
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Health Potion", "Use Health Potion")).SetValue(true);
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifHealthPercent", "if Health Percent <")).SetValue(new Slider(55, 0, 100));
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Mana Potion", "Use Mana Potion")).SetValue(true);
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(55,0,100));
 
-            //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
-            //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);
+            Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
+            Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);
 
             additems();
             addPotions();
@@ -157,7 +154,7 @@ namespace _xcsoft__ALL_IN_ONE.utility
                 {
                     if (Menu.Item("AutoPotion.Use Health Potion").GetValue<bool>())
                     {
-                        if (xcsoftFunc.getHealthPercent(ObjectManager.Player) <= Menu.Item("AutoPotion.ifHealthPercent").GetValue<Slider>().Value)
+                        if (ALL_IN_ONE_Func.getHealthPercent(ObjectManager.Player) <= Menu.Item("AutoPotion.ifHealthPercent").GetValue<Slider>().Value)
                         {
                             var healthSlot = GetPotionSlot(PotionType.Health);
 
@@ -168,7 +165,7 @@ namespace _xcsoft__ALL_IN_ONE.utility
 
                     if (Menu.Item("AutoPotion.Use Mana Potion").GetValue<bool>())
                     {
-                        if (xcsoftFunc.getManaPercent(ObjectManager.Player) <= Menu.Item("AutoPotion.ifManaPercent").GetValue<Slider>().Value)
+                        if (ALL_IN_ONE_Func.getManaPercent(ObjectManager.Player) <= Menu.Item("AutoPotion.ifManaPercent").GetValue<Slider>().Value)
                         {
                             var manaSlot = GetPotionSlot(PotionType.Mana);
 

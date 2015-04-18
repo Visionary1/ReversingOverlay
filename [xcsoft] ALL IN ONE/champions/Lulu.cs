@@ -12,7 +12,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
     class Lulu
     {
         
-        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
+        static Orbwalking.Orbwalker Orbwalker { get { return ALL_IN_ONE_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
@@ -29,35 +29,33 @@ namespace _xcsoft__ALL_IN_ONE.champions
             E.SetTargetted(0.25f, float.MaxValue);
             R.SetTargetted(0.25f, float.MaxValue);
 
-            xcsoftMenu.Combo.addUseQ();
-            xcsoftMenu.Combo.addUseW();
-            xcsoftMenu.Combo.addUseE();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseW();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseE();
 
-            xcsoftMenu.Harass.addUseQ();
-            xcsoftMenu.Harass.addUseE();
-            xcsoftMenu.Harass.addifMana();
+            ALL_IN_ONE_Menu.Champion.Harass.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Harass.addUseE();
+            ALL_IN_ONE_Menu.Champion.Harass.addIfMana();
 
-            xcsoftMenu.Lasthit.isEmpty();
+            ALL_IN_ONE_Menu.Champion.Laneclear.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Laneclear.addUseE();
+            ALL_IN_ONE_Menu.Champion.Laneclear.addIfMana();
 
-            xcsoftMenu.Laneclear.addUseQ();
-            xcsoftMenu.Laneclear.addUseE();
-            xcsoftMenu.Laneclear.addifMana();
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addUseE();
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addIfMana();
 
-            xcsoftMenu.Jungleclear.addUseQ();
-            xcsoftMenu.Jungleclear.addUseE();
-            xcsoftMenu.Jungleclear.addifMana();
+            ALL_IN_ONE_Menu.Champion.Misc.addHitchanceSelector();
+            ALL_IN_ONE_Menu.Champion.Misc.addUseKillsteal();
+            ALL_IN_ONE_Menu.Champion.Misc.addUseAntiGapcloser();
+            ALL_IN_ONE_Menu.Champion.Misc.addUseInterrupter();
 
-            xcsoftMenu.Misc.addHitchanceSelector();
-            xcsoftMenu.Misc.addUseKillsteal();
-            xcsoftMenu.Misc.addUseAntiGapcloser();
-            xcsoftMenu.Misc.addUseInterrupter();
+            ALL_IN_ONE_Menu.Champion.Drawings.addQRange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addQRange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addERange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addRRange();
 
-            xcsoftMenu.Drawings.addQrange();
-            xcsoftMenu.Drawings.addWrange();
-            xcsoftMenu.Drawings.addErange();
-            xcsoftMenu.Drawings.addRrange();
-
-            xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
+            ALL_IN_ONE_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -85,10 +83,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 }
             }
 
-            if (xcsoftMenu.Misc.UseKillsteal)
+            if (ALL_IN_ONE_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
 
-            Q.MinHitChance = xcsoftMenu.Misc.SelectedHitchance;
+            Q.MinHitChance = ALL_IN_ONE_Menu.Champion.Misc.SelectedHitchance;
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -96,10 +94,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = xcsoftMenu.Drawings.DrawQRange;
-            var drawW = xcsoftMenu.Drawings.DrawWRange;
-            var drawE = xcsoftMenu.Drawings.DrawERange;
-            var drawR = xcsoftMenu.Drawings.DrawRRange;
+            var drawQ = ALL_IN_ONE_Menu.Champion.Drawings.QRange;
+            var drawW = ALL_IN_ONE_Menu.Champion.Drawings.WRange;
+            var drawE = ALL_IN_ONE_Menu.Champion.Drawings.ERange;
+            var drawR = ALL_IN_ONE_Menu.Champion.Drawings.RRange;
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
@@ -116,7 +114,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!xcsoftMenu.Misc.UseAntiGapcloser || Player.IsDead)
+            if (!ALL_IN_ONE_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
             if (W.CanCast(gapcloser.Sender))
@@ -125,7 +123,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!xcsoftMenu.Misc.UseInterrupter || Player.IsDead)
+            if (!ALL_IN_ONE_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
                 return;
 
             if (W.CanCast(sender))
@@ -134,9 +132,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Combo()
         {
-            if (xcsoftMenu.Combo.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-                var faeritarget = HeroManager.Enemies.FirstOrDefault(x => xcsoftFunc.getBuffInstance(Player, "lulufaeriburn", Player) != null);
+                var faeritarget = HeroManager.Enemies.FirstOrDefault(x => ALL_IN_ONE_Func.getBuffInstance(Player, "lulufaeriburn", Player) != null);
 
                 if (faeritarget != null)
                 {
@@ -154,12 +152,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 }
             }
 
-            if (xcsoftMenu.Combo.UseW && W.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseW && W.IsReady())
             {
                 W.CastOnBestTarget();
             }
 
-            if (xcsoftMenu.Combo.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 E.CastOnBestTarget();
             }
@@ -167,12 +165,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Harass.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Harass.IfMana))
                 return;
 
-            if (xcsoftMenu.Harass.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-                var faeritarget = HeroManager.Enemies.FirstOrDefault(x => xcsoftFunc.getBuffInstance(Player, "lulufaeriburn", Player) != null);
+                var faeritarget = HeroManager.Enemies.FirstOrDefault(x => ALL_IN_ONE_Func.getBuffInstance(Player, "lulufaeriburn", Player) != null);
 
                 if (faeritarget != null)
                 {
@@ -190,7 +188,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 }
             }
 
-            if (xcsoftMenu.Harass.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Harass.UseE && E.IsReady())
             {
                 E.CastOnBestTarget();
             }
@@ -198,7 +196,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Laneclear.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Laneclear.IfMana))
                 return;
 
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -206,7 +204,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Minions.Count <= 0)
                 return;
 
-            if (xcsoftMenu.Laneclear.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
                 var qloc = Q.GetLineFarmLocation(Minions);
 
@@ -214,9 +212,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     Q.Cast(qloc.Position);
             }
 
-            if (xcsoftMenu.Laneclear.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
-                var eTarget = Minions.Where(x => x.IsValidTarget(E.Range) && xcsoftFunc.isKillable(x, E)).OrderByDescending(x => x.Health).FirstOrDefault();
+                var eTarget = Minions.Where(x => x.IsValidTarget(E.Range) && ALL_IN_ONE_Func.isKillable(x, E)).OrderByDescending(x => x.Health).FirstOrDefault();
 
                 if (eTarget != null)
                     E.Cast(eTarget);
@@ -225,7 +223,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Jungleclear.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Jungleclear.IfMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
@@ -233,13 +231,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Mobs.Count <= 0)
                 return;
 
-            if (xcsoftMenu.Jungleclear.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
                 if (Q.CanCast(Mobs.FirstOrDefault()))
                     Q.Cast(Mobs.FirstOrDefault());
             }
 
-            if (xcsoftMenu.Jungleclear.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Jungleclear.UseE && E.IsReady())
             {
                 if (E.CanCast(Mobs.FirstOrDefault()))
                     E.Cast(Mobs.FirstOrDefault());
@@ -250,10 +248,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (Q.CanCast(target) && xcsoftFunc.isKillable(target, Q))
+                if (Q.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, Q))
                     Q.Cast(target);
 
-                if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
+                if (E.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, E))
                     E.Cast(target);
             }
         }

@@ -10,8 +10,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class Talon //RL144
     {
-        static Menu Menu { get { return xcsoftMenu.Menu_Manual; } } //메뉴얼 오브워커 넣기는 했지만. 음.. 
-        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
+        static Menu Menu { get { return ALL_IN_ONE_Menu.MainMenu_Manual; } } //메뉴얼 오브워커 넣기는 했지만. 음.. 
+        static Orbwalking.Orbwalker Orbwalker { get { return ALL_IN_ONE_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Items.Item tiamatItem, hydraItem; //히드라 평캔을 위함
 
@@ -22,9 +22,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
 		static Items.Item s0, s1, s2, s3, s4;
         static float smrange = 700f;
 		
-        static float getQBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "TalonNoxianDiplomacyBuff"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static float getEBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "TalonDamageAmp"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static float getRBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "TalonDisappear"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getQBuffDuration { get { var buff = ALL_IN_ONE_Func.getBuffInstance(Player, "TalonNoxianDiplomacyBuff"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getEBuffDuration { get { var buff = ALL_IN_ONE_Func.getBuffInstance(Player, "TalonDamageAmp"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getRBuffDuration { get { var buff = ALL_IN_ONE_Func.getBuffInstance(Player, "TalonDisappear"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
         {
@@ -38,41 +38,39 @@ namespace _xcsoft__ALL_IN_ONE.champions
             hydraItem = new Items.Item((int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
             tiamatItem = new Items.Item((int)ItemId.Tiamat_Melee_Only, 250f);
 			
-            xcsoftMenu.Combo.addUseQ();
-            xcsoftMenu.Combo.addUseW();
-            xcsoftMenu.Combo.addUseE();
-            xcsoftMenu.Combo.addUseR();
-            xcsoftMenu.Combo.addItem("Use Hydra", true);
+            ALL_IN_ONE_Menu.Champion.Combo.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseW();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseE();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseR();
+            ALL_IN_ONE_Menu.Champion.Combo.addItem("Use Hydra", true);
 
-            xcsoftMenu.Harass.addUseW();
-            xcsoftMenu.Harass.addifMana();
+            ALL_IN_ONE_Menu.Champion.Harass.addUseW();
+            ALL_IN_ONE_Menu.Champion.Harass.addIfMana();
 
-            xcsoftMenu.Lasthit.isEmpty();
-
-            xcsoftMenu.Laneclear.addUseQ();
-            xcsoftMenu.Laneclear.addUseW();
-            xcsoftMenu.Laneclear.addUseE();
-            xcsoftMenu.Laneclear.addItem("Use Hydra", true);
-            xcsoftMenu.Laneclear.addifMana();
+            ALL_IN_ONE_Menu.Champion.Laneclear.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Laneclear.addUseW();
+            ALL_IN_ONE_Menu.Champion.Laneclear.addUseE();
+            ALL_IN_ONE_Menu.Champion.Laneclear.addItem("Use Hydra", true);
+            ALL_IN_ONE_Menu.Champion.Laneclear.addIfMana();
 
 
-            xcsoftMenu.Jungleclear.addUseQ();
-            xcsoftMenu.Jungleclear.addUseW();
-            xcsoftMenu.Jungleclear.addUseE();
-            xcsoftMenu.Jungleclear.addItem("Use Hydra", true);
-            xcsoftMenu.Jungleclear.addifMana();
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addUseW();
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addUseE();
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addItem("Use Hydra", true);
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addIfMana();
 
-            xcsoftMenu.Misc.addUseKillsteal();
-            //xcsoftMenu.Misc.addUseAntiGapcloser();
-            //xcsoftMenu.Misc.addUseInterrupter();
-            xcsoftMenu.Drawings.addWrange();
-            xcsoftMenu.Drawings.addErange();
-            xcsoftMenu.Drawings.addRrange();
-            xcsoftMenu.Drawings.addItem("Q Timer", new Circle(true, Color.LightGreen));
-            xcsoftMenu.Drawings.addItem("E Timer", new Circle(true, Color.LightGreen));
-            xcsoftMenu.Drawings.addItem("R Timer", new Circle(true, Color.LightGreen));
+            ALL_IN_ONE_Menu.Champion.Misc.addUseKillsteal();
+            //ALL_IN_ONE_Menu.Champion.Misc.addUseAntiGapcloser();
+            //ALL_IN_ONE_Menu.Champion.Misc.addUseInterrupter();
+            ALL_IN_ONE_Menu.Champion.Drawings.addQRange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addERange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addRRange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addItem("Q Timer", new Circle(true, Color.LightGreen));
+            ALL_IN_ONE_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.LightGreen));
+            ALL_IN_ONE_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.LightGreen));
 			
-			xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
+			ALL_IN_ONE_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -106,7 +104,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
 
             #region Killsteal
-            if (xcsoftMenu.Misc.UseKillsteal)
+            if (ALL_IN_ONE_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
             #endregion
 			
@@ -118,12 +116,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Player.IsDead)
                 return;
 
-            var drawW = xcsoftMenu.Drawings.DrawWRange;
-            var drawE = xcsoftMenu.Drawings.DrawERange;
-            var drawR = xcsoftMenu.Drawings.DrawRRange;
-			var drawQTimer = xcsoftMenu.Drawings.getCircleValue("Q Timer");
-			var drawETimer = xcsoftMenu.Drawings.getCircleValue("E Timer");
-			var drawRTimer = xcsoftMenu.Drawings.getCircleValue("R Timer");
+            var drawW = ALL_IN_ONE_Menu.Champion.Drawings.WRange;
+            var drawE = ALL_IN_ONE_Menu.Champion.Drawings.ERange;
+            var drawR = ALL_IN_ONE_Menu.Champion.Drawings.RRange;
+			var drawQTimer = ALL_IN_ONE_Menu.Champion.Drawings.getCircleValue("Q Timer");
+			var drawETimer = ALL_IN_ONE_Menu.Champion.Drawings.getCircleValue("E Timer");
+			var drawRTimer = ALL_IN_ONE_Menu.Champion.Drawings.getCircleValue("R Timer");
 
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
@@ -182,7 +180,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 		
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!xcsoftMenu.Misc.UseAntiGapcloser || Player.IsDead)
+            if (!ALL_IN_ONE_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
 
@@ -190,7 +188,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!xcsoftMenu.Misc.UseInterrupter || Player.IsDead)
+            if (!ALL_IN_ONE_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
                 return;
 
 
@@ -245,11 +243,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
 			
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if (xcsoftMenu.Combo.UseQ && Q.IsReady()
+                if (ALL_IN_ONE_Menu.Champion.Combo.UseQ && Q.IsReady()
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                     Q.Cast();
 				
-				if (xcsoftMenu.Combo.getBoolValue("Use Hydra")
+				if (ALL_IN_ONE_Menu.Champion.Combo.getBoolValue("Use Hydra")
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
 				{
 					if(tiamatItem.IsReady())
@@ -261,11 +259,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
 				
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (xcsoftMenu.Combo.UseQ && Q.IsReady()
+                if (ALL_IN_ONE_Menu.Champion.Combo.UseQ && Q.IsReady()
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                     Q.Cast();					
 				
-				if (xcsoftMenu.Combo.getBoolValue("Use Hydra")
+				if (ALL_IN_ONE_Menu.Champion.Combo.getBoolValue("Use Hydra")
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
 				{
 					if(tiamatItem.IsReady())
@@ -278,12 +276,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Combo()
         {
-            if (xcsoftMenu.Combo.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 E.CastOnBestTarget();
             }
 			
-            if (xcsoftMenu.Harass.UseW && W.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Harass.UseW && W.IsReady())
             {
                
                 var wTarget = TargetSelector.GetTarget(W.Range, W.DamageType, true);
@@ -293,7 +291,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     W.Cast(wTarget);       
             }
 
-            if (xcsoftMenu.Combo.UseR && R.IsReady()
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseR && R.IsReady()
 			&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
             {
                 R.Cast();
@@ -303,10 +301,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Harass.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Harass.IfMana))
                 return;
 				
-            if (xcsoftMenu.Harass.UseW && W.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Harass.UseW && W.IsReady())
             {
                
                 var wTarget = TargetSelector.GetTarget(W.Range, W.DamageType, true);
@@ -320,7 +318,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 		
         static void AALaneclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Laneclear.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Laneclear.IfMana))
                 return;
 
 				var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -328,10 +326,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
 				if (Minions.Count <= 0)
                 return;
 				
-                if (xcsoftMenu.Laneclear.UseQ && Q.IsReady())
+                if (ALL_IN_ONE_Menu.Champion.Laneclear.UseQ && Q.IsReady())
                     Q.Cast();
 					
-				if (xcsoftMenu.Laneclear.getBoolValue("Use Hydra"))
+				if (ALL_IN_ONE_Menu.Champion.Laneclear.getBoolValue("Use Hydra"))
 				{
 					if(tiamatItem.IsReady())
 						tiamatItem.Cast();
@@ -342,7 +340,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void AAJungleclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Jungleclear.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Jungleclear.IfMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
@@ -350,10 +348,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Mobs.Count <= 0)
                 return;
 				
-            if (xcsoftMenu.Jungleclear.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
                 Q.Cast();
 					
-			if (xcsoftMenu.Jungleclear.getBoolValue("Use Hydra"))
+			if (ALL_IN_ONE_Menu.Champion.Jungleclear.getBoolValue("Use Hydra"))
 			{
 			    if(tiamatItem.IsReady())
 			        tiamatItem.Cast();
@@ -365,7 +363,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Laneclear.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Laneclear.IfMana))
                 return;
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -374,16 +372,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 				
 				
-            if (xcsoftMenu.Laneclear.UseW && W.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Laneclear.UseW && W.IsReady())
                 W.Cast(Minions[0]);
 
-            if (xcsoftMenu.Laneclear.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Laneclear.UseE && E.IsReady())
                 E.Cast(Minions[0]);
         }
 
         static void Jungleclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Jungleclear.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Jungleclear.IfMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
@@ -391,10 +389,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Mobs.Count <= 0)
                 return;
 
-            if (xcsoftMenu.Jungleclear.UseW && W.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Jungleclear.UseW && W.IsReady())
                 W.Cast(Mobs[0]);
 
-            if (xcsoftMenu.Jungleclear.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Jungleclear.UseE && E.IsReady())
                 E.Cast(Mobs[0]);
         }
 
@@ -402,7 +400,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (W.CanCast(target) && xcsoftFunc.isKillable(target, W))
+                if (W.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, W))
                     W.Cast(target);
             }
         }

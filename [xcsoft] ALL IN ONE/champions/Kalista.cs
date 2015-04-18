@@ -11,8 +11,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class Kalista
     {
-        static Menu Menu { get { return xcsoftMenu.Menu_Manual; } }
-        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
+        static Menu Menu { get { return ALL_IN_ONE_Menu.MainMenu_Manual; } }
+        static Orbwalking.Orbwalker Orbwalker { get { return ALL_IN_ONE_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
@@ -26,35 +26,33 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             Q.SetSkillshot(0.25f, 40f, 1700f, true, SkillshotType.SkillshotLine);
 
-            Menu.SubMenu("Combo").AddItem(new MenuItem("comboUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("comboUseE", "Use E", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("comboUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("comboUseE", "Use E", true).SetValue(true));
 
-            Menu.SubMenu("Harass").AddItem(new MenuItem("harassUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(50, 0, 100)));
+            Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("harassUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(50, 0, 100)));
 
-            xcsoftMenu.Lasthit.isEmpty();
+            Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("laneclearUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("laneclearQnum", "Cast Q If Can Kill Minion Number >=", true).SetValue(new Slider(3, 1, 5)));
+            Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("laneclearUseE", "Use E", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("laneclearEnum", "Cast E If Can Kill Minion Number >=", true).SetValue(new Slider(2, 1, 5)));
+            Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("laneclearMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("laneclearUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("laneclearQnum", "Cast Q If Can Kill Minion Number >=", true).SetValue(new Slider(3, 1, 5)));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("laneclearUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("laneclearEnum", "Cast E If Can Kill Minion Number >=", true).SetValue(new Slider(2, 1, 5)));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("laneclearMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
+            Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("jungleclearUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("jungleclearUseE", "Use E", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("jungleclearMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
 
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("jungleclearUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("jungleclearUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("jungleclearMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
+            Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("killsteal", "Use Killsteal (With E)", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("mobsteal", "Use Mobsteal (With E)", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("lasthitassist", "Use Lasthit Assist (With E)", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("soulboundsaver", "Use Soulbound Saver (With R)", true).SetValue(true));
 
-            Menu.SubMenu("Misc").AddItem(new MenuItem("killsteal", "Use Killsteal (With E)", true).SetValue(true));
-            Menu.SubMenu("Misc").AddItem(new MenuItem("mobsteal", "Use Mobsteal (With E)", true).SetValue(true));
-            Menu.SubMenu("Misc").AddItem(new MenuItem("lasthitassist", "Use Lasthit Assist (With E)", true).SetValue(true));
-            Menu.SubMenu("Misc").AddItem(new MenuItem("soulboundsaver", "Use Soulbound Saver (With R)", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.FromArgb(0, 230, 255))));
+            Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawW", "W Range", true).SetValue(new Circle(false, Color.FromArgb(0, 230, 255))));
+            Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawE", "E Range", true).SetValue(new Circle(true, Color.FromArgb(0, 230, 255))));
+            Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(false, Color.FromArgb(0, 230, 255))));
 
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.FromArgb(0, 230, 255))));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawW", "W Range", true).SetValue(new Circle(false, Color.FromArgb(0, 230, 255))));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawE", "E Range", true).SetValue(new Circle(true, Color.FromArgb(0, 230, 255))));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(false, Color.FromArgb(0, 230, 255))));
-
-            xcsoftMenu.Drawings.addDamageIndicator(GetComboDamage);
+            ALL_IN_ONE_Menu.Champion.Drawings.addDamageIndicator(GetComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -123,7 +121,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Menu.Item("soulboundsaver", true).GetValue<bool>() && sender.Type == GameObjectType.obj_AI_Hero && sender.IsEnemy && R.IsReady())
             {
-                var soulbound = HeroManager.Allies.FirstOrDefault(hero => hero.HasBuff("kalistacoopstrikeally", true) && args.Target.NetworkId == hero.NetworkId && xcsoftFunc.getHealthPercent(hero) <= 20);
+                var soulbound = HeroManager.Allies.FirstOrDefault(hero => hero.HasBuff("kalistacoopstrikeally", true) && args.Target.NetworkId == hero.NetworkId && ALL_IN_ONE_Func.getHealthPercent(hero) <= 20);
 
                 if (soulbound != null)
                     R.Cast();
@@ -161,7 +159,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("harassUseQ", true).GetValue<bool>())
@@ -175,7 +173,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Laneclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -189,7 +187,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 {
                     var killcount = 0;
 
-                    foreach (var colminion in xcsoftFunc.getCollisionMinions(Player, Player.ServerPosition.Extend(minion.ServerPosition, Q.Range), Q.Delay, Q.Width, Q.Speed))
+                    foreach (var colminion in ALL_IN_ONE_Func.getCollisionMinions(Player, Player.ServerPosition.Extend(minion.ServerPosition, Q.Range), Q.Delay, Q.Width, Q.Speed))
                     {
                         if (colminion.Health <= Q.GetDamage(colminion))
                             killcount++;
@@ -218,7 +216,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(Player.ServerPosition, Orbwalking.GetRealAutoAttackRange(Player) + 100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

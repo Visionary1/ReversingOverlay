@@ -7,7 +7,7 @@ using LeagueSharp.Common;
 
 namespace _xcsoft__ALL_IN_ONE
 {
-    class xcsoftFunc
+    class ALL_IN_ONE_Func
     {
         internal static float getHealthPercent(Obj_AI_Base unit)
         {

@@ -11,8 +11,8 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class Fiora
     {
-        static Menu Menu { get { return xcsoftMenu.Menu_Manual; } }
-        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
+        static Menu Menu { get { return ALL_IN_ONE_Menu.MainMenu_Manual; } }
+        static Orbwalking.Orbwalker Orbwalker { get { return ALL_IN_ONE_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Items.Item tiamatItem, hydraItem;
 
@@ -26,9 +26,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
 		static Items.Item s0, s1, s2, s3, s4; //RS
         static float smrange = 700f; //RS
 		
-        static float getQBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "fioraqcd"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static float getWBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "FioraRiposte"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static float getEBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "FioraFlurry"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getQBuffDuration { get { var buff = ALL_IN_ONE_Func.getBuffInstance(Player, "fioraqcd"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getWBuffDuration { get { var buff = ALL_IN_ONE_Func.getBuffInstance(Player, "FioraRiposte"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getEBuffDuration { get { var buff = ALL_IN_ONE_Func.getBuffInstance(Player, "FioraFlurry"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
         {
@@ -42,39 +42,37 @@ namespace _xcsoft__ALL_IN_ONE.champions
             hydraItem = new Items.Item((int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
             tiamatItem = new Items.Item((int)ItemId.Tiamat_Melee_Only, 250f);
 
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQD", "Q Distance", true).SetValue(new Slider(150, 0, 600)));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseH", "Use Hydra", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseQD", "Q Distance", true).SetValue(new Slider(150, 0, 600)));
+            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseH", "Use Hydra", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
 
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseH", "Use Hydra", true).SetValue(true));
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
+            Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsUseE", "Use E", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsUseH", "Use Hydra", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
-            xcsoftMenu.Lasthit.isEmpty();
+            Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("LcUseE", "Use E", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("LcUseH", "Use Hydra", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
+
+            Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcUseW", "Use W", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcUseE", "Use E", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcUseH", "Use Hydra", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
+
+            Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("credit", "RL144", true));
 			
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseH", "Use Hydra", true).SetValue(true));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
+            Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.Red)));
+            Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(true, Color.Blue)));
+            Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawQTimer", "Q Timer", true).SetValue(new Circle(true, Color.LightGreen)));
+            Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawWTimer", "W Timer", true).SetValue(new Circle(true, Color.Black)));
+            Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawETimer", "E Timer", true).SetValue(new Circle(true, Color.Red)));
 
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseW", "Use W", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseH", "Use Hydra", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
-
-            Menu.SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
-            Menu.SubMenu("Misc").AddItem(new MenuItem("credit", "RL144", true).SetValue(true));
-			
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.Red)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(true, Color.Blue)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawQTimer", "Q Timer", true).SetValue(new Circle(true, Color.LightGreen)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawWTimer", "W Timer", true).SetValue(new Circle(true, Color.Black)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawETimer", "E Timer", true).SetValue(new Circle(true, Color.Red)));
-
-			xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
+			ALL_IN_ONE_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -295,14 +293,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
                 return;
 
         }
 
         static void AALaneclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
 				var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -326,7 +324,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void AAJungleclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
@@ -351,7 +349,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 		
         static void Laneclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -360,7 +358,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Jungleclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
@@ -381,9 +379,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (Q.CanCast(target) && xcsoftFunc.isKillable(target, Q))
+                if (Q.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, Q))
                     Q.Cast(target);
-                if (Menu.Item("CbUseR", true).GetValue<bool>() && R.CanCast(target) && xcsoftFunc.isKillable(target, R))
+                if (Menu.Item("CbUseR", true).GetValue<bool>() && R.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, R))
                     R.Cast(target);
             }
         }

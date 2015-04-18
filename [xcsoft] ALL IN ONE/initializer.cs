@@ -11,42 +11,30 @@ namespace _xcsoft__ALL_IN_ONE
     {
         internal static void initialize()
         {
-            xcsoftMenu.initialize("[xcsoft] AIO: Champion");
+            ALL_IN_ONE_Menu.initialize();
 
-            if (!champLoader.champSupportedCheck("[xcsoft] ALL IN ONE: ", "_xcsoft__ALL_IN_ONE.champions."))
+            if (!ALL_IN_ONE_ChampLoader.champSupportedCheck("ALL IN ONE: ", "_xcsoft__ALL_IN_ONE.champions."))
                 return;
 
-            xcsoftMenu.addOrbwalker(ObjectManager.Player.ChampionName);
-            xcsoftMenu.addTargetSelector(ObjectManager.Player.ChampionName);
+            ALL_IN_ONE_Menu.Champion.addOrbwalker();
+            ALL_IN_ONE_Menu.Champion.addTargetSelector();
 
-            xcsoftMenu.addSubMenu("Infomation");
-            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.1", "만든 사람들"));
-            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.2", ""));
-            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.3", "xcsoft"));
-            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.4", "fakker"));
-            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.5", "GBKTV"));
-            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.6", "rl224"));
-            xcsoftMenu.Menu_Manual.AddItem(new MenuItem("Infomation.6", "Coreboard"));
+            ALL_IN_ONE_ChampLoader.Load(ObjectManager.Player.ChampionName);
 
-            xcsoftMenu.addSubMenu_ChampTemplate(ObjectManager.Player.ChampionName);
+            ALL_IN_ONE_Menu.MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("BLANK", string.Empty));
+            ALL_IN_ONE_Menu.MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));
 
-            champLoader.Load(ObjectManager.Player.ChampionName);
-
-            xcsoftMenu.Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("BLANK0", string.Empty));
-            xcsoftMenu.Menu_Manual.SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));
-
-            xcsoftMenu.Drawings.addItems(new object[][] { new object[] 
-            { "Auto-Attack Real Range", new Circle(true, Color.Silver)},        new object[] 
-            { "Auto-Attack Target",     new Circle(true, Color.Red)},           new object[] 
-            { "Minion Last Hit",        new Circle(true, Color.GreenYellow)},   new object[] 
-            { "Minion Near Kill",       new Circle(true, Color.Gray)},          new object[] 
-            { "Jungle Position",        true                                    }}, false);
+            ALL_IN_ONE_Menu.Champion.Drawings.addItem("Auto-Attack Real Range", new Circle(true, Color.Silver), false);
+            ALL_IN_ONE_Menu.Champion.Drawings.addItem("Auto-Attack Target", new Circle(true, Color.Red), false);
+            ALL_IN_ONE_Menu.Champion.Drawings.addItem("Minion Last Hit", new Circle(true, Color.GreenYellow), false);
+            ALL_IN_ONE_Menu.Champion.Drawings.addItem("Minion Near Kill", new Circle(true, Color.Gray), false);
+            ALL_IN_ONE_Menu.Champion.Drawings.addItem("Jungle Position", true, false);
 
             utility.Activator.Load();
 
             Drawing.OnDraw += Drawing_OnDraw;
 
-            Game.PrintChat(xcsoftFunc.colorChat(Color.LightSkyBlue, "[xcsoft] All In One: ") + xcsoftFunc.colorChat(Color.Red, ObjectManager.Player.ChampionName) + " Loaded");
+            Game.PrintChat(ALL_IN_ONE_Func.colorChat(Color.DeepSkyBlue, "[xcsoft] All In One: ") + ALL_IN_ONE_Func.colorChat(Color.DeepPink, ObjectManager.Player.ChampionName) + " Loaded");
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -54,8 +42,8 @@ namespace _xcsoft__ALL_IN_ONE
             if (ObjectManager.Player.IsDead)
                 return;
 
-            var drawMinionLastHit = xcsoftMenu.Drawings.getCircleValue("Minion Last Hit", false);
-            var drawMinionNearKill = xcsoftMenu.Drawings.getCircleValue("Minion Near Kill", false);
+            var drawMinionLastHit = ALL_IN_ONE_Menu.Champion.Drawings.getCircleValue("Minion Last Hit", false);
+            var drawMinionNearKill = ALL_IN_ONE_Menu.Champion.Drawings.getCircleValue("Minion Near Kill", false);
 
             if (drawMinionLastHit.Active || drawMinionNearKill.Active)
             {
@@ -69,7 +57,7 @@ namespace _xcsoft__ALL_IN_ONE
                 }
             }
 
-            if (Game.MapId == (GameMapId)11 && xcsoftMenu.Drawings.getBoolValue("Jungle Position", false))
+            if (Game.MapId == (GameMapId)11 && ALL_IN_ONE_Menu.Champion.Drawings.getBoolValue("Jungle Position", false))
             {
                 const byte circleRadius = 100;
 
@@ -88,15 +76,15 @@ namespace _xcsoft__ALL_IN_ONE
                 Render.Circle.DrawCircle(new SharpDX.Vector3(7001.741f, 9915.717f, 54.02466f), circleRadius, Color.Red, 5); // red team: wariaths                    
             }
 
-            var drawAA = xcsoftMenu.Drawings.getCircleValue("Auto-Attack Real Range", false);
-            var drawTarget = xcsoftMenu.Drawings.getCircleValue("Auto-Attack Target", false);
+            var drawAA = ALL_IN_ONE_Menu.Champion.Drawings.getCircleValue("Auto-Attack Real Range", false);
+            var drawTarget = ALL_IN_ONE_Menu.Champion.Drawings.getCircleValue("Auto-Attack Target", false);
 
             if (drawAA.Active)
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player), drawAA.Color);
 
             if (drawTarget.Active)
             {
-                var aaTarget = xcsoftMenu.Orbwalker.GetTarget();
+                var aaTarget = ALL_IN_ONE_Menu.Orbwalker.GetTarget();
 
                 if (aaTarget != null)
                     Render.Circle.DrawCircle(aaTarget.Position, aaTarget.BoundingRadius + 15, drawTarget.Color, 6);

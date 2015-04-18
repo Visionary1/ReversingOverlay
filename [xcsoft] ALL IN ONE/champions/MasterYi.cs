@@ -11,16 +11,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class MasterYi
     {
-        static Menu Menu { get { return xcsoftMenu.Menu_Manual; } }
-        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
+        static Menu Menu { get { return ALL_IN_ONE_Menu.MainMenu_Manual; } }
+        static Orbwalking.Orbwalker Orbwalker { get { return ALL_IN_ONE_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 		
         static Spell Q, W, E, R;
 
         static void Wcancel() { Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
 
-        static float getPBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "doublestrike"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static float getRBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "Highlander"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getPBuffDuration { get { var buff = ALL_IN_ONE_Func.getBuffInstance(Player, "doublestrike"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getRBuffDuration { get { var buff = ALL_IN_ONE_Func.getBuffInstance(Player, "Highlander"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
         {
@@ -31,30 +31,28 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             Q.SetTargetted(0.25f, float.MaxValue);
 
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W (Auto-Attack Reset)", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W (Auto-Attack Reset)", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
 
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
+            Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
-            xcsoftMenu.Lasthit.isEmpty();
+            Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
+            Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcUseE", "Use E", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
 
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
+            Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
 
-            Menu.SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
+            ALL_IN_ONE_Menu.Champion.Drawings.addQRange();
+            Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawRTimer", "R Timer", true).SetValue(new Circle(true, Color.LightGreen)));
+            Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawPTimer", "P Timer", true).SetValue(new Circle(true, Color.LightGreen)));
 
-            xcsoftMenu.Drawings.addQrange();
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawRTimer", "R Timer", true).SetValue(new Circle(true, Color.LightGreen)));
-            Menu.SubMenu("Drawings").AddItem(new MenuItem("drawPTimer", "P Timer", true).SetValue(new Circle(true, Color.LightGreen)));
-
-			xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
+			ALL_IN_ONE_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -95,7 +93,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = xcsoftMenu.Drawings.DrawQRange;
+            var drawQ = ALL_IN_ONE_Menu.Champion.Drawings.QRange;
             var drawRTimer = Menu.Item("drawRTimer", true).GetValue<Circle>();
             var drawPTimer = Menu.Item("drawPTimer", true).GetValue<Circle>();
 
@@ -160,7 +158,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Combo()
         {
-            if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())
+            if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady() && !Player.IsWindingUp)
                 Q.CastOnBestTarget();
 
             if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
@@ -169,16 +167,16 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
                 return;
 
-            if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
+            if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady() && !Player.IsWindingUp)
                 Q.CastOnBestTarget();
         }
 
         static void Laneclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -186,13 +184,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Minions.Count <= 0)
                 return;
 
-            if (Menu.Item("LcUseQ", true).GetValue<bool>() && Q.IsReady())
+            if (Menu.Item("LcUseQ", true).GetValue<bool>() && Q.IsReady() && !Player.IsWindingUp)
                 Q.Cast(Minions.FirstOrDefault());
         }
 
         static void Jungleclear()
         {
-            if (!(xcsoftFunc.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
@@ -200,7 +198,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Mobs.Count <= 0)
                 return;
 
-            if (Menu.Item("JcUseQ", true).GetValue<bool>() && Q.IsReady())
+            if (Menu.Item("JcUseQ", true).GetValue<bool>() && Q.IsReady() && !Player.IsWindingUp)
                 Q.Cast(Mobs.FirstOrDefault());
 
             if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady() && Mobs.Any(x => Orbwalking.InAutoAttackRange(x)))
@@ -211,7 +209,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (Q.CanCast(target) && xcsoftFunc.isKillable(target, Q))
+                if (Q.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, Q))
                     Q.Cast(target);
             }
         }
@@ -220,35 +218,35 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             float damage = 0;
 
-		if (Q.IsReady())
-                	damage += Q.GetDamage(enemy);
+		    if (Q.IsReady())
+                damage += Q.GetDamage(enemy);
 				
-		if (E.IsReady())
-                	damage += E.GetDamage(enemy);
+		    if (E.IsReady())
+                damage += E.GetDamage(enemy);
 				
-		if (getPBuffDuration > 0)
-                	damage += (float)Player.GetAutoAttackDamage(enemy, true) / 2;
+		    if (getPBuffDuration > 0)
+                damage += (float)Player.GetAutoAttackDamage(enemy, false) / 2;
 				
-		if (W.IsReady())
-                	damage += (float)Player.GetAutoAttackDamage(enemy, true);
+		    if (W.IsReady())
+                damage += (float)Player.GetAutoAttackDamage(enemy, false);
 				
-		if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
-		{
-			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
-			damage += (float)Player.GetAutoAttackDamage(enemy, true);
-		}
+		    if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
+		    {
+			    damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
+			    damage += (float)Player.GetAutoAttackDamage(enemy, false);
+		    }
 		
-		if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
-		{
-			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
-			damage += (float)Player.GetAutoAttackDamage(enemy, true);
-		}
+		    if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
+		    {
+			    damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
+			    damage += (float)Player.GetAutoAttackDamage(enemy, false);
+		    }
 
-		if(!Player.IsWindingUp)
-			damage += (float)Player.GetAutoAttackDamage(enemy, true);
+		    if(!Player.IsWindingUp)
+			    damage += (float)Player.GetAutoAttackDamage(enemy, true);
 				
-            return damage;
-        }
+                return damage;
+            }
     }
 }
 

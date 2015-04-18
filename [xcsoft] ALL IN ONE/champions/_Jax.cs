@@ -11,7 +11,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class _Jax
     {
-        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }//메뉴에있는 오브워커(xcsoftMenu.Orbwalker)를 쓰기편하게 오브젝트명 Orbwalker로 단축한것.
+        static Orbwalking.Orbwalker Orbwalker { get { return ALL_IN_ONE_Menu.Orbwalker; } }//메뉴에있는 오브워커(ALL_IN_ONE_Menu.Orbwalker)를 쓰기편하게 오브젝트명 Orbwalker로 단축한것.
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }//Player오브젝트 = 말그대로 플레이어 챔피언입니다. 이 오브젝트로 챔피언을 움직인다던지 스킬을 쓴다던지 다 됩니다.
 
         //**********************************************************
@@ -36,33 +36,33 @@ namespace _xcsoft__ALL_IN_ONE.champions
             //Q가 스킬샷(투사체)인경우 설정하는 예제
             //스킬시전전 딜레이, 스킬샷범위(두께), 투사체속도, 미니언에 막히는가안막히는가(막히면 true,안막히면 false)
 
-            //메뉴에 아이템추가. xcsoftMenu 클래스로 간편하게 만들어놨음 아래처럼 필요한 옵션만 추가하면 되고, 문제있으면 저한테 물어보세요.
+            //메뉴에 아이템추가. ALL_IN_ONE_Menu 클래스로 간편하게 만들어놨음 아래처럼 필요한 옵션만 추가하면 되고, 문제있으면 저한테 물어보세요.
 
             //메인메뉴.서브메뉴.메소드 혹은 함수명();
 
-            xcsoftMenu.Combo.addUseQ();//Combo서브메뉴에 Use Q 옵션 추가
-            xcsoftMenu.Combo.addUseW();
-            xcsoftMenu.Combo.addUseE();
-            xcsoftMenu.Combo.addUseR();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseQ();//Combo서브메뉴에 Use Q 옵션 추가
+            ALL_IN_ONE_Menu.Champion.Combo.addUseW();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseE();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseR();
 
-            xcsoftMenu.Harass.addUseQ();//Harass서브메뉴에 Use Q 옵션 추가
-            xcsoftMenu.Harass.addUseW();
-            xcsoftMenu.Harass.addUseE();
+            ALL_IN_ONE_Menu.Champion.Harass.addUseQ();//Harass서브메뉴에 Use Q 옵션 추가
+            ALL_IN_ONE_Menu.Champion.Harass.addUseW();
+            ALL_IN_ONE_Menu.Champion.Harass.addUseE();
 
-            xcsoftMenu.Laneclear.addUseW();//Laneclear서브메뉴에 Use W 옵션 추가
-            xcsoftMenu.Laneclear.addUseE();
+            ALL_IN_ONE_Menu.Champion.Laneclear.addUseW();//Laneclear서브메뉴에 Use W 옵션 추가
+            ALL_IN_ONE_Menu.Champion.Laneclear.addUseE();
 
-            xcsoftMenu.Jungleclear.addUseQ();//Jungleclear서브메뉴에 Use Q 옵션 추가
-            xcsoftMenu.Jungleclear.addUseW();
-            xcsoftMenu.Jungleclear.addUseE();
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addUseQ();//Jungleclear서브메뉴에 Use Q 옵션 추가
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addUseW();
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addUseE();
 
-            xcsoftMenu.Misc.addUseKillsteal();//Misc서브메뉴에 Use Killsteal 옵션 추가
-            xcsoftMenu.Misc.addUseInterrupter();//Misc서브메뉴에 Use Interrupter 옵션 추가.
+            ALL_IN_ONE_Menu.Champion.Misc.addUseKillsteal();//Misc서브메뉴에 Use Killsteal 옵션 추가
+            ALL_IN_ONE_Menu.Champion.Misc.addUseInterrupter();//Misc서브메뉴에 Use Interrupter 옵션 추가.
 
-            xcsoftMenu.Drawings.addQrange();//Drawings서브메뉴에 Q Range 옵션추가.
+            ALL_IN_ONE_Menu.Champion.Drawings.addQRange();//Drawings서브메뉴에 Q Range 옵션추가.
 
             // Drawings 서브메뉴에 데미지표시기 추가하는 메소드.
-            xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
+            ALL_IN_ONE_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             //이벤트들 추가.
             Game.OnUpdate += Game_OnUpdate;
@@ -96,7 +96,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
 
             //메인메뉴->Misc서브메뉴에서 Use Killsteal 옵션이 On인경우 킬스틸 함수 호출.
-            if (xcsoftMenu.Misc.UseKillsteal)
+            if (ALL_IN_ONE_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
         }
 
@@ -110,7 +110,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             //Drawings 설정 정보를 변수에 불러오는겁니다.
             //사용하지 않는 옵션은 지우세요 인게임에서 오류납니다.
-            var drawQ = xcsoftMenu.Drawings.DrawQRange;
+            var drawQ = ALL_IN_ONE_Menu.Champion.Drawings.QRange;
 
             //Q스펠이 준비상태(쿨타임아닌상태)이고 Q Range옵션이 On 이면 Q사거리를 플레이어 챔피언위치에다가 그리는겁니다. 이하동문
             if (Q.IsReady() && drawQ.Active)
@@ -121,7 +121,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             //안티갭클로저 이벤트. 적챔피언이 달라붙는 스킬을 사용할때마다 발동합니다.
 
             //misc서브메뉴에 Use Anti-Gapcloser옵션이 On이 아니거나, 플레이어가 죽은상태면 리턴
-            if (!xcsoftMenu.Misc.UseAntiGapcloser || Player.IsDead)
+            if (!ALL_IN_ONE_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
             //Q스펠을 gapcloser.Sender(달라붙는스킬을 시전한 챔피언)에게 사용할 수 있으면 E스펠을 gapcloser.Sender에게 시전.
@@ -134,7 +134,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             //인터럽터 이벤트. 카타리나R 피들스틱W 이런 채널링스킬들이 발동할때 이부분이 실행됩니다.
 
             //Misc서브메뉴에 Use Interrupter옵션이 On이 아니거나, 플레이어가 죽은상태이면 리턴
-            if (!xcsoftMenu.Misc.UseInterrupter || Player.IsDead)
+            if (!ALL_IN_ONE_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
                 return;
 
             //E스펠을 sender(채널링스킬을 시전한 챔피언)에게 사용할 수 있으면 E스펠을 sender에게 시전.
@@ -145,7 +145,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Combo()
         {
             //콤보모드. 인게임에서 스페이스바키를 누르면 아래코드가 실행되는겁니다.
-            if (xcsoftMenu.Combo.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
                 //타겟셀렉터를 이용해서 Q 사거리내에서 최적의 타겟을 구합니다. 
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
@@ -157,23 +157,23 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             }
 
-            if (xcsoftMenu.Combo.UseW && W.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseW && W.IsReady())
             { }
 
-            if (xcsoftMenu.Combo.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseE && E.IsReady())
             { }
 
-            if (xcsoftMenu.Combo.UseR && R.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseR && R.IsReady())
             { }
         }
 
         static void Harass()
         {
             //하래스모드. 인게임에서 C키를 누르면 아래코드가 실행되는겁니다.
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Harass.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Harass.IfMana))
                 return;
 
-            if (xcsoftMenu.Harass.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
                 //타겟셀렉터를 이용해서 Q 사거리내에서 최적의 타겟을 구합니다. 
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
@@ -185,17 +185,17 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             }
 
-            if (xcsoftMenu.Harass.UseW && W.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Harass.UseW && W.IsReady())
             { }
 
-            if (xcsoftMenu.Harass.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Harass.UseE && E.IsReady())
             { }
         }
 
         static void Laneclear()
         {
             //래인클리어모드. 인게임에서 V키를 누르면 아래코드가 실행되는겁니다.
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Laneclear.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Laneclear.IfMana))
                 return;
 
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -203,17 +203,17 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Minions.Count <= 0)
                 return;
 
-            if (xcsoftMenu.Laneclear.UseW && W.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Laneclear.UseW && W.IsReady())
             { }
 
-            if (xcsoftMenu.Laneclear.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Laneclear.UseE && E.IsReady())
             { }
         }
 
         static void Jungleclear()
         {
             //정글클리어모드. 인게임에서 V키를 누르면 아래코드가 실행되는겁니다.
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Jungleclear.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Jungleclear.IfMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
@@ -221,19 +221,19 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Mobs.Count <= 0)
                 return;
 
-            if (xcsoftMenu.Jungleclear.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
                 if (Q.CanCast(Mobs.FirstOrDefault()))
                     Q.Cast(Mobs.FirstOrDefault());
             }
 
-            if (xcsoftMenu.Jungleclear.UseW && W.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Jungleclear.UseW && W.IsReady())
             {
                 if (W.CanCast(Mobs.FirstOrDefault()))
                     W.Cast(Mobs.FirstOrDefault());
             }
 
-            if (xcsoftMenu.Jungleclear.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Jungleclear.UseE && E.IsReady())
             {
                 if (E.CanCast(Mobs.FirstOrDefault()))
                     E.Cast(Mobs.FirstOrDefault());
@@ -248,7 +248,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 //데미지가 있고 적챔프에게 시전할 수 있는 스펠만 남겨두고 지우세요. 인게임에서 오류납니다.
 
                 //Q스펠을 target한테 사용할 수 있고 target이 Q데미지를 입으면 죽는 체력일 경우 Q스펠 target에게 시전. 이하동문
-                if (Q.CanCast(target) && xcsoftFunc.isKillable(target, Q))
+                if (Q.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, Q))
                     Q.Cast(target);
             }
         }

@@ -11,14 +11,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class Vladimir
     {
-        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
+        static Orbwalking.Orbwalker Orbwalker { get { return ALL_IN_ONE_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
 
-        static int getEBuffStacks { get { var buff = xcsoftFunc.getBuffInstance(Player, "vladimirtidesofbloodcost"); return buff != null ? buff.Count : 0; } }
-        static float getEBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "vladimirtidesofbloodcost"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static float getWBuffDuration { get { var buff = xcsoftFunc.getBuffInstance(Player, "VladimirSanguinePool"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static int getEBuffStacks { get { var buff = ALL_IN_ONE_Func.getBuffInstance(Player, "vladimirtidesofbloodcost"); return buff != null ? buff.Count : 0; } }
+        static float getEBuffDuration { get { var buff = ALL_IN_ONE_Func.getBuffInstance(Player, "vladimirtidesofbloodcost"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getWBuffDuration { get { var buff = ALL_IN_ONE_Func.getBuffInstance(Player, "VladimirSanguinePool"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
         {
@@ -30,39 +30,31 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Q.SetTargetted(0.25f, float.MaxValue);
             R.SetSkillshot(0.389f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
-            xcsoftMenu.Combo.addItems(new object[][] { new object[] 
-            { "Use Q", true },                                      new object[] 
-            { "Use W", false },                                     new object[] 
-            { "Use E", true },                                      new object[] 
-            { "Use R", true }                                       });
+            ALL_IN_ONE_Menu.Champion.Combo.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseW(false);
+            ALL_IN_ONE_Menu.Champion.Combo.addUseE();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseR();
 
-            xcsoftMenu.Harass.addItems(new object[][] { new object[] 
-            { "Use Q", true },                                      new object[] 
-            { "Use E", true }                                       }, false);
+            ALL_IN_ONE_Menu.Champion.Harass.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Harass.addUseE();
 
-            xcsoftMenu.Lasthit.isEmpty();
+            ALL_IN_ONE_Menu.Champion.Laneclear.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Laneclear.addUseE();
 
-            xcsoftMenu.Laneclear.addItems(new object[][] { new object[] 
-            { "Use Q", true},                                       new object[] 
-            { "Use E", true}                                        }, false);
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addUseE();
 
-            xcsoftMenu.Jungleclear.addItems(new object[][] { new object[] 
-            { "Use Q", true },                                      new object[] 
-            { "Use E", true }                                       }, false);
+             ALL_IN_ONE_Menu.Champion.Misc.addUseKillsteal();
+             ALL_IN_ONE_Menu.Champion.Misc.addUseAntiGapcloser();
+             ALL_IN_ONE_Menu.Champion.Misc.addItem("Auto-E For Keep Statcks", true);
 
-            xcsoftMenu.Misc.addItems(new object[][] { new object[] 
-            { "Use Killsteal" ,true},                               new object[] 
-            { "Use Anti-Gapcloser", true },                         new object[] 
-            { "Auto-E For Keep Stacks", true}                       });
+            ALL_IN_ONE_Menu.Champion.Drawings.addQRange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addWRange(false);
+            ALL_IN_ONE_Menu.Champion.Drawings.addERange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addRRange(false);
+            ALL_IN_ONE_Menu.Champion.Drawings.addItem("W TImer", new Circle(true, Color.GreenYellow));
 
-            xcsoftMenu.Drawings.addItems(new object[][] { new object[] 
-            { "Q Range", new Circle(true, Color.GreenYellow) },     new object[] 
-            { "W Range", new Circle(false, Color.GreenYellow) },    new object[] 
-            { "E Range", new Circle(true, Color.GreenYellow) },     new object[] 
-            { "R Range", new Circle(false, Color.GreenYellow) },    new object[] 
-            { "W Timer", new Circle(false, Color.GreenYellow) }     });
-
-            xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
+            ALL_IN_ONE_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -93,12 +85,12 @@ namespace _xcsoft__ALL_IN_ONE.champions
             Orbwalker.SetAttack(Player.IsTargetable);
 
             #region Killsteal
-            if (xcsoftMenu.Misc.UseKillsteal)
+            if (ALL_IN_ONE_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
             #endregion
 
             #region AutoE
-            if (xcsoftMenu.Misc.getBoolValue("Auto-E For Keep Stacks") && !Player.IsRecalling())
+            if (ALL_IN_ONE_Menu.Champion.Misc.getBoolValue("Auto-E For Keep Stacks") && !Player.IsRecalling())
                 AutoE(); 
             #endregion
         }
@@ -108,11 +100,11 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = xcsoftMenu.Drawings.DrawQRange;
-            var drawW = xcsoftMenu.Drawings.DrawQRange;
-            var drawE = xcsoftMenu.Drawings.DrawQRange;
-            var drawR = xcsoftMenu.Drawings.DrawQRange;
-            var drawWTimer = xcsoftMenu.Drawings.getCircleValue("W Timer");
+            var drawQ = ALL_IN_ONE_Menu.Champion.Drawings.QRange;
+            var drawW = ALL_IN_ONE_Menu.Champion.Drawings.WRange;
+            var drawE = ALL_IN_ONE_Menu.Champion.Drawings.ERange;
+            var drawR = ALL_IN_ONE_Menu.Champion.Drawings.RRange;
+            var drawWTimer = ALL_IN_ONE_Menu.Champion.Drawings.getCircleValue("W Timer");
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
@@ -135,7 +127,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!xcsoftMenu.Misc.UseAntiGapcloser || Player.IsDead)
+            if (!ALL_IN_ONE_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
             if (W.IsReady() && Player.Distance(gapcloser.End, false) <= W.Range)
@@ -144,22 +136,22 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Combo()
         {
-            if (xcsoftMenu.Combo.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseQ && Q.IsReady())
                 Q.CastOnBestTarget();
 
-            if (xcsoftMenu.Combo.UseW && W.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseW && W.IsReady())
             {
-                if (xcsoftFunc.anyoneValidInRange(W.Range))
+                if (ALL_IN_ONE_Func.anyoneValidInRange(W.Range))
                     W.Cast();
             }
 
-            if (xcsoftMenu.Combo.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseE && E.IsReady())
             {
-                if (xcsoftFunc.anyoneValidInRange(E.Range))
+                if (ALL_IN_ONE_Func.anyoneValidInRange(E.Range))
                     E.Cast();
             }
 
-            if (xcsoftMenu.Combo.UseR && R.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var rTarget = HeroManager.Enemies.FirstOrDefault(x=> R.GetPrediction(x, true).Hitchance >= HitChance.High);
 
@@ -170,14 +162,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
         static void Harass()
         {
-            if (xcsoftMenu.Harass.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Harass.UseQ && Q.IsReady())
             { 
                 Q.CastOnBestTarget(); 
             }
 
-            if (xcsoftMenu.Harass.UseQ && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Harass.UseQ && E.IsReady())
             {
-                if (xcsoftFunc.anyoneValidInRange(E.Range))
+                if (ALL_IN_ONE_Func.anyoneValidInRange(E.Range))
                     E.Cast(); 
             }
         }
@@ -189,7 +181,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Minions.Count <= 0)
                 return;
 
-            if (xcsoftMenu.Laneclear.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
                 var qTarget = Minions.Where(x => x.IsValidTarget(Q.Range) && Q.IsKillable(x)).OrderByDescending(x=>x.Health).FirstOrDefault();
 
@@ -197,7 +189,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     Q.Cast(qTarget);
             }
 
-            if (xcsoftMenu.Laneclear.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
                 if (Minions.Any(x => x.IsValidTarget(E.Range)))
                     E.Cast();
@@ -211,7 +203,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Mobs.Count <= 0)
                 return;
 
-            if (xcsoftMenu.Jungleclear.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
                 var qTarget = Mobs.FirstOrDefault(x => x.IsValidTarget(Q.Range));
 
@@ -219,7 +211,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     Q.Cast(qTarget);
             }
 
-            if (xcsoftMenu.Jungleclear.UseE && E.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Jungleclear.UseE && E.IsReady())
             {
                 if (Mobs.Any(x => x.IsValidTarget(E.Range)))
                     E.Cast();
@@ -230,13 +222,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (Q.CanCast(target) && xcsoftFunc.isKillable(target, Q))
+                if (Q.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, Q))
                     Q.Cast(target);
 
-                if (E.CanCast(target) && xcsoftFunc.isKillable(target, E))
+                if (E.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, E))
                     E.Cast(target);
 
-                if (R.CanCast(target) && xcsoftFunc.isKillable(target, R))
+                if (R.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, R))
                     R.Cast(target, false, true);
             }
         }
@@ -249,7 +241,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (getEBuffStacks < 4)
                 E.Cast();
 
-            if (getEBuffStacks == 4 && getEBuffDuration <= 1f)
+            if (getEBuffStacks == 4 && getEBuffDuration <= 0.5f)
                 E.Cast();
         }
 

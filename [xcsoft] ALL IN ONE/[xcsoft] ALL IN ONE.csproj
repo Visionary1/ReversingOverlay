@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ALL IN ONE Menu.cs" />
     <Compile Include="champions\_Aatrox.cs" />
     <Compile Include="champions\_Akali.cs" />
     <Compile Include="champions\_Alistar.cs" />
@@ -196,10 +197,9 @@
     <Compile Include="champions\_Ziggs.cs" />
     <Compile Include="champions\_Zilean.cs" />
     <Compile Include="champions\_Zyra.cs" />
-    <Compile Include="champLoader.cs" />
+    <Compile Include="ALL IN ONE ChampLoader.cs" />
     <Compile Include="utility\Activator.cs" />
-    <Compile Include="xcsoftMenu.cs" />
-    <Compile Include="xcsoftFunc.cs" />
+    <Compile Include="ALL IN ONE Func.cs" />
     <Compile Include="champions\__BASE.cs" />
     <Compile Include="damageIndicator.cs" />
     <Compile Include="initializer.cs" />

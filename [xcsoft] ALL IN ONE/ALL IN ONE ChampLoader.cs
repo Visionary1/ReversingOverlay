@@ -4,7 +4,7 @@ using LeagueSharp;
 
 namespace _xcsoft__ALL_IN_ONE
 {
-    class champLoader
+    class ALL_IN_ONE_ChampLoader
     {
         internal static void Load(string champName)
         {
@@ -68,7 +68,7 @@ namespace _xcsoft__ALL_IN_ONE
                     champions.Talon.Load();
                     break;
                 default:
-                    xcsoftFunc.sendDebugMsg("(champLoader)Champ Not Supported.", true);
+                    ALL_IN_ONE_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;
             } 
         }
@@ -77,14 +77,14 @@ namespace _xcsoft__ALL_IN_ONE
         {
             try
             {
-                xcsoftFunc.sendDebugMsg(tag + Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " Supported.", false);
+               ALL_IN_ONE_Func.sendDebugMsg(tag + Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " Supported.", false);
             }
             catch
             {
-                xcsoftFunc.sendDebugMsg(tag + ObjectManager.Player.ChampionName + " Not supported.", false);
-                Game.PrintChat(xcsoftFunc.colorChat(System.Drawing.Color.MediumBlue, tag) + xcsoftFunc.colorChat(System.Drawing.Color.DarkGray, ObjectManager.Player.ChampionName) + " Not supported.");
+                ALL_IN_ONE_Func.sendDebugMsg(tag + ObjectManager.Player.ChampionName + " Not supported.", false);
+                Game.PrintChat(ALL_IN_ONE_Func.colorChat(System.Drawing.Color.DeepSkyBlue, tag) + ALL_IN_ONE_Func.colorChat(System.Drawing.Color.DeepPink, ObjectManager.Player.ChampionName) + " Not supported.");
 
-                xcsoftMenu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported");
+                ALL_IN_ONE_Menu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported", null);
                 return false;
             }
 

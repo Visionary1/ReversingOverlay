@@ -15,7 +15,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
     class Graves
     {
         
-        static Orbwalking.Orbwalker Orbwalker { get { return xcsoftMenu.Orbwalker; } }
+        static Orbwalking.Orbwalker Orbwalker { get { return ALL_IN_ONE_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
       
@@ -35,32 +35,30 @@ namespace _xcsoft__ALL_IN_ONE.champions
             R.SetSkillshot(0.25f, 100f, 2100f, false, SkillshotType.SkillshotLine);
 
 
-            xcsoftMenu.Combo.addUseQ();
-            xcsoftMenu.Combo.addUseW();
-            xcsoftMenu.Combo.addUseR();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseW();
+            ALL_IN_ONE_Menu.Champion.Combo.addUseR();
 
 
-            xcsoftMenu.Harass.addUseQ();
-            xcsoftMenu.Harass.addifMana(70);
+            ALL_IN_ONE_Menu.Champion.Harass.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Harass.addIfMana(70);
 
-            xcsoftMenu.Lasthit.isEmpty();
+            ALL_IN_ONE_Menu.Champion.Laneclear.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Laneclear.addIfMana(80);
 
-            xcsoftMenu.Laneclear.addUseQ();
-            xcsoftMenu.Laneclear.addifMana(80);
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addUseQ();
+            ALL_IN_ONE_Menu.Champion.Jungleclear.addIfMana(80);
 
-            xcsoftMenu.Jungleclear.addUseQ();
-            xcsoftMenu.Jungleclear.addifMana(80);
+            ALL_IN_ONE_Menu.Champion.Misc.addItem("Use E on Gap Closer", true);
+            ALL_IN_ONE_Menu.Champion.Misc.addUseKillsteal();
 
-            xcsoftMenu.Misc.addItem("Use E on Gap Closer", true);
-            xcsoftMenu.Misc.addUseKillsteal();
-
-            xcsoftMenu.Drawings.addQrange();
-            xcsoftMenu.Drawings.addWrange();
-            xcsoftMenu.Drawings.addErange();
-            xcsoftMenu.Drawings.addRrange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addQRange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addQRange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addERange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addRRange();
 
            
-            xcsoftMenu.Drawings.addDamageIndicator(getComboDamage);
+            ALL_IN_ONE_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
 
             Game.OnUpdate += Game_OnUpdate;
@@ -91,7 +89,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             }
 
            
-            if (xcsoftMenu.Misc.UseKillsteal)
+            if (ALL_IN_ONE_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
         }
 
@@ -101,10 +99,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = xcsoftMenu.Drawings.DrawQRange;
-            var drawW = xcsoftMenu.Drawings.DrawWRange;
-            var drawE = xcsoftMenu.Drawings.DrawERange;
-            var drawR = xcsoftMenu.Drawings.DrawRRange;
+            var drawQ = ALL_IN_ONE_Menu.Champion.Drawings.QRange;
+            var drawW = ALL_IN_ONE_Menu.Champion.Drawings.WRange;
+            var drawE = ALL_IN_ONE_Menu.Champion.Drawings.ERange;
+            var drawR = ALL_IN_ONE_Menu.Champion.Drawings.RRange;
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
@@ -128,7 +126,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (xcsoftMenu.Combo.UseQ && Q.CanCast(Target) && !Player.IsDashing())
+                if (ALL_IN_ONE_Menu.Champion.Combo.UseQ && Q.CanCast(Target) && !Player.IsDashing())
                 {
                     Q.Cast(Target);
                 }
@@ -136,7 +134,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if (xcsoftMenu.Combo.UseQ && Q.CanCast(Target) && !Player.IsDashing() && !(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Harass.ifMana))
+                if (ALL_IN_ONE_Menu.Champion.Combo.UseQ && Q.CanCast(Target) && !Player.IsDashing() && !(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Harass.IfMana))
                     Q.Cast(Target);
             }
         }
@@ -144,7 +142,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser) 
             // cradits to Asuna & ijabba
         {
-            if (!xcsoftMenu.Misc.getBoolValue("Use E on Gap Closer") || Player.IsDead)
+            if (!ALL_IN_ONE_Menu.Champion.Misc.getBoolValue("Use E on Gap Closer") || Player.IsDead)
                 return;
 
             var extended = gapcloser.Start.Extend(Player.Position, gapcloser.Start.Distance(Player.ServerPosition) + E.Range);
@@ -159,7 +157,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             
 
-            if (xcsoftMenu.Combo.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
                
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
@@ -169,7 +167,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     Q.Cast(qTarget);       
             }
 
-            if (xcsoftMenu.Combo.UseW && W.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseW && W.IsReady())
             {
                 var wTarget = TargetSelector.GetTarget(W.Range, W.DamageType, true);
 
@@ -177,7 +175,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                     W.Cast(wTarget);
             }
 
-            if (xcsoftMenu.Combo.UseR && R.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = HeroManager.Enemies.Where(x => R.CanCast(x) && x.Health + (x.HPRegenRate / 2) <= R.GetDamage(x) && R.GetPrediction(x).Hitchance >= HitChance.VeryHigh).OrderByDescending(x => x.Health).FirstOrDefault();
 
@@ -189,10 +187,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Harass()
         {
            
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Harass.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Harass.IfMana))
                 return;
 
-            if (xcsoftMenu.Harass.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
 
@@ -205,7 +203,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Laneclear()
         {
 
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Laneclear.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Laneclear.IfMana))
                 return;
 
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -213,7 +211,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Minions.Count <= 0)
                 return;
 
-            if (xcsoftMenu.Laneclear.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
                 var Farmloc = Q.GetLineFarmLocation(Minions);
 
@@ -226,7 +224,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         static void Jungleclear()
         {
             
-            if (!(xcsoftFunc.getManaPercent(Player) > xcsoftMenu.Jungleclear.ifMana))
+            if (!(ALL_IN_ONE_Func.getManaPercent(Player) > ALL_IN_ONE_Menu.Champion.Jungleclear.IfMana))
                 return;
 
 
@@ -235,7 +233,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             if (Mobs.Count <= 0)
                 return;
 
-            if (xcsoftMenu.Jungleclear.UseQ && Q.IsReady())
+            if (ALL_IN_ONE_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
                
                 if (Q.CanCast(Mobs.FirstOrDefault()))
@@ -250,13 +248,13 @@ namespace _xcsoft__ALL_IN_ONE.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 
-                if (Q.CanCast(target) && xcsoftFunc.isKillable(target, Q))
+                if (Q.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, Q))
                     Q.Cast(target);
 
-                if (W.CanCast(target) && xcsoftFunc.isKillable(target, W))
+                if (W.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, W))
                     W.Cast(target);
 
-                if (R.CanCast(target) && xcsoftFunc.isKillable(target, R))
+                if (R.CanCast(target) && ALL_IN_ONE_Func.isKillable(target, R))
                     R.Cast(target);
             }
         }
@@ -284,7 +282,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             return
                 HeroManager.Enemies.Where(
-                    hero => hero.IsValidTarget(range, true, position) && xcsoftFunc.getHealthPercent(hero) <= 15).ToList();
+                    hero => hero.IsValidTarget(range, true, position) && ALL_IN_ONE_Func.getHealthPercent(hero) <= 15).ToList();
         }
 
 

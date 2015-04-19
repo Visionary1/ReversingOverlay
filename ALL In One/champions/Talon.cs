@@ -17,9 +17,9 @@ namespace ALL_In_One.champions
 
         static Spell Q, W, E, R;
         static List<Items.Item> itemsList = new List<Items.Item>(); //척후병 샤브르
-		static Spell Smite;
-		static SpellSlot smiteSlot = SpellSlot.Unknown;
-		static Items.Item s0, s1, s2, s3, s4;
+	static Spell Smite;
+	static SpellSlot smiteSlot = SpellSlot.Unknown;
+	static Items.Item s0, s1, s2, s3, s4;
         static float smrange = 700f;
 		
         static float getQBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "TalonNoxianDiplomacyBuff"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
@@ -61,8 +61,6 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addUseKillsteal();
-            //ALL_IN_ONE_Menu.Champion.Misc.addUseAntiGapcloser();
-            //ALL_IN_ONE_Menu.Champion.Misc.addUseInterrupter();
             AIO_Menu.Champion.Drawings.addQRange();
             AIO_Menu.Champion.Drawings.addERange();
             AIO_Menu.Champion.Drawings.addRRange();
@@ -70,17 +68,15 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.LightGreen));
             AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.LightGreen));
 			
-			AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
+	    AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             Orbwalking.OnAttack += Orbwalking_OnAttack;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
-            //AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-            //Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
 			
-			InitializeItems();
+	    InitializeItems();
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -105,10 +101,10 @@ namespace ALL_In_One.champions
 
             #region Killsteal
             if (AIO_Menu.Champion.Misc.UseKillsteal)
-                Killsteal();
+            Killsteal();
             #endregion
 			
-			setSmiteSlot();
+	    setSmiteSlot();
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -116,29 +112,29 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawW = AIO_Menu.Champion.Drawings.WRange;
-            var drawE = AIO_Menu.Champion.Drawings.ERange;
-            var drawR = AIO_Menu.Champion.Drawings.RRange;
-			var drawQTimer = AIO_Menu.Champion.Drawings.getCircleValue("Q Timer");
-			var drawETimer = AIO_Menu.Champion.Drawings.getCircleValue("E Timer");
-			var drawRTimer = AIO_Menu.Champion.Drawings.getCircleValue("R Timer");
-
-            if (E.IsReady() && drawE.Active)
-                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
-
-            if (R.IsReady() && drawR.Active)
-                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
-
-            var pos_temp = Drawing.WorldToScreen(Player.Position);
-
-            if (drawQTimer.Active && getQBuffDuration > 0)
-                Drawing.DrawText(pos_temp[0], pos_temp[1], drawQTimer.Color, "Q: " + getQBuffDuration.ToString("0.00"));
-
-            if (drawETimer.Active && getEBuffDuration > 0)
-                Drawing.DrawText(pos_temp[0], pos_temp[1], drawETimer.Color, "E: " + getEBuffDuration.ToString("0.00"));
-
-            if (drawRTimer.Active && getRBuffDuration > 0)
-                Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R: " + getRBuffDuration.ToString("0.00"));
+		var drawW = AIO_Menu.Champion.Drawings.WRange;
+		var drawE = AIO_Menu.Champion.Drawings.ERange;
+		var drawR = AIO_Menu.Champion.Drawings.RRange;
+		var drawQTimer = AIO_Menu.Champion.Drawings.getCircleValue("Q Timer");
+		var drawETimer = AIO_Menu.Champion.Drawings.getCircleValue("E Timer");
+		var drawRTimer = AIO_Menu.Champion.Drawings.getCircleValue("R Timer");
+	
+		if (E.IsReady() && drawE.Active)
+		Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+		
+		if (R.IsReady() && drawR.Active)
+		Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+		
+		var pos_temp = Drawing.WorldToScreen(Player.Position);
+		
+		if (drawQTimer.Active && getQBuffDuration > 0)
+		Drawing.DrawText(pos_temp[0], pos_temp[1], drawQTimer.Color, "Q: " + getQBuffDuration.ToString("0.00"));
+		
+		if (drawETimer.Active && getEBuffDuration > 0)
+		Drawing.DrawText(pos_temp[0], pos_temp[1], drawETimer.Color, "E: " + getEBuffDuration.ToString("0.00"));
+		
+		if (drawRTimer.Active && getRBuffDuration > 0)
+		Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R: " + getRBuffDuration.ToString("0.00"));
         }
 		
         static void setSmiteSlot()
@@ -202,22 +198,22 @@ namespace ALL_In_One.champions
 
         }
 
-		static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)
-		{
+	static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)
+	{
             var Target = (Obj_AI_Base)target;
             
-			if (!unit.IsMe || Target == null)
+	    if (!unit.IsMe || Target == null)
                 return;
 				
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-				{
-					if (!CheckInv())
-					return;
-                    Smite.Slot = smiteSlot;
-					if(smiteSlot.IsReady())
-                    Player.Spellbook.CastSpell(smiteSlot, Target);
-				}
+		{
+		if (!CheckInv())
+		return;
+		 Smite.Slot = smiteSlot;
+		if(smiteSlot.IsReady())
+		 Player.Spellbook.CastSpell(smiteSlot, Target);
 		}
+	}
 		
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
@@ -227,19 +223,19 @@ namespace ALL_In_One.champions
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-				var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
-				var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+		var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
+		var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
-				if(Minions.Count + Mobs.Count <= 0)
-				return;
+		if(Minions.Count + Mobs.Count <= 0)
+		return;
+		
+		if (Minions.Count >= 1)
+		AALaneclear();
+		
+		if (Mobs.Count >= 1)
+		AAJungleclear();
 				
-				if (Minions.Count >= 1)
-				AALaneclear();
-				
-				if (Mobs.Count >= 1)
-				AAJungleclear();
-				
-			}
+	    }
 			
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
@@ -247,15 +243,15 @@ namespace ALL_In_One.champions
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                     Q.Cast();
 				
-				if (AIO_Menu.Champion.Combo.getBoolValue("Use Hydra")
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-				{
-					if(tiamatItem.IsReady())
-						tiamatItem.Cast();
-					else if(hydraItem.IsReady())
-						hydraItem.Cast();
-				}
-			}
+		if (AIO_Menu.Champion.Combo.getBoolValue("Use Hydra")
+			&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+		{
+			if(tiamatItem.IsReady())
+				tiamatItem.Cast();
+			else if(hydraItem.IsReady())
+				hydraItem.Cast();
+		}
+	    }
 				
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
@@ -263,15 +259,15 @@ namespace ALL_In_One.champions
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                     Q.Cast();					
 				
-				if (AIO_Menu.Champion.Combo.getBoolValue("Use Hydra")
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-				{
-					if(tiamatItem.IsReady())
-						tiamatItem.Cast();
-					else if(hydraItem.IsReady())
-						hydraItem.Cast();
-				}
-			}
+		if (AIO_Menu.Champion.Combo.getBoolValue("Use Hydra")
+			&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+		{
+			if(tiamatItem.IsReady())
+				tiamatItem.Cast();
+			else if(hydraItem.IsReady())
+				hydraItem.Cast();
+		}
+	    }
         }
 
         static void Combo()
@@ -321,21 +317,21 @@ namespace ALL_In_One.champions
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
-				var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
+		var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
 
-				if (Minions.Count <= 0)
+		if (Minions.Count <= 0)
                 return;
 				
                 if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
                     Q.Cast();
 					
-				if (AIO_Menu.Champion.Laneclear.getBoolValue("Use Hydra"))
-				{
-					if(tiamatItem.IsReady())
-						tiamatItem.Cast();
-					else if(hydraItem.IsReady())
-						hydraItem.Cast();
-				}
+		if (AIO_Menu.Champion.Laneclear.getBoolValue("Use Hydra"))
+		{
+			if(tiamatItem.IsReady())
+				tiamatItem.Cast();
+			else if(hydraItem.IsReady())
+				hydraItem.Cast();
+		}
         }
 
         static void AAJungleclear()
@@ -351,13 +347,13 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
                 Q.Cast();
 					
-			if (AIO_Menu.Champion.Jungleclear.getBoolValue("Use Hydra"))
-			{
-			    if(tiamatItem.IsReady())
-			        tiamatItem.Cast();
-				else if(hydraItem.IsReady())
-				    hydraItem.Cast();
-			}			
+		if (AIO_Menu.Champion.Jungleclear.getBoolValue("Use Hydra"))
+		{
+		    if(tiamatItem.IsReady())
+		        tiamatItem.Cast();
+			else if(hydraItem.IsReady())
+			    hydraItem.Cast();
+		}			
         }
 
 
@@ -410,20 +406,37 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
+		{
                 damage += Q.GetDamage(enemy);
+                damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
+		}
+			
+            if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
+		{
+		damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
+		damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
+		}
+			
+            if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
+		{
+		damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
+		damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
+		}
+
 
             if (W.IsReady())
                 damage += W.GetDamage(enemy);
 
-            if (R.IsReady())
+            if (R.IsReady() && xcsoftMenu.Combo.UseR)
                 damage += R.GetDamage(enemy);
 
-//            if(!Player.IsWindingUp)
-//                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+            if(!Player.IsWindingUp)
+                damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
 
             if (E.IsReady())
-                damage = damage * (1+0.03f * E.Level);
 
+                damage = damage *(1 + 0.03f * E.Level);
+				
             return damage;
         }
     }

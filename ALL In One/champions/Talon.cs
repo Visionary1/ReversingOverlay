@@ -427,7 +427,7 @@ namespace ALL_In_One.champions
             if (W.IsReady())
                 damage += W.GetDamage(enemy);
 
-            if (R.IsReady() && AIO_Menu.Combo.UseR)
+            if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
                 damage += R.GetDamage(enemy);
 
             if(!Player.IsWindingUp)

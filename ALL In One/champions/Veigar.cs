@@ -10,7 +10,7 @@ using SharpDX;
 
 using Color = System.Drawing.Color;
 
-namespace ALL_IN_ONE.champions
+namespace ALL_In_One.champions
 {
     class Veigar //rl244
     {

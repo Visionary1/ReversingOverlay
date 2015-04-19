@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using SharpDX;
 
 using Color = System.Drawing.Color;
 
-namespace ALL_In_One.champions
+namespace ALL_IN_ONE.champions
 {
     class Veigar //rl244
     {
@@ -132,7 +132,7 @@ namespace ALL_In_One.champions
 
             if (E.IsReady()
 		&& Player.Distance(gapcloser.Sender.Position) <= E.Range + Player.MoveSpeed*E.Delay)
-                castE(gapcloser.Sender);
+                castE((Vector3)gapcloser.End);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -165,8 +165,8 @@ namespace ALL_In_One.champions
             {
 		var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
 		var pred = W.GetPrediction(Wtarget);
-			if (pred.Hitchance == HitChance.Immobile || Wtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= W.Delay - 0.3f && W.IsReady())
-			W.Cast(Wtarget, false, true);
+		if (pred.Hitchance == HitChance.Immobile || Wtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= W.Delay - 0.3f && W.IsReady())
+		W.Cast(Wtarget, false, true);
 
             }
 
@@ -176,8 +176,8 @@ namespace ALL_In_One.champions
 			
 		if(AIO_Func.isKillable(Rtarget, R) || Rtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= R.Delay && R.IsReady())
                { 
-			if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
-                    	R.Cast(Rtarget);
+		if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
+            	R.Cast(Rtarget);
 		}
             }
         }
@@ -186,13 +186,13 @@ namespace ALL_In_One.champions
         {
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-			var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+		var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
                 CastQ(Qtarget);
             }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
-			var Etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed*E.Delay, TargetSelector.DamageType.Magical);
+		var Etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed*E.Delay, TargetSelector.DamageType.Magical);
                 castE(Etarget);
             }
 
@@ -273,7 +273,7 @@ namespace ALL_In_One.champions
             var minioncol = qcollision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
 	    if (target.IsValidTarget(Q.Range - target.MoveSpeed*(Q.Delay +Player.Distance(target.Position)/Q.Speed) + 50) && minioncol <= 1 && qpred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
             {
-            Q.Cast(qpred.CastPosition);
+        	 Q.Cast(qpred.CastPosition);
             }
 	}
 
@@ -283,9 +283,9 @@ namespace ALL_In_One.champions
             var minions = prediction.CollisionObjects.Count(thing => thing.IsMinion);
 
             if (minions <= 1 && prediction.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-			{
-            Q.Cast(prediction.CastPosition);
-			}
+		{
+            	Q.Cast(prediction.CastPosition);
+		}
 	}
 		
         static void castE(Obj_AI_Base target) //E CAST(base)
@@ -320,6 +320,24 @@ namespace ALL_In_One.champions
                 E.Cast(castVec, false);
             }
             if (pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && E.IsReady() && Vector3.Distance(Player.Position, pred.UnitPosition) > 700 - E.Width)
+            {
+                E.Cast(castVec2, false);
+            }
+        }
+        
+        public static void castE(Vector3 pos)
+        {
+            Vector2 castVec = pos.To2D() +
+                              Vector2.Normalize(pos.To2D() - Player.Position.To2D()) * E.Width;
+							  
+            Vector2 castVec2 = pos.To2D() -
+                              Vector2.Normalize(pos.To2D() - Player.Position.To2D()) * E.Width;
+
+            if (E.IsReady() && Vector3.Distance(Player.Position, pos) <= 700 - E.Width)
+            {
+                E.Cast(castVec, false);
+            }
+            if (E.IsReady() && Vector3.Distance(Player.Position, pos) > 700 - E.Width)
             {
                 E.Cast(castVec2, false);
             }

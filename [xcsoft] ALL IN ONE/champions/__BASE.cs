@@ -36,13 +36,14 @@ namespace _xcsoft__ALL_IN_ONE.champions
             //Q가 스킬샷(투사체)인경우 설정하는 예제
             //스킬시전전 딜레이, 스킬샷범위(두께), 투사체속도, 미니언에 막히는가안막히는가(막히면 true,안막히면 false), 스킬샷 타입(Line, Cone, Circle)
             Q.SetSkillshot(0.25f, 50f, 2000f, true, SkillshotType.SkillshotLine);
-            
+            //차징설정
             Q.SetCharged(" ", " ", 750, 1550, 1.5f);
+            //타겟팅설정
             Q.SetTargetted(0.25f, 2000f);
 
             //메뉴에 아이템추가. ALL_IN_ONE_Menu 클래스로 간편하게 만들어놨음 아래처럼 필요한 옵션만 추가하면 되고, 문제있으면 저한테 물어보세요.
 
-            //메인메뉴.서브메뉴.메소드 혹은 함수명();
+            //메인메뉴.서브메뉴.서브메뉴.메소드();
 
             ALL_IN_ONE_Menu.Champion.Combo.addUseQ();
             ALL_IN_ONE_Menu.Champion.Combo.addUseW();

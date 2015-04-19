@@ -14,7 +14,7 @@ namespace _xcsoft__ALL_IN_ONE
         
         internal static void initialize()
         {
-            MainMenu_Manual = new Menu("ALL IN ONE", "xcsoft_ALLINONE", true);
+            MainMenu_Manual = new Menu("ALL In One", "xcsoft_ALLINONE", true);
             MainMenu_Manual.AddToMainMenu();
 
             addSubMenu("Champion", "AIO: " + ObjectManager.Player.ChampionName);

@@ -53,7 +53,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             ALL_IN_ONE_Menu.Champion.Misc.addUseInterrupter();
 
             ALL_IN_ONE_Menu.Champion.Drawings.addQRange();
-            ALL_IN_ONE_Menu.Champion.Drawings.addQRange();
+            ALL_IN_ONE_Menu.Champion.Drawings.addWRange();
             ALL_IN_ONE_Menu.Champion.Drawings.addERange();
 
             ALL_IN_ONE_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);

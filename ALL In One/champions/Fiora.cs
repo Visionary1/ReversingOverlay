@@ -7,9 +7,18 @@ using LeagueSharp.Common;
 
 using Color = System.Drawing.Color;
 
+using System.Runtime.ExceptionServices;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.IO;
+using SharpDX;
+
 namespace ALL_In_One.champions
 {
-    class Fiora
+    class Fiora // RL244
     {
         static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
@@ -21,9 +30,9 @@ namespace ALL_In_One.champions
 
 
         static List<Items.Item> itemsList = new List<Items.Item>(); //척후병 샤브르 //RS
-		static Spell Smite; //RS
-		static SpellSlot smiteSlot = SpellSlot.Unknown; //RS
-		static Items.Item s0, s1, s2, s3, s4; //RS
+	static Spell Smite; //RS
+	static SpellSlot smiteSlot = SpellSlot.Unknown; //RS
+	static Items.Item s0, s1, s2, s3, s4; //RS
         static float smrange = 700f; //RS
 		
         static float getQBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "fioraqcd"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
@@ -63,8 +72,9 @@ namespace ALL_In_One.champions
             Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
 
-            Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
-            Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("credit", "RL144", true));
+            Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("credit", "Made By RL244", true));
+            Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("miscKsQ", "Use Q KillSteal", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("miscKsR", "Use R KillSteal", true).SetValue(true));
 			
             Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawQ", "Q Range", true).SetValue(new Circle(true, Color.Red)));
             Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawR", "R Range", true).SetValue(new Circle(true, Color.Blue)));
@@ -72,7 +82,7 @@ namespace ALL_In_One.champions
             Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawWTimer", "W Timer", true).SetValue(new Circle(true, Color.Black)));
             Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawETimer", "E Timer", true).SetValue(new Circle(true, Color.Red)));
 
-			AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
+	    AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -80,7 +90,7 @@ namespace ALL_In_One.champions
             Orbwalking.OnAttack += Orbwalking_OnAttack;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
 			
-			InitializeItems(); //RS
+	    InitializeItems(); //RS
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -104,11 +114,13 @@ namespace ALL_In_One.champions
             }
 
             #region Killsteal
-            if (Menu.Item("miscKs", true).GetValue<bool>())
-                Killsteal();
+            if (Menu.Item("miscKsQ", true).GetValue<bool>())
+                KillstealQ();
+            if (Menu.Item("miscKsR", true).GetValue<bool>())
+                KillstealR();
             #endregion
 			
-			setSmiteSlot(); //RS
+		setSmiteSlot(); //RS
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -180,31 +192,68 @@ namespace ALL_In_One.champions
             itemsList.Add(s4);
         }
 
+	static readonly string[] MinionNames =
+	{
+	"SRU_Blue", "SRU_Gromp", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Red", "SRU_Krug", "SRU_Dragon", "SRU_BaronSpawn"
+	};
+	
+	static Obj_AI_Minion Chase(Vector3 pos)
+	{
+		var minions =
+		ObjectManager.Get<Obj_AI_Minion>()
+		.Where(minion => minion.IsValid && minion.IsEnemy && !minion.IsDead
+		&& Player.Distance(minion.Position) <= 600 && Player.Distance(minion.Position) > 400);
+		var objAiMinions = minions as Obj_AI_Minion[] ?? minions.ToArray();
+		Obj_AI_Minion sMinion = objAiMinions.FirstOrDefault();
+		double? nearest = null;
+		foreach (Obj_AI_Minion minion in objAiMinions)
+		{
+			double distance = Vector3.Distance(pos, minion.Position);
+			if (nearest == null || nearest > distance)
+			{
+				nearest = distance;
+				sMinion = minion;
+			}
+		}
+		return sMinion;
+	}
+		
+        static readonly string[] Attacks = { "jarvanivcataclysmattack", "monkeykingdoubleattack", "shyvanadoubleattack", "shyvanadoubleattackdragon", "caitlynheadshotmissile", "frostarrow", "garenslash2", "kennenmegaproc", "masteryidoublestrike", "quinnwenhanced", "renektonexecute", "renektonsuperexecute", "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "viktorqbuff", "xenzhaothrust2", "xenzhaothrust3" };
+        static readonly string[] NoAttacks = { "zyragraspingplantattack", "zyragraspingplantattack2", "zyragraspingplantattackfire", "zyragraspingplantattack2fire" };
+        static readonly string[] OHSP = { "Parley", "EzrealMysticShot"};
+        static readonly string[] AttackResets = { "dariusnoxiantacticsonh", "fioraflurry", "garenq", "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "leonashieldofdaybreak", "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade", "parley", "poppydevastatingblow", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack", "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie", "volibearq", "xenzhaocombotarget", "yorickspectral" };
+
+        static bool IsOnHit(string name)
+        {
+            return !(name.ToLower().Contains("tower")) &&!(name.ToLower().Contains("turret")) && !(name.ToLower().Contains("mini")) && (name.ToLower().Contains("attack")) && !NoAttacks.Contains(name.ToLower()) ||
+            Attacks.Contains(name.ToLower()) && AttackResets.Contains(name.ToLower()) && OHSP.Contains(name.ToLower());
+        }
+
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsMe || Player.IsDead)
-                return;
+            if (IsOnHit(args.SData.Name) && args.Target.IsMe && Player.Distance(args.End) < 150)
+		{
+
+			W.Cast();
+		}
 
         }
 
-		static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target) 
-		{
-            var Target = (Obj_AI_Base)target;
-            
-			if(unit.IsEnemy && target.IsMe) //AA Block
-			W.Cast();
-			else if (!unit.IsMe || Target == null)
+	static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target) 
+	{
+		var Target = (Obj_AI_Base)target;
+		if (!unit.IsMe || Target == null)
                 return;
 				
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) //RS
-				{
-					if (!CheckInv())
-					return;
-                    Smite.Slot = smiteSlot;
-					if(smiteSlot.IsReady())
-                    Player.Spellbook.CastSpell(smiteSlot, Target);
-				}
-		}
+            	if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) //RS
+			{
+				if (!CheckInv())
+				return;
+                    		Smite.Slot = smiteSlot;
+				if(smiteSlot.IsReady())
+                		 Player.Spellbook.CastSpell(smiteSlot, Target);
+			}
+	}
 		
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
@@ -213,34 +262,34 @@ namespace ALL_In_One.champions
                 return;
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-            {
-				var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
-				var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-				if(Minions.Count + Mobs.Count <= 0)
-				return;
-				
-				if(Minions.Count >= 1)
-				AALaneclear();
-				if(Mobs.Count >= 1)
-				AAJungleclear();
-			}
+	{
+		var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
+		var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+		if(Minions.Count + Mobs.Count <= 0)
+		return;
+		
+		if(Minions.Count >= 1)
+		AALaneclear();
+		if(Mobs.Count >= 1)
+		AAJungleclear();
+	}
 			
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-            {
+	{	
                 if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
+			&& !tiamatItem.IsReady() && !hydraItem.IsReady())
                     E.Cast();
 				
-				if (Menu.Item("HrsUseH", true).GetValue<bool>()// && !W.IsReady()
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-				{
-					if(tiamatItem.IsReady())
-						tiamatItem.Cast();
-					else if(hydraItem.IsReady())
-						hydraItem.Cast();
-				}
-			}
+		if (Menu.Item("HrsUseH", true).GetValue<bool>()// && !W.IsReady()
+			&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+		{
+			if(tiamatItem.IsReady())
+				tiamatItem.Cast();
+			else if(hydraItem.IsReady())
+				hydraItem.Cast();
+		}
+	}
 				
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
@@ -270,24 +319,22 @@ namespace ALL_In_One.champions
 
         static void Combo()
         {
-            if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady() 
-                && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
-                W.Cast();
-
-            if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())  //<- 코드에 문제가 있어 주석처리함.
+            if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady()) 
                 {
-				var qd = Menu.Item("CbUseQD", true).GetValue<Slider>().Value;
-				var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-				var fqTarget = TargetSelector.GetTarget(Q.Range * 2, Q.DamageType);
-				var fminion = ObjectManager.Get<Obj_AI_Minion>().Any(t => !t.IsAlly && Player.Distance(t.Position) <= 600 && fqTarget.Distance(t.Position) <= 600);
-
-				if(qTarget.Distance(Player.ServerPosition) >= qd || getQBuffDuration < 1)
-					Q.Cast(qTarget);
-					
-				if(fqTarget.Distance(Player.ServerPosition) > 600 //Chasing Enemy
-				&& ObjectManager.Get<Obj_AI_Minion>().Any(t => !t.IsAlly && Player.Distance(t.Position) <= 600 && fqTarget.Distance(t.Position) <= 600))
-					Q.Cast(fminion);
-				}
+			var qd = Menu.Item("CbUseQD", true).GetValue<Slider>().Value;
+			var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+			var fqTarget = TargetSelector.GetTarget(Q.Range * 2, Q.DamageType);
+//				var fminion = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => t.Distance(fqTarget.Position)).
+//				Where(t => !t.IsAlly && Player.Distance(t.Position) <= 600 && Player.Distance(t.Position) >= 300 && fqTarget.Distance(t.Position) <= 600).First();
+			var mchase = Chase(fqTarget.Position);
+			
+			
+			if(qTarget.Distance(Player.ServerPosition) >= qd || getQBuffDuration < 1)
+				Q.Cast(qTarget);
+				
+			if(fqTarget.Distance(Player.ServerPosition) > 600) //Chasing Enemy
+				Q.Cast(mchase);
+		}
 				
         }
 
@@ -311,15 +358,15 @@ namespace ALL_In_One.champions
                 if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady()
 					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
                 {    
-				E.Cast();
-				}
-				if (Menu.Item("LcUseH", true).GetValue<bool>())
-				{
-					if(tiamatItem.IsReady())
-						tiamatItem.Cast();
-					else if(hydraItem.IsReady())
-						hydraItem.Cast();
-				}
+			E.Cast();
+		}
+		if (Menu.Item("LcUseH", true).GetValue<bool>())
+		{
+			if(tiamatItem.IsReady())
+				tiamatItem.Cast();
+			else if(hydraItem.IsReady())
+				hydraItem.Cast();
+		}
         }
 
         static void AAJungleclear()
@@ -375,13 +422,20 @@ namespace ALL_In_One.champions
                 Q.Cast(Mobs[0]);
         }
 
-        static void Killsteal()
+        static void KillstealQ()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
                     Q.Cast(target);
-                if (Menu.Item("CbUseR", true).GetValue<bool>() && R.CanCast(target) && AIO_Func.isKillable(target, R))
+            }
+        }
+		
+        static void KillstealR()
+        {
+            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
+            {
+                if (R.CanCast(target) && AIO_Func.isKillable(target, R))
                     R.Cast(target);
             }
         }
@@ -391,16 +445,31 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage(enemy) * 2;
 				
-            if (R.IsReady())
+            if (R.IsReady() && Menu.Item("CbUseR", true).GetValue<bool>())
                 damage += R.GetDamage(enemy);
+				
+            if (W.IsReady())
+                damage += W.GetDamage(enemy);
+				
+            if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
+		{
+		damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
+		damage += (float)Player.GetAutoAttackDamage(enemy, true);
+		}
+			
+            if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
+		{
+		damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
+		damage += (float)Player.GetAutoAttackDamage(enemy, true);
+		}
 
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
 
-			if(E.IsReady())
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+	    if(E.IsReady())
+                damage += (float)Player.GetAutoAttackDamage(enemy, true) * 2;
 				
             return damage;
         }

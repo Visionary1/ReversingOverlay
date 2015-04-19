@@ -14,7 +14,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 {
     class Veigar // rl244
     {
-        static Orbwalking.Orbwalker Orbwalker { get { return ALL_IN_ONE_Menu.Champion.Orbwalker; } }
+        static Orbwalking.Orbwalker Orbwalker { get { return ALL_IN_ONE_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
@@ -47,7 +47,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             ALL_IN_ONE_Menu.Champion.Jungleclear.addUseQ();
             ALL_IN_ONE_Menu.Champion.Jungleclear.addUseW(false);
 			
-			ALL_IN_ONE_Menu.Champion.Lasthit.isEmpty();
+	    ALL_IN_ONE_Menu.Champion.Lasthit.isEmpty();
 
             ALL_IN_ONE_Menu.Champion.Misc.addHitchanceSelector();
             ALL_IN_ONE_Menu.Champion.Misc.addItem("Made by RL244", true);
@@ -105,9 +105,9 @@ namespace _xcsoft__ALL_IN_ONE.champions
             var drawQ = ALL_IN_ONE_Menu.Champion.Drawings.DrawQRange;
             var drawW = ALL_IN_ONE_Menu.Champion.Drawings.DrawWRange;
             var drawE = ALL_IN_ONE_Menu.Champion.Drawings.DrawERange;
-			var drawEr = ALL_IN_ONE_Menu.Champion.Drawings.getCircleValue("E Real Range");
+	    var drawEr = ALL_IN_ONE_Menu.Champion.Drawings.getCircleValue("E Real Range");
             var drawR = ALL_IN_ONE_Menu.Champion.Drawings.DrawRRange;
-			var etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed * E.Delay, TargetSelector.DamageType.Magical);
+	    var etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed * E.Delay, TargetSelector.DamageType.Magical);
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
@@ -132,7 +132,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (E.IsReady()
-			&& Player.Distance(gapcloser.Sender.Position) <= E.Range + Player.MoveSpeed*E.Delay)
+		&& Player.Distance(gapcloser.Sender.Position) <= E.Range + Player.MoveSpeed*E.Delay)
                 castE(gapcloser.Sender);
         }
 
@@ -142,7 +142,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
                 return;
 
             if (E.IsReady()
-			&& Player.Distance(sender.Position) <= E.Range)
+		&& Player.Distance(sender.Position) <= E.Range)
                 castE(sender);
         }
 
@@ -152,34 +152,34 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (ALL_IN_ONE_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-			var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+		var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
                 CastQ(Qtarget);
             }
 
             if (ALL_IN_ONE_Menu.Champion.Combo.UseE && E.IsReady())
             {
-			var Etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed*E.Delay, TargetSelector.DamageType.Magical);
+		var Etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed*E.Delay, TargetSelector.DamageType.Magical);
                 castE(Etarget);
             }
 
             if (ALL_IN_ONE_Menu.Champion.Combo.UseW && W.IsReady())
             {
-			var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-			var pred = W.GetPrediction(Wtarget);
-				if (pred.Hitchance == HitChance.Immobile || Wtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= W.Delay - 0.3f && W.IsReady())
-					W.Cast(Wtarget, false, true);
+		var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+		var pred = W.GetPrediction(Wtarget);
+			if (pred.Hitchance == HitChance.Immobile || Wtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= W.Delay - 0.3f && W.IsReady())
+			W.Cast(Wtarget, false, true);
 
             }
 
             if (ALL_IN_ONE_Menu.Champion.Combo.UseR && R.IsReady())
             {
-			var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-			
-			if(ALL_IN_ONE_Func.isKillable(Rtarget, R) || Rtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= R.Delay && R.IsReady())
+		var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
+		
+		if(ALL_IN_ONE_Func.isKillable(Rtarget, R) || Rtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= R.Delay && R.IsReady())
                { 
-					if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
-                    R.Cast(Rtarget);
-				}
+		if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
+        	 R.Cast(Rtarget);
+		}
             }
         }
 
@@ -187,22 +187,22 @@ namespace _xcsoft__ALL_IN_ONE.champions
         {
             if (ALL_IN_ONE_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-			var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+		var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
                 CastQ(Qtarget);
             }
 
             if (ALL_IN_ONE_Menu.Champion.Harass.UseE && E.IsReady())
             {
-			var Etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed*E.Delay, TargetSelector.DamageType.Magical);
+		var Etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed*E.Delay, TargetSelector.DamageType.Magical);
                 castE(Etarget);
             }
 
             if (ALL_IN_ONE_Menu.Champion.Harass.UseW && W.IsReady())
             {
-			var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-			var pred = W.GetPrediction(Wtarget);
-			if (pred.Hitchance == HitChance.Immobile || Wtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= W.Delay - 0.3f && W.IsReady())
-					W.Cast(Wtarget, false, true);
+		var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+		var pred = W.GetPrediction(Wtarget);
+		if (pred.Hitchance == HitChance.Immobile || Wtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= W.Delay - 0.3f && W.IsReady())
+		W.Cast(Wtarget, false, true);
             }
         }
 
@@ -215,7 +215,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
 
             if (ALL_IN_ONE_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
-				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / Q.Speed), (int)(Q.Delay * 1000 + Game.Ping / 2)) > 0);			
+		var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / Q.Speed), (int)(Q.Delay * 1000 + Game.Ping / 2)) > 0);			
                 if (_m != null)
                     CastQ(_m);
             }
@@ -276,7 +276,7 @@ namespace _xcsoft__ALL_IN_ONE.champions
             {
             Q.Cast(qpred.CastPosition);
             }
-		}
+	}
 
         static void CastQ(Obj_AI_Base target)
         {
@@ -284,10 +284,10 @@ namespace _xcsoft__ALL_IN_ONE.champions
             var minions = prediction.CollisionObjects.Count(thing => thing.IsMinion);
 
             if (minions <= 1 && prediction.Hitchance >= ALL_IN_ONE_Menu.Champion.Misc.SelectedHitchance)
-			{
-            Q.Cast(prediction.CastPosition);
-			}
+		{
+            	Q.Cast(prediction.CastPosition);
 		}
+	}
 		
         static void castE(Obj_AI_Base target) //E CAST(base)
         {

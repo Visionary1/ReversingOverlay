@@ -30,9 +30,9 @@ namespace ALL_In_One.champions
 
 
         static List<Items.Item> itemsList = new List<Items.Item>(); //척후병 샤브르 //RS
-		static Spell Smite; //RS
-		static SpellSlot smiteSlot = SpellSlot.Unknown; //RS
-		static Items.Item s0, s1, s2, s3, s4; //RS
+	static Spell Smite; //RS
+	static SpellSlot smiteSlot = SpellSlot.Unknown; //RS
+	static Items.Item s0, s1, s2, s3, s4; //RS
         static float smrange = 700f; //RS
 		
         static float getQBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "fioraqcd"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
@@ -358,15 +358,15 @@ namespace ALL_In_One.champions
                 if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady()
 					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
                 {    
-				E.Cast();
-				}
-				if (Menu.Item("LcUseH", true).GetValue<bool>())
-				{
-					if(tiamatItem.IsReady())
-						tiamatItem.Cast();
-					else if(hydraItem.IsReady())
-						hydraItem.Cast();
-				}
+			E.Cast();
+		}
+		if (Menu.Item("LcUseH", true).GetValue<bool>())
+		{
+			if(tiamatItem.IsReady())
+				tiamatItem.Cast();
+			else if(hydraItem.IsReady())
+				hydraItem.Cast();
+		}
         }
 
         static void AAJungleclear()
@@ -454,21 +454,21 @@ namespace ALL_In_One.champions
                 damage += W.GetDamage(enemy);
 				
             if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
-			{
-			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
-			damage += (float)Player.GetAutoAttackDamage(enemy, true);
-			}
+		{
+		damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
+		damage += (float)Player.GetAutoAttackDamage(enemy, true);
+		}
 			
             if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
-			{
-			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
-			damage += (float)Player.GetAutoAttackDamage(enemy, true);
-			}
+		{
+		damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
+		damage += (float)Player.GetAutoAttackDamage(enemy, true);
+		}
 
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
 
-			if(E.IsReady())
+	    if(E.IsReady())
                 damage += (float)Player.GetAutoAttackDamage(enemy, true) * 2;
 				
             return damage;

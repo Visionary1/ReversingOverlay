@@ -7,6 +7,15 @@ using LeagueSharp.Common;
 
 using Color = System.Drawing.Color;
 
+using System.Runtime.ExceptionServices;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.IO;
+using SharpDX;
+
 namespace ALL_In_One.champions
 {
     class Fiora // RL244

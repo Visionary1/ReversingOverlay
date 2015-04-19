@@ -17,12 +17,12 @@ namespace ALL_In_One
                 return;
 
             AIO_Menu.addSubMenu("Champion", "AIO: " + ObjectManager.Player.ChampionName);
-            AIO_Menu.addSubMenu("Activator", "AIO: Activator");
 
             AIO_Menu.Champion.addOrbwalker();
             AIO_Menu.Champion.addTargetSelector();
 
             ChampLoader.Load(ObjectManager.Player.ChampionName);
+            utility.Activator.Load();
 
             AIO_Menu.MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("BLANK", string.Empty));
             AIO_Menu.MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));
@@ -32,8 +32,6 @@ namespace ALL_In_One
             AIO_Menu.Champion.Drawings.addItem("Minion Last Hit", new Circle(true, Color.GreenYellow), false);
             AIO_Menu.Champion.Drawings.addItem("Minion Near Kill", new Circle(true, Color.Gray), false);
             AIO_Menu.Champion.Drawings.addItem("Jungle Position", true, false);
-
-            utility.Activator.Load();
 
             Drawing.OnDraw += Drawing_OnDraw;
 

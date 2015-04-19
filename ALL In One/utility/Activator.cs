@@ -20,6 +20,8 @@ namespace ALL_In_One.utility
 
         internal static void Load()
         {
+            AIO_Menu.addSubMenu("Activator", "AIO: Activator");
+
             Menu.AddSubMenu(new Menu("Auto-Potion", "AutoPotion"));
             Menu.AddSubMenu(new Menu("Auto-Spell", "AutoSpell"));
             //Menu.AddSubMenu(new Menu("Activator: ComboMode", "ComboMode"));
@@ -31,8 +33,8 @@ namespace ALL_In_One.utility
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Mana Potion", "Use Mana Potion")).SetValue(true);
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(55,0,100));
 
-            Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
-            Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);
+            //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
+            //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);
 
             additems();
             addPotions();

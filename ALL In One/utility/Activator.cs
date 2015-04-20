@@ -227,21 +227,26 @@ namespace ALL_In_One.utility
 			internal static void InitializeItems()
 			{
 				smiteList = new List<items>
-				{
+				{	
+					new items
 					{
-					s0 = new ItemId = (ItemId) 3714
+					ItemId = (ItemId) 3714
 					},
+					new items
 					{
-					s1 = new ItemId = (ItemId) 3715
+					ItemId = (ItemId) 3715
 					},
+					new items
 					{
-					s2 = new ItemId = (ItemId) 3716
+					ItemId = (ItemId) 3716
 					},
+					new items
 					{
-					s3 = new ItemId = (ItemId) 3717
+					ItemId = (ItemId) 3717
 					},
+					new items
 					{
-					s4 = new ItemId = (ItemId) 3718
+					ItemId = (ItemId) 3718
 					}
 				};
 			}

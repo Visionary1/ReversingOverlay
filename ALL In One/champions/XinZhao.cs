@@ -236,7 +236,7 @@ namespace ALL_In_One.champions
 			
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady()
+                if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady()
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                     Q.Cast();
 				

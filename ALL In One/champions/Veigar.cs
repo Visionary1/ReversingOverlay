@@ -95,6 +95,8 @@ namespace ALL_In_One.champions
                 KillstealQ();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
+			if (AIO_Menu.Champion.Misc.getBoolValue("W on stuned target"))
+				stw();
 				
         }
 
@@ -267,6 +269,16 @@ namespace ALL_In_One.champions
                     R.Cast(target);
             }
         }
+		static void stw()
+		{
+			if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && !Combo())
+            {
+			var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+			var pred = W.GetPrediction(Wtarget);
+			if (pred.Hitchance == HitChance.Immobile || Wtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= W.Delay - 0.4f && W.IsReady())
+			W.Cast(Wtarget, false, true);
+            }
+		}
 		
         static void CastQ(Obj_AI_Hero target)
         {

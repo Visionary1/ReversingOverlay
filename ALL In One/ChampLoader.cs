@@ -37,9 +37,6 @@ namespace ALL_In_One
                 case "Urgot"://Added by fakker
                     champions.Urgot.Load();
                     break;
-                //case "Jax":
-                //    champions.Jax.Load();
-                //    break;
                 case "Fiora"://Added by RL144
                     champions.Fiora.Load();
                     break;
@@ -67,6 +64,9 @@ namespace ALL_In_One
                 case "Talon"://Added by RL144
                     champions.Talon.Load();
                     break;
+                case "Riven"://Added by xcsoft
+                    champions.Riven.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;
@@ -78,6 +78,7 @@ namespace ALL_In_One
             try
             {
                AIO_Func.sendDebugMsg(tag + Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " Supported.", false);
+               return true;
             }
             catch
             {
@@ -87,8 +88,6 @@ namespace ALL_In_One
                 AIO_Menu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported", null);
                 return false;
             }
-
-            return true;
         }
     }
 }

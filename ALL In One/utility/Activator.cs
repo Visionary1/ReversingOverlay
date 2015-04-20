@@ -70,6 +70,7 @@ namespace ALL_In_One.utility
             AfterAttack.additem("BoTRK", (int)ItemId.Blade_of_the_Ruined_King, 450f, true);
         }
 
+        #region PotionManager
         static void addPotions()
         {
             potions = new List<Potion>
@@ -111,7 +112,7 @@ namespace ALL_In_One.utility
 
         //PotionManager part of Marksman
         static List<Potion> potions;
-        
+
         enum PotionType
         {
             Health, Mana
@@ -143,6 +144,7 @@ namespace ALL_In_One.utility
                     where buff.Name == potion.Name && buff.IsActive
                     select potion).Any();
         }
+        #endregion
 
         internal class OnUpdate
         {
@@ -188,8 +190,6 @@ namespace ALL_In_One.utility
 				
             }
         }
-		
-
 		
 		internal class OnAttack
 		{

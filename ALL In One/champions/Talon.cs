@@ -10,7 +10,7 @@ namespace ALL_In_One.champions
 {
     class Talon //RL144
     {
-        static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } } //메뉴얼 오브워커 넣기는 했지만. 음.. 
+        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} //메뉴얼 오브워커 넣기는 했지만. 음.. 
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;

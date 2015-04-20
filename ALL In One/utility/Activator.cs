@@ -37,10 +37,10 @@ namespace ALL_In_One.utility
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(55,0,100));
             Menu.SubMenu("OnAttack").AddItem(new MenuItem("OnAttack.RS", "Use Red Smite")).SetValue(true);
             Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.SF", "Skill First")).SetValue(false);
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Cb", "On Combo")).SetValue(false);
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Hr", "On Harass")).SetValue(false);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Cb", "On Combo")).SetValue(true);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Hr", "On Harass")).SetValue(true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Lc", "On LaneClear")).SetValue(false);
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Jc", "On JungleClear")).SetValue(false);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Jc", "On JungleClear")).SetValue(true);
 
             //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
             //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);

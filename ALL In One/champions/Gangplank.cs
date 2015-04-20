@@ -238,7 +238,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var rTarget = TargetSelector.GetTarget(Q.Range, R.DamageType, true);
-                if (rTarget != null && !Player.IsDashing() && getHealthPercent(rTarget) <= 50)
+                if (rTarget != null && !Player.IsDashing() && AIO_Func.getHealthPercent(rTarget) <= 50)
                 R.Cast(rTarget.Position);
             }
 				

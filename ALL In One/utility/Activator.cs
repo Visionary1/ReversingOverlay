@@ -187,10 +187,10 @@ namespace ALL_In_One.utility
 		
 		internal class OnAttack
 		{
-            internal static List<item> itemsList = new List<item>();
+            internal static List<items> itemsList = new List<items>();
 			internal static Spell Smite;
 			internal static SpellSlot smiteSlot = SpellSlot.Unknown;
-			internal static Items.Item s0, s1, s2, s3, s4;
+			internal static Items.Items s0, s1, s2, s3, s4;
 			internal static float smrange = 700f;
             internal static void Game_OnUpdate(EventArgs args)
             {
@@ -212,7 +212,7 @@ namespace ALL_In_One.utility
 			internal static bool CheckInv()
 			{
 				bool b = false;
-				foreach(var item in itemsList)
+				foreach(var items in itemsList)
 				{
 					if(Player.InventoryItems.Any(f => f.Id == (ItemId)item.Id))
 					{
@@ -221,22 +221,17 @@ namespace ALL_In_One.utility
 				}
 				return b;
 			}
-			internal class item
-			{
-				internal int Id { get; set; }
-				internal float Range { get; set; }
-			}
 			internal static void InitializeItems()
 			{
-				s0 = new Items.Item(3714, smrange);
+				s0 = new Items.Items(3714, smrange);
 				itemsList.Add(s0);
-				s1 = new Items.Item(3715, smrange);
+				s1 = new Items.Items(3715, smrange);
 				itemsList.Add(s1);
-				s2 = new Items.Item(3716, smrange);
+				s2 = new Items.Items(3716, smrange);
 				itemsList.Add(s2);
-				s3 = new Items.Item(3717, smrange);
+				s3 = new Items.Items(3717, smrange);
 				itemsList.Add(s3);
-				s4 = new Items.Item(3718, smrange);
+				s4 = new Items.Items(3718, smrange);
 				itemsList.Add(s4);
 			}
 

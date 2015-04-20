@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Drawing;
 
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
 
 namespace ALL_In_One.champions
 {

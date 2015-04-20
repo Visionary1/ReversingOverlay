@@ -45,7 +45,6 @@ namespace ALL_In_One.utility
             Game.OnUpdate += OnUpdate.Game_OnUpdate;
             Orbwalking.BeforeAttack += BeforeAttack.Orbwalking_BeforeAttack;
             Orbwalking.AfterAttack += AfterAttack.Orbwalking_AfterAttack;
-			InitializeItems();
         }
 
         internal class item
@@ -184,19 +183,7 @@ namespace ALL_In_One.utility
             }
         }
 		
-		static void InitializeItems()
-		{
-			s0 = new Items.Item(3714, smrange);
-			itemsList.Add(s0);
-			s1 = new Items.Item(3715, smrange);
-			itemsList.Add(s1);
-			s2 = new Items.Item(3716, smrange);
-			itemsList.Add(s2);
-			s3 = new Items.Item(3717, smrange);
-			itemsList.Add(s3);
-			s4 = new Items.Item(3718, smrange);
-			itemsList.Add(s4);
-		}
+
 		
 		internal class OnAttack
 		{
@@ -208,6 +195,10 @@ namespace ALL_In_One.utility
             internal static void Game_OnUpdate(EventArgs args)
             {
 				setSmiteSlot();
+			}
+			internal static void Load()
+			{
+			InitializeItems();
 			}
 			internal static void setSmiteSlot()
 			{
@@ -231,6 +222,19 @@ namespace ALL_In_One.utility
 				return b;
 			}
 		
+			internal static void InitializeItems()
+			{
+				s0 = new Items.Item(3714, smrange);
+				itemsList.Add(s0);
+				s1 = new Items.Item(3715, smrange);
+				itemsList.Add(s1);
+				s2 = new Items.Item(3716, smrange);
+				itemsList.Add(s2);
+				s3 = new Items.Item(3717, smrange);
+				itemsList.Add(s3);
+				s4 = new Items.Item(3718, smrange);
+				itemsList.Add(s4);
+			}
 
 			internal static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)
 			{

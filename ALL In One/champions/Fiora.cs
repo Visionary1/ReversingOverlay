@@ -327,7 +327,7 @@ namespace ALL_In_One.champions
 				if (Minions.Count <= 0)
                 return;
 				
-                if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady()
+                if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady())
                 {    
 				E.Cast();
 				}
@@ -343,7 +343,7 @@ namespace ALL_In_One.champions
             if (Mobs.Count <= 0)
                 return;
 				
-                if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady()
+                if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady())
                 {    
 				E.Cast();
 				}

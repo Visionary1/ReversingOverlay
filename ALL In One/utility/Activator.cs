@@ -16,6 +16,7 @@ namespace ALL_In_One.utility
         //http://leagueoflegends.wikia.com/wiki/Category:Items
 
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
+        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         internal static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Activator");}}
 
         internal static void Load()
@@ -183,6 +184,20 @@ namespace ALL_In_One.utility
             }
         }
 		
+		static void InitializeItems()
+		{
+			s0 = new Items.Item(3714, smrange);
+			itemsList.Add(s0);
+			s1 = new Items.Item(3715, smrange);
+			itemsList.Add(s1);
+			s2 = new Items.Item(3716, smrange);
+			itemsList.Add(s2);
+			s3 = new Items.Item(3717, smrange);
+			itemsList.Add(s3);
+			s4 = new Items.Item(3718, smrange);
+			itemsList.Add(s4);
+		}
+		
 		internal class OnAttack
 		{
             internal static List<item> itemsList = new List<item>();
@@ -216,19 +231,7 @@ namespace ALL_In_One.utility
 				return b;
 			}
 		
-			internal static void InitializeItems()
-			{
-				s0 = new Items.Item(3714, smrange);
-				itemsList.Add(s0);
-				s1 = new Items.Item(3715, smrange);
-				itemsList.Add(s1);
-				s2 = new Items.Item(3716, smrange);
-				itemsList.Add(s2);
-				s3 = new Items.Item(3717, smrange);
-				itemsList.Add(s3);
-				s4 = new Items.Item(3718, smrange);
-				itemsList.Add(s4);
-			}
+
 			internal static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)
 			{
 				var Target = (Obj_AI_Base)target;

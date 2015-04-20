@@ -328,7 +328,6 @@ namespace ALL_In_One.champions
                 return;
 				
                 if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady()
-					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
                 {    
 				E.Cast();
 				}
@@ -345,7 +344,6 @@ namespace ALL_In_One.champions
                 return;
 				
                 if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady()
-					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
                 {    
 				E.Cast();
 				}

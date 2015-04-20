@@ -34,7 +34,7 @@ namespace ALL_In_One.utility
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Mana Potion", "Use Mana Potion")).SetValue(true);
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(55,0,100));
             Menu.SubMenu("OnAttack").AddItem(new MenuItem("OnAttack.RS", "Use Red Smite")).SetValue(true);
-
+            Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.SF", "Skill First")).SetValue(false);
             //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
             //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);
 
@@ -58,7 +58,6 @@ namespace ALL_In_One.utility
         static void additems()
         {
             BeforeAttack.additem("Youmuu", (int)ItemId.Youmuus_Ghostblade, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player));
-            AfterAttack.additem("Skill First", false);
             AfterAttack.additem("Tiamat", (int)ItemId.Tiamat_Melee_Only, 250f);
             AfterAttack.additem("Hydra", (int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
             AfterAttack.additem("Bilgewater", (int)ItemId.Bilgewater_Cutlass, 450f, true);
@@ -295,7 +294,7 @@ namespace ALL_In_One.utility
 
                 if (itemone != null)
                 {
-					if(AIO_Menu.Activator.AfterAttack.getBoolValue("Skill First"), true)
+					if(Menu.Item("AfterAttack.SF").GetValue<bool>())
 					{
 						//WIP
 					}

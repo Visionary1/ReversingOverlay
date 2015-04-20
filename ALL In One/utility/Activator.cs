@@ -200,6 +200,11 @@ namespace ALL_In_One.utility
 			{
 			InitializeItems();
 			}
+			internal class items
+			{
+				internal int Id { get; set; }
+				internal float Range { get; set; }
+			}
 			internal static void setSmiteSlot()
 			{
 				foreach (var spell in ObjectManager.Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteduel", StringComparison.CurrentCultureIgnoreCase))) // Red Smite

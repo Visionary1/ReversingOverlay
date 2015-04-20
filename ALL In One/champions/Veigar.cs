@@ -272,7 +272,7 @@ namespace ALL_In_One.champions
         }
 		static void stw()
 		{
-			if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && !Combo())
+			if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && Orbwalker.ActiveMode !== Orbwalking.OrbwalkingMode.Combo)
             {
 			var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
 			var pred = W.GetPrediction(Wtarget);

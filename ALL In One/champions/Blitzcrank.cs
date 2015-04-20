@@ -211,11 +211,12 @@ namespace ALL_In_One.champions
             {
 			var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
 			
-			if(AIO_Func.isKillable(Rtarget, R))
-			{ 
-				if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
-            	R.Cast();
-            }
+				if(AIO_Func.isKillable(Rtarget, R))
+				{ 
+					if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
+					R.Cast();
+				}
+			}
         }
 
         static void Harass()

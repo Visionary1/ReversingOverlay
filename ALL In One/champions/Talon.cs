@@ -13,13 +13,11 @@ namespace ALL_In_One.champions
         static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } } //메뉴얼 오브워커 넣기는 했지만. 음.. 
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-        static Items.Item tiamatItem, hydraItem; //히드라 평캔을 위함
-
         static Spell Q, W, E, R;
         static List<Items.Item> itemsList = new List<Items.Item>(); //척후병 샤브르
-	static Spell Smite;
-	static SpellSlot smiteSlot = SpellSlot.Unknown;
-	static Items.Item s0, s1, s2, s3, s4;
+		static Spell Smite;
+		static SpellSlot smiteSlot = SpellSlot.Unknown;
+		static Items.Item s0, s1, s2, s3, s4;
         static float smrange = 700f;
 		
         static float getQBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "TalonNoxianDiplomacyBuff"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
@@ -35,14 +33,11 @@ namespace ALL_In_One.champions
 
             W.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 2000f, false, SkillshotType.SkillshotCone);
             E.SetTargetted(0.25f, float.MaxValue);
-            hydraItem = new Items.Item((int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
-            tiamatItem = new Items.Item((int)ItemId.Tiamat_Melee_Only, 250f);
 			
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
-            AIO_Menu.Champion.Combo.addItem("Use Hydra", true);
 
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addIfMana();
@@ -50,14 +45,12 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW();
             AIO_Menu.Champion.Laneclear.addUseE();
-            AIO_Menu.Champion.Laneclear.addItem("Use Hydra", true);
             AIO_Menu.Champion.Laneclear.addIfMana();
 
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addUseE();
-            AIO_Menu.Champion.Jungleclear.addItem("Use Hydra", true);
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addUseKillsteal();
@@ -223,51 +216,33 @@ namespace ALL_In_One.champions
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-		var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
-		var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+			var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
+			var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
-		if(Minions.Count + Mobs.Count <= 0)
-		return;
-		
-		if (Minions.Count >= 1)
-		AALaneclear();
-		
-		if (Mobs.Count >= 1)
-		AAJungleclear();
-				
-	    }
+			if(Minions.Count + Mobs.Count <= 0)
+			return;
+			
+			if (Minions.Count >= 1)
+			AALaneclear();
+			
+			if (Mobs.Count >= 1)
+			AAJungleclear();
+					
+			}
 			
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
                 if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady()
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                     Q.Cast();
-				
-		if (AIO_Menu.Champion.Combo.getBoolValue("Use Hydra")
-			&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-		{
-			if(tiamatItem.IsReady())
-				tiamatItem.Cast();
-			else if(hydraItem.IsReady())
-				hydraItem.Cast();
-		}
-	    }
+			}
 				
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady()
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                     Q.Cast();					
-				
-		if (AIO_Menu.Champion.Combo.getBoolValue("Use Hydra")
-			&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-		{
-			if(tiamatItem.IsReady())
-				tiamatItem.Cast();
-			else if(hydraItem.IsReady())
-				hydraItem.Cast();
-		}
-	    }
+			}
         }
 
         static void Combo()
@@ -317,21 +292,15 @@ namespace ALL_In_One.champions
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
-		var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
+			var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
 
-		if (Minions.Count <= 0)
+			if (Minions.Count <= 0)
                 return;
 				
                 if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
                     Q.Cast();
 					
-		if (AIO_Menu.Champion.Laneclear.getBoolValue("Use Hydra"))
-		{
-			if(tiamatItem.IsReady())
-				tiamatItem.Cast();
-			else if(hydraItem.IsReady())
-				hydraItem.Cast();
-		}
+
         }
 
         static void AAJungleclear()
@@ -346,14 +315,6 @@ namespace ALL_In_One.champions
 				
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
                 Q.Cast();
-					
-		if (AIO_Menu.Champion.Jungleclear.getBoolValue("Use Hydra"))
-		{
-		    if(tiamatItem.IsReady())
-		        tiamatItem.Cast();
-			else if(hydraItem.IsReady())
-			    hydraItem.Cast();
-		}			
         }
 
 
@@ -406,23 +367,22 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-		{
+			{
                 damage += Q.GetDamage(enemy);
                 damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
-		}
+			}
 			
             if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
-		{
-		damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
-		damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
-		}
+			{
+			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
+			damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
+			}
 			
             if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
-		{
-		damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
-		damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
-		}
-
+			{
+			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
+			damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
+			}
 
             if (W.IsReady())
                 damage += W.GetDamage(enemy);

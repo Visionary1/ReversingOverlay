@@ -70,6 +70,9 @@ namespace ALL_In_One
                 //case "Azir"://Added by RL244 WIP
                 //    champions.Azir.Load();
                 //    break;
+                case "Gangplank"://Added by RL244 WIP
+                    champions.Gangplank.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

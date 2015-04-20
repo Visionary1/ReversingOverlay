@@ -101,7 +101,7 @@
     <Compile Include="champions\Fiora.cs" />
     <Compile Include="champions\_Fizz.cs" />
     <Compile Include="champions\_Galio.cs" />
-    <Compile Include="champions\_Gangplank.cs" />
+    <Compile Include="champions\Gangplank.cs" />
     <Compile Include="champions\Garen.cs" />
     <Compile Include="champions\_Gnar.cs" />
     <Compile Include="champions\_Gragas.cs" />

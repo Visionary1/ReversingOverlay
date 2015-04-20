@@ -187,10 +187,9 @@ namespace ALL_In_One.utility
 		
 		internal class OnAttack
 		{
-            internal static List<items> itemsList = new List<items>();
+            internal static List<items> smiteList = new List<items>();
 			internal static Spell Smite;
 			internal static SpellSlot smiteSlot = SpellSlot.Unknown;
-			internal static Items.Items s0, s1, s2, s3, s4;
 			internal static float smrange = 700f;
             internal static void Game_OnUpdate(EventArgs args)
             {
@@ -202,8 +201,7 @@ namespace ALL_In_One.utility
 			}
 			internal class items
 			{
-				internal int Id { get; set; }
-				internal float Range { get; set; }
+				internal ItemId ItemId { get; set; }
 			}
 			internal static void setSmiteSlot()
 			{
@@ -217,7 +215,7 @@ namespace ALL_In_One.utility
 			internal static bool CheckInv()
 			{
 				bool b = false;
-				foreach(var items in itemsList)
+				foreach(var items in smiteList)
 				{
 					if(Player.InventoryItems.Any(f => f.Id == (ItemId)item.Id))
 					{
@@ -228,16 +226,24 @@ namespace ALL_In_One.utility
 			}
 			internal static void InitializeItems()
 			{
-				s0 = new Items.Items(3714, smrange);
-				itemsList.Add(s0);
-				s1 = new Items.Items(3715, smrange);
-				itemsList.Add(s1);
-				s2 = new Items.Items(3716, smrange);
-				itemsList.Add(s2);
-				s3 = new Items.Items(3717, smrange);
-				itemsList.Add(s3);
-				s4 = new Items.Items(3718, smrange);
-				itemsList.Add(s4);
+				smiteList = new List<items>
+				{
+					{
+					s0 = new ItemId = (ItemId) 3714
+					},
+					{
+					s1 = new ItemId = (ItemId) 3715
+					},
+					{
+					s2 = new ItemId = (ItemId) 3716
+					},
+					{
+					s3 = new ItemId = (ItemId) 3717
+					},
+					{
+					s4 = new ItemId = (ItemId) 3718
+					}
+				};
 			}
 
 			internal static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)

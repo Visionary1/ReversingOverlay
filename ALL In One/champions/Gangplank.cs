@@ -291,7 +291,7 @@ namespace ALL_In_One.champions
                 return;
 				
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
-                E.Cast(Minions);
+                E.Cast();
         }
 
         static void Jungleclear()

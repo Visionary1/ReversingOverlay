@@ -19,7 +19,7 @@ namespace ALL_In_One.champions
 		static SpellSlot smiteSlot = SpellSlot.Unknown;
 		static Items.Item s0, s1, s2, s3, s4;
         static float smrange = 700f;
-        static float getEBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "RaiseMorale"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getEBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "RaiseMoraleBuff"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
         {
@@ -207,15 +207,15 @@ namespace ALL_In_One.champions
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
                 if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                    Q.Cast();
+                    && Q.CanCast(Target))
+                    Q.Cast(Target);
 			}
 				
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                    Q.Cast();					
+                    && Q.CanCast(Target))
+                    Q.Cast(Target);					
 			}
         }
 
@@ -226,10 +226,20 @@ namespace ALL_In_One.champions
                 E.Cast();
             }
 
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady()
-			&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+            if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-                R.Cast();
+               
+                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
+      
+                if (qTarget != null && !Player.IsDashing())
+                    Q.Cast(qTarget);       
+            }
+			
+            if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
+            {
+                var rTarget = TargetSelector.GetTarget(Q.Range, R.DamageType, true);
+                if (rTarget != null && !Player.IsDashing() && getHealthPercent(rTarget) <= 50)
+                R.Cast(rTarget.Position);
             }
 				
         }
@@ -321,7 +331,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && AIO_Func.isKillable(target, R))
+                if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.75f))/7) >= target.Health + target.HPRegenRate)
                     R.Cast(target.Position);
             }
         }
@@ -349,7 +359,7 @@ namespace ALL_In_One.champions
 			}
 
             if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage(enemy)*((R.Width/(enemy.MoveSpeed*0.75f))/7);
 
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);

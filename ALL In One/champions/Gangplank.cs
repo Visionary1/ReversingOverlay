@@ -271,8 +271,8 @@ namespace ALL_In_One.champions
 			if (Minions.Count <= 0)
                 return;
 				
-                if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
-                    Q.Cast();
+                //if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+                //    Q.Cast(Minions[0]);
         }
 
         static void AAJungleclear()
@@ -285,8 +285,8 @@ namespace ALL_In_One.champions
             if (Mobs.Count <= 0)
                 return;
 				
-            if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
-                Q.Cast();
+            //if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+            //    Q.Cast(Mobs[0]);
         }
 
 
@@ -299,6 +299,15 @@ namespace ALL_In_One.champions
 
             if (Minions.Count <= 0)
                 return;
+
+				
+            if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
+            {
+				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q)))
+      
+                if (_m != null && !Player.IsDashing())
+                    Q.Cast(qTarget);       
+            }
 				
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
                 E.Cast();
@@ -314,6 +323,14 @@ namespace ALL_In_One.champions
             if (Mobs.Count <= 0)
                 return;
 
+            if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
+            {
+				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q)))
+      
+                if (_m != null && !Player.IsDashing())
+                    Q.Cast(qTarget);       
+            }
+			
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
                 E.Cast();
         }

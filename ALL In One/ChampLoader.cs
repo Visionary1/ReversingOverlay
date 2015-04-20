@@ -73,6 +73,9 @@ namespace ALL_In_One
                 case "Gangplank"://Added by RL244
                     champions.Gangplank.Load();
                     break;
+                case "Blitzcrank"://Added by RL244
+                    champions.Blitzcrank.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

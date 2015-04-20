@@ -206,7 +206,7 @@ namespace ALL_In_One.champions
 			
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+                if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
                     && Q.CanCast(Target))
                     Q.Cast(Target);
 			}

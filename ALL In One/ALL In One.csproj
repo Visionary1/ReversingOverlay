@@ -83,7 +83,7 @@
     <Compile Include="champions\_Ashe.cs" />
     <Compile Include="champions\Azir.cs" />
     <Compile Include="champions\_Bard.cs" />
-    <Compile Include="champions\_Blitzcrank.cs" />
+    <Compile Include="champions\Blitzcrank.cs" />
     <Compile Include="champions\_Brand.cs" />
     <Compile Include="champions\_Braum.cs" />
     <Compile Include="champions\_Caitlyn.cs" />

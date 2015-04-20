@@ -27,11 +27,13 @@ namespace ALL_In_One.utility
             //Menu.AddSubMenu(new Menu("Activator: ComboMode", "ComboMode"));
             Menu.AddSubMenu(new Menu("BeforeAttack", "BeforeAttack"));
             Menu.AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
+            Menu.AddSubMenu(new Menu("OnAttack", "OnAttack"));
 
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Health Potion", "Use Health Potion")).SetValue(true);
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifHealthPercent", "if Health Percent <")).SetValue(new Slider(55, 0, 100));
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Mana Potion", "Use Mana Potion")).SetValue(true);
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(55,0,100));
+            Menu.SubMenu("OnAttack").AddItem(new MenuItem("OnAttack.RS", "Use Red Smite")).SetValue(true);
 
             //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
             //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);
@@ -42,6 +44,7 @@ namespace ALL_In_One.utility
             Game.OnUpdate += OnUpdate.Game_OnUpdate;
             Orbwalking.BeforeAttack += BeforeAttack.Orbwalking_BeforeAttack;
             Orbwalking.AfterAttack += AfterAttack.Orbwalking_AfterAttack;
+			InitializeItems();
         }
 
         internal class item
@@ -55,7 +58,7 @@ namespace ALL_In_One.utility
         static void additems()
         {
             BeforeAttack.additem("Youmuu", (int)ItemId.Youmuus_Ghostblade, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player));
-
+            AfterAttack.additem("Skill First", false);
             AfterAttack.additem("Tiamat", (int)ItemId.Tiamat_Melee_Only, 250f);
             AfterAttack.additem("Hydra", (int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
             AfterAttack.additem("Bilgewater", (int)ItemId.Bilgewater_Cutlass, 450f, true);
@@ -177,8 +180,73 @@ namespace ALL_In_One.utility
                     }
                 }
 
+				
             }
         }
+		
+		internal class OnAttack
+		{
+            internal static List<item> itemsList = new List<item>();
+			internal static Spell Smite;
+			internal static SpellSlot smiteSlot = SpellSlot.Unknown;
+			internal static Items.Item s0, s1, s2, s3, s4;
+			internal static float smrange = 700f;
+            internal static void Game_OnUpdate(EventArgs args)
+            {
+				setSmiteSlot();
+			}
+			internal static void setSmiteSlot()
+			{
+				foreach (var spell in ObjectManager.Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteduel", StringComparison.CurrentCultureIgnoreCase))) // Red Smite
+				{
+					smiteSlot = spell.Slot;
+					Smite = new Spell(smiteSlot, smrange);
+					return;
+				}
+			}
+			internal static bool CheckInv()
+			{
+				bool b = false;
+				foreach(var item in itemsList)
+				{
+					if(Player.InventoryItems.Any(f => f.Id == (ItemId)item.Id))
+					{
+						b = true;
+					}
+				}
+				return b;
+			}
+		
+			internal static void InitializeItems()
+			{
+				s0 = new Items.Item(3714, smrange);
+				itemsList.Add(s0);
+				s1 = new Items.Item(3715, smrange);
+				itemsList.Add(s1);
+				s2 = new Items.Item(3716, smrange);
+				itemsList.Add(s2);
+				s3 = new Items.Item(3717, smrange);
+				itemsList.Add(s3);
+				s4 = new Items.Item(3718, smrange);
+				itemsList.Add(s4);
+			}
+			internal static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)
+			{
+				var Target = (Obj_AI_Base)target;
+					
+				if (!unit.IsMe || Target == null)
+						return;
+						
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Menu.Item("OnAttack.RS").GetValue<bool>())
+				{
+					if (!CheckInv())
+					return;
+					Smite.Slot = smiteSlot;
+					if(smiteSlot.IsReady())
+					Player.Spellbook.CastSpell(smiteSlot, Target);
+				}
+			}
+		}
 
         internal class BeforeAttack
         {
@@ -227,11 +295,18 @@ namespace ALL_In_One.utility
 
                 if (itemone != null)
                 {
-                    if (itemone.isTargeted)
-                        Items.UseItem(itemone.Id, (Obj_AI_Base)target);
-                    else
-                        Items.UseItem(itemone.Id);
-                }
+					if(AIO_Menu.Activator.AfterAttack.getBoolValue("Skill First"), true)
+					{
+						//WIP
+					}
+					else
+					{
+						if (itemone.isTargeted)
+							Items.UseItem(itemone.Id, (Obj_AI_Base)target);
+						else
+							Items.UseItem(itemone.Id);
+					}
+				}
             }
         }
     }

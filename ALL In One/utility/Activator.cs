@@ -217,7 +217,7 @@ namespace ALL_In_One.utility
 				bool b = false;
 				foreach(var items in smiteList)
 				{
-					if(Player.InventoryItems.Any(f => f.Id == (ItemId)item.Id))
+					if(Player.InventoryItems.Any(f => f.Id == (ItemId)items.ItemId))
 					{
 						b = true;
 					}

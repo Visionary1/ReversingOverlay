@@ -37,7 +37,7 @@ namespace ALL_In_One
                 case "Urgot"://Added by fakker
                     champions.Urgot.Load();
                     break;
-                case "Fiora"://Added by RL144
+                case "Fiora"://Added by RL244
                     champions.Fiora.Load();
                     break;
                 case "Lulu"://xcsoft가 추가함. 기록해두면 좋음.
@@ -52,21 +52,24 @@ namespace ALL_In_One
                 case "Sivir"://Added by fakker , 95% from sharpshooter
                     champions.Sivir.Load();
                     break;
-                case "XinZhao"://Added by RL144
+                case "XinZhao"://Added by RL244
                     champions.XinZhao.Load();
                     break;
                 case "Katarina"://Added by xcsoft
                     champions.Katarina.Load();
                     break;
-                case "Veigar"://Added by RL144
+                case "Veigar"://Added by RL244
                     champions.Veigar.Load();
                     break;
-                case "Talon"://Added by RL144
+                case "Talon"://Added by RL244
                     champions.Talon.Load();
                     break;
                 case "Riven"://Added by xcsoft
                     champions.Riven.Load();
                     break;
+                //case "Azir"://Added by RL244 WIP
+                //    champions.Azir.Load();
+                //    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

@@ -221,7 +221,11 @@ namespace ALL_In_One.utility
 				}
 				return b;
 			}
-		
+			internal class item
+			{
+				internal int Id { get; set; }
+				internal float Range { get; set; }
+			}
 			internal static void InitializeItems()
 			{
 				s0 = new Items.Item(3714, smrange);

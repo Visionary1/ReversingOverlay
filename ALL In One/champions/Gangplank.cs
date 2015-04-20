@@ -333,19 +333,19 @@ namespace ALL_In_One.champions
             if (Q.IsReady())
 			{
                 damage += Q.GetDamage(enemy);
-                damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
+                damage += (float)Player.GetAutoAttackDamage(enemy, true);
 			}
 			
             if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
 			{
 			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
-			damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
+			damage += (float)Player.GetAutoAttackDamage(enemy, true);
 			}
 			
             if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
 			{
 			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
-			damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
+			damage += (float)Player.GetAutoAttackDamage(enemy, true);
 			}
 
             if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)

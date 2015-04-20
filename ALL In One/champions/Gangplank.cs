@@ -303,7 +303,7 @@ namespace ALL_In_One.champions
 				
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
-				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q)))
+				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))));
       
                 if (_m != null && !Player.IsDashing())
                     Q.Cast(qTarget);       
@@ -325,7 +325,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
-				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q)))
+				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))));
       
                 if (_m != null && !Player.IsDashing())
                     Q.Cast(qTarget);       

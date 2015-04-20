@@ -29,6 +29,7 @@ namespace ALL_In_One.utility
             Menu.AddSubMenu(new Menu("BeforeAttack", "BeforeAttack"));
             Menu.AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
             Menu.AddSubMenu(new Menu("OnAttack", "OnAttack"));
+			Menu.AddSubMenu(new Menu("Misc", "Misc"));
 
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Health Potion", "Use Health Potion")).SetValue(true);
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifHealthPercent", "if Health Percent <")).SetValue(new Slider(55, 0, 100));
@@ -36,6 +37,11 @@ namespace ALL_In_One.utility
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(55,0,100));
             Menu.SubMenu("OnAttack").AddItem(new MenuItem("OnAttack.RS", "Use Red Smite")).SetValue(true);
             Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.SF", "Skill First")).SetValue(false);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Cb", "On Combo")).SetValue(false);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Hr", "On Harass")).SetValue(false);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Lc", "On LaneClear")).SetValue(false);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Jc", "On JungleClear")).SetValue(false);
+
             //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
             //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);
 
@@ -260,8 +266,8 @@ namespace ALL_In_One.utility
 						
 				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Menu.Item("OnAttack.RS").GetValue<bool>())
 				{
-					if (!CheckInv())
-					return;
+					//if (!CheckInv())
+					//return;
 					Smite.Slot = smiteSlot;
 					if(smiteSlot.IsReady())
 					Player.Spellbook.CastSpell(smiteSlot, Target);
@@ -287,11 +293,14 @@ namespace ALL_In_One.utility
 
                 foreach (var item in BeforeAttack.itemsList.Where(x => Items.CanUseItem((int)x.Id) && args.Target.IsValidTarget(x.Range) && Menu.Item("BeforeAttack.Use " + x.Id.ToString()).GetValue<bool>()))
                 {
-                    if (item.isTargeted)
-                        Items.UseItem(item.Id, (Obj_AI_Base)args.Target);
-                    else
-                        Items.UseItem(item.Id);
-                }
+					if(Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                    {
+						if (item.isTargeted)
+							Items.UseItem(item.Id, (Obj_AI_Base)args.Target);
+						else
+							Items.UseItem(item.Id);
+					}
+				}
             }
         }
 
@@ -316,16 +325,24 @@ namespace ALL_In_One.utility
 
                 if (itemone != null)
                 {
-					if(Menu.Item("AfterAttack.SF").GetValue<bool>())
+					var Minions = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Enemy);
+					var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+					if(Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
+					Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed || 
+					Menu.Item("Misc.Jc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count >= 1
+					Menu.Item("Misc.Lc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Minions.Count >= 1)
 					{
-						//WIP
-					}
-					else
-					{
-						if (itemone.isTargeted)
-							Items.UseItem(itemone.Id, (Obj_AI_Base)target);
+						if(Menu.Item("AfterAttack.SF").GetValue<bool>())
+						{
+							//WIP
+						}
 						else
-							Items.UseItem(itemone.Id);
+						{
+							if (itemone.isTargeted)
+								Items.UseItem(itemone.Id, (Obj_AI_Base)target);
+							else
+								Items.UseItem(itemone.Id);
+						}
 					}
 				}
             }

@@ -147,16 +147,16 @@ namespace ALL_In_One.champions
 
             //Q스펠이 준비상태(쿨타임아닌상태)이고 Q Range옵션이 On 이면 Q사거리를 플레이어 챔피언위치에다가 그리는겁니다. 이하동문
             if (Q.IsReady() && drawQ.Active)
-                Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+                Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color, 3);
 
             if (W.IsReady() && drawW.Active)
-                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
+                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color, 3);
 
             if (E.IsReady() && drawE.Active)
-                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color, 3);
 
             if (R.IsReady() && drawR.Active)
-                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color, 3);
         }
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)

@@ -42,8 +42,6 @@ namespace ALL_In_One.champions
             Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
-            
-
             //Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("LcUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));

@@ -18,12 +18,12 @@ namespace ALL_In_One.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 260f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 250f, TargetSelector.DamageType.Physical);
-            E = new Spell(SpellSlot.E, 325f, TargetSelector.DamageType.Physical);
-            R = new Spell(SpellSlot.R, 900f, TargetSelector.DamageType.Physical);
+            Q = new Spell(SpellSlot.Q, 500f);
+            W = new Spell(SpellSlot.W, 260f);
+            E = new Spell(SpellSlot.E, 250f);
+            R = new Spell(SpellSlot.R, 1025f);
 
-            R.SetSkillshot(0.25f, 100f, 2200f, false, SkillshotType.SkillshotCone);
+            R.SetSkillshot(0.25f, 200f, 2200f, false, SkillshotType.SkillshotCone);
 
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
@@ -53,11 +53,11 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
-            //이벤트들 추가.
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
+            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -82,6 +82,8 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
+
+            
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -95,16 +97,16 @@ namespace ALL_In_One.champions
             var drawR = AIO_Menu.Champion.Drawings.RRange;
 
             if (Q.IsReady() && drawQ.Active)
-                Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+                Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color, 3);
 
             if (W.IsReady() && drawW.Active)
-                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
+                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color, 3);
 
             if (E.IsReady() && drawE.Active)
-                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color, 3);
 
             if (R.IsReady() && drawR.Active)
-                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color, 3);
         }
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
@@ -125,19 +127,33 @@ namespace ALL_In_One.champions
                 W.Cast();
         }
 
+        static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
+        {
+            var Target = (Obj_AI_Base)target;
+
+            if (!unit.IsMe || !Orbwalking.CanMove(10) || !Target.IsValidTarget())
+                return;
+
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                Q.Cast();
+
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                Q.Cast();
+
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                Q.Cast();
+        }
+
         static void Combo()
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
-            {
-                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-
-                if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-                    Q.Cast(qTarget);
-
-            }
+            { }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-            { }
+            {
+                if (AIO_Func.anyoneValidInRange(250f))
+                    W.Cast();
+            }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             { }

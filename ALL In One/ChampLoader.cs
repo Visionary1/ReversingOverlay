@@ -95,7 +95,7 @@ namespace ALL_In_One
             catch
             {
                 AIO_Func.sendDebugMsg(tag + ObjectManager.Player.ChampionName + " Not supported.", false);
-                Game.PrintChat(AIO_Func.colorChat(System.Drawing.Color.DeepSkyBlue, tag) + AIO_Func.colorChat(System.Drawing.Color.DeepPink, ObjectManager.Player.ChampionName) + " Not supported.");
+                Game.PrintChat(AIO_Func.colorChat(System.Drawing.Color.SpringGreen, tag) + AIO_Func.colorChat(System.Drawing.Color.DeepPink, ObjectManager.Player.ChampionName) + " Not supported.");
 
                 AIO_Menu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported", null);
                 return false;

@@ -35,7 +35,7 @@ namespace ALL_In_One
 
             Drawing.OnDraw += Drawing_OnDraw;
 
-            Game.PrintChat(AIO_Func.colorChat(Color.DeepSkyBlue, "[xcsoft] All In One: ") + AIO_Func.colorChat(Color.DeepPink, ObjectManager.Player.ChampionName) + " Loaded");
+            Game.PrintChat(AIO_Func.colorChat(Color.SpringGreen, "[xcsoft] All In One: ") + AIO_Func.colorChat(Color.DeepPink, ObjectManager.Player.ChampionName) + " Loaded");
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -51,10 +51,10 @@ namespace ALL_In_One
                 foreach (var minion in MinionManager.GetMinions(ObjectManager.Player.Position, ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius + 300))
                 {
                     if (drawMinionLastHit.Active && ObjectManager.Player.GetAutoAttackDamage(minion, true) >= minion.Health)
-                        Render.Circle.DrawCircle(minion.Position, minion.BoundingRadius, drawMinionLastHit.Color, 5);
+                        Render.Circle.DrawCircle(minion.Position, minion.BoundingRadius, drawMinionLastHit.Color, 3);
                     else
                         if (drawMinionNearKill.Active && ObjectManager.Player.GetAutoAttackDamage(minion, true) * 2 >= minion.Health)
-                        Render.Circle.DrawCircle(minion.Position, minion.BoundingRadius, drawMinionNearKill.Color, 5);
+                        Render.Circle.DrawCircle(minion.Position, minion.BoundingRadius, drawMinionNearKill.Color, 3);
                 }
             }
 
@@ -62,19 +62,19 @@ namespace ALL_In_One
             {
                 const byte circleRadius = 100;
 
-                Render.Circle.DrawCircle(new SharpDX.Vector3(7461.018f, 3253.575f, 52.57141f), circleRadius, Color.Blue, 5); // blue team: red
-                Render.Circle.DrawCircle(new SharpDX.Vector3(3511.601f, 8745.617f, 52.57141f), circleRadius, Color.Blue, 5); // blue team: blue
-                Render.Circle.DrawCircle(new SharpDX.Vector3(7462.053f, 2489.813f, 52.57141f), circleRadius, Color.Blue, 5); // blue team: golems
-                Render.Circle.DrawCircle(new SharpDX.Vector3(3144.897f, 7106.449f, 51.89026f), circleRadius, Color.Blue, 5); // blue team: wolfs
-                Render.Circle.DrawCircle(new SharpDX.Vector3(7770.341f, 5061.238f, 49.26587f), circleRadius, Color.Blue, 5); // blue team: wariaths
+                Render.Circle.DrawCircle(new SharpDX.Vector3(7461.018f, 3253.575f, 52.57141f), circleRadius, Color.Blue, 3); // blue team: red
+                Render.Circle.DrawCircle(new SharpDX.Vector3(3511.601f, 8745.617f, 52.57141f), circleRadius, Color.Blue, 3); // blue team: blue
+                Render.Circle.DrawCircle(new SharpDX.Vector3(7462.053f, 2489.813f, 52.57141f), circleRadius, Color.Blue, 3); // blue team: golems
+                Render.Circle.DrawCircle(new SharpDX.Vector3(3144.897f, 7106.449f, 51.89026f), circleRadius, Color.Blue, 3); // blue team: wolfs
+                Render.Circle.DrawCircle(new SharpDX.Vector3(7770.341f, 5061.238f, 49.26587f), circleRadius, Color.Blue, 3); // blue team: wariaths
 
-                Render.Circle.DrawCircle(new SharpDX.Vector3(10930.93f, 5405.83f, -68.72192f), circleRadius, Color.Yellow, 5); // Dragon
+                Render.Circle.DrawCircle(new SharpDX.Vector3(10930.93f, 5405.83f, -68.72192f), circleRadius, Color.Yellow, 3); // Dragon
 
-                Render.Circle.DrawCircle(new SharpDX.Vector3(7326.056f, 11643.01f, 50.21985f), circleRadius, Color.Red, 5); // red team: red
-                Render.Circle.DrawCircle(new SharpDX.Vector3(11417.6f, 6216.028f, 51.00244f), circleRadius, Color.Red, 5); // red team: blue
-                Render.Circle.DrawCircle(new SharpDX.Vector3(7368.408f, 12488.37f, 56.47668f), circleRadius, Color.Red, 5); // red team: golems
-                Render.Circle.DrawCircle(new SharpDX.Vector3(10342.77f, 8896.083f, 51.72742f), circleRadius, Color.Red, 5); // red team: wolfs
-                Render.Circle.DrawCircle(new SharpDX.Vector3(7001.741f, 9915.717f, 54.02466f), circleRadius, Color.Red, 5); // red team: wariaths                    
+                Render.Circle.DrawCircle(new SharpDX.Vector3(7326.056f, 11643.01f, 50.21985f), circleRadius, Color.Red, 3); // red team: red
+                Render.Circle.DrawCircle(new SharpDX.Vector3(11417.6f, 6216.028f, 51.00244f), circleRadius, Color.Red, 3); // red team: blue
+                Render.Circle.DrawCircle(new SharpDX.Vector3(7368.408f, 12488.37f, 56.47668f), circleRadius, Color.Red, 3); // red team: golems
+                Render.Circle.DrawCircle(new SharpDX.Vector3(10342.77f, 8896.083f, 51.72742f), circleRadius, Color.Red, 3); // red team: wolfs
+                Render.Circle.DrawCircle(new SharpDX.Vector3(7001.741f, 9915.717f, 54.02466f), circleRadius, Color.Red, 3); // red team: wariaths                    
             }
 
             var drawAA = AIO_Menu.Champion.Drawings.getCircleValue("Auto-Attack Real Range", false);
@@ -87,8 +87,8 @@ namespace ALL_In_One
             {
                 var aaTarget = AIO_Menu.Orbwalker.GetTarget();
 
-                if (aaTarget != null)
-                    Render.Circle.DrawCircle(aaTarget.Position, aaTarget.BoundingRadius + 15, drawTarget.Color, 6);
+                if (aaTarget.IsValidTarget())
+                    Render.Circle.DrawCircle(aaTarget.Position, aaTarget.BoundingRadius + 15, drawTarget.Color, 3);
             }
         }
     }

@@ -9,6 +9,7 @@ namespace ALL_In_One
 {
     class AIO_Func
     {
+        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         internal static float getHealthPercent(Obj_AI_Base unit)
         {
             return unit.Health / unit.MaxHealth * 100;
@@ -77,8 +78,9 @@ namespace ALL_In_One
             return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2"); 
         }
 		
-		internal static void CCast(Spell spell, Obj_AI_Hero target) //for Circle spells
+		internal static void CCast(Spell spell, Obj_AI_Base target) //for Circular spells
 		{
+
 				var pred = spell.GetPrediction(target, true);
 				SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.Position.To2D()) / 2 ;
 				if (target.IsValidTarget(spell.Range))
@@ -94,22 +96,16 @@ namespace ALL_In_One
 					}
 				}
 		}
-		internal static void CCast(Spell spell, Obj_AI_Base target) //for Circle spells
-		{
-				var pred = spell.GetPrediction(target, true);
-				SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.Position.To2D()) / 2 ;
-				if (target.IsValidTarget(spell.Range))
-				{
-					if(target.MoveSpeed*spell.Delay <= spell.Width*2/3)
-					spell.Cast(target.Position);
-					else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-					{
-						if(target.MoveSpeed*spell.Delay <= spell.Width*4/3)
-						spell.Cast(castVec);
-						else
-						spell.Cast(pred.CastPosition);
-					}
-				}
+		
+		internal static void LCast(Spell spell, Obj_AI_Base target, float alpha, float colmini) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
+		{							//        AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue); <- 이런식으로 사용.
+            var pred = spell.GetPrediction(target, true);
+            var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
+            var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
+			if (target.IsValidTarget(spell.Range - target.MoveSpeed*(spell.Delay +Player.Distance(target.Position)/spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+            {
+        	 spell.Cast(pred.CastPosition);
+            }
 		}
     }
 }

@@ -8,6 +8,7 @@ using System.Drawing;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
+using Color = System.Drawing.Color;
 
 namespace ALL_In_One.champions
 {

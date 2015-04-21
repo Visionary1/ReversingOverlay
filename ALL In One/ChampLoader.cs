@@ -85,6 +85,9 @@ namespace ALL_In_One
                 case "KogMaw"://Added by RL244
                     champions.KogMaw.Load();
                     break;
+                case "Zyra"://Added by RL244
+                    champions.Zyra.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

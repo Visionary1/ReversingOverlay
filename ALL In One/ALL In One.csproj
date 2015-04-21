@@ -196,7 +196,7 @@
     <Compile Include="champions\_Zed.cs" />
     <Compile Include="champions\_Ziggs.cs" />
     <Compile Include="champions\_Zilean.cs" />
-    <Compile Include="champions\_Zyra.cs" />
+    <Compile Include="champions\Zyra.cs" />
     <Compile Include="ChampLoader.cs" />
     <Compile Include="utility\Activator.cs" />
     <Compile Include="AIO Func.cs" />

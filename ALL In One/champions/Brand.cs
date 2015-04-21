@@ -144,7 +144,7 @@ namespace ALL_In_One.champions
                 W.Cast((Vector3)gapcloser.End);
             if (!W.IsReady() && Q.IsReady()
 				&& Player.Distance(gapcloser.Sender.Position) <= Q.Range)
-                CastQ(gapcloser);
+                Q.Cast((Vector3)gapcloser.End);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)

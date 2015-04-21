@@ -141,10 +141,10 @@ namespace ALL_In_One.champions
 
             if (W.IsReady()
 				&& Player.Distance(gapcloser.Sender.Position) <= W.Range)
-                castW((Vector3)gapcloser.End);
-            if (!W.IsReady() && Q.IsReady
+                CastW((Vector3)gapcloser.End);
+            if (!W.IsReady() && Q.IsReady()
 				&& Player.Distance(gapcloser.Sender.Position) <= Q.Range)
-                castQ((Vector3)gapcloser.End);
+                CastQ((Vector3)gapcloser.End);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -154,10 +154,10 @@ namespace ALL_In_One.champions
 
             if (W.IsReady()
 			&& Player.Distance(sender.Position) <= W.Range)
-                castW(sender);
-            if (!W.IsReady() && Q.IsReady
+                CastW(sender);
+            if (!W.IsReady() && Q.IsReady()
 			&& Player.Distance(sender.Position) <= Q.Range)
-                castQ(sender);
+                CastQ(sender);
         }
 
 		
@@ -334,7 +334,7 @@ namespace ALL_In_One.champions
 	static void CastW(Obj_AI_Hero target)
 	{
             var wpred = W.GetPrediction(target, true);
-			if (target.IsValidTarget(W.Range && wpred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+			if (target.IsValidTarget(W.Range) && wpred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
             {
         	 W.Cast(wpred.CastPosition);
             }
@@ -343,7 +343,7 @@ namespace ALL_In_One.champions
 	static void CastW(Obj_AI_Base target)
 	{
             var wpred = W.GetPrediction(target, true);
-			if (target.IsValidTarget(W.Range && wpred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+			if (target.IsValidTarget(W.Range) && wpred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
             {
         	 W.Cast(wpred.CastPosition);
             }

@@ -82,6 +82,9 @@ namespace ALL_In_One
                 case "Cassiopeia"://Added by RL244
                     champions.Cassiopeia.Load();
                     break;
+                case "KogMaw"://Added by RL244
+                    champions.KogMaw.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

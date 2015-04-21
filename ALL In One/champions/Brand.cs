@@ -182,7 +182,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
 		var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-		CastW(Wtarget);
+		AIO_Func.CCast(W,Wtarget);
 
             }
 
@@ -218,7 +218,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
 			var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-			CastW(Wtarget);
+			AIO_Func.CCast(W,Wtarget);
             }
         }
 
@@ -340,24 +340,6 @@ namespace ALL_In_One.champions
             if (minions <= 0 && prediction.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
 			{
             	Q.Cast(prediction.CastPosition);
-			}
-	}
-	
-	static void CastW(Obj_AI_Hero target)
-	{
-            var wpred = W.GetPrediction(target, true);
-            Vector2 castVec = (wpred.UnitPosition.To2D() + target.Position.To2D()) / 2 ;
-			if (target.IsValidTarget(W.Range))
-			{
-				if(target.MoveSpeed*W.Delay <= W.Width*2/3)
-				W.Cast(target.Position);
-				else if(wpred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-				{
-					if(target.MoveSpeed*W.Delay <= W.Width*4/3)
-					W.Cast(castVec);
-					else
-					W.Cast(wpred.CastPosition);
-				}
 			}
 	}
 	

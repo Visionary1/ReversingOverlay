@@ -55,7 +55,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
 
-            AIO_Menu.Champion.Drawings.addQRange();
+            AIO_Menu.Champion.Drawings.addQRange(false);
+            AIO_Menu.Champion.Drawings.addItem("Q Safe Range", new Circle(true, Color.Red));
             AIO_Menu.Champion.Drawings.addRRange();
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
@@ -104,9 +105,14 @@ namespace ALL_In_One.champions
 
             var drawQ = AIO_Menu.Champion.Drawings.QRange;
             var drawR = AIO_Menu.Champion.Drawings.RRange;
+            var drawQr = AIO_Menu.Champion.Drawings.getCircleValue("Q Safe Range");
+			var qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+				
+            if (Q.IsReady() && drawQr.Active)
+                Render.Circle.DrawCircle(Player.Position, Q.Range - (qtarget.MoveSpeed * (Q.Delay+Player.Distance(qtarget.Position)/Q.Speed)), drawQ.Color);
 
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
@@ -145,8 +151,8 @@ namespace ALL_In_One.champions
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-			var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
-			var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+			var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
+			var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
 			if(Minions.Count + Mobs.Count <= 0)
 			return;
@@ -162,14 +168,14 @@ namespace ALL_In_One.champions
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
                 if (AIO_Menu.Champion.Harass.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
-                    && Target.IsValidTarget(Player.AttackRange))
+                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                     E.Cast();
 			}
 				
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 if (AIO_Menu.Champion.Combo.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
-                    && Target.IsValidTarget(Player.AttackRange))
+                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                     E.Cast();					
 			}
         }
@@ -179,7 +185,7 @@ namespace ALL_In_One.champions
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
-			var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
+			var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
 
 			if (Minions.Count <= 0)
                 return;
@@ -193,7 +199,7 @@ namespace ALL_In_One.champions
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
-            var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
                 return;
@@ -209,6 +215,12 @@ namespace ALL_In_One.champions
             {
 			var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
                 CastQ(Qtarget);
+            }
+			
+            if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
+            {
+				if (HeroManager.Enemies.Any(x => x.IsValidTarget(Player.AttackRange)))
+                W.Cast();
             }
 
 

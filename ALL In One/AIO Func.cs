@@ -94,5 +94,22 @@ namespace ALL_In_One
 					}
 				}
 		}
+		internal static void CCast(Spell spell, Obj_AI_Base target) //for Circle spells
+		{
+				var pred = spell.GetPrediction(target, true);
+				SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.Position.To2D()) / 2 ;
+				if (target.IsValidTarget(spell.Range))
+				{
+					if(target.MoveSpeed*spell.Delay <= spell.Width*2/3)
+					spell.Cast(target.Position);
+					else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+					{
+						if(target.MoveSpeed*spell.Delay <= spell.Width*4/3)
+						spell.Cast(castVec);
+						else
+						spell.Cast(pred.CastPosition);
+					}
+				}
+		}
     }
 }

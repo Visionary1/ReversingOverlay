@@ -76,6 +76,9 @@ namespace ALL_In_One
                 case "Blitzcrank"://Added by RL244
                     champions.Blitzcrank.Load();
                     break;
+                case "Brand"://Added by RL244
+                    champions.Brand.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

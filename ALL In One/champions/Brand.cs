@@ -141,10 +141,10 @@ namespace ALL_In_One.champions
 
             if (W.IsReady()
 				&& Player.Distance(gapcloser.Sender.Position) <= W.Range)
-                CastW((Vector3)gapcloser.End);
+                W.Cast((Vector3)gapcloser.End);
             if (!W.IsReady() && Q.IsReady()
 				&& Player.Distance(gapcloser.Sender.Position) <= Q.Range)
-                CastQ((Vector3)gapcloser.End);
+                CastQ(gapcloser);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)

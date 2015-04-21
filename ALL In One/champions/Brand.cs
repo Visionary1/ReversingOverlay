@@ -12,9 +12,7 @@ using SharpDX;
 using Color = System.Drawing.Color;
 namespace ALL_In_One.champions
 {
-    class Brand
-    {
-    class Veigar //rl244
+    class Brand //RL244
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
@@ -244,7 +242,7 @@ namespace ALL_In_One.champions
                 if (_m != null)
                     E.Cast(_m);
             }
-}
+		}
 
         static void Jungleclear()
         {

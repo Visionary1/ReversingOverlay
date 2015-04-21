@@ -35,17 +35,21 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE(false);
+            AIO_Menu.Champion.Harass.addIfMana();
 
             AIO_Menu.Champion.Lasthit.addUseQ();
             AIO_Menu.Champion.Lasthit.addUseW();
+            AIO_Menu.Champion.Lasthit.addIfMana();
 
-            AIO_Menu.Champion.Laneclear.addUseQ();
+            AIO_Menu.Champion.Laneclear.addUseQ(false);
             AIO_Menu.Champion.Laneclear.addUseW();
             AIO_Menu.Champion.Laneclear.addUseE(false);
-
-            AIO_Menu.Champion.Jungleclear.addUseQ();
+            AIO_Menu.Champion.Laneclear.addIfMana();
+			
+            AIO_Menu.Champion.Jungleclear.addUseQ(false);
             AIO_Menu.Champion.Jungleclear.addUseW();
-            AIO_Menu.Champion.Jungleclear.addUseE();
+			AIO_Menu.Champion.Jungleclear.addUseE(false);
+            AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addUseKillsteal();
 
@@ -142,6 +146,8 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+                return;
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
                 Q.CastOnBestTarget();
@@ -157,6 +163,9 @@ namespace ALL_In_One.champions
 
         static void Lasthit()
         {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Lasthit.IfMana))
+                return;
+				
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
@@ -167,6 +176,8 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+                return;
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
@@ -190,6 +201,8 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+                return;
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)

@@ -41,12 +41,15 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW(false);
             AIO_Menu.Champion.Harass.addUseE(false);
+            AIO_Menu.Champion.Harass.addIfMana();
 
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW(false);
+            AIO_Menu.Champion.Laneclear.addIfMana();
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW(false);
+            AIO_Menu.Champion.Jungleclear.addIfMana();
 			
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
@@ -123,7 +126,7 @@ namespace ALL_In_One.champions
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
 
             if (E.IsReady() && drawEr.Active)
-                Render.Circle.DrawCircle(Player.Position, E.Range - etarget.MoveSpeed*E.Delay, drawE.Color);
+                Render.Circle.DrawCircle(Player.Position, E.Range - etarget.MoveSpeed*E.Delay, drawEr.Color);
 				
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
@@ -189,6 +192,8 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+                return;
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
 		var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
@@ -212,6 +217,8 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+                return;
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
@@ -234,6 +241,8 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+                return;
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)

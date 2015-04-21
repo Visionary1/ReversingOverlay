@@ -41,14 +41,17 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE();
+            AIO_Menu.Champion.Harass.addIfMana();
 
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW();
             AIO_Menu.Champion.Laneclear.addUseE();
+            AIO_Menu.Champion.Laneclear.addIfMana();
 			
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
-			AIO_Menu.Champion.Jungleclear.addUseE();		
+			AIO_Menu.Champion.Jungleclear.addUseE();
+            AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("Made By Rl244", true);
@@ -124,7 +127,7 @@ namespace ALL_In_One.champions
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
 
             if (W.IsReady() && drawWr.Active)
-                Render.Circle.DrawCircle(Player.Position, W.Range - wtarget.MoveSpeed*W.Delay, drawW.Color);
+                Render.Circle.DrawCircle(Player.Position, W.Range - wtarget.MoveSpeed*W.Delay, drawWr.Color);
 		
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
@@ -187,7 +190,7 @@ namespace ALL_In_One.champions
             {
 		var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
 			
-			if(AIO_Func.isKillable(Rtarget, R) || Rtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= R.Delay && R.IsReady())
+			if(Rtarget.Health + Rtarget.HPRegenRate <= (Q.GetDamage(Rtarget)+W.GetDamage(Rtarget)+E.GetDamage(Rtarget)+R.GetDamage(Rtarget))*2/3 || Rtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= R.Delay)
                { 
 				if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
             	R.Cast(Rtarget);
@@ -197,6 +200,9 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+                return;
+		
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
 		var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
@@ -218,6 +224,9 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+                return;
+		
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
@@ -246,6 +255,9 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+                return;
+		
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
@@ -334,10 +346,19 @@ namespace ALL_In_One.champions
 	static void CastW(Obj_AI_Hero target)
 	{
             var wpred = W.GetPrediction(target, true);
-			if (target.IsValidTarget(W.Range) && wpred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-            {
-        	 W.Cast(wpred.CastPosition);
-            }
+            Vector2 castVec = (wpred.UnitPosition.To2D() + target.Position.To2D()) / 2 ;
+			if (target.IsValidTarget(W.Range))
+			{
+				if(target.MoveSpeed*W.Delay <= W.Width*2/3)
+				W.Cast(target.Position);
+				else if(wpred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+				{
+					if(target.MoveSpeed*W.Delay <= W.Width*4/3)
+					W.Cast(castVec);
+					else
+					W.Cast(wpred.CastPosition);
+				}
+			}
 	}
 	
 	static void CastW(Obj_AI_Base target)

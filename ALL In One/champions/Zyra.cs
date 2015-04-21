@@ -65,6 +65,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseInterrupter();
 
             AIO_Menu.Champion.Drawings.addQRange();
+            AIO_Menu.Champion.Drawings.addWRange();
             AIO_Menu.Champion.Drawings.addItem("E Safe Range", new Circle(true, Color.Red));
             AIO_Menu.Champion.Drawings.addERange(false);
             AIO_Menu.Champion.Drawings.addRRange();
@@ -115,6 +116,7 @@ namespace ALL_In_One.champions
                 return;
 
             var drawQ = AIO_Menu.Champion.Drawings.QRange;
+            var drawW = AIO_Menu.Champion.Drawings.WRange;
             var drawE = AIO_Menu.Champion.Drawings.ERange;
 			var drawEr = AIO_Menu.Champion.Drawings.getCircleValue("E Safe Range");
             var drawR = AIO_Menu.Champion.Drawings.RRange;
@@ -122,6 +124,9 @@ namespace ALL_In_One.champions
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+
+            if (W.IsReady() && drawW.Active)
+                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
 
             if (E.IsReady() && drawEr.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range - etarget.MoveSpeed*E.Delay, drawEr.Color);
@@ -191,6 +196,12 @@ namespace ALL_In_One.champions
 				var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.CCast(Q,Qtarget);
             }
+			
+            if (AIO_Menu.Champion.Harass.UseW && W.IsReady() && (Q.IsReady() || E.IsReady()))
+            {
+				var Wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
+                AIO_Func.CCast(W,Wtarget);
+            }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
@@ -202,12 +213,6 @@ namespace ALL_In_One.champions
             {
 				var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.CCast(R,Rtarget);
-            }
-
-            if (AIO_Menu.Champion.Harass.UseW && W.IsReady() && (Q.IsReady() || E.IsReady()))
-            {
-				var Wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(W,Wtarget);
             }
         }
 

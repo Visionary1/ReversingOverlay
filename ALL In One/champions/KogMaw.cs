@@ -25,7 +25,7 @@ namespace ALL_In_One.champions
             Q = new Spell(SpellSlot.Q, 1000f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W);
             E = new Spell(SpellSlot.E, 1280f, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 1800f, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 1200f, TargetSelector.DamageType.Magical);
 
 			
             Q.SetSkillshot(0.25f, 70f, 1650f, true, SkillshotType.SkillshotLine);
@@ -82,7 +82,7 @@ namespace ALL_In_One.champions
         {
             if (Player.IsDead)
                 return;
-
+			R.Range = 900f +R.Level*300f;
             if (Orbwalking.CanMove(10))
             {
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
@@ -131,7 +131,7 @@ namespace ALL_In_One.champions
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
 		
             if (R.IsReady() && drawR.Active)
-                Render.Circle.DrawCircle(Player.Position, R.Range/2+R.Level*300f, drawR.Color);
+                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
 
 		
@@ -169,7 +169,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-				var Rtarget = TargetSelector.GetTarget(R.Range/2+R.Level*300f, TargetSelector.DamageType.Magical);
+				var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.CCast(R,Rtarget);
             }
         }
@@ -193,7 +193,7 @@ namespace ALL_In_One.champions
 			
             if (AIO_Menu.Champion.Harass.UseR && R.IsReady())
             {
-				var Rtarget = TargetSelector.GetTarget(R.Range/2+R.Level*300f, TargetSelector.DamageType.Magical);
+				var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.CCast(R,Rtarget);
             }
 
@@ -277,7 +277,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (target.IsValidTarget(R.Range/2+R.Level*300f) && AIO_Func.isKillable(target, R))
+                if (target.IsValidTarget(R.Range) && AIO_Func.isKillable(target, R))
                     AIO_Func.CCast(R,target);
             }
         }

@@ -25,7 +25,7 @@ namespace ALL_In_One.champions
             Q = new Spell(SpellSlot.Q, 1250f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W, 800f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 950f, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 3000f, TargetSelector.DamageType.Physical);
+            R = new Spell(SpellSlot.R, float.MaxValue, TargetSelector.DamageType.Physical);
 			
             Q.SetSkillshot(1.0f, 85f, 2000f, false, SkillshotType.SkillshotLine);
             W.SetSkillshot(0.625f, 67.5f, float.MaxValue, false, SkillshotType.SkillshotCircle);
@@ -96,6 +96,8 @@ namespace ALL_In_One.champions
                 KillstealR();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
                 KillstealE();
+
+            R.Range = 1500 + R.Level * 500;
 		}
 
         static void Drawing_OnDraw(EventArgs args)
@@ -123,7 +125,7 @@ namespace ALL_In_One.champions
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
 		
             if (R.IsReady() && drawR.Active)
-                Render.Circle.DrawCircle(Player.Position, R.Range/2+R.Level*500f, drawR.Color);
+                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
 		
 		
@@ -134,7 +136,7 @@ namespace ALL_In_One.champions
 
             if (E.IsReady()
 				&& Player.Distance(gapcloser.Sender.Position) <= E.Range)
-                E.Cast((Vector3)gapcloser.End);
+                E.Cast(gapcloser.End);
         }
 
 		

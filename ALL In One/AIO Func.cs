@@ -9,8 +9,8 @@ namespace ALL_In_One
 {
     class AIO_Func
     {
-        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-		static float SWDuration { get { var buff = AIO_Func.getBuffInstance(Player, "MasterySpellWeaving"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float SWDuration { get { var buff = AIO_Func.getBuffInstance(ObjectManager.Player, "MasterySpellWeaving"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+
         internal static float getHealthPercent(Obj_AI_Base unit)
         {
             return unit.Health / unit.MaxHealth * 100;
@@ -144,12 +144,7 @@ namespace ALL_In_One
 		
 		internal static bool AfterAttack()
 		{
-			bool AA = false;
-			if(SWDuration > 4.9)
-			AA = true;
-			else
-			AA = false;
-			return AA;
+			return SWDuration > 4.9;
 		}
 		
     }

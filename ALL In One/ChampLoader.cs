@@ -85,7 +85,10 @@ namespace ALL_In_One
                 case "Zyra"://Added by RL244
                     champions.Zyra.Load();
                     break;
-                case "Caitlyn"://Added by RL244 
+                case "Caitlyn"://Added by RL244 WIP
+                    champions.Caitlyn.Load();
+                    break;
+                case "Missfortune"://Added by RL244 WIP
                     champions.Caitlyn.Load();
                     break;
                 default:

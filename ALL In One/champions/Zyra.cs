@@ -303,7 +303,7 @@ namespace ALL_In_One.champions
 			if(P.IsReady())
 			{
 				var Ptarget = TargetSelector.GetTarget(P.Range, TargetSelector.DamageType.True);
-                AIO_Func.LCast(P,Ptarget,0,float.MaxValue);
+                AIO_Func.LCast(P,Ptarget,150,float.MaxValue);
 			}
 		}
 		

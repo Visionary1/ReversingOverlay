@@ -108,10 +108,6 @@ namespace ALL_In_One
 
 			if(spell != null && target !=null)
 			{
-				if(alpha == null)
-				alpha = 0;
-				if(colmini == null)
-				colmini = 0;
 				var pred = spell.GetPrediction(target, true);
 				var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
 				var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
@@ -125,5 +121,21 @@ namespace ALL_In_One
 			sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
 			}
 		}
+		/*
+		internal static void LH(Spell spell) // For Last hit with skill for farming
+		{
+			if(spell == null)
+			return
+				var _m = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.spell))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);			
+                if (_m != null)
+				{
+				if() // 선형 스킬일경우
+                LCast(spell,_m,50,0);
+				else if() // 원형 스킬일경우
+				CCast(spell,_m);
+				}
+		}
+		*/
+		
     }
 }

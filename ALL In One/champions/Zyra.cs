@@ -222,8 +222,9 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
-                if (Minions.Any(x => x.IsValidTarget(E.Range)))
-                AIO_Func.LCast(E,Minions[0],Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
+				var _m = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.E))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / E.Speed), (int)(E.Delay * 1000 + Game.Ping / 2)) > 0);			
+                if (_m != null)
+                AIO_Func.LCast(E,_m,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
             }
 
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady() && (Q.IsReady() || E.IsReady()))
@@ -234,7 +235,7 @@ namespace ALL_In_One.champions
 			
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
-				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.E))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / Q.Speed), (int)(Q.Delay * 1000 + Game.Ping / 2)) > 0);			
+				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / Q.Speed), (int)(Q.Delay * 1000 + Game.Ping / 2)) > 0);			
                 if (_m != null)
                 AIO_Func.CCast(Q,_m);
             }

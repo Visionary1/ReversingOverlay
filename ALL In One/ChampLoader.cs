@@ -85,7 +85,7 @@ namespace ALL_In_One
                 case "Zyra"://Added by RL244
                     champions.Zyra.Load();
                     break;
-                case "Caitlyn"://Added by RL244 WIP
+                case "Caitlyn"://Added by RL244 WIP <- 얘만 문제가 있음
                     champions.Caitlyn.Load();
                     break;
                 case "MissFortune"://Added by RL244

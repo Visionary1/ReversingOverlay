@@ -104,7 +104,32 @@ namespace ALL_In_One.champions
                 KillstealR();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
                 KillstealE();
-}
+				
+			if (AIO_Func.AfterAttack() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+			{
+				var Target = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+				var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
+				var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+
+				if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseW ||
+				Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana ||
+				Minions.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Laneclear.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana ||
+				Mobs.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Jungleclear.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana)
+				&& W.IsReady())
+				{
+					W.Cast();
+				}
+				
+				if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseQ ||
+				Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana ||
+				Minions.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Laneclear.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana ||
+				Mobs.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Jungleclear.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana)
+				&& Q.IsReady())
+				{
+					Q.Cast(Target);
+				}
+			}
+		}
 
         static void Drawing_OnDraw(EventArgs args)
         {
@@ -161,12 +186,6 @@ namespace ALL_In_One.champions
                 AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
             }
 
-            if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-            {
-				if (HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-				W.Cast();
-            }
-
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
 				var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
@@ -196,12 +215,7 @@ namespace ALL_In_One.champions
 				var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.CCast(R,Rtarget);
             }
-
-            if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
-            {
-				if (HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-				W.Cast();
-            }
+			
         }
 
         static void Laneclear()
@@ -216,8 +230,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
-                if (Minions.Any(x => x.IsValidTarget(E.Range)))
-                AIO_Func.LCast(E,Minions[0],Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LH(E,float.MaxValue);
             }
 
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
@@ -228,9 +241,7 @@ namespace ALL_In_One.champions
 			
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
-				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.E))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / Q.Speed), (int)(Q.Delay * 1000 + Game.Ping / 2)) > 0);			
-                if (_m != null)
-                AIO_Func.LCast(Q,_m,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,0);
+                AIO_Func.LH(Q,0);
             }
 		}
 

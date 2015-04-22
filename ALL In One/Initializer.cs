@@ -35,7 +35,7 @@ namespace ALL_In_One
 
             Drawing.OnDraw += Drawing_OnDraw;
 
-            Game.PrintChat(AIO_Func.colorChat(Color.SpringGreen, "[xcsoft] All In One: ") + AIO_Func.colorChat(Color.DeepPink, ObjectManager.Player.ChampionName) + " Loaded");
+            Game.PrintChat(AIO_Func.colorChat(Color.SpringGreen, "[TeamProject] All In One: ") + AIO_Func.colorChat(Color.DeepPink, ObjectManager.Player.ChampionName) + " Loaded");
         }
 
         static void Drawing_OnDraw(EventArgs args)

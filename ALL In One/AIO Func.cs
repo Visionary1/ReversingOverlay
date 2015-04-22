@@ -55,7 +55,7 @@ namespace ALL_In_One
             return target.Health + (target.HPRegenRate/2) <= spell.GetDamage(target, stage);
         }
 
-        internal static void sendDebugMsg(string message, bool printchat = true, string tag = "xcsoft_DebugMsg: ")
+        internal static void sendDebugMsg(string message, bool printchat = true, string tag = "AIO_DebugMsg: ")
         {
             if (printchat)
                 Game.PrintChat(tag + message);
@@ -97,6 +97,10 @@ namespace ALL_In_One
 					}
 				}
 			}
+			else
+			{
+			sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
+			}
 		}
 		
 		internal static void LCast(Spell spell, Obj_AI_Base target, float alpha, float colmini) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
@@ -115,6 +119,10 @@ namespace ALL_In_One
 				{
 				 spell.Cast(pred.CastPosition);
 				}
+			}
+			else
+			{
+			sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
 			}
 		}
     }

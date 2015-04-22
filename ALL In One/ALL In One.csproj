@@ -86,7 +86,7 @@
     <Compile Include="champions\Blitzcrank.cs" />
     <Compile Include="champions\Brand.cs" />
     <Compile Include="champions\_Braum.cs" />
-    <Compile Include="champions\_Caitlyn.cs" />
+    <Compile Include="champions\Caitlyn.cs" />
     <Compile Include="champions\Cassiopeia.cs" />
     <Compile Include="champions\Chogath.cs" />
     <Compile Include="champions\_Corki.cs" />

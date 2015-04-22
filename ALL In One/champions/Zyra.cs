@@ -27,7 +27,7 @@ namespace ALL_In_One.champions
             W = new Spell(SpellSlot.W, 850f);
             E = new Spell(SpellSlot.E, 1100f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 700f, TargetSelector.DamageType.Magical);
-            P = new Spell(SpellSlot.Q, 1470f, TargetSelector.DamageType.Magical);
+            P = new Spell(SpellSlot.Q, 1470f, TargetSelector.DamageType.True);
 			
             Q.SetSkillshot(0.625f, 85f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             W.SetSkillshot(0.25f, 50f, float.MaxValue, false, SkillshotType.SkillshotCircle);
@@ -112,7 +112,7 @@ namespace ALL_In_One.champions
 
         static void Drawing_OnDraw(EventArgs args)
         {
-            if (Player.IsDead)
+            if (!ZyraDead() && Player.IsDead)
                 return;
 
             var drawQ = AIO_Menu.Champion.Drawings.QRange;
@@ -208,12 +208,6 @@ namespace ALL_In_One.champions
 				var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
             }
-			
-            if (AIO_Menu.Champion.Harass.UseR && R.IsReady())
-            {
-				var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(R,Rtarget);
-            }
         }
 
         static void Laneclear()
@@ -307,7 +301,7 @@ namespace ALL_In_One.champions
 		{
 			if(P.IsReady())
 			{
-				var Ptarget = TargetSelector.GetTarget(P.Range, TargetSelector.DamageType.Magical);
+				var Ptarget = TargetSelector.GetTarget(P.Range, TargetSelector.DamageType.True);
                 AIO_Func.LCast(P,Ptarget,0,float.MaxValue);
 			}
 		}

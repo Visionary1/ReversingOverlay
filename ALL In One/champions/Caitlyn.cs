@@ -275,7 +275,6 @@ namespace ALL_In_One.champions
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
 				
-				
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
             return damage;

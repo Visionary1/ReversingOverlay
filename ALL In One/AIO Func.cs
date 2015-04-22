@@ -121,21 +121,25 @@ namespace ALL_In_One
 			    sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
 		}
 
-		/*
+		
 		internal static void LH(Spell spell) // For Last hit with skill for farming
 		{
 			if(spell == null)
-			return
-				var _m = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.spell))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);			
-                if (_m != null)
+			return;
+				var _m = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((spell.GetDamage(m))) && HealthPrediction.GetHealthPrediction(m, (int)(ObjectManager.Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
+				if (_m != null)
 				{
-				if() // 선형 스킬일경우
+				if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
                 LCast(spell,_m,50,0);
-				else if() // 원형 스킬일경우
+				else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
 				CCast(spell,_m);
+				else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+				spell.Cast(_m);
+				else if(!spell.IsSkillshot)
+				spell.Cast(_m);
 				}
 		}
-		*/
+		
 
         internal static void MotionCancel()
         {
@@ -149,3 +153,4 @@ namespace ALL_In_One
 		
     }
 }
+

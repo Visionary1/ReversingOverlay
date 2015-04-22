@@ -80,7 +80,8 @@ namespace ALL_In_One
 		
 		internal static void CCast(Spell spell, Obj_AI_Base target) //for Circular spells
 		{
-
+			if(spell != null && target !=null)
+			{
 				var pred = spell.GetPrediction(target, true);
 				SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.Position.To2D()) / 2 ;
 				if (target.IsValidTarget(spell.Range))
@@ -95,17 +96,26 @@ namespace ALL_In_One
 						spell.Cast(pred.CastPosition);
 					}
 				}
+			}
 		}
 		
 		internal static void LCast(Spell spell, Obj_AI_Base target, float alpha, float colmini) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
 		{							//        AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue); <- 이런식으로 사용.
-            var pred = spell.GetPrediction(target, true);
-            var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
-            var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
-			if (target.IsValidTarget(spell.Range - target.MoveSpeed*(spell.Delay +Player.Distance(target.Position)/spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-            {
-        	 spell.Cast(pred.CastPosition);
-            }
+
+			if(spell != null && target !=null)
+			{
+				if(alpha == null)
+				alpha = 0;
+				if(colmini == null)
+				colmini = 0;
+				var pred = spell.GetPrediction(target, true);
+				var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
+				var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
+				if (target.IsValidTarget(spell.Range - target.MoveSpeed*(spell.Delay +Player.Distance(target.Position)/spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+				{
+				 spell.Cast(pred.CastPosition);
+				}
+			}
 		}
     }
 }

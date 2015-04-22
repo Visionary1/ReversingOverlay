@@ -28,8 +28,8 @@ namespace ALL_In_One.champions
             R = new Spell(SpellSlot.R, 3000f, TargetSelector.DamageType.Physical);
 			
             Q.SetSkillshot(1.0f, 85f, 2000f, false, SkillshotType.SkillshotLine);
-            W.SetSkillshot(0.25f, 67.5f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            E.SetSkillshot(0.5f, 80f, 1600f, false, SkillshotType.SkillshotLine);
+            W.SetSkillshot(0.625f, 67.5f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            E.SetSkillshot(0.5f, 80f, 1600f, true, SkillshotType.SkillshotLine);
             R.SetTargetted(1.35f, 3200f);
             
             AIO_Menu.Champion.Combo.addUseQ();
@@ -57,7 +57,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
 
-            AIO_Menu.Champion.Drawings.addQRange(false);
+            AIO_Menu.Champion.Drawings.addQRange();
             AIO_Menu.Champion.Drawings.addItem("Q Safe Range", new Circle(true, Color.Red));
             AIO_Menu.Champion.Drawings.addWRange();
             AIO_Menu.Champion.Drawings.addERange();
@@ -104,18 +104,18 @@ namespace ALL_In_One.champions
                 return;
 
             var drawQ = AIO_Menu.Champion.Drawings.QRange;
-			var drawQr = AIO_Menu.Champion.Drawings.getCircleValue("Q Safe Range");
             var drawW = AIO_Menu.Champion.Drawings.WRange;
             var drawE = AIO_Menu.Champion.Drawings.ERange;
             var drawR = AIO_Menu.Champion.Drawings.RRange;
+			var drawQr = AIO_Menu.Champion.Drawings.getCircleValue("Q Safe Range");
 			var qtarget = TargetSelector.GetTarget(Q.Range + Player.MoveSpeed * Q.Delay, TargetSelector.DamageType.Physical);
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
-				
-            if (Q.IsReady() && drawQr.Active)
-                Render.Circle.DrawCircle(Player.Position, Q.Range - qtarget.MoveSpeed*Q.Delay, drawQr.Color);
 
+            if (Q.IsReady() && drawQr.Active && qtarget != null)
+                Render.Circle.DrawCircle(Player.Position, Q.Range - etarget.MoveSpeed*Q.Delay, drawQr.Color);
+				
             if (W.IsReady() && drawW.Active)
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
 		

@@ -109,10 +109,10 @@ namespace ALL_In_One
 			if(spell != null && target !=null)
 			{
 				var pred = spell.GetPrediction(target, true);
-				var collision = spell.GetCollision(ObjectManager.Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
+				var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
 				var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
 
-                if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + ObjectManager.Player.Distance(target.Position) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+				if (target.IsValidTarget(spell.Range - target.MoveSpeed*(spell.Delay +Player.Distance(target.Position)/spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
 				{
 				    spell.Cast(pred.CastPosition);
 				}

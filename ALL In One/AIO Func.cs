@@ -84,10 +84,11 @@ namespace ALL_In_One
 			{
 				var pred = spell.GetPrediction(target, true);
 				SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.Position.To2D()) / 2 ;
+
 				if (target.IsValidTarget(spell.Range))
 				{
 					if(target.MoveSpeed*spell.Delay <= spell.Width*2/3)
-					spell.Cast(target.Position);
+					    spell.Cast(target.Position);
 					else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
 					{
 						if(target.MoveSpeed*spell.Delay <= spell.Width*4/3)
@@ -98,9 +99,7 @@ namespace ALL_In_One
 				}
 			}
 			else
-			{
-			sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
-			}
+			    sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
 		}
 		
 		internal static void LCast(Spell spell, Obj_AI_Base target, float alpha, float colmini) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
@@ -111,16 +110,16 @@ namespace ALL_In_One
 				var pred = spell.GetPrediction(target, true);
 				var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
 				var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
+
 				if (target.IsValidTarget(spell.Range - target.MoveSpeed*(spell.Delay +Player.Distance(target.Position)/spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
 				{
-				 spell.Cast(pred.CastPosition);
+				    spell.Cast(pred.CastPosition);
 				}
 			}
 			else
-			{
-			sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
-			}
+			    sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
 		}
+
 		/*
 		internal static void LH(Spell spell) // For Last hit with skill for farming
 		{
@@ -136,6 +135,10 @@ namespace ALL_In_One
 				}
 		}
 		*/
-		
+
+        internal static void MotionCancel()
+        {
+            Game.Say("/d");
+        }
     }
 }

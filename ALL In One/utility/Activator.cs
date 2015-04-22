@@ -16,6 +16,7 @@ namespace ALL_In_One.utility
         //http://leagueoflegends.wikia.com/wiki/Category:Items
 
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
+        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         internal static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Activator");}}
 
         internal static void Load()
@@ -27,11 +28,21 @@ namespace ALL_In_One.utility
             //Menu.AddSubMenu(new Menu("Activator: ComboMode", "ComboMode"));
             Menu.AddSubMenu(new Menu("BeforeAttack", "BeforeAttack"));
             Menu.AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
+            Menu.AddSubMenu(new Menu("OnAttack", "OnAttack"));
+            Menu.AddSubMenu(new Menu("Killsteal", "Killsteal"));
+			Menu.AddSubMenu(new Menu("Misc", "Misc"));
 
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Health Potion", "Use Health Potion")).SetValue(true);
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifHealthPercent", "if Health Percent <")).SetValue(new Slider(55, 0, 100));
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Mana Potion", "Use Mana Potion")).SetValue(true);
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(55,0,100));
+            Menu.SubMenu("OnAttack").AddItem(new MenuItem("OnAttack.RS", "Use Red Smite")).SetValue(true);
+            Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.SF", "Skill First")).SetValue(false);
+            Menu.SubMenu("Killsteal").AddItem(new MenuItem("Killsteal.BS", "Blue Smite")).SetValue(true);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Cb", "On Combo")).SetValue(true);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Hr", "On Harass")).SetValue(true);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Lc", "On LaneClear")).SetValue(false);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Jc", "On JungleClear")).SetValue(true);
 
             //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
             //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);
@@ -40,8 +51,11 @@ namespace ALL_In_One.utility
             addPotions();
 
             Game.OnUpdate += OnUpdate.Game_OnUpdate;
+            Game.OnUpdate += OnAttack.Game_OnUpdate;
+            Game.OnUpdate += Killsteal.Game_OnUpdate;
             Orbwalking.BeforeAttack += BeforeAttack.Orbwalking_BeforeAttack;
             Orbwalking.AfterAttack += AfterAttack.Orbwalking_AfterAttack;
+            Orbwalking.OnAttack += OnAttack.Orbwalking_OnAttack;
         }
 
         internal class item
@@ -55,13 +69,13 @@ namespace ALL_In_One.utility
         static void additems()
         {
             BeforeAttack.additem("Youmuu", (int)ItemId.Youmuus_Ghostblade, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player));
-
             AfterAttack.additem("Tiamat", (int)ItemId.Tiamat_Melee_Only, 250f);
             AfterAttack.additem("Hydra", (int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
             AfterAttack.additem("Bilgewater", (int)ItemId.Bilgewater_Cutlass, 450f, true);
             AfterAttack.additem("BoTRK", (int)ItemId.Blade_of_the_Ruined_King, 450f, true);
         }
 
+        #region PotionManager
         static void addPotions()
         {
             potions = new List<Potion>
@@ -103,7 +117,7 @@ namespace ALL_In_One.utility
 
         //PotionManager part of Marksman
         static List<Potion> potions;
-        
+
         enum PotionType
         {
             Health, Mana
@@ -135,6 +149,7 @@ namespace ALL_In_One.utility
                     where buff.Name == potion.Name && buff.IsActive
                     select potion).Any();
         }
+        #endregion
 
         internal class OnUpdate
         {
@@ -177,8 +192,89 @@ namespace ALL_In_One.utility
                     }
                 }
 
+				
             }
         }
+		
+		internal class OnAttack
+		{
+			internal static Spell RS;
+			internal static SpellSlot smiteSlot = SpellSlot.Unknown;
+			internal static float smrange = 700f;
+            internal static void Game_OnUpdate(EventArgs args)
+            {
+				setRSmiteSlot();
+			}
+			internal static void setRSmiteSlot()
+			{
+				foreach (var spell in ObjectManager.Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteduel", StringComparison.CurrentCultureIgnoreCase))) // Red Smite
+				{
+					smiteSlot = spell.Slot;
+					RS = new Spell(smiteSlot, smrange);
+					return;
+				}
+			}
+
+			internal static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)
+			{
+				var Target = (Obj_AI_Base)target;
+					
+				if (!unit.IsMe || Target == null)
+						return;
+						
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Menu.Item("OnAttack.RS").GetValue<bool>())
+				{
+					RS.Slot = smiteSlot;
+					if(smiteSlot.IsReady())
+					Player.Spellbook.CastSpell(smiteSlot, Target);
+				}
+			}
+		}
+		
+		internal class Killsteal
+		{
+			internal static Spell BS;
+			internal static SpellSlot smiteSlot = SpellSlot.Unknown;
+			internal static float smrange = 700f;
+            internal static void Game_OnUpdate(EventArgs args)
+            {
+				setBSmiteSlot();
+				
+				var ts = ObjectManager.Get<Obj_AI_Hero>().Where(f => !f.IsAlly && !f.IsDead && Player.Distance(f, false) <= smrange);
+				if (ts == null)
+					return;
+
+				float dmg = BSDamage();
+				if(Menu.Item("Killsteal.BS").GetValue<bool>())
+				{
+					foreach (var t in ts)
+					{
+						if (AIO_Func.isKillable(t,dmg))
+						{
+							BS.Slot = smiteSlot;
+							Player.Spellbook.CastSpell(smiteSlot, t);
+						}
+					}
+				}
+			}
+			
+			internal static float BSDamage()
+			{
+				int lvl = Player.Level;
+				int damage = (20 + 8 * lvl);
+				return damage;
+			}
+			
+			internal static void setBSmiteSlot()
+			{
+				foreach (var spell in ObjectManager.Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteplayerganker", StringComparison.CurrentCultureIgnoreCase))) // Red Smite
+				{
+					smiteSlot = spell.Slot;
+					BS = new Spell(smiteSlot, smrange);
+					return;
+				}
+			}		
+		}
 
         internal class BeforeAttack
         {
@@ -198,11 +294,14 @@ namespace ALL_In_One.utility
 
                 foreach (var item in BeforeAttack.itemsList.Where(x => Items.CanUseItem((int)x.Id) && args.Target.IsValidTarget(x.Range) && Menu.Item("BeforeAttack.Use " + x.Id.ToString()).GetValue<bool>()))
                 {
-                    if (item.isTargeted)
-                        Items.UseItem(item.Id, (Obj_AI_Base)args.Target);
-                    else
-                        Items.UseItem(item.Id);
-                }
+					if(Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                    {
+						if (item.isTargeted)
+							Items.UseItem(item.Id, (Obj_AI_Base)args.Target);
+						else
+							Items.UseItem(item.Id);
+					}
+				}
             }
         }
 
@@ -227,11 +326,26 @@ namespace ALL_In_One.utility
 
                 if (itemone != null)
                 {
-                    if (itemone.isTargeted)
-                        Items.UseItem(itemone.Id, (Obj_AI_Base)target);
-                    else
-                        Items.UseItem(itemone.Id);
-                }
+					var Minions = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Enemy);
+					var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+					if(Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
+					Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed || 
+					Menu.Item("Misc.Jc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count >= 1 ||
+					Menu.Item("Misc.Lc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Minions.Count >= 1)
+					{
+						if(Menu.Item("AfterAttack.SF").GetValue<bool>())
+						{
+							//WIP
+						}
+						else
+						{
+							if (itemone.isTargeted)
+								Items.UseItem(itemone.Id, (Obj_AI_Base)target);
+							else
+								Items.UseItem(itemone.Id);
+						}
+					}
+				}
             }
         }
     }

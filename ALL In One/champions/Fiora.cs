@@ -23,16 +23,11 @@ namespace ALL_In_One.champions
         static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-        static Items.Item tiamatItem, hydraItem;
-
         static Spell Q, W, E, R;
-
-
-
         static List<Items.Item> itemsList = new List<Items.Item>(); //척후병 샤브르 //RS
-	static Spell Smite; //RS
-	static SpellSlot smiteSlot = SpellSlot.Unknown; //RS
-	static Items.Item s0, s1, s2, s3, s4; //RS
+		static Spell Smite; //RS
+		static SpellSlot smiteSlot = SpellSlot.Unknown; //RS
+		static Items.Item s0, s1, s2, s3, s4; //RS
         static float smrange = 700f; //RS
 		
         static float getQBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "fioraqcd"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
@@ -48,28 +43,21 @@ namespace ALL_In_One.champions
 
             Q.SetTargetted(0.25f, float.MaxValue);
 
-            hydraItem = new Items.Item((int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
-            tiamatItem = new Items.Item((int)ItemId.Tiamat_Melee_Only, 250f);
-
             Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseQD", "Q Distance", true).SetValue(new Slider(150, 0, 600)));
             Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseW", "Use W", true).SetValue(true));
-            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseE", "Use E", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
 
             Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("LcUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("LcUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("LcMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcUseW", "Use W", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcUseE", "Use E", true).SetValue(true));
-            Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcUseH", "Use Hydra", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("JcMana", "if Mana % >", true).SetValue(new Slider(20, 0, 100)));
 
             Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("credit", "Made By RL244", true));
@@ -82,7 +70,7 @@ namespace ALL_In_One.champions
             Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawWTimer", "W Timer", true).SetValue(new Circle(true, Color.Black)));
             Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawETimer", "E Timer", true).SetValue(new Circle(true, Color.Red)));
 
-	    AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
+			AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -255,65 +243,49 @@ namespace ALL_In_One.champions
 			}
 	}
 		
-        static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
-        {
+	static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
+	{
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-	{
-		var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
-		var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-		if(Minions.Count + Mobs.Count <= 0)
-		return;
-		
-		if(Minions.Count >= 1)
-		AALaneclear();
-		if(Mobs.Count >= 1)
-		AAJungleclear();
-	}
+			{
+				var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
+				var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+				if(Minions.Count + Mobs.Count <= 0)
+				return;
+				
+				if(Minions.Count >= 1)
+				AALaneclear();
+				if(Mobs.Count >= 1)
+				AAJungleclear();
+			}
 			
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-	{	
+			{	
                 if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-			&& !tiamatItem.IsReady() && !hydraItem.IsReady())
+				&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
                     E.Cast();
-				
-		if (Menu.Item("HrsUseH", true).GetValue<bool>()// && !W.IsReady()
-			&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-		{
-			if(tiamatItem.IsReady())
-				tiamatItem.Cast();
-			else if(hydraItem.IsReady())
-				hydraItem.Cast();
-		}
-	}
+
+			}
 				
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
+					&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
                     E.Cast();
 					
 				foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
 				{
 				if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady()
-				&& !tiamatItem.IsReady() && !hydraItem.IsReady() && !E.IsReady()
+				&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted && !E.IsReady()
 				&& HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
 				R.Cast(rtarget);
 				}
 				
-				if (Menu.Item("CbUseH", true).GetValue<bool>()// && !W.IsReady()
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-				{
-					if(tiamatItem.IsReady())
-						tiamatItem.Cast();
-					else if(hydraItem.IsReady())
-						hydraItem.Cast();
-				}
 			}
         }
 
@@ -355,18 +327,10 @@ namespace ALL_In_One.champions
 				if (Minions.Count <= 0)
                 return;
 				
-                if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady()
-					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
+                if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady())
                 {    
-			E.Cast();
-		}
-		if (Menu.Item("LcUseH", true).GetValue<bool>())
-		{
-			if(tiamatItem.IsReady())
-				tiamatItem.Cast();
-			else if(hydraItem.IsReady())
-				hydraItem.Cast();
-		}
+				E.Cast();
+				}
         }
 
         static void AAJungleclear()
@@ -379,18 +343,10 @@ namespace ALL_In_One.champions
             if (Mobs.Count <= 0)
                 return;
 				
-                if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady()
-					&& !tiamatItem.IsReady() && !hydraItem.IsReady())
+                if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady())
                 {    
 				E.Cast();
 				}
-				if (Menu.Item("JcUseH", true).GetValue<bool>())
-				{
-					if(tiamatItem.IsReady())
-						tiamatItem.Cast();
-					else if(hydraItem.IsReady())
-						hydraItem.Cast();
-				}	
         }
 		
 		

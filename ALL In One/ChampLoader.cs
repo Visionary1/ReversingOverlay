@@ -37,10 +37,7 @@ namespace ALL_In_One
                 case "Urgot"://Added by fakker
                     champions.Urgot.Load();
                     break;
-                //case "Jax":
-                //    champions.Jax.Load();
-                //    break;
-                case "Fiora"://Added by RL144
+                case "Fiora"://Added by RL244
                     champions.Fiora.Load();
                     break;
                 case "Lulu"://xcsoft가 추가함. 기록해두면 좋음.
@@ -55,17 +52,44 @@ namespace ALL_In_One
                 case "Sivir"://Added by fakker , 95% from sharpshooter
                     champions.Sivir.Load();
                     break;
-                case "XinZhao"://Added by RL144
+                case "XinZhao"://Added by RL244
                     champions.XinZhao.Load();
                     break;
                 case "Katarina"://Added by xcsoft
                     champions.Katarina.Load();
                     break;
-                case "Veigar"://Added by RL144
+                case "Veigar"://Added by RL244
                     champions.Veigar.Load();
                     break;
-                case "Talon"://Added by RL144
+                case "Talon"://Added by RL244
                     champions.Talon.Load();
+                    break;
+                case "Riven"://Added by xcsoft (Incomplete)
+                    champions.Riven.Load();
+                    break;
+                //case "Azir"://Added by RL244 WIP
+                //    champions.Azir.Load();
+                //    break;
+                case "Gangplank"://Added by RL244
+                    champions.Gangplank.Load();
+                    break;
+                case "Blitzcrank"://Added by RL244
+                    champions.Blitzcrank.Load();
+                    break;
+                case "Brand"://Added by RL244
+                    champions.Brand.Load();
+                    break;
+                case "Cassiopeia"://Added by RL244
+                    champions.Cassiopeia.Load();
+                    break;
+                case "KogMaw"://Added by RL244
+                    champions.KogMaw.Load();
+                    break;
+                case "Zyra"://Added by RL244
+                    champions.Zyra.Load();
+                    break;
+                case "Caitlyn"://Added by RL244 
+                    champions.Caitlyn.Load();
                     break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
@@ -78,17 +102,16 @@ namespace ALL_In_One
             try
             {
                AIO_Func.sendDebugMsg(tag + Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " Supported.", false);
+               return true;
             }
             catch
             {
                 AIO_Func.sendDebugMsg(tag + ObjectManager.Player.ChampionName + " Not supported.", false);
-                Game.PrintChat(AIO_Func.colorChat(System.Drawing.Color.DeepSkyBlue, tag) + AIO_Func.colorChat(System.Drawing.Color.DeepPink, ObjectManager.Player.ChampionName) + " Not supported.");
+                Game.PrintChat(AIO_Func.colorChat(System.Drawing.Color.SpringGreen, tag) + AIO_Func.colorChat(System.Drawing.Color.DeepPink, ObjectManager.Player.ChampionName) + " Not supported.");
 
                 AIO_Menu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported", null);
                 return false;
             }
-
-            return true;
         }
     }
 }

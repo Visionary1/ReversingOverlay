@@ -112,7 +112,7 @@ namespace ALL_In_One
 				}
 		}
 
-        internal static void MotionCancle()
+        internal static void MotionCancel()
         {
             Game.Say("/d");
         }

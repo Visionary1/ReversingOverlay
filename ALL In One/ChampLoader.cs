@@ -64,9 +64,6 @@ namespace ALL_In_One
                 case "Talon"://Added by RL244
                     champions.Talon.Load();
                     break;
-                case "Riven"://Added by xcsoft (Incomplete)
-                    champions.Riven.Load();
-                    break;
                 //case "Azir"://Added by RL244 WIP
                 //    champions.Azir.Load();
                 //    break;

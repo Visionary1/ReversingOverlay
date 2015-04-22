@@ -111,5 +111,10 @@ namespace ALL_In_One
 					}
 				}
 		}
+
+        internal static void MotionCancle()
+        {
+            Game.Say("/d");
+        }
     }
 }

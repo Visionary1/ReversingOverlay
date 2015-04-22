@@ -126,7 +126,7 @@ namespace ALL_In_One.champions
 				Mobs.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Jungleclear.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana)
 				&& Q.IsReady())
 				{
-					Q.Cast(Target);
+                AIO_Func.LCast(Q,Target,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,0);
 				}
 			}
 		}

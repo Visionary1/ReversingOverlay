@@ -3,10 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Drawing;
 
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
+
+/*
+MasteryBladeWeaving 무기연성
+MasterySpellWeaving 주문연성 (평타시)
+ElixirOfWrath 분노의영약
+grievouswound 고통스런 상처
+missfortunepassivestack 미포 w패시브
+*/
+
 
 namespace ALL_In_One.champions
 {
@@ -17,6 +26,10 @@ namespace ALL_In_One.champions
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
+		
+        static float getMBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "MasteryBladeWeaving"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getSBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "MasterySpellWeaving"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+
 
         public static void Load()
         {
@@ -33,7 +46,6 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
-            AIO_Menu.Champion.Combo.addUseR();
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
@@ -59,13 +71,16 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addQRange();
             AIO_Menu.Champion.Drawings.addERange(false);
             AIO_Menu.Champion.Drawings.addRRange();
+            AIO_Menu.Champion.Drawings.addItem("M", new Circle(false, Color.LightGreen));
+            AIO_Menu.Champion.Drawings.addItem("S", new Circle(false, Color.LightGreen));
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-			Orbwalking.AfterAttack += Orbwalking_OnAfterAttack;
+			//Orbwalking.AfterAttack += Orbwalking_OnAfterAttack;
+			//Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -92,6 +107,31 @@ namespace ALL_In_One.champions
                 KillstealQ();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
+				
+			if (getSBuffDuration > 4.9 && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+			{
+			var Target = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+            var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
+            var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+
+            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseW ||
+			Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana ||
+			Minions.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Laneclear.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana ||
+			Mobs.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Jungleclear.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana)
+			&& W.IsReady())
+            {
+                W.Cast();
+            }
+			
+            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseQ ||
+			Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana ||
+			Minions.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Laneclear.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana ||
+			Mobs.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Jungleclear.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana)
+			&& Q.IsReady())
+            {
+                Q.Cast(Target);
+            }
+			}
 		}
 
         static void Drawing_OnDraw(EventArgs args)
@@ -102,7 +142,8 @@ namespace ALL_In_One.champions
             var drawQ = AIO_Menu.Champion.Drawings.QRange;
             var drawE = AIO_Menu.Champion.Drawings.ERange;
             var drawR = AIO_Menu.Champion.Drawings.RRange;
-
+		var drawMTimer = AIO_Menu.Champion.Drawings.getCircleValue("M");
+		var drawSTimer = AIO_Menu.Champion.Drawings.getCircleValue("S");
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
 
@@ -111,6 +152,14 @@ namespace ALL_In_One.champions
 		
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+		var pos_temp = Drawing.WorldToScreen(Player.Position);
+		
+		if (drawMTimer.Active && getMBuffDuration > 0)
+		Drawing.DrawText(pos_temp[0], pos_temp[1], drawMTimer.Color, "M: " + getMBuffDuration.ToString("0.00"));
+		
+		if (drawSTimer.Active && getSBuffDuration > 0)
+		Drawing.DrawText(pos_temp[0], pos_temp[1], drawSTimer.Color, "S: " + getSBuffDuration.ToString("0.00"));
+		
         }
 
 		
@@ -121,9 +170,9 @@ namespace ALL_In_One.champions
 
             if (E.IsReady()
 				&& Player.Distance(gapcloser.Sender.Position) <= E.Range)
-                E.Cast((Vector3)gapcloser.End);
+                E.Cast((SharpDX.Vector3)gapcloser.End);
         }
-		
+/*
         static void Orbwalking_OnAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
@@ -150,22 +199,17 @@ namespace ALL_In_One.champions
                 Q.Cast(Target);
             }
         }
-
+*/
 		
         static void Combo()
         {
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-				var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
+				var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
                 AIO_Func.CCast(E,Etarget);
             }
 
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
-            {
-				var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(R,Rtarget);
-            }
         }
 
         static void Harass()
@@ -178,6 +222,7 @@ namespace ALL_In_One.champions
 				var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.CCast(E,Etarget);
             }
+
         }
 
         static void Laneclear()

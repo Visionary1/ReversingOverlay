@@ -171,7 +171,7 @@
     <Compile Include="champions\_Taric.cs" />
     <Compile Include="champions\_Teemo.cs" />
     <Compile Include="champions\_Thresh.cs" />
-    <Compile Include="champions\_Tristana.cs" />
+    <Compile Include="champions\Tristana.cs" />
     <Compile Include="champions\_Trundle.cs" />
     <Compile Include="champions\_Tryndamere.cs" />
     <Compile Include="champions\_TwistedFate.cs" />

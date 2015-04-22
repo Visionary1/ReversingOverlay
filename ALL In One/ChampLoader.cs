@@ -88,8 +88,11 @@ namespace ALL_In_One
                 case "Caitlyn"://Added by RL244 WIP
                     champions.Caitlyn.Load();
                     break;
-                case "MissFortune"://Added by RL244 WIP
+                case "MissFortune"://Added by RL244
                     champions.MissFortune.Load();
+                    break;
+                case "Tristana"://Added by RL244
+                    champions.Tristana.Load();
                     break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);

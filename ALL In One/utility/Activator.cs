@@ -29,6 +29,7 @@ namespace ALL_In_One.utility
             Menu.AddSubMenu(new Menu("BeforeAttack", "BeforeAttack"));
             Menu.AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
             Menu.AddSubMenu(new Menu("OnAttack", "OnAttack"));
+            Menu.AddSubMenu(new Menu("Killsteal", "Killsteal"));
 			Menu.AddSubMenu(new Menu("Misc", "Misc"));
 
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Health Potion", "Use Health Potion")).SetValue(true);
@@ -37,6 +38,7 @@ namespace ALL_In_One.utility
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(55,0,100));
             Menu.SubMenu("OnAttack").AddItem(new MenuItem("OnAttack.RS", "Use Red Smite")).SetValue(true);
             Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.SF", "Skill First")).SetValue(false);
+            Menu.SubMenu("Killsteal").AddItem(new MenuItem("Killsteal.BS", "Blue Smite")).SetValue(true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Cb", "On Combo")).SetValue(true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Hr", "On Harass")).SetValue(true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Lc", "On LaneClear")).SetValue(false);
@@ -49,8 +51,11 @@ namespace ALL_In_One.utility
             addPotions();
 
             Game.OnUpdate += OnUpdate.Game_OnUpdate;
+            Game.OnUpdate += OnAttack.Game_OnUpdate;
+            Game.OnUpdate += Killsteal.Game_OnUpdate;
             Orbwalking.BeforeAttack += BeforeAttack.Orbwalking_BeforeAttack;
             Orbwalking.AfterAttack += AfterAttack.Orbwalking_AfterAttack;
+            Orbwalking.OnAttack += OnAttack.Orbwalking_OnAttack;
         }
 
         internal class item
@@ -193,68 +198,21 @@ namespace ALL_In_One.utility
 		
 		internal class OnAttack
 		{
-            internal static List<items> smiteList = new List<items>();
-			internal static Spell Smite;
+			internal static Spell RS;
 			internal static SpellSlot smiteSlot = SpellSlot.Unknown;
 			internal static float smrange = 700f;
             internal static void Game_OnUpdate(EventArgs args)
             {
-				setSmiteSlot();
+				setRSmiteSlot();
 			}
-			internal static void Load()
-			{
-			InitializeItems();
-			}
-			internal class items
-			{
-				internal ItemId ItemId { get; set; }
-			}
-			internal static void setSmiteSlot()
+			internal static void setRSmiteSlot()
 			{
 				foreach (var spell in ObjectManager.Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteduel", StringComparison.CurrentCultureIgnoreCase))) // Red Smite
 				{
 					smiteSlot = spell.Slot;
-					Smite = new Spell(smiteSlot, smrange);
+					RS = new Spell(smiteSlot, smrange);
 					return;
 				}
-			}
-			internal static bool CheckInv()
-			{
-				bool b = false;
-				foreach(var items in smiteList)
-				{
-					if(Player.InventoryItems.Any(f => f.Id == (ItemId)items.ItemId))
-					{
-						b = true;
-					}
-				}
-				return b;
-			}
-			internal static void InitializeItems()
-			{
-				smiteList = new List<items>
-				{	
-					new items
-					{
-					ItemId = (ItemId) 3714
-					},
-					new items
-					{
-					ItemId = (ItemId) 3715
-					},
-					new items
-					{
-					ItemId = (ItemId) 3716
-					},
-					new items
-					{
-					ItemId = (ItemId) 3717
-					},
-					new items
-					{
-					ItemId = (ItemId) 3718
-					}
-				};
 			}
 
 			internal static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)
@@ -266,13 +224,56 @@ namespace ALL_In_One.utility
 						
 				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Menu.Item("OnAttack.RS").GetValue<bool>())
 				{
-					//if (!CheckInv())
-					//return;
-					Smite.Slot = smiteSlot;
+					RS.Slot = smiteSlot;
 					if(smiteSlot.IsReady())
 					Player.Spellbook.CastSpell(smiteSlot, Target);
 				}
 			}
+		}
+		
+		internal class Killsteal
+		{
+			internal static Spell BS;
+			internal static SpellSlot smiteSlot = SpellSlot.Unknown;
+			internal static float smrange = 700f;
+            internal static void Game_OnUpdate(EventArgs args)
+            {
+				setBSmiteSlot();
+				
+				var ts = ObjectManager.Get<Obj_AI_Hero>().Where(f => !f.IsAlly && !f.IsDead && Player.Distance(f, false) <= smrange);
+				if (ts == null)
+					return;
+
+				float dmg = BSDamage();
+				if(Menu.Item("Killsteal.BS").GetValue<bool>())
+				{
+					foreach (var t in ts)
+					{
+						if (AIO_Func.isKillable(t,dmg))
+						{
+							BS.Slot = smiteSlot;
+							Player.Spellbook.CastSpell(smiteSlot, t);
+						}
+					}
+				}
+			}
+			
+			internal static float BSDamage()
+			{
+				int lvl = Player.Level;
+				int damage = (20 + 8 * lvl);
+				return damage;
+			}
+			
+			internal static void setBSmiteSlot()
+			{
+				foreach (var spell in ObjectManager.Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteplayerganker", StringComparison.CurrentCultureIgnoreCase))) // Red Smite
+				{
+					smiteSlot = spell.Slot;
+					BS = new Spell(smiteSlot, smrange);
+					return;
+				}
+			}		
 		}
 
         internal class BeforeAttack

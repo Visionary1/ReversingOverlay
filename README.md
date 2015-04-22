@@ -3,8 +3,5 @@
 + xcsoft
 
 ##Collaborator
-+ Yours
-+ GBKTV
-+ CoreBoard
 + Fakker
 + RL244

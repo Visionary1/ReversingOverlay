@@ -115,7 +115,7 @@ namespace ALL_In_One.champions
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
 				
-            if (Q.IsReady() && drawQr.Active)
+            if (Q.IsReady() && drawQr.Active && qtarget != null)
                 Render.Circle.DrawCircle(Player.Position, Q.Range - (qtarget.MoveSpeed * (Q.Delay+Player.Distance(qtarget.Position)/Q.Speed)), drawQ.Color);
 
             if (R.IsReady() && drawR.Active)

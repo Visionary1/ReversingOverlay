@@ -165,7 +165,8 @@ namespace ALL_In_One.champions
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
                 return;
 		
-            if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
+            if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() &&
+				(AIO_Menu.Champion.Harass.UseE && !E.IsReady() || !AIO_Menu.Champion.Harass.UseE))
             {
 				var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
                 AIO_Func.LCast(Q,Qtarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
@@ -177,7 +178,8 @@ namespace ALL_In_One.champions
                 AIO_Func.CCast(W,Wtarget);
             }
 
-            if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
+            if (AIO_Menu.Champion.Harass.UseE && E.IsReady() &&
+				(AIO_Menu.Champion.Harass.UseQ && Q.IsReady() || !AIO_Menu.Champion.Harass.UseQ))
             {
 				var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.LCast(E,Etarget,50,0);

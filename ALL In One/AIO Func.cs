@@ -157,7 +157,7 @@ namespace ALL_In_One
 		
 		internal static bool AfterAttack()
 		{
-			return SWDuration > 4.9;
+			return SWDuration > 4.9 && utility.Activator.AfterAttack.AIO;
 		}
 		
     }

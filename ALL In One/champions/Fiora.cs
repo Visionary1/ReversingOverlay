@@ -101,6 +101,38 @@ namespace ALL_In_One.champions
                 KillstealR();
             #endregion
 			
+			#region AfterAttack
+			AIO_Func.AASkill(E);
+			
+			if(AIO_Func.AfterAttack())
+			{
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+				{	
+					if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
+						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
+					&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+						E.Cast();
+
+				}
+					
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+				{
+					if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
+						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
+						&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+						E.Cast();
+						
+					foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
+					{
+					if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady()
+					&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted && !E.IsReady()
+					&& HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range))
+					&& AIO_Func.isKillable(rtarget,R.GetDamage(rtarget) + Q.GetDamage(rtarget)*2)
+					R.Cast(rtarget);
+					}
+				}
+			}
+			#endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -195,30 +227,33 @@ namespace ALL_In_One.champions
 			AAJungleclear();
 		}
 		
-		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-		{	
-			if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
-				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-			&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
-				E.Cast();
-
-		}
-			
-		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+		if(!utility.Activator.AfterAttack.AIO)
 		{
-			if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
-				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+			{	
+				if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
 				&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
-				E.Cast();
-				
-			foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
-			{
-			if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady()
-			&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted && !E.IsReady()
-			&& HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
-			R.Cast(rtarget);
+					E.Cast();
+
 			}
-			
+				
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+			{
+				if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
+					&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+					E.Cast();
+					
+				foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
+				{
+				if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady()
+				&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted && !E.IsReady()
+				&& HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range))
+				&& AIO_Func.isKillable(rtarget,R.GetDamage(rtarget) + Q.GetDamage(rtarget)*2)
+				R.Cast(rtarget);
+				}
+			}
 		}
 	}
 

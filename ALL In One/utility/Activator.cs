@@ -311,9 +311,9 @@ namespace ALL_In_One.utility
         internal class AfterAttack
         {
             internal static List<item> itemsList = new List<item>();
-            internal static bool ALLCancleItemsAreCasted { get { return !utility.Activator.AfterAttack.itemsList.Any(x => Items.CanUseItem((int)x.Id) && !x.isTargeted && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()); } }
+            internal static bool ALLCancleItemsAreCasted { get { return Menu.Item("AfterAttack.SF").GetValue<bool>() || !utility.Activator.AfterAttack.itemsList.Any(x => Items.CanUseItem((int)x.Id) && !x.isTargeted && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()); } }
 			internal static bool AIO { get { return Menu.Item("AfterAttack.AIO").GetValue<bool>(); } }
-            public static bool SkillCasted = false;
+            internal static bool SkillCasted = false;
             internal static void additem(string itemName, int itemid, float itemRange, bool itemisTargeted = false)
             {
                 itemsList.Add(new item { Name = itemName, Id = itemid, Range = itemRange, isTargeted = itemisTargeted });

@@ -36,8 +36,6 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana();
 
-            
-
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW();
             AIO_Menu.Champion.Laneclear.addUseE();
@@ -90,7 +88,26 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
             #endregion
+			#region AfterAttack
+			AIO_Func.AASkill(Q);
 			
+			if(AIO_Func.AfterAttack())
+			{
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+				{
+					if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+						Q.Cast();
+				}
+					
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+				{
+					if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+						Q.Cast();					
+				}
+			}
+			#endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -172,22 +189,21 @@ namespace ALL_In_One.champions
 			AAJungleclear();
 					
 			}
-			
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-            {
-                if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady()
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                    Q.Cast();
-				
-
-			}
-				
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-            {
-                if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && !Q.IsReady()
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                    Q.Cast();					
-				
+			if(!utility.Activator.AfterAttack.AIO)
+			{
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+				{
+					if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+						Q.Cast();
+				}
+					
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+				{
+					if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+						Q.Cast();					
+				}
 			}
         }
 

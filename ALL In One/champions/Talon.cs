@@ -96,8 +96,6 @@ namespace ALL_In_One.champions
 			
 			if(AIO_Func.AfterAttack())
 			{
-
-				
 				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
 				{
 					if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted

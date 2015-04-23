@@ -91,12 +91,15 @@ namespace ALL_In_One.champions
             Killsteal();
             #endregion
 			
+			#region AfterAttack
+			if(Q.IsReady())
+			utility.Activator.AfterAttack.SkillCasted = false;
+			else
+			utility.Activator.AfterAttack.SkillCasted = true;
+			
 			if(AIO_Func.AfterAttack())
 			{
-				if(Q.IsReady())
-				utility.Activator.AfterAttack.SkillCasted = true;
-				else
-				utility.Activator.AfterAttack.SkillCasted = false;
+
 				
 				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
 				{
@@ -112,6 +115,7 @@ namespace ALL_In_One.champions
 						Q.Cast();					
 				}
 			}
+			#endregion
 			
         }
 

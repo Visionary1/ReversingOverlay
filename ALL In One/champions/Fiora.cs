@@ -24,11 +24,6 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-        static List<Items.Item> itemsList = new List<Items.Item>(); //척후병 샤브르 //RS
-		static Spell Smite; //RS
-		static SpellSlot smiteSlot = SpellSlot.Unknown; //RS
-		static Items.Item s0, s1, s2, s3, s4; //RS
-        static float smrange = 700f; //RS
 		
         static float getQBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "fioraqcd"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static float getWBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "FioraRiposte"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
@@ -75,10 +70,8 @@ namespace ALL_In_One.champions
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
-            Orbwalking.OnAttack += Orbwalking_OnAttack;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
 			
-	    InitializeItems(); //RS
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -108,7 +101,6 @@ namespace ALL_In_One.champions
                 KillstealR();
             #endregion
 			
-		setSmiteSlot(); //RS
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -143,48 +135,6 @@ namespace ALL_In_One.champions
             }
         }
 		
-        static void setSmiteSlot() //RS
-        {
-            foreach (var spell in ObjectManager.Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteduel", StringComparison.CurrentCultureIgnoreCase)))
-            {
-                smiteSlot = spell.Slot;
-                Smite = new Spell(smiteSlot, smrange);
-                return;
-            }
-        }
-		
-        static bool CheckInv() //RS
-        {
-            bool b = false;
-            foreach(var item in itemsList)
-            {
-                if(Player.InventoryItems.Any(f => f.Id == (ItemId)item.Id))
-                {
-                    b = true;
-                }
-            }
-            return b;
-        }
-		
-        static void InitializeItems() //RS
-        {
-            s0 = new Items.Item(3714, smrange);
-            itemsList.Add(s0);
-            s1 = new Items.Item(3715, smrange);
-            itemsList.Add(s1);
-            s2 = new Items.Item(3716, smrange);
-            itemsList.Add(s2);
-            s3 = new Items.Item(3717, smrange);
-            itemsList.Add(s3);
-            s4 = new Items.Item(3718, smrange);
-            itemsList.Add(s4);
-        }
-
-	static readonly string[] MinionNames =
-	{
-	"SRU_Blue", "SRU_Gromp", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Red", "SRU_Krug", "SRU_Dragon", "SRU_BaronSpawn"
-	};
-	
 	static Obj_AI_Minion Chase(Vector3 pos)
 	{
 		var minions =
@@ -227,22 +177,6 @@ namespace ALL_In_One.champions
 
         }
 
-	static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target) 
-	{
-		var Target = (Obj_AI_Base)target;
-		if (!unit.IsMe || Target == null)
-                return;
-				
-            	if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) //RS
-			{
-				if (!CheckInv())
-				return;
-                    		Smite.Slot = smiteSlot;
-				if(smiteSlot.IsReady())
-                		 Player.Spellbook.CastSpell(smiteSlot, Target);
-			}
-	}
-		
 	static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
 	{
             var Target = (Obj_AI_Base)target;

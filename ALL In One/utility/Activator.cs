@@ -54,9 +54,11 @@ namespace ALL_In_One.utility
             Game.OnUpdate += OnUpdate.Game_OnUpdate;
             Game.OnUpdate += OnAttack.Game_OnUpdate;
             Game.OnUpdate += Killsteal.Game_OnUpdate;
+			Game.OnUpdate += AfterAttack.Game_OnUpdate;
             Orbwalking.BeforeAttack += BeforeAttack.Orbwalking_BeforeAttack;
             Orbwalking.AfterAttack += AfterAttack.Orbwalking_AfterAttack;
             Orbwalking.OnAttack += OnAttack.Orbwalking_OnAttack;
+			
         }
 
         internal class item

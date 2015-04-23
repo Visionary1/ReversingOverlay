@@ -127,7 +127,7 @@ namespace ALL_In_One.champions
 					if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady()
 					&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted && !E.IsReady()
 					&& HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range))
-					&& AIO_Func.isKillable(rtarget,R.GetDamage(rtarget) + Q.GetDamage(rtarget)*2)
+					&& AIO_Func.isKillable(rtarget,R.GetDamage(rtarget) + Q.GetDamage(rtarget)*2))
 					R.Cast(rtarget);
 					}
 				}
@@ -250,7 +250,7 @@ namespace ALL_In_One.champions
 				if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady()
 				&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted && !E.IsReady()
 				&& HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range))
-				&& AIO_Func.isKillable(rtarget,R.GetDamage(rtarget) + Q.GetDamage(rtarget)*2)
+				&& AIO_Func.isKillable(rtarget,R.GetDamage(rtarget) + Q.GetDamage(rtarget)*2))
 				R.Cast(rtarget);
 				}
 			}

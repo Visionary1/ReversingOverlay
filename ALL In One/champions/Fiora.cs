@@ -169,59 +169,58 @@ namespace ALL_In_One.champions
 
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
+            var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+			if (Mobs.Count >= 1 && (!Menu.Item("JcUseW", true).GetValue<bool>() || !(AIO_Func.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value)) ||
+			Mobs.Count == 0 && !Menu.Item("CbUseW", true).GetValue<bool>())
             if (IsOnHit(args.SData.Name) && args.Target.IsMe && Player.Distance(args.End) < 150)
-		{
-
 			W.Cast();
-		}
-
         }
 
 	static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
 	{
-            var Target = (Obj_AI_Base)target;
-            if (!unit.IsMe || Target == null)
-                return;
+		var Target = (Obj_AI_Base)target;
+		if (!unit.IsMe || Target == null)
+			return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-			{
-				var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
-				var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-				if(Minions.Count + Mobs.Count <= 0)
-				return;
+		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+		{
+			var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
+			var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+			if(Minions.Count + Mobs.Count <= 0)
+			return;
+			
+			if(Minions.Count >= 1)
+			AALaneclear();
+			if(Mobs.Count >= 1)
+			AAJungleclear();
+		}
+		
+		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+		{	
+			if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
+				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
+			&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+				E.Cast();
+
+		}
+			
+		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+		{
+			if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
+				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
+				&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+				E.Cast();
 				
-				if(Minions.Count >= 1)
-				AALaneclear();
-				if(Mobs.Count >= 1)
-				AAJungleclear();
+			foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
+			{
+			if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady()
+			&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted && !E.IsReady()
+			&& HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
+			R.Cast(rtarget);
 			}
 			
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-			{	
-                if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-				&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
-                    E.Cast();
-
-			}
-				
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-            {
-                if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-					&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
-                    E.Cast();
-					
-				foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
-				{
-				if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady()
-				&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted && !E.IsReady()
-				&& HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
-				R.Cast(rtarget);
-				}
-				
-			}
-        }
+		}
+	}
 
         static void Combo()
         {

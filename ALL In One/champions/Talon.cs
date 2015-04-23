@@ -92,10 +92,7 @@ namespace ALL_In_One.champions
             #endregion
 			
 			#region AfterAttack
-			if(Q.IsReady())
-			utility.Activator.AfterAttack.SkillCasted = false;
-			else
-			utility.Activator.AfterAttack.SkillCasted = true;
+			AIO_Func.AASkill(Q);
 			
 			if(AIO_Func.AfterAttack())
 			{

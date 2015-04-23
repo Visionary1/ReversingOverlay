@@ -160,6 +160,14 @@ namespace ALL_In_One
 			return SWDuration > 4.85 && utility.Activator.AfterAttack.AIO;
 		}
 		
+		internal static void AASkill(Spell spell)
+		{
+			if(spell.IsReady())
+			utility.Activator.AfterAttack.SkillCasted = false;
+			else
+			utility.Activator.AfterAttack.SkillCasted = true;
+		}
+		
     }
 }
 

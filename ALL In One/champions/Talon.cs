@@ -93,6 +93,11 @@ namespace ALL_In_One.champions
 			
 			if(AIO_Func.AfterAttack())
 			{
+				if(Q.IsReady())
+				utility.Activator.AfterAttack.SkillCasted = true;
+				else
+				utility.Activator.AfterAttack.SkillCasted = false;
+				
 				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
 				{
 					if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
@@ -199,7 +204,7 @@ namespace ALL_In_One.champions
 					
 				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
 				{
-					if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+					if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady()// && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
 						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
 						Q.Cast();					
 				}
@@ -210,14 +215,14 @@ namespace ALL_In_One.champions
         {
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-                E.CastOnBestTarget();
+                var eTarget = TargetSelector.GetTarget(E.Range, W.DamageType, true);
+				if(eTarget.Distance(Player.Position) > 600 || eTarget.Distance(Player.Position) <= 600 && !W.IsReady())
+                E.Cast(eTarget);
             }
 			
-            if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
+            if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && !AIO_Func.AfterAttack())
             {
-               
                 var wTarget = TargetSelector.GetTarget(W.Range, W.DamageType, true);
-
         
                 if (wTarget != null && !Player.IsDashing())
                     W.Cast(wTarget);       

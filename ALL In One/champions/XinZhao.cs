@@ -14,11 +14,6 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-        static List<Items.Item> itemsList = new List<Items.Item>(); //척후병 샤브르
-		static Spell Smite;
-		static SpellSlot smiteSlot = SpellSlot.Unknown;
-		static Items.Item s0, s1, s2, s3, s4;
-        static float smrange = 700f;
 		
         static float getWBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "XenZhaoBattleCry"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
@@ -40,8 +35,6 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana();
-
-            
 
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW();
@@ -65,12 +58,10 @@ namespace ALL_In_One.champions
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
-            Orbwalking.OnAttack += Orbwalking_OnAttack;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
 			
-	    InitializeItems();
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -97,8 +88,26 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
             #endregion
+			#region AfterAttack
+			AIO_Func.AASkill(Q);
 			
-			setSmiteSlot();
+			if(AIO_Func.AfterAttack())
+			{
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+				{
+					if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+						Q.Cast();
+				}
+					
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+				{
+					if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+						Q.Cast();					
+				}
+			}
+			#endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -120,43 +129,6 @@ namespace ALL_In_One.champions
                 var pos_temp = Drawing.WorldToScreen(Player.Position);
                 Drawing.DrawText(pos_temp[0], pos_temp[1], drawWTimer.Color, "W: " + getWBuffDuration.ToString("0.00"));
             }
-        }
-		
-        static void setSmiteSlot()
-        {
-            foreach (var spell in ObjectManager.Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteduel", StringComparison.CurrentCultureIgnoreCase)))
-            {
-                smiteSlot = spell.Slot;
-                Smite = new Spell(smiteSlot, smrange);
-                return;
-            }
-        }
-		
-        static bool CheckInv()
-        {
-            bool b = false;
-            foreach(var item in itemsList)
-            {
-                if(Player.InventoryItems.Any(f => f.Id == (ItemId)item.Id))
-                {
-                    b = true;
-                }
-            }
-            return b;
-        }
-		
-        static void InitializeItems()
-        {
-            s0 = new Items.Item(3714, smrange);
-            itemsList.Add(s0);
-            s1 = new Items.Item(3715, smrange);
-            itemsList.Add(s1);
-            s2 = new Items.Item(3716, smrange);
-            itemsList.Add(s2);
-            s3 = new Items.Item(3717, smrange);
-            itemsList.Add(s3);
-            s4 = new Items.Item(3718, smrange);
-            itemsList.Add(s4);
         }
 		
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
@@ -195,22 +167,6 @@ namespace ALL_In_One.champions
             }
         }
 
-	static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)
-	{
-		var Target = (Obj_AI_Base)target;
-            
-		if (!unit.IsMe || Target == null)
-                return;
-				
-		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-		{
-			if (!CheckInv())
-			return;
-			Smite.Slot = smiteSlot;
-			if(smiteSlot.IsReady())
-			Player.Spellbook.CastSpell(smiteSlot, Target);
-		}
-	}
 		
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
@@ -233,22 +189,21 @@ namespace ALL_In_One.champions
 			AAJungleclear();
 					
 			}
-			
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-            {
-                if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady()
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                    Q.Cast();
-				
-
-			}
-				
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-            {
-                if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && !Q.IsReady()
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                    Q.Cast();					
-				
+			if(!utility.Activator.AfterAttack.AIO)
+			{
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+				{
+					if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+						Q.Cast();
+				}
+					
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+				{
+					if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+						Q.Cast();					
+				}
 			}
         }
 

@@ -64,9 +64,6 @@ namespace ALL_In_One
                 case "Talon"://Added by RL244
                     champions.Talon.Load();
                     break;
-                case "Riven"://Added by xcsoft (Incomplete)
-                    champions.Riven.Load();
-                    break;
                 //case "Azir"://Added by RL244 WIP
                 //    champions.Azir.Load();
                 //    break;
@@ -88,8 +85,14 @@ namespace ALL_In_One
                 case "Zyra"://Added by RL244
                     champions.Zyra.Load();
                     break;
-                case "Caitlyn"://Added by RL244 
+                case "Caitlyn"://Added by RL244 WIP
                     champions.Caitlyn.Load();
+                    break;
+                case "MissFortune"://Added by RL244
+                    champions.MissFortune.Load();
+                    break;
+                case "Tristana"://Added by RL244
+                    champions.Tristana.Load();
                     break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);

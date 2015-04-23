@@ -9,7 +9,8 @@ namespace ALL_In_One
 {
     class AIO_Func
     {
-        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
+        static float SWDuration { get { var buff = AIO_Func.getBuffInstance(ObjectManager.Player, "MasterySpellWeaving"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+
         internal static float getHealthPercent(Obj_AI_Base unit)
         {
             return unit.Health / unit.MaxHealth * 100;
@@ -80,62 +81,93 @@ namespace ALL_In_One
 		
 		internal static void CCast(Spell spell, Obj_AI_Base target) //for Circular spells
 		{
-			if(spell != null && target !=null)
+			if(spell.Type == SkillshotType.SkillshotCircle || spell.Type == SkillshotType.SkillshotCone) // Cone 스킬은 임시로
 			{
-				var pred = spell.GetPrediction(target, true);
-				SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.Position.To2D()) / 2 ;
-				if (target.IsValidTarget(spell.Range))
+				if(spell != null && target !=null)
 				{
-					if(target.MoveSpeed*spell.Delay <= spell.Width*2/3)
-					spell.Cast(target.Position);
-					else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+					var pred = spell.GetPrediction(target, true);
+					SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.Position.To2D()) / 2 ;
+
+					if (target.IsValidTarget(spell.Range))
 					{
-						if(target.MoveSpeed*spell.Delay <= spell.Width*4/3)
-						spell.Cast(castVec);
-						else
-						spell.Cast(pred.CastPosition);
+						if(target.MoveSpeed*spell.Delay <= spell.Width*2/3)
+							spell.Cast(target.Position);
+						else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+						{
+							if(target.MoveSpeed*spell.Delay <= spell.Width*4/3)
+							spell.Cast(castVec);
+							else
+							spell.Cast(pred.CastPosition);
+						}
 					}
 				}
+				else
+					sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
 			}
 			else
-			{
-			sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
-			}
+			sendDebugMsg("It is not circular skill. Debug needed");
 		}
 		
 		internal static void LCast(Spell spell, Obj_AI_Base target, float alpha, float colmini) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
 		{							//        AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue); <- 이런식으로 사용.
-
-			if(spell != null && target !=null)
-			{
-				var pred = spell.GetPrediction(target, true);
-				var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
-				var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
-				if (target.IsValidTarget(spell.Range - target.MoveSpeed*(spell.Delay +Player.Distance(target.Position)/spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-				{
-				 spell.Cast(pred.CastPosition);
-				}
-			}
+			if(spell.Type != SkillshotType.SkillshotLine)
+			sendDebugMsg("It is not linar skill. Debug needed");
 			else
 			{
-			sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
+				if(spell != null && target !=null)
+				{
+					var pred = spell.GetPrediction(target, true);
+					var collision = spell.GetCollision(ObjectManager.Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
+					var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
+
+					if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + ObjectManager.Player.Distance(target.Position) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+					{
+						spell.Cast(pred.CastPosition);
+					}
+				}
+				else
+					sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
 			}
 		}
-		/*
-		internal static void LH(Spell spell) // For Last hit with skill for farming
+
+		
+		internal static void LH(Spell spell, float ALPHA) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q) or AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
 		{
 			if(spell == null)
-			return
-				var _m = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.spell))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);			
-                if (_m != null)
+			return;
+				var _m = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((spell.GetDamage(m))) && HealthPrediction.GetHealthPrediction(m, (int)(ObjectManager.Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
+				if (_m != null)
 				{
-				if() // 선형 스킬일경우
-                LCast(spell,_m,50,0);
-				else if() // 원형 스킬일경우
+				if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
+                LCast(spell,_m,50,ALPHA);
+				else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
 				CCast(spell,_m);
+				else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+				spell.Cast(_m);
+				else if(!spell.IsSkillshot)
+				spell.Cast(_m);
 				}
 		}
-		*/
+		
+
+        internal static void MotionCancel()
+        {
+            Game.Say("/d");
+        }
+		
+		internal static bool AfterAttack()
+		{
+			return SWDuration > 4.85 && utility.Activator.AfterAttack.AIO;
+		}
+		
+		internal static void AASkill(Spell spell)
+		{
+			if(spell.IsReady())
+			utility.Activator.AfterAttack.SkillCasted = false;
+			else
+			utility.Activator.AfterAttack.SkillCasted = true;
+		}
 		
     }
 }
+

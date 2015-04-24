@@ -24,7 +24,7 @@ namespace ALL_In_One.utility
             AIO_Menu.addSubMenu("Activator", "AIO: Activator");
 
             Menu.AddSubMenu(new Menu("Auto-Potion", "AutoPotion"));
-            Menu.AddSubMenu(new Menu("Auto-Spell", "AutoSpell"));
+            //Menu.AddSubMenu(new Menu("Auto-Spell", "AutoSpell"));
             //Menu.AddSubMenu(new Menu("Activator: ComboMode", "ComboMode"));
             Menu.AddSubMenu(new Menu("BeforeAttack", "BeforeAttack"));
             Menu.AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
@@ -40,6 +40,7 @@ namespace ALL_In_One.utility
             Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.SF", "Skill First")).SetValue(false);
             Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.AIO", "Use SpellWeaving AACancle")).SetValue(false);
             Menu.SubMenu("Killsteal").AddItem(new MenuItem("Killsteal.BS", "Blue Smite")).SetValue(true);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.BF", "Debug Mode-Check Buff(In Combo mode)")).SetValue(false);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Cb", "On Combo")).SetValue(true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Hr", "On Harass")).SetValue(true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Lc", "On LaneClear")).SetValue(false);
@@ -194,8 +195,21 @@ namespace ALL_In_One.utility
                         }
                     }
                 }
-
 				
+				if(Menu.Item("Misc.BF").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) // 개발 편의를 위해 추가한 버프 체크기.
+				{
+					foreach (var buff in ObjectManager.Player.Buffs)
+					{
+						AIO_Func.sendDebugMsg("PLAYER : "+buff.Name);
+					}
+					
+					var Target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
+					
+					foreach (var buff in Target.Buffs)
+					{
+						AIO_Func.sendDebugMsg("TARGET : "+buff.Name);
+					}
+				}
             }
         }
 		

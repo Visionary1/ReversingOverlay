@@ -61,8 +61,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseInterrupter();
 
             AIO_Menu.Champion.Drawings.addQRange();
+            AIO_Menu.Champion.Drawings.addItem("Q Safe Range", new Circle(true, Color.Red));
             AIO_Menu.Champion.Drawings.addWRange();
-            AIO_Menu.Champion.Drawings.addItem("E Safe Range", new Circle(true, Color.Red));
             AIO_Menu.Champion.Drawings.addERange(false);
             AIO_Menu.Champion.Drawings.addRRange();
 
@@ -156,8 +156,7 @@ namespace ALL_In_One.champions
 				var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
                 AIO_Func.LCast(Q,Qtarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,0);
             }
-
-
+			
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
 				T(W);
 

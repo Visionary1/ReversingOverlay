@@ -14,7 +14,7 @@ namespace ALL_In_One
         
         internal static void initialize()
         {
-            MainMenu_Manual = new Menu("ALL In One", "xcsoft_ALLINONE", true);
+            MainMenu_Manual = new Menu("ALL In One", "Teamproject_ALLINONE", true);
             MainMenu_Manual.AddToMainMenu();
         }
 

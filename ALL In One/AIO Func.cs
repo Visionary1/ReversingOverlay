@@ -9,6 +9,7 @@ namespace ALL_In_One
 {
     class AIO_Func
     {
+        internal static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static float SWDuration { get { var buff = AIO_Func.getBuffInstance(ObjectManager.Player, "MasterySpellWeaving"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         internal static float getHealthPercent(Obj_AI_Base unit)
@@ -166,6 +167,26 @@ namespace ALL_In_One
 			utility.Activator.AfterAttack.SkillCasted = false;
 			else
 			utility.Activator.AfterAttack.SkillCasted = true;
+		}
+		
+		internal static void AALcJc(Spell spell) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
+		{
+				var Minions = MinionManager.GetMinions(ObjectManager.Player.AttackRange, MinionTypes.All, MinionTeam.Enemy);
+				var Mobs = MinionManager.GetMinions(ObjectManager.Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+				if((Menu.Item("Laneclear.Use " + spell.ToString(),true).GetValue<bool>() || Menu.Item("LcUse" + spell.ToString(),true).GetValue<bool>()) && Minions.Count >= 1 && getManaPercent(ObjectManager.Player) > AIO_Menu.Champion.Laneclear.IfMana)
+				{
+					if(!spell.IsSkillshot)
+					spell.Cast(Minions[0]);
+					else
+					spell.Cast();
+				}
+				if((Menu.Item("Jungleclear.Use " + spell.ToString(),true).GetValue<bool>() || Menu.Item("JcUse" + spell.ToString(),true).GetValue<bool>()) && Mobs.Count >= 1 && getManaPercent(ObjectManager.Player) > AIO_Menu.Champion.Jungleclear.IfMana)
+				{
+					if(!spell.IsSkillshot)
+					spell.Cast(Mobs[0]);
+					else
+					spell.Cast();
+				}
 		}
 		
     }

@@ -86,6 +86,12 @@ namespace ALL_In_One.champions
             if (Menu.Item("miscKs", true).GetValue<bool>())
                 Killsteal();
             #endregion
+			
+			#region AfterAttack
+			AIO_Func.AASkill(W);
+			if(AIO_Func.AfterAttack())
+			AA();
+			#endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -139,13 +145,8 @@ namespace ALL_In_One.champions
 
         }
 
-        static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
-        {
-            var Target = (Obj_AI_Base)target;
-
-            if (!unit.IsMe || Target == null)
-                return;
-                
+		static void AA()
+		{
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)) && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
@@ -154,6 +155,16 @@ namespace ALL_In_One.champions
 	            if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
 				    R.Cast();
 		    }
+		}
+		
+        static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
+        {
+            var Target = (Obj_AI_Base)target;
+
+            if (!unit.IsMe || Target == null)
+                return;
+			if(!utility.Activator.AfterAttack.AIO)
+			AA();
         }
 
         static void Combo()

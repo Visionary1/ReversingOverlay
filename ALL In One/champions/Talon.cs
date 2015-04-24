@@ -57,7 +57,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.LightGreen));
             AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.LightGreen));
 			
-	    AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
+			AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -93,23 +93,8 @@ namespace ALL_In_One.champions
 			
 			#region AfterAttack
 			AIO_Func.AASkill(Q);
-			
 			if(AIO_Func.AfterAttack())
-			{
-				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-				{
-					if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
-						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-						Q.Cast();
-				}
-					
-				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-				{
-					if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
-						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-						Q.Cast();					
-				}
-			}
+			AA();
 			#endregion
 			
         }
@@ -171,6 +156,24 @@ namespace ALL_In_One.champions
 
         }
 		
+		static void AA() // 챔피언 대상 평캔 ( 빼낸 이유는 AA방식 두개로 할시 두번 적어야 해서 단순화하기 위함.
+		{
+			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //탈론은 타겟이 필요한건 아니지만. Base로 쓰기 위해.
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+			{
+				if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+					Q.Cast();
+			}
+				
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+			{
+				if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+					Q.Cast();					
+			}
+		}
+		
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
@@ -178,36 +181,9 @@ namespace ALL_In_One.champions
                 return;
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-            {
-			var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
-			var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-			if(Minions.Count + Mobs.Count <= 0)
-			return;
-			
-			if (Minions.Count >= 1)
-			AALaneclear();
-			
-			if (Mobs.Count >= 1)
-			AAJungleclear();
-					
-			}
+			AIO_Func.AALcJc(Q);
 			if(!utility.Activator.AfterAttack.AIO)
-			{
-				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-				{
-					if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
-						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-						Q.Cast();
-				}
-					
-				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-				{
-					if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady()// && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
-						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-						Q.Cast();					
-				}
-			}
+			AA();
         }
 
         static void Combo()
@@ -252,37 +228,6 @@ namespace ALL_In_One.champions
 
         }
 		
-        static void AALaneclear()
-        {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
-                return;
-
-			var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
-
-			if (Minions.Count <= 0)
-                return;
-				
-                if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
-                    Q.Cast();
-					
-
-        }
-
-        static void AAJungleclear()
-        {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
-                return;
-
-            var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-            if (Mobs.Count <= 0)
-                return;
-				
-            if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
-                Q.Cast();
-        }
-
-
         static void Laneclear()
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))

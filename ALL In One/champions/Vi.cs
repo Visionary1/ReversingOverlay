@@ -93,6 +93,12 @@ namespace ALL_In_One.champions
             if (Menu.Item("miscKs", true).GetValue<bool>())
                 Killsteal();
             #endregion
+			
+			#region AfterAttack
+			AIO_Func.AASkill(E);
+			if(AIO_Func.AfterAttack())
+			AA();
+			#endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -136,6 +142,21 @@ namespace ALL_In_One.champions
             if (R.CanCast(sender) && args.DangerLevel >= Interrupter2.DangerLevel.High)
                 R.Cast(sender);
         }
+		
+		static void AA()
+		{
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            {
+                if (Menu.Item("CbUseE", true).GetValue<bool>() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+                    E.Cast();
+            }
+
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed )
+            {
+                if (Menu.Item("HrsUseE", true).GetValue<bool>() && AIO_Func.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+                    E.Cast();
+            }
+		}
 
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
@@ -144,24 +165,15 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || !Orbwalking.CanMove(10) || !E.IsReady() || Target == null)
                 return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-            {
-                if (Menu.Item("CbUseE", true).GetValue<bool>())
-                    E.Cast();
-            }
-
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed )
-            {
-                if (Menu.Item("HrsUseE", true).GetValue<bool>() && AIO_Func.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value)
-                    E.Cast();
-            }
+			if(!utility.Activator.AfterAttack.AIO)
+			AA();
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
                 if (Menu.Item("LcUseE", true).GetValue<bool>() && AIO_Func.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value)
                     E.Cast();
 
-                if (Menu.Item("JcUseE", true).GetValue<bool>() && AIO_Func.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value)
+                if (Menu.Item("JcUseE", true).GetValue<bool>() && AIO_Func.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value) // <- 이렇게 하면 JcUseE, LcUseE 둘중에 하나만 켜도 정글 라인 안가리고 항상 E를 쓰는 문제가 발생함. 분리하려면 제가한것처럼 AALaneclear AAJunglecelar 등으로 분리해야..
                     E.Cast();
             }
         }

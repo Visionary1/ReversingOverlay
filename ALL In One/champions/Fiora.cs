@@ -103,35 +103,8 @@ namespace ALL_In_One.champions
 			
 			#region AfterAttack
 			AIO_Func.AASkill(E);
-			
 			if(AIO_Func.AfterAttack())
-			{
-				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-				{	
-					if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
-						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-					&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
-						E.Cast();
-
-				}
-					
-				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-				{
-					if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
-						&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-						&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
-						E.Cast();
-						
-					foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
-					{
-					if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady()
-					&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted && !E.IsReady()
-					&& HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range))
-					&& AIO_Func.isKillable(rtarget,R.GetDamage(rtarget) + Q.GetDamage(rtarget)*2))
-					R.Cast(rtarget);
-					}
-				}
-			}
+			AA();
 			#endregion
         }
 
@@ -208,6 +181,34 @@ namespace ALL_In_One.champions
 			W.Cast();
         }
 
+	static void AA()
+	{
+		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+		{	
+			if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
+				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
+			&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+				E.Cast();
+
+		}
+			
+		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+		{
+			if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
+				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
+				&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+				E.Cast();
+				
+			foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
+			{
+			if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady()
+			&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted && !E.IsReady()
+			&& HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range))
+			&& AIO_Func.isKillable(rtarget,R.GetDamage(rtarget) + Q.GetDamage(rtarget)*2))
+			R.Cast(rtarget);
+			}
+		}
+	}
 	static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
 	{
 		var Target = (Obj_AI_Base)target;
@@ -228,54 +229,27 @@ namespace ALL_In_One.champions
 		}
 		
 		if(!utility.Activator.AfterAttack.AIO)
-		{
-			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-			{	
-				if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-				&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
-					E.Cast();
-
-			}
-				
-			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-			{
-				if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-					&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
-					E.Cast();
-					
-				foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
-				{
-				if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady()
-				&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted && !E.IsReady()
-				&& HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range))
-				&& AIO_Func.isKillable(rtarget,R.GetDamage(rtarget) + Q.GetDamage(rtarget)*2))
-				R.Cast(rtarget);
-				}
-			}
-		}
+			AA();
 	}
 
         static void Combo()
         {
             if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady()) 
-                {
-			var qd = Menu.Item("CbUseQD", true).GetValue<Slider>().Value;
-			var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-			var fqTarget = TargetSelector.GetTarget(Q.Range * 2, Q.DamageType);
-//				var fminion = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => t.Distance(fqTarget.Position)).
-//				Where(t => !t.IsAlly && Player.Distance(t.Position) <= 600 && Player.Distance(t.Position) >= 300 && fqTarget.Distance(t.Position) <= 600).First();
-			var mchase = Chase(fqTarget.Position);
-			
-			
-			if(qTarget.Distance(Player.ServerPosition) >= qd || getQBuffDuration < 1)
-				Q.Cast(qTarget);
+			{
+				var qd = Menu.Item("CbUseQD", true).GetValue<Slider>().Value;
+				var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+				var fqTarget = TargetSelector.GetTarget(Q.Range * 2, Q.DamageType);
+	//				var fminion = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => t.Distance(fqTarget.Position)).
+	//				Where(t => !t.IsAlly && Player.Distance(t.Position) <= 600 && Player.Distance(t.Position) >= 300 && fqTarget.Distance(t.Position) <= 600).First();
+				var mchase = Chase(fqTarget.Position);
 				
-			if(fqTarget.Distance(Player.ServerPosition) > 600) //Chasing Enemy
-				Q.Cast(mchase);
-		}
 				
+				if(qTarget.Distance(Player.ServerPosition) >= qd || getQBuffDuration < 1)
+					Q.Cast(qTarget);
+					
+				if(fqTarget.Distance(Player.ServerPosition) > 600) //Chasing Enemy
+					Q.Cast(mchase);
+			}
         }
 
         static void Harass()
@@ -296,9 +270,7 @@ namespace ALL_In_One.champions
                 return;
 				
                 if (Menu.Item("LcUseE", true).GetValue<bool>() && E.IsReady())
-                {    
 				E.Cast();
-				}
         }
 
         static void AAJungleclear()
@@ -312,9 +284,7 @@ namespace ALL_In_One.champions
                 return;
 				
                 if (Menu.Item("JcUseE", true).GetValue<bool>() && E.IsReady())
-                {    
 				E.Cast();
-				}
         }
 		
 		

@@ -137,9 +137,7 @@ namespace ALL_In_One.champions
             if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-                {
                     W.Cast();
-                }
             }
         }
         static void Combo()

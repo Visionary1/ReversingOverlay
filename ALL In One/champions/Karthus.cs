@@ -11,8 +11,8 @@ namespace ALL_In_One.champions
 {
     class Karthus
     {
-        static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }//메뉴에있는 오브워커(ALL_IN_ONE_Menu.Orbwalker)를 쓰기편하게 오브젝트명 Orbwalker로 단축한것.
-        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }//Player오브젝트 = 말그대로 플레이어 챔피언입니다. 이 오브젝트로 챔피언을 움직인다던지 스킬을 쓴다던지 다 됩니다.
+        static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
+        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
 
@@ -26,7 +26,7 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E, 550f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R);
 
-            Q.SetSkillshot(0.9f, 160f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(1.0f, 160f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             W.SetSkillshot(0.6f, 1f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
             AIO_Menu.Champion.Combo.addUseQ();
@@ -54,7 +54,6 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addQRange();
             AIO_Menu.Champion.Drawings.addWRange();
             AIO_Menu.Champion.Drawings.addERange();
-            AIO_Menu.Champion.Drawings.addRRange();
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -67,25 +66,33 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
+            Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
+
             if (Orbwalking.CanMove(10))
             {
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                    Combo();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    Harass();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
-                    Lasthit();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                switch (Orbwalker.ActiveMode)
                 {
-                    Laneclear();
-                    Jungleclear();
+                    case Orbwalking.OrbwalkingMode.Combo:
+                        Orbwalker.SetAttack(false);
+                        Combo();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LaneClear:
+                        Harass();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LastHit:
+                        Lasthit();
+                        break;
+                    case Orbwalking.OrbwalkingMode.Mixed:
+                        Laneclear();
+                        Jungleclear();
+                        break;
+                    case Orbwalking.OrbwalkingMode.None:
+                        Orbwalker.SetAttack(true);
+                        if (EisActivated && E.IsReady())
+                            E.Cast();
+                        break;
                 }
             }
-
-            Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -96,7 +103,6 @@ namespace ALL_In_One.champions
             var drawQ = AIO_Menu.Champion.Drawings.QRange;
             var drawW = AIO_Menu.Champion.Drawings.WRange;
             var drawE = AIO_Menu.Champion.Drawings.ERange;
-            var drawR = AIO_Menu.Champion.Drawings.RRange;
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color, 3);
@@ -124,16 +130,11 @@ namespace ALL_In_One.champions
             {
                 if (AIO_Func.anyoneValidInRange(E.Range) && !EisActivated)
                     E.Cast();
-                else if(!AIO_Func.anyoneValidInRange(E.Range) && EisActivated)
-                    E.Cast();
             }
         }
 
         static void Harass()
         {
-            if (!AIO_Func.anyoneValidInRange(E.Range) && EisActivated && E.IsReady())
-                E.Cast();
-
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
                 return;
 
@@ -166,7 +167,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
             {
-                var qTarget = Minions.FirstOrDefault(x => x.IsValidTarget(Q.Range) && AIO_Func.isKillable(x, Q));
+                var qTarget = Minions.FirstOrDefault(x => x.IsValidTarget(Q.Range) && HealthPrediction.GetHealthPrediction((Obj_AI_Base)x, (int)Q.Delay) <= Q.GetDamage(x));
 
                 if (qTarget != null)
                     Q.Cast(qTarget);
@@ -175,23 +176,20 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
-            var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
-
-            if (!Minions.Any(x => x.IsValidTarget(E.Range)) && EisActivated && E.IsReady())
-                E.Cast();
-
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
+
+            var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
                 return;
 
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
-                var qTarget = Minions.OrderBy(x=>x.Health).FirstOrDefault();
+                var qloc = Q.GetCircularFarmLocation(Minions.Where(x=>x.IsValidTarget(Q.Range)).ToList());
 
-                if (qTarget != null)
-                    Q.Cast(qTarget, false, true);
+                if (qloc.MinionsHit >= 1)
+                    Q.Cast(qloc.Position);
             }
 
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
@@ -203,21 +201,20 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-            if (!Mobs.Any(x => x.IsValidTarget(E.Range)) && EisActivated && E.IsReady())
-                E.Cast();
-
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
+
+            var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
                 return;
 
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
-                if (Mobs.FirstOrDefault() != null)
-                    Q.Cast(Mobs.FirstOrDefault(), false, true);
+                var qloc = Q.GetCircularFarmLocation(Mobs.Where(x => x.IsValidTarget(Q.Range)).ToList());
+
+                if (qloc.MinionsHit >= 1)
+                    Q.Cast(qloc.Position);
             }
 
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())

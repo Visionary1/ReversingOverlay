@@ -94,6 +94,9 @@ namespace ALL_In_One
                 case "Tristana"://Added by RL244
                     champions.Tristana.Load();
                     break;
+                case "Karthus"://Added by xcsoft
+                    champions.Karthus.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

@@ -167,7 +167,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
             {
-                var qTarget = Minions.FirstOrDefault(x => x.IsValidTarget(Q.Range) && HealthPrediction.GetHealthPrediction((Obj_AI_Base)x, (int)Q.Delay) <= Q.GetDamage(x));
+                var qTarget = Minions.FirstOrDefault(x => x.IsValidTarget(Q.Range) && HealthPrediction.GetHealthPrediction((Obj_AI_Base)x, (int)(Q.Delay*1000)) <= Q.GetDamage(x, 1));
 
                 if (qTarget != null)
                     Q.Cast(qTarget);

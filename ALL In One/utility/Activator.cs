@@ -313,7 +313,7 @@ namespace ALL_In_One.utility
             internal static List<item> itemsList = new List<item>();
             internal static bool ALLCancleItemsAreCasted { get { return Menu.Item("AfterAttack.SF").GetValue<bool>() || !utility.Activator.AfterAttack.itemsList.Any(x => Items.CanUseItem((int)x.Id) && !x.isTargeted && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()); } }
 			internal static bool AIO { get { return Menu.Item("AfterAttack.AIO").GetValue<bool>(); } }
-            internal static bool SkillCasted = false;
+            internal static bool SkillCasted = true; // 기본값이 false였으나 true로 바꾼 이유는. 아직 SF를 설정하지 않은 챔프가 해당 기능 켤 경우 아이템을 안쓰기때문. 어짜피 SF 쓰는 챔프는 AASkill(spell)만 게임 온 업데이트에 넣으면 알아서 true false 바꿔줌.
             internal static void additem(string itemName, int itemid, float itemRange, bool itemisTargeted = false)
             {
                 itemsList.Add(new item { Name = itemName, Id = itemid, Range = itemRange, isTargeted = itemisTargeted });
@@ -325,7 +325,7 @@ namespace ALL_In_One.utility
 			{
 				var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true);
                 var itemone = AfterAttack.itemsList.FirstOrDefault(x => Items.CanUseItem((int)x.Id) && target.IsValidTarget(x.Range) && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>());
-				if (AIO_Func.AfterAttack() && Menu.Item("AfterAttack.AIO").GetValue<bool>())
+				if (AIO_Func.AfterAttack() && AIO)
 				{
 					if(Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
 					Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
@@ -363,7 +363,7 @@ namespace ALL_In_One.utility
 					var Minions = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Enemy);
 					var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 					if((Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
-					Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && !Menu.Item("AfterAttack.AIO").GetValue<bool>() ||
+					Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && !AIO ||
 					Menu.Item("Misc.Jc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count >= 1 ||
 					Menu.Item("Misc.Lc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Minions.Count >= 1)
 					{

@@ -115,7 +115,7 @@
     <Compile Include="champions\_Jayce.cs" />
     <Compile Include="champions\_Jinx.cs" />
     <Compile Include="champions\Kalista.cs" />
-    <Compile Include="champions\_Karma.cs" />
+    <Compile Include="champions\Karma.cs" />
     <Compile Include="champions\_Karthus.cs" />
     <Compile Include="champions\_Kassadin.cs" />
     <Compile Include="champions\Katarina.cs" />

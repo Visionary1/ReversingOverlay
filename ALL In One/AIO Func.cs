@@ -132,7 +132,7 @@ namespace ALL_In_One
 		}
 
 		
-		internal static void LH(Spell spell, float ALPHA) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q) or AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
+		internal static void LH(Spell spell, float ALPHA) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
 		{
 			if(spell == null)
 			return;

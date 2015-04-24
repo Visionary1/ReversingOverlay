@@ -96,6 +96,7 @@ namespace ALL_In_One.champions
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
+			Orbwalking.AfterAttack += Orbwalking_AfterAttack; // 에프터 어택 이벤트 추가.
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -128,6 +129,12 @@ namespace ALL_In_One.champions
             //메인메뉴->Misc서브메뉴에서 Use Killsteal 옵션이 On인경우 킬스틸 함수 호출.
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
+				
+			#region AfterAttack
+			AIO_Func.AASkill(Q); // 평캔스킬 Q 인식하도록 추가.
+			if(AIO_Func.AfterAttack()) // 주문연성 평캔 사용시(사용 안할 예정이라도 AfterAttack 할거면 사용자가 선택 가능하도록 추가하는게 좋음.)
+			AA();						// 	챔피언 대상 AfterAttack 함수 호출.
+			#endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -185,6 +192,36 @@ namespace ALL_In_One.champions
                 Q.Cast(sender);
         }
 
+		static void AA() // 챔피언 대상 평캔 ( 평캔 방식에 상관없이 로직을 적용하기 위해 별도의 함수로 표현 )
+		{
+			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //타겟이 필요한 경우 설정.
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) // 하레스 모드일 경우.
+			{
+				if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+					Q.Cast();
+			}
+				
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) // 콤보 모드일 경우.
+			{
+				if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+					Q.Cast();					
+			}
+		}
+		
+        static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target) // 오브워킹 애프터어택
+        {
+            var Target = (Obj_AI_Base)target;
+            if (!unit.IsMe || Target == null)
+                return;
+
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear) // 라인클리어 모드일 경우
+			AIO_Func.AALcJc(Q);						// 정글, 라인클리어 평캔. 새로 추가한 이유는. 기존방식에서 그냥 할 경우 라인-정글 둘 중 하나만 사용 체크해도 항상 사용하는 문제점이 있었기 때문.(즉 사용 설정이 별로 의미가 없었음). 한편 대안인 AALaneclear AAJungleclear는 너무 기니까.
+			if(!utility.Activator.AfterAttack.AIO) // 주문연성 평캔 사용하지 않을시.
+			AA(); 								// 챔피언 대상 애프터 어택 함수 호출
+        }
+		
         static void Combo()
         {
             //콤보모드. 인게임에서 스페이스바키를 누르면 아래코드가 실행되는겁니다.
@@ -247,11 +284,14 @@ namespace ALL_In_One.champions
 
             if(AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
             {
-                //Q스펠로 미니언막타친다는 내용
+                //Q스펠로 미니언막타친다는 내용. 
+				/*
                 var qTarget = Minions.FirstOrDefault(x=>x.IsValidTarget(Q.Range) && AIO_Func.isKillable(x, Q));
-
                 if (qTarget != null)
                     Q.Cast(qTarget);
+				*/
+				//위는 기존의 방식이고 새로운 방식으로 간단히 Q스펠 막타치는것도 구현가능. 기존과 달리 한줄만 적으면됨.
+				AIO_Func.LH(Q,0); // Q로 막타를 치는 것. AIO_Func.LH(스펠,0) 이런식으로 쓰면 됨. 해당 스킬이 투과형 선형 스킬일 경우. 0 대신 투과 가능한 수치(예> 럭스는 1, 케이틀린은 float.MaxValue) 이런식으로 쓰면 됨.
             }
         }
 

@@ -76,13 +76,13 @@ namespace ALL_In_One.champions
                         Orbwalker.SetAttack(false);
                         Combo();
                         break;
-                    case Orbwalking.OrbwalkingMode.LaneClear:
+                    case Orbwalking.OrbwalkingMode.Mixed:
                         Harass();
                         break;
                     case Orbwalking.OrbwalkingMode.LastHit:
                         Lasthit();
                         break;
-                    case Orbwalking.OrbwalkingMode.Mixed:
+                    case Orbwalking.OrbwalkingMode.LaneClear:
                         Laneclear();
                         Jungleclear();
                         break;

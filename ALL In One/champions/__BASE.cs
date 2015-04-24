@@ -115,13 +115,13 @@ namespace ALL_In_One.champions
                     case Orbwalking.OrbwalkingMode.Combo:
                         Combo();
                         break;
-                    case Orbwalking.OrbwalkingMode.LaneClear:
+                    case Orbwalking.OrbwalkingMode.Mixed:
                         Harass();
                         break;
                     case Orbwalking.OrbwalkingMode.LastHit:
                         Lasthit();
                         break;
-                    case Orbwalking.OrbwalkingMode.Mixed:
+                    case Orbwalking.OrbwalkingMode.LaneClear:
                         Laneclear();
                         Jungleclear();
                         break;

@@ -173,14 +173,14 @@ namespace ALL_In_One
 		{
 				var Minions = MinionManager.GetMinions(ObjectManager.Player.AttackRange, MinionTypes.All, MinionTeam.Enemy);
 				var Mobs = MinionManager.GetMinions(ObjectManager.Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-				if((Menu.Item("Laneclear.Use " + spell.ToString(),true).GetValue<bool>() || Menu.Item("LcUse" + spell.ToString(),true).GetValue<bool>()) && Minions.Count >= 1 && getManaPercent(ObjectManager.Player) > AIO_Menu.Champion.Laneclear.IfMana)
+				if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>()) && Minions.Count >= 1 && getManaPercent(ObjectManager.Player) > AIO_Menu.Champion.Laneclear.IfMana)
 				{
 					if(!spell.IsSkillshot)
 					spell.Cast(Minions[0]);
 					else
 					spell.Cast();
 				}
-				if((Menu.Item("Jungleclear.Use " + spell.ToString(),true).GetValue<bool>() || Menu.Item("JcUse" + spell.ToString(),true).GetValue<bool>()) && Mobs.Count >= 1 && getManaPercent(ObjectManager.Player) > AIO_Menu.Champion.Jungleclear.IfMana)
+				if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>()) && Mobs.Count >= 1 && getManaPercent(ObjectManager.Player) > AIO_Menu.Champion.Jungleclear.IfMana)
 				{
 					if(!spell.IsSkillshot)
 					spell.Cast(Mobs[0]);

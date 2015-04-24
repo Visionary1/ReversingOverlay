@@ -110,19 +110,23 @@ namespace ALL_In_One.champions
             //이 부분은 건드릴 필요가 없음. 현재 사용자가 누르고있는 오브워커 버튼에따른 함수 호출.
             if (Orbwalking.CanMove(10))
             {
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                    Combo();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    Harass();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
-                    Lasthit();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                switch (Orbwalker.ActiveMode)
                 {
-                    Laneclear();
-                    Jungleclear();
+                    case Orbwalking.OrbwalkingMode.Combo:
+                        Combo();
+                        break;
+                    case Orbwalking.OrbwalkingMode.Mixed:
+                        Harass();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LastHit:
+                        Lasthit();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LaneClear:
+                        Laneclear();
+                        Jungleclear();
+                        break;
+                    case Orbwalking.OrbwalkingMode.None:
+                        break;
                 }
             }
 

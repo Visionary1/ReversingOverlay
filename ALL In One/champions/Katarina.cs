@@ -49,7 +49,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseKillsteal();
 
             AIO_Menu.Champion.Drawings.addQRange();
-            AIO_Menu.Champion.Drawings.addQRange();
+            AIO_Menu.Champion.Drawings.addWRange();
             AIO_Menu.Champion.Drawings.addERange();
             AIO_Menu.Champion.Drawings.addRRange();
 
@@ -111,10 +111,19 @@ namespace ALL_In_One.champions
 
         static void Combo()
         {
-            if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
+            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && !Q.IsReady() && !W.IsReady() && !E.IsReady())
             {
-                Q.CastOnBestTarget();
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)) && R.Instance.Name == "KatarinaR")
+                    R.Cast();
+                else
+                    R.Cast();
             }
+
+            if (R.Instance.Name != "KatarinaR")
+                return;
+
+            if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
+                Q.CastOnBestTarget();
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
@@ -124,28 +133,14 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-                if(E.CastOnBestTarget() ==  Spell.CastStates.SuccessfullyCasted)
-                {
-                    if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-                        W.Cast();
-                }
-            }
-
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
-            {
-                if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)) && R.Instance.Name == "KatarinaR")
-                    R.Cast();
-                else
-                    R.Cast();
+                E.CastOnBestTarget();
             }
         }
 
         static void Harass()
         {
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
-            {
                 Q.CastOnBestTarget();
-            }
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
@@ -154,13 +149,7 @@ namespace ALL_In_One.champions
             }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
-            {
-                if (E.CastOnBestTarget() == Spell.CastStates.SuccessfullyCasted)
-                {
-                    if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-                        W.Cast();
-                }
-            }
+                E.CastOnBestTarget();
         }
 
         static void Lasthit()
@@ -273,7 +262,7 @@ namespace ALL_In_One.champions
                 damage += E.GetDamage(enemy);
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage(enemy) * 5;
 
             return damage;
         }

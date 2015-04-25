@@ -14,6 +14,7 @@ namespace ALL_In_One.champions
 {
     class Cassiopeia // RL244
     {
+	
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
@@ -28,7 +29,7 @@ namespace ALL_In_One.champions
             R = new Spell(SpellSlot.R, 825f, TargetSelector.DamageType.Magical);
 
 			
-            Q.SetSkillshot(0.4f, 75f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(0.4f, 60f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             W.SetSkillshot(0.4f, 125f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             E.SetTargetted(0.25f, float.MaxValue);
             R.SetSkillshot(0.25f, 80f * (float)Math.PI / 180, 2000f, false, SkillshotType.SkillshotCone);
@@ -37,16 +38,17 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
+            Menu.SubMenu("Combo").AddItem(new MenuItem("ComboRC", "R Min target counts", true).SetValue(new Slider(2, 1, 5)));
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana();
 
-            AIO_Menu.Champion.Laneclear.addUseQ();
-            AIO_Menu.Champion.Laneclear.addUseW();
+            AIO_Menu.Champion.Laneclear.addUseQ(false);
+            AIO_Menu.Champion.Laneclear.addUseW(false);
             AIO_Menu.Champion.Laneclear.addUseE();
-            AIO_Menu.Champion.Laneclear.addIfMana();
+            AIO_Menu.Champion.Laneclear.addIfMana(10);
 			
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
@@ -62,9 +64,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseInterrupter();
 
             AIO_Menu.Champion.Drawings.addQRange();
-            AIO_Menu.Champion.Drawings.addWRange();
+            AIO_Menu.Champion.Drawings.addWRange(false);
             AIO_Menu.Champion.Drawings.addItem("W Real Range", new Circle(true, Color.Red));
-            AIO_Menu.Champion.Drawings.addERange(false);
+            AIO_Menu.Champion.Drawings.addERange();
             AIO_Menu.Champion.Drawings.addRRange();
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
@@ -184,13 +186,12 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
+				var rc = Menu.Item("ComboRC", true).GetValue<Slider>().Value;
 				var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
 			
-			   if(Rtarget.Health + Rtarget.HPRegenRate <= (Q.GetDamage(Rtarget)+W.GetDamage(Rtarget)+E.GetDamage(Rtarget)+R.GetDamage(Rtarget))*2/3)
-				{ 
-				if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
+				if(AIO_Func.EnemyCount(R.Range, 10, 100) >= rc) 
             	R.Cast(Rtarget);
-				}
+				
             }
         }
 
@@ -243,7 +244,7 @@ namespace ALL_In_One.champions
 			
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
-				var _m = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.E))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / E.Speed), (int)(E.Delay * 1000 + Game.Ping / 2)) > 0 && IsPoisoned(m));			
+				var _m = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => AIO_Func.isKillable(m,E,0) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / E.Speed), (int)(E.Delay * 1000 + Game.Ping / 2)) > 0 && IsPoisoned(m));			
                 if (_m != null)
                     E.Cast(_m);
             }

@@ -92,10 +92,10 @@ namespace ALL_In_One
 					if (target.IsValidTarget(spell.Range))
 					{
 						if(target.MoveSpeed*spell.Delay <= spell.Width*2/3)
-							spell.Cast(target.Position);
+							spell.Cast(target.ServerPosition);
 						else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
 						{
-							if(target.MoveSpeed*spell.Delay <= spell.Width*4/3)
+							if(target.MoveSpeed*spell.Delay <= spell.Width*6/5)
 							spell.Cast(castVec);
 							else
 							spell.Cast(pred.CastPosition);
@@ -187,14 +187,14 @@ namespace ALL_In_One
 				}
 		}
 		
-		internal static List<Obj_AI_Hero> GetEnemyList()// 
+		internal static List<Obj_AI_Hero> GetEnemyList()// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌.
 		{
 			return ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsValid && !x.IsDead && !x.IsInvulnerable).ToList();
 		}
 		
-		internal static int EnemyCount(float range)
+		internal static int EnemyCount(float range, float min, float max)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
 		{
-			return GetEnemyList().Where(x => x.Distance(ObjectManager.Player.Position) <= range).Count();
+			return GetEnemyList().Where(x => x.Distance(ObjectManager.Player.Position) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
 		}
 		
     }

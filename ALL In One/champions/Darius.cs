@@ -32,6 +32,7 @@ namespace ALL_In_One.champions
             Menu.SubMenu("Combo").AddItem(new MenuItem("ComboQD", "Q Min Distance", true).SetValue(new Slider(275, 0, 425)));
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
+            Menu.SubMenu("Combo").AddItem(new MenuItem("ComboED", "E Min Distance", true).SetValue(new Slider(150, 0, 550)));
             AIO_Menu.Champion.Combo.addUseR();
 
 			AIO_Menu.Champion.Harass.addUseQ();
@@ -189,14 +190,15 @@ namespace ALL_In_One.champions
             {
 				var QD = Menu.Item("ComboQD", true).GetValue<Slider>().Value;
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
-				if(qTarget.Distance(Player.Position) > QD)
+				if(qTarget.Distance(Player.Position) >= QD)
                 Q.Cast();
             }
 			
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
+				var ED = Menu.Item("ComboED", true).GetValue<Slider>().Value;
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
-                if (ETarget != null && !Player.IsDashing())
+                if (ETarget != null && !Player.IsDashing() && ETarget.Distance(Player.Position) >= ED)
                 AIO_Func.LCast(E,ETarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
             }
 
@@ -218,14 +220,15 @@ namespace ALL_In_One.champions
             {
 				var QD = Menu.Item("ComboQD", true).GetValue<Slider>().Value;
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
-				if(qTarget.Distance(Player.Position) > QD)
+				if(qTarget.Distance(Player.Position) >= QD)
                 Q.Cast();
             }
 				
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
+				var ED = Menu.Item("ComboED", true).GetValue<Slider>().Value;
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
-                if (ETarget != null && !Player.IsDashing())
+                if (ETarget != null && !Player.IsDashing() && ETarget.Distance(Player.Position) >= ED)
                 AIO_Func.LCast(E,ETarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
             }
 

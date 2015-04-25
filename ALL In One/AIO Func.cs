@@ -187,6 +187,16 @@ namespace ALL_In_One
 				}
 		}
 		
+		internal static List<Obj_AI_Hero> GetEnemyList()// 
+		{
+			return ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsValid && !x.IsDead && !x.IsInvulnerable).ToList();
+		}
+		
+		internal static int EnemyCount(float range)
+		{
+			return GetEnemyList().Where(x => x.Distance(ObjectManager.Player.Position) <= range).Count();
+		}
+		
     }
 }
 

@@ -100,8 +100,11 @@ namespace ALL_In_One
                 case "Karma"://Added by RL244 WIP
                     champions.Karma.Load();
                     break;
-                case "Jax"://Added by RL244
-                    champions.Karma.Load();
+                case "Jax"://Added by RL244 WIP
+                    champions.Jax.Load();
+                    break;
+                case "Darius"://Added by RL244 WIP
+                    champions.Darius.Load();
                     break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);

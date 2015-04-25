@@ -91,7 +91,7 @@
     <Compile Include="champions\Cassiopeia.cs" />
     <Compile Include="champions\Chogath.cs" />
     <Compile Include="champions\_Corki.cs" />
-    <Compile Include="champions\_Darius.cs" />
+    <Compile Include="champions\Darius.cs" />
     <Compile Include="champions\_Diana.cs" />
     <Compile Include="champions\_Draven.cs" />
     <Compile Include="champions\_DrMundo.cs" />

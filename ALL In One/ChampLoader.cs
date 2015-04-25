@@ -97,7 +97,10 @@ namespace ALL_In_One
                 case "Karthus"://Added by xcsoft
                     champions.Karthus.Load();
                     break;
-                case "Karma"://Added by RL244
+                case "Karma"://Added by RL244 WIP
+                    champions.Karma.Load();
+                    break;
+                case "Jax"://Added by RL244
                     champions.Karma.Load();
                     break;
                 default:

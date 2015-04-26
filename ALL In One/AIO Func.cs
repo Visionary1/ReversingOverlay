@@ -202,6 +202,23 @@ namespace ALL_In_One
 			return GetEnemyList().Where(x => x.Distance(ObjectManager.Player.Position) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
 		}
 		
+        internal class SelfAOE_Prediction
+        {
+            internal static int HitCount(float delay, float range)
+            {
+                byte hitcount = 0;
+
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(range)))
+                {
+                    var pred = Prediction.GetPrediction(enemy, delay);
+
+                    if (ObjectManager.Player.ServerPosition.Distance(pred.UnitPosition) <= range)
+                        hitcount++;
+                }
+
+                return hitcount;
+            }
+        }
     }
 }
 

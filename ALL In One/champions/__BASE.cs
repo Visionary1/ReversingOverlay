@@ -74,7 +74,7 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            if (Orbwalking.CanMove(10))
+            if (Orbwalking.CanMove(100))
             {
                 switch (Orbwalker.ActiveMode)
                 {

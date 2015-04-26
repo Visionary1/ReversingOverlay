@@ -29,6 +29,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
+            AIO_Menu.Champion.Combo.addItem("Cast R if Enemy number >=", new Slider(2, 1, 5));
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
@@ -41,13 +42,11 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW();
             AIO_Menu.Champion.Laneclear.addUseE();
-            AIO_Menu.Champion.Laneclear.addUseR();
             AIO_Menu.Champion.Laneclear.addIfMana();
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addUseE();
-            AIO_Menu.Champion.Jungleclear.addUseR();
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
@@ -70,7 +69,7 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            if (Orbwalking.CanMove(10))
+            if (Orbwalking.CanMove(100))
             {
                 switch (Orbwalker.ActiveMode)
                 {
@@ -91,6 +90,8 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
+
+            Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -128,22 +129,24 @@ namespace ALL_In_One.champions
         static void Combo()
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
-            {
-                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-
-                if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-                    Q.Cast(qTarget);
-
-            }
+                Q.CastOnBestTarget();
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-            { }
+            {
+                
+            }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
-            { }
+            {
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)))
+                    E.Cast();
+            }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
-            { }
+            {
+                if (HeroManager.Enemies.Count(x => x.IsValidTarget(R.Range)) >= AIO_Menu.Champion.Combo.getSliderValue("Cast R if Enemy number >=").Value)
+                    R.Cast();
+            }
         }
 
         static void Harass()
@@ -152,16 +155,16 @@ namespace ALL_In_One.champions
                 return;
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
-            { }
+                Q.CastOnBestTarget();
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             { }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
-            { }
-
-            if (AIO_Menu.Champion.Harass.UseR && R.IsReady())
-            { }
+            {
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)))
+                    E.Cast();
+            }
         }
 
         static void Laneclear()
@@ -222,9 +225,6 @@ namespace ALL_In_One.champions
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
                     Q.Cast(target);
-
-                if (W.CanCast(target) && AIO_Func.isKillable(target, W))
-                    W.Cast(target);
 
                 if (E.CanCast(target) && AIO_Func.isKillable(target, E))
                     E.Cast(target);

@@ -86,6 +86,8 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
+
+            Orbwalker.SetAttack(!W.IsReady());
         }
 
         static void Drawing_OnDraw(EventArgs args)

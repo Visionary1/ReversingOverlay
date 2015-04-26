@@ -23,7 +23,7 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E, 350f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 550f, TargetSelector.DamageType.Magical);
 
-            Q.SetSkillshot(0.25f, 50f, 2000f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 80f, 2000f, true, SkillshotType.SkillshotLine);
 
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
@@ -36,10 +36,6 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana(60);
 
-            AIO_Menu.Champion.Lasthit.addUseQ();
-            AIO_Menu.Champion.Lasthit.addIfMana();
-
-            AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW();
             AIO_Menu.Champion.Laneclear.addUseE();
             AIO_Menu.Champion.Laneclear.addIfMana();
@@ -88,6 +84,9 @@ namespace ALL_In_One.champions
                 }
             }
 
+            if (W.IsReady() && W.Instance.ToggleState == 2 && !HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)) && !MinionManager.GetMinions(W.Range, MinionTypes.All, MinionTeam.NotAlly).Any())
+                W.Cast();
+
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
 
@@ -133,7 +132,10 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
-                
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 1)
+                    W.Cast();
+                else if (!HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
+                    W.Cast();
             }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
@@ -158,7 +160,12 @@ namespace ALL_In_One.champions
                 Q.CastOnBestTarget();
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
-            { }
+            {
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 1)
+                    W.Cast();
+                else if (!HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
+                    W.Cast();
+            }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
@@ -177,17 +184,19 @@ namespace ALL_In_One.champions
             if (Minions.Count <= 0)
                 return;
 
-            if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
-            { }
-
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
-            { }
+            {
+                if (Minions.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 1)
+                    W.Cast();
+                else if (!Minions.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
+                    W.Cast();
+            }
 
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
-            { }
-
-            if (AIO_Menu.Champion.Laneclear.UseR && R.IsReady())
-            { }
+            {
+                if (Minions.Any(x => x.IsValidTarget(E.Range)))
+                    E.Cast();
+            }
         }
 
         static void Jungleclear()
@@ -202,21 +211,23 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
-                if (Q.CanCast(Mobs.FirstOrDefault()))
-                    Q.Cast(Mobs.FirstOrDefault());
+                if (Q.CanCast(Mobs[0]))
+                    Q.Cast(Mobs[0]);
             }
 
             if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady())
             {
-                if (W.CanCast(Mobs.FirstOrDefault()))
-                    W.Cast(Mobs.FirstOrDefault());
+                if (Mobs.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 1)
+                    W.Cast();
+                else if (!Mobs.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
+                    W.Cast();
             }
 
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
-            { }
-
-            if (AIO_Menu.Champion.Jungleclear.UseR && R.IsReady())
-            { }
+            {
+                if (Mobs.Any(x => x.IsValidTarget(E.Range)))
+                    E.Cast();
+            }
         }
 
         static void Killsteal()

@@ -153,8 +153,16 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
+            if (W.IsReady() && !HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
+                W.Cast();
+
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            {
+                if (W.IsReady() && W.Instance.ToggleState == 2)
+                    W.Cast();
+
                 return;
+            }
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
                 Q.CastOnBestTarget();
@@ -162,8 +170,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
                 if (HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 1)
-                    W.Cast();
-                else if (!HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
                     W.Cast();
             }
 
@@ -176,10 +182,18 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
-                return;
-
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
+
+            if (W.IsReady() && !Minions.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
+                W.Cast();
+
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            {
+                if (W.IsReady() && W.Instance.ToggleState == 2)
+                    W.Cast();
+
+                return;
+            }
 
             if (Minions.Count <= 0)
                 return;
@@ -187,8 +201,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
             {
                 if (Minions.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 1)
-                    W.Cast();
-                else if (!Minions.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
                     W.Cast();
             }
 
@@ -201,10 +213,18 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
-                return;
-
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+
+            if (W.IsReady() && !Mobs.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
+                W.Cast();
+
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            {
+                if (W.IsReady() && W.Instance.ToggleState == 2)
+                    W.Cast();
+
+                return;
+            }
 
             if (Mobs.Count <= 0)
                 return;
@@ -218,8 +238,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady())
             {
                 if (Mobs.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 1)
-                    W.Cast();
-                else if (!Mobs.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
                     W.Cast();
             }
 

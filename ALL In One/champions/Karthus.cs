@@ -16,8 +16,6 @@ namespace ALL_In_One.champions
 
         static Spell Q, W, E, R;
 
-        static bool EisActivated { get { return Player.HasBuff("KarthusDefile", true); } }
-
         public static void Load()
         {
 
@@ -77,19 +75,20 @@ namespace ALL_In_One.champions
                         Combo();
                         break;
                     case Orbwalking.OrbwalkingMode.Mixed:
+                        Orbwalker.SetAttack(true);
                         Harass();
                         break;
                     case Orbwalking.OrbwalkingMode.LastHit:
+                        Orbwalker.SetAttack(!AIO_Menu.Champion.Lasthit.UseQ && !Q.IsReady());
                         Lasthit();
                         break;
                     case Orbwalking.OrbwalkingMode.LaneClear:
+                        Orbwalker.SetAttack(true);
                         Laneclear();
                         Jungleclear();
                         break;
                     case Orbwalking.OrbwalkingMode.None:
                         Orbwalker.SetAttack(true);
-                        if (EisActivated && E.IsReady())
-                            E.Cast();
                         break;
                 }
             }
@@ -128,15 +127,25 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-                if (AIO_Func.anyoneValidInRange(E.Range) && !EisActivated)
+                if (AIO_Func.anyoneValidInRange(E.Range) && E.Instance.ToggleState == 1)
+                    E.Cast();
+                else if (!AIO_Func.anyoneValidInRange(E.Range) && E.Instance.ToggleState == 2)
                     E.Cast();
             }
         }
 
         static void Harass()
         {
+            if (E.IsReady() && !AIO_Func.anyoneValidInRange(E.Range) && E.Instance.ToggleState == 2)
+                E.Cast();
+
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            {
+                if (E.IsReady() && E.Instance.ToggleState == 2)
+                    E.Cast();
+
                 return;
+            }
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
@@ -150,7 +159,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
-                if (AIO_Func.anyoneValidInRange(E.Range) && !EisActivated)
+                if (AIO_Func.anyoneValidInRange(E.Range) && E.Instance.ToggleState == 1)
                     E.Cast();
             }
         }
@@ -176,10 +185,18 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
-                return;
-
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
+
+            if (E.IsReady() && !Minions.Any(x => x.IsValidTarget(E.Range)) && E.Instance.ToggleState == 2)
+                E.Cast();
+
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            {
+                if (E.IsReady() && E.Instance.ToggleState == 2)
+                    E.Cast();
+
+                return;
+            }
 
             if (Minions.Count <= 0)
                 return;
@@ -194,17 +211,25 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
-                if (Minions.Any(x => x.IsValidTarget(E.Range)) && !EisActivated)
+                if (Minions.Any(x => x.IsValidTarget(E.Range)) && E.Instance.ToggleState == 1)
                     E.Cast();
             }
         }
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
-                return;
-
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+
+            if (E.IsReady() && !Mobs.Any(x => x.IsValidTarget(E.Range)) && E.Instance.ToggleState == 2)
+                E.Cast();
+
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            {
+                if (E.IsReady() && E.Instance.ToggleState == 2)
+                    E.Cast();
+
+                return;
+            }
 
             if (Mobs.Count <= 0)
                 return;
@@ -219,7 +244,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
             {
-                if (Mobs.Any(x => x.IsValidTarget(E.Range)) && !EisActivated)
+                if (Mobs.Any(x => x.IsValidTarget(E.Range)) && E.Instance.ToggleState == 1)
                     E.Cast();
             }
         }

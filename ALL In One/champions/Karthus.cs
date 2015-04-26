@@ -92,6 +92,9 @@ namespace ALL_In_One.champions
                         break;
                 }
             }
+
+            if (E.IsReady() && E.Instance.ToggleState == 2 && !HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)) && !MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly).Any())
+                E.Cast();
         }
 
         static void Drawing_OnDraw(EventArgs args)

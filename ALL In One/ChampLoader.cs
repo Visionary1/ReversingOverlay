@@ -103,7 +103,7 @@ namespace ALL_In_One
                 case "Jax"://Added by RL244 WIP
                     champions.Jax.Load();
                     break;
-                case "Darius"://Added by RL244 WIP
+                case "Darius"://Added by RL244
                     champions.Darius.Load();
                     break;
                 default:

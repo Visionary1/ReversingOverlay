@@ -171,14 +171,14 @@ namespace ALL_In_One.champions
 			
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if (AIO_Menu.Champion.Harass.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+                if (AIO_Menu.Champion.Harass.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                     E.Cast();
 			}
 				
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (AIO_Menu.Champion.Combo.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+                if (AIO_Menu.Champion.Combo.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
                     && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                     E.Cast();					
 			}
@@ -194,7 +194,7 @@ namespace ALL_In_One.champions
 			if (Minions.Count <= 0)
                 return;
 				
-			if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+			if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
 				E.Cast();
         }
 
@@ -208,7 +208,7 @@ namespace ALL_In_One.champions
             if (Mobs.Count <= 0)
                 return;
 				
-            if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+            if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
                 E.Cast();
         }
 		

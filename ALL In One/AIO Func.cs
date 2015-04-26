@@ -136,6 +136,7 @@ namespace ALL_In_One
 		{
 			if(spell == null)
 			return;
+
 				var _m = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => isKillable(m,spell,0) && HealthPrediction.GetHealthPrediction(m, (int)(ObjectManager.Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
 				if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
                 LCast(spell,_m,50,ALPHA);

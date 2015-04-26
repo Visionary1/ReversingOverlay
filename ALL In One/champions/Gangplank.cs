@@ -144,14 +144,14 @@ namespace ALL_In_One.champions
 			
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+                if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
                     && Q.CanCast(Target))
                     Q.Cast(Target);
 			}
 				
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+                if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
                     && Q.CanCast(Target))
                     Q.Cast(Target);					
 			}
@@ -209,7 +209,7 @@ namespace ALL_In_One.champions
 			if (Minions.Count <= 0)
                 return;
 				
-                //if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+                //if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
                 //    Q.Cast(Minions[0]);
         }
 
@@ -223,7 +223,7 @@ namespace ALL_In_One.champions
             if (Mobs.Count <= 0)
                 return;
 				
-            //if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+            //if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
             //    Q.Cast(Mobs[0]);
         }
 

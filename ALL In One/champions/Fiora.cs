@@ -187,7 +187,7 @@ namespace ALL_In_One.champions
 		{	
 			if (Menu.Item("HrsUseE", true).GetValue<bool>() && E.IsReady()
 				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-			&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+			&& utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
 				E.Cast();
 
 		}
@@ -196,13 +196,13 @@ namespace ALL_In_One.champions
 		{
 			if (Menu.Item("CbUseE", true).GetValue<bool>() && E.IsReady()
 				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-				&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+				&& utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
 				E.Cast();
 				
 			foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
 			{
 			if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady()
-			&& utility.Activator.AfterAttack.ALLCancleItemsAreCasted && !E.IsReady()
+			&& utility.Activator.AfterAttack.ALLCancelItemsAreCasted && !E.IsReady()
 			&& HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range))
 			&& AIO_Func.isKillable(rtarget,R.GetDamage(rtarget) + Q.GetDamage(rtarget)*2))
 			R.Cast(rtarget);

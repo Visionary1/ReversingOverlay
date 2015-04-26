@@ -147,13 +147,13 @@ namespace ALL_In_One.champions
 		{
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (Menu.Item("CbUseE", true).GetValue<bool>() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+                if (Menu.Item("CbUseE", true).GetValue<bool>() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
                     E.Cast();
             }
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed )
             {
-                if (Menu.Item("HrsUseE", true).GetValue<bool>() && AIO_Func.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value && utility.Activator.AfterAttack.ALLCancleItemsAreCasted)
+                if (Menu.Item("HrsUseE", true).GetValue<bool>() && AIO_Func.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
                     E.Cast();
             }
 		}

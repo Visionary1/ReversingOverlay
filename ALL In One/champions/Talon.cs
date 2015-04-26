@@ -161,14 +161,14 @@ namespace ALL_In_One.champions
 			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //탈론은 타겟이 필요한건 아니지만. Base로 쓰기 위해.
 			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
 			{
-				if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+				if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
 					Q.Cast();
 			}
 				
 			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
 			{
-				if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancleItemsAreCasted
+				if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
 					Q.Cast();					
 			}

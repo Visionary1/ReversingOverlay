@@ -303,7 +303,7 @@ namespace ALL_In_One.champions
             if (W.IsReady())
                 damage += W.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, true);
 
-            if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
+            if (R.IsReady())
                 damage += R.GetDamage(enemy);
 
             if(!Player.IsWindingUp)

@@ -100,7 +100,7 @@ namespace ALL_In_One
                 case "Karma"://Added by RL244 WIP
                     champions.Karma.Load();
                     break;
-                case "Jax"://Added by RL244 WIP
+                case "Jax"://Added by RL244
                     champions.Jax.Load();
                     break;
                 case "Darius"://Added by RL244

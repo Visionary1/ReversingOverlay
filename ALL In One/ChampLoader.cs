@@ -109,6 +109,9 @@ namespace ALL_In_One
                 case "Amumu"://Added by xcsoft
                     champions.Amumu.Load();
                     break;
+                case "Yasuo"://Added by RL244 WIP
+                    champions.Yasuo.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

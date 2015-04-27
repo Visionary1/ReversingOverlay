@@ -190,7 +190,7 @@
     <Compile Include="champions\_Wukong.cs" />
     <Compile Include="champions\_Xerath.cs" />
     <Compile Include="champions\XinZhao.cs" />
-    <Compile Include="champions\_Yasuo.cs" />
+    <Compile Include="champions\Yasuo.cs" />
     <Compile Include="champions\_Yorick.cs" />
     <Compile Include="champions\_Zac.cs" />
     <Compile Include="champions\_Zed.cs" />

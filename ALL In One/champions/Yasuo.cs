@@ -26,8 +26,8 @@ namespace ALL_In_One.champions
             QQ = new Spell(SpellSlot.Q, 900f, TargetSelector.DamageType.Physical);
             EQ = new Spell(SpellSlot.Q, 375f, TargetSelector.DamageType.Physical);
 
-            Q.SetSkillshot(0.25f, 70f, float.MaxValue, false, SkillshotType.SkillshotLine);
-            QQ.SetSkillshot(0.25f, 70f, 1400f, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 50f, float.MaxValue, false, SkillshotType.SkillshotLine);
+            QQ.SetSkillshot(0.25f, 60f, 1200f, false, SkillshotType.SkillshotLine);
 			W.SetSkillshot(0.25f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 			E.SetTargetted(0.25f, float.MaxValue);
 			EQ.SetTargetted(0.25f, float.MaxValue);
@@ -61,6 +61,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
             AIO_Menu.Champion.Drawings.addQRange();
             AIO_Menu.Champion.Drawings.addItem("QQ Safe Range", new Circle(true, Color.Red));
+            AIO_Menu.Champion.Drawings.addItem("EQ Range", new Circle(true, Color.Red));
             AIO_Menu.Champion.Drawings.addWRange();
             AIO_Menu.Champion.Drawings.addERange();
 			AIO_Menu.Champion.Drawings.addRRange();
@@ -122,11 +123,15 @@ namespace ALL_In_One.champions
 		var drawE = AIO_Menu.Champion.Drawings.ERange;
 		var drawR = AIO_Menu.Champion.Drawings.RRange;
 		var drawQQr = AIO_Menu.Champion.Drawings.getCircleValue("QQ Safe Range");
+		var drawEQr = AIO_Menu.Champion.Drawings.getCircleValue("EQ Range");
 		var QQTarget = TargetSelector.GetTarget(QQ.Range + Player.MoveSpeed * QQ.Delay, TargetSelector.DamageType.Magical);
 
 	
 		if (Q.IsReady() && drawQ.Active)
 		Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+		
+		if (EQ.IsReady() && drawEQ.Active && Player.HasBuff("yasuoq3w") && Player.IsDashing)
+		Render.Circle.DrawCircle(Player.Position, EQ.Range, drawEQ.Color);
 		
 		if (W.IsReady() && drawW.Active)
 		Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
@@ -137,7 +142,7 @@ namespace ALL_In_One.champions
 		if (R.IsReady() && drawR.Active)
 		Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
 		
-		if (QQ.IsReady() && drawQQr.Active && QQTarget != null)
+		if (QQ.IsReady() && drawQQr.Active && Player.HasBuff("yasuoq3w") && !Player.IsDashing && QQTarget != null)
 		Render.Circle.DrawCircle(Player.Position, QQ.Range - QQTarget.MoveSpeed*QQ.Delay, drawQQr.Color);
 
 
@@ -156,7 +161,7 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
                 return;
 
-            if (QQ.IsReady()
+            if (QQ.IsReady() && Player.HasBuff("yasuoq3w") && !Player.IsDashing
 			&& Player.Distance(sender.Position) <= QQ.Range)
                 QQ.Cast(sender.Position);
 
@@ -177,14 +182,14 @@ namespace ALL_In_One.champions
 			{
 				if (AIO_Menu.Champion.Harass.UseW && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-					Q.Cast();
+					Q.Cast(target);
 			}
 				
 			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
 			{
 				if (AIO_Menu.Champion.Combo.UseW && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-					Q.Cast();					
+					Q.Cast(target);					
 			}
 		}
 		
@@ -205,20 +210,20 @@ namespace ALL_In_One.champions
         static void Combo()
         {
 			var buff = AIO_Func.getBuffInstance(Player, "yasuoq3w");
-            if (AIO_Menu.Champion.Combo.UseQ)
+            if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-				if(Q.IsReady())
+				if(!Player.HasBuff("yasuoq3w"))
 				{
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
 				if(qTarget.Distance(Player.Position) >= Player.AttackRange + 50)
-                AIO_Func.LCast(Q,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                Q.Cast(qTarget);
 				}
-				if(QQ.IsReady())
+				else if(!Player.IsDashing)
 				{
                 var qTarget = TargetSelector.GetTarget(QQ.Range, Q.DamageType, true);
                 AIO_Func.LCast(QQ,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
 				}
-				if(EQ.IsReady())
+				else
 				{
 				var qTarget = TargetSelector.GetTarget(EQ.Range - 10, Q.DamageType, true);
 				EQ.Cast();
@@ -228,6 +233,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
+				if(!ETarget.HasBuff("yasuodashwrapper"))
                 E.Cast(ETarget);
             }
 			
@@ -245,20 +251,20 @@ namespace ALL_In_One.champions
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
                 return;
 				
-            if (AIO_Menu.Champion.Harass.UseQ)
+            if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-				if(Q.IsReady())
+				if(!Player.HasBuff("yasuoq3w"))
 				{
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
 				if(qTarget.Distance(Player.Position) >= Player.AttackRange + 50)
-                AIO_Func.LCast(Q,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                Q.Cast(qTarget);
 				}
-				if(QQ.IsReady())
+				else if(!Player.IsDashing)
 				{
                 var qTarget = TargetSelector.GetTarget(QQ.Range, Q.DamageType, true);
                 AIO_Func.LCast(QQ,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
 				}
-				if(EQ.IsReady())
+				else
 				{
 				var qTarget = TargetSelector.GetTarget(EQ.Range - 10, Q.DamageType, true);
 				EQ.Cast();
@@ -268,6 +274,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
+				if(!ETarget.HasBuff("yasuodashwrapper"))
                 E.Cast(ETarget);
             }
 
@@ -320,7 +327,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
-                AIO_Func.LCast(Q,target,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                Q.Cast(target);
             }
         }
         static void KillstealE()

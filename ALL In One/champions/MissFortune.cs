@@ -85,6 +85,8 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(35))
             {
+                switch (Orbwalker.ActiveMode)
+                {
                     case Orbwalking.OrbwalkingMode.Combo:
                         Orbwalker.SetAttack(true);
                         Combo();

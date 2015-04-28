@@ -204,6 +204,11 @@ namespace ALL_In_One
 			return GetEnemyList().Where(x => x.Distance(ObjectManager.Player.Position) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
 		}
 		
+		internal static int ECTarget(Obj_AI_Hero target, float range, float min, float max)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
+		{
+			return GetEnemyList().Where(x => x.Distance(target.Position) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
+		}
+		
         internal class SelfAOE_Prediction
         {
             internal static int HitCount(float delay, float range)

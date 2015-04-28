@@ -39,6 +39,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
+            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.Rt", "R min target counts")).SetValue(new Slider(2, 0, 5));
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
@@ -182,7 +183,8 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
 				var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-				if(AIO_Func.isKillable(Rtarget, getComboDamage(Rtarget)*2/3))
+				var rt = Menu.Item("Combo.Rt").GetValue<Slider>().Value;
+				if(AIO_Func.getHealthPercent(Player) < 50 && AIO_Func.isKillable(Rtarget, getComboDamage(Rtarget)*2/3) || AIO_Func.ECTarget(Rtarget,R.Width,0,100) >= rt)
                 AIO_Func.CCast(R,Rtarget);
             }
         }

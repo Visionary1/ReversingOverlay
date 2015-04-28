@@ -225,24 +225,21 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
 		var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-			if(PriorSpell.Q == SelectedPriorSpell && !Qtarget.HasBuff("brandablaze"))
-			return;
+			if(PriorSpell.Q != SelectedPriorSpell || Qtarget.HasBuff("brandablaze"))
                 CastQ(Qtarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
 		var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-			if(PriorSpell.E == SelectedPriorSpell && !Etarget.HasBuff("brandablaze"))
-			return;
+			if(PriorSpell.E != SelectedPriorSpell || Etarget.HasBuff("brandablaze"))
                 E.Cast(Etarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
 		var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-		if(PriorSpell.W == SelectedPriorSpell && !Wtarget.HasBuff("brandablaze"))
-		return;
+		if(PriorSpell.W != SelectedPriorSpell || Wtarget.HasBuff("brandablaze"))
 		AIO_Func.CCast(W,Wtarget);
 
             }
@@ -251,7 +248,7 @@ namespace ALL_In_One.champions
             {
 		var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
 			
-			if(Rtarget.Health + Rtarget.HPRegenRate <= (Q.GetDamage(Rtarget)+W.GetDamage(Rtarget)+E.GetDamage(Rtarget)+R.GetDamage(Rtarget))*2/3 || Rtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= R.Delay)
+			if(Rtarget.Health + Rtarget.HPRegenRate <= R.GetDamage(Rtarget)*2)
                { 
 				if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
             	R.Cast(Rtarget);
@@ -433,7 +430,7 @@ namespace ALL_In_One.champions
                 damage += E.GetDamage(enemy);
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage(enemy) * 2;
 				
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);

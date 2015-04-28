@@ -286,7 +286,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.75f))) >= target.Health + target.HPRegenRate)
+                if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.75f))+1f) >= target.Health + target.HPRegenRate)
                     R.Cast(target.Position);
             }
         }
@@ -314,7 +314,7 @@ namespace ALL_In_One.champions
 			}
 
             if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
-                damage += R.GetDamage(enemy)*((R.Width/(enemy.MoveSpeed*0.75f)));
+                damage += R.GetDamage(enemy)*((R.Width/(enemy.MoveSpeed*0.75f))+1f);
 
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);

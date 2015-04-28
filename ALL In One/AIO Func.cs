@@ -87,7 +87,7 @@ namespace ALL_In_One
 				if(spell != null && target !=null)
 				{
 					var pred = spell.GetPrediction(target, true);
-					SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.Position.To2D()) / 2 ;
+					SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.ServerPosition.To2D()) / 2 ;
 
 					if (target.IsValidTarget(spell.Range))
 					{
@@ -121,7 +121,7 @@ namespace ALL_In_One
 					var collision = spell.GetCollision(ObjectManager.Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
 					var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
 
-					if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + ObjectManager.Player.Distance(target.Position) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+					if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + ObjectManager.Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
 					{
 						spell.Cast(pred.CastPosition);
 					}
@@ -174,21 +174,23 @@ namespace ALL_In_One
 				var Mobs = MinionManager.GetMinions(ObjectManager.Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 				if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>()) && getManaPercent(ObjectManager.Player) > AIO_Menu.Champion.Laneclear.IfMana)
 				{
-				if (Minions.Count <= 0)
-                return;
+				if (Minions.Count > 0)
+					{
 					if(!spell.IsSkillshot)
 					spell.Cast(Minions[0]);
 					else
 					spell.Cast();
+					}
 				}
 				if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>()) && getManaPercent(ObjectManager.Player) > AIO_Menu.Champion.Jungleclear.IfMana)
 				{
-				if (Mobs.Count <= 0)
-                return;
+				if (Mobs.Count > 0)
+					{
 					if(!spell.IsSkillshot)
 					spell.Cast(Mobs[0]);
 					else
 					spell.Cast();
+					}
 				}
 		}
 		

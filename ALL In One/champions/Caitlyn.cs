@@ -12,7 +12,7 @@ using Color = System.Drawing.Color;
 
 namespace ALL_In_One.champions
 {
-    class Caitlyn//RL244 케틀 스펠 왜안써지지 노답.
+    class Caitlyn//RL244
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
@@ -72,7 +72,7 @@ namespace ALL_In_One.champions
 
         static void Game_OnUpdate(EventArgs args)
         {
-            if (!Player.IsDead)
+            if (Player.IsDead)
                 return;
 				
 			R.Range = 1500f + R.Level*500f;

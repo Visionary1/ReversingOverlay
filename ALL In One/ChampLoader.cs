@@ -115,6 +115,9 @@ namespace ALL_In_One
                 case "Syndra"://Added by RL244 WIP
                     champions.Syndra.Load();
                     break;
+                case "Viktor"://Added by RL244 WIP
+                    champions.Viktor.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

@@ -109,7 +109,7 @@ namespace ALL_In_One
 			sendDebugMsg("It is not circular skill. Debug needed");
 		}
 		
-		internal static void LCast(Spell spell, Obj_AI_Base target, float alpha, float colmini) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
+		internal static void LCast(Spell spell, Obj_AI_Base target, float alpha = 50f, float colmini = 0) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
 		{							//        AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue); <- 이런식으로 사용.
 			if(spell.Type != SkillshotType.SkillshotLine)
 			sendDebugMsg("It is not linar skill. Debug needed");
@@ -132,7 +132,7 @@ namespace ALL_In_One
 		}
 
 		
-		internal static void LH(Spell spell, float ALPHA) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
+		internal static void LH(Spell spell, float ALPHA = 0) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
 		{
 			if(spell == null)
 			return;
@@ -199,12 +199,12 @@ namespace ALL_In_One
 			return ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsValid && !x.IsDead && !x.IsInvulnerable).ToList();
 		}
 		
-		internal static int EnemyCount(float range, float min, float max)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
+		internal static int EnemyCount(float range, float min = 0, float max = 100)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
 		{
 			return GetEnemyList().Where(x => x.Distance(ObjectManager.Player.ServerPosition) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
 		}
 		
-		internal static int ECTarget(Obj_AI_Hero target, float range, float min, float max)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
+		internal static int ECTarget(Obj_AI_Hero target, float range, float min = 0, float max = 100)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
 		{
 			return GetEnemyList().Where(x => x.Distance(target.ServerPosition) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
 		}

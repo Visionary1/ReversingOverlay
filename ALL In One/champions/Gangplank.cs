@@ -21,14 +21,13 @@ namespace ALL_In_One.champions
             Q = new Spell(SpellSlot.Q, 625f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W);
             E = new Spell(SpellSlot.E, 1200f);
-            R = new Spell(SpellSlot.R, 25000f, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 40000f, TargetSelector.DamageType.Magical);
 
             Q.SetTargetted(0.25f, float.MaxValue);
             R.SetSkillshot(0.25f, 575f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
 			
             AIO_Menu.Champion.Combo.addUseQ();
-            AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
 
@@ -36,13 +35,10 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addIfMana();
 
             AIO_Menu.Champion.Laneclear.addUseQ();
-            AIO_Menu.Champion.Laneclear.addUseW();
             AIO_Menu.Champion.Laneclear.addUseE();
             AIO_Menu.Champion.Laneclear.addIfMana();
 
-
             AIO_Menu.Champion.Jungleclear.addUseQ();
-            AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
@@ -161,6 +157,8 @@ namespace ALL_In_One.champions
         {
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
+                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
+                if (qTarget != null)
                 E.Cast();
             }
 
@@ -286,8 +284,18 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.75f))+1f) >= target.Health + target.HPRegenRate)
-                    R.Cast(target.Position);
+                if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))+3f) >= target.Health + target.HPRegenRate
+					&& target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 2)
+                    R.Cast(target.ServerPosition);
+                else if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))+2f) >= target.Health + target.HPRegenRate
+					&& target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 1)
+                    R.Cast(target.ServerPosition);
+                else if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))+1f) >= target.Health + target.HPRegenRate
+					&& target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 0)
+                    R.Cast(target.ServerPosition);
+                else if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))) >= target.Health + target.HPRegenRate
+					&& target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() == 0)
+                    R.Cast(target.ServerPosition);
             }
         }
 
@@ -314,7 +322,7 @@ namespace ALL_In_One.champions
 			}
 
             if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
-                damage += R.GetDamage(enemy)*((R.Width/(enemy.MoveSpeed*0.75f))+1f);
+                damage += R.GetDamage(enemy)*((R.Width/(enemy.MoveSpeed*0.8f))+1f);
 
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);

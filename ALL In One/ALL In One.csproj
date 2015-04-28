@@ -183,7 +183,7 @@
     <Compile Include="champions\Veigar.cs" />
     <Compile Include="champions\_VelKoz.cs" />
     <Compile Include="champions\Vi.cs" />
-    <Compile Include="champions\_Viktor.cs" />
+    <Compile Include="champions\Viktor.cs" />
     <Compile Include="champions\Vladimir.cs" />
     <Compile Include="champions\_Volibear.cs" />
     <Compile Include="champions\_Warwick.cs" />

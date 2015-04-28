@@ -12,7 +12,7 @@ using Color = System.Drawing.Color;
 
 namespace ALL_In_One.champions
 {
-    class Syndra//RL244
+    class Syndra//RL244 WIP
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}

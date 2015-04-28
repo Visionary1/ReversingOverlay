@@ -376,7 +376,7 @@ namespace ALL_In_One.utility
                 if (itemone != null)
                 {
 					var Minions = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Enemy);
-					var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+					var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral);
 					if((Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
 					Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && !AIO ||
 					Menu.Item("Misc.Jc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count >= 1 ||

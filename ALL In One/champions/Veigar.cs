@@ -43,6 +43,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseE(false);
             AIO_Menu.Champion.Harass.addIfMana();
 
+            AIO_Menu.Champion.Lasthit.addUseQ();
+            AIO_Menu.Champion.Lasthit.addIfMana();
+			
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
@@ -82,16 +85,28 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                    Combo();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    Harass();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                switch (Orbwalker.ActiveMode)
                 {
-                    Laneclear();
-                    Jungleclear();
+                    case Orbwalking.OrbwalkingMode.Combo:
+                        Orbwalker.SetAttack(true);
+                        Combo();
+                        break;
+                    case Orbwalking.OrbwalkingMode.Mixed:
+                        Orbwalker.SetAttack(true);
+                        Harass();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LastHit:
+                        Orbwalker.SetAttack(!AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady());
+                        Lasthit();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LaneClear:
+                        Orbwalker.SetAttack(true);
+                        Laneclear();
+                        Jungleclear();
+                        break;
+                    case Orbwalking.OrbwalkingMode.None:
+                        Orbwalker.SetAttack(true);
+                        break;
                 }
             }
 
@@ -215,6 +230,14 @@ namespace ALL_In_One.champions
             }
         }
 
+        static void Lasthit()
+        {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Lasthit.IfMana))
+                return;
+            if (AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
+			AIO_Func.LH(Q,50);
+		}
+		
         static void Laneclear()
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))

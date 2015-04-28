@@ -198,12 +198,13 @@ namespace ALL_In_One.utility
 				
 				if(Menu.Item("Misc.BF").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) // 개발 편의를 위해 추가한 버프 체크기.
 				{
+					var Target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
+					if(Target == null)
+					return;
 					foreach (var buff in ObjectManager.Player.Buffs)
 					{
 						AIO_Func.sendDebugMsg("PLAYER : "+buff.Name);
 					}
-					
-					var Target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
 					
 					foreach (var buff in Target.Buffs)
 					{

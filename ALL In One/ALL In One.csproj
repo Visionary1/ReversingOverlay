@@ -166,7 +166,7 @@
     <Compile Include="champions\_Sona.cs" />
     <Compile Include="champions\_Soraka.cs" />
     <Compile Include="champions\_Swain.cs" />
-    <Compile Include="champions\_Syndra.cs" />
+    <Compile Include="champions\Syndra.cs" />
     <Compile Include="champions\Talon.cs" />
     <Compile Include="champions\_Taric.cs" />
     <Compile Include="champions\_Teemo.cs" />
@@ -190,7 +190,7 @@
     <Compile Include="champions\_Wukong.cs" />
     <Compile Include="champions\_Xerath.cs" />
     <Compile Include="champions\XinZhao.cs" />
-    <Compile Include="champions\_Yasuo.cs" />
+    <Compile Include="champions\Yasuo.cs" />
     <Compile Include="champions\_Yorick.cs" />
     <Compile Include="champions\_Zac.cs" />
     <Compile Include="champions\_Zed.cs" />

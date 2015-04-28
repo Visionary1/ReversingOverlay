@@ -85,16 +85,22 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(35))
             {
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                    Combo();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    Harass();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-                {
-                    Laneclear();
-                    Jungleclear();
+                    case Orbwalking.OrbwalkingMode.Combo:
+                        Orbwalker.SetAttack(true);
+                        Combo();
+                        break;
+                    case Orbwalking.OrbwalkingMode.Mixed:
+                        Orbwalker.SetAttack(true);
+                        Harass();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LaneClear:
+                        Orbwalker.SetAttack(true);
+                        Laneclear();
+                        Jungleclear();
+                        break;
+                    case Orbwalking.OrbwalkingMode.None:
+                        Orbwalker.SetAttack(true);
+                        break;
                 }
             }
 
@@ -102,31 +108,11 @@ namespace ALL_In_One.champions
                 KillstealQ();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
-				
-			if (AIO_Func.AfterAttack() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-			{
-				var Target = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-				var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
-				var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-				if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseW ||
-				Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana ||
-				Minions.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Laneclear.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana ||
-				Mobs.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Jungleclear.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana)
-				&& W.IsReady())
-				{
-					W.Cast();
-				}
-				
-				if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseQ ||
-				Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana ||
-				Minions.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Laneclear.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana ||
-				Mobs.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Jungleclear.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana)
-				&& Q.IsReady())
-				{
-					Q.Cast(Target);
-				}
-			}
+			#region AfterAttack
+			AIO_Func.AASkill(Q);
+			if(AIO_Func.AfterAttack())
+			AA();
+			#endregion
 		}
 
         static void Drawing_OnDraw(EventArgs args)
@@ -159,34 +145,55 @@ namespace ALL_In_One.champions
 				&& Player.Distance(gapcloser.Sender.Position) <= E.Range)
                 E.Cast((SharpDX.Vector3)gapcloser.End);
         }
-/*
+
+		static void AA() // 챔피언 대상 평캔 ( 빼낸 이유는 AA방식 두개로 할시 두번 적어야 해서 단순화하기 위함.
+		{
+			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+			{
+				if (AIO_Menu.Champion.Harass.UseW && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+                Q.Cast(target);
+			}
+				
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+			{
+				if (AIO_Menu.Champion.Combo.UseW && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+                Q.Cast(target);
+			}
+			
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+			{
+				if (AIO_Menu.Champion.Harass.UseW && W.IsReady()
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+                W.Cast();
+			}
+				
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+			{
+				if (AIO_Menu.Champion.Combo.UseW && W.IsReady()
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+                W.Cast();
+			}
+		}
+		
         static void Orbwalking_OnAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || (Target == null))
                 return;
-            var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
-            var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseW ||
-			Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana ||
-			Minions.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Laneclear.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana ||
-			Mobs.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Jungleclear.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana)
-			&& W.IsReady())
-            {
-                W.Cast();
-            }
+				
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+			{
+			AIO_Func.AALcJc(Q);
+			AIO_Func.AALcJc(W);
+			}
 			
-            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseQ ||
-			Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana ||
-			Minions.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Laneclear.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana ||
-			Mobs.Count >= 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && AIO_Menu.Champion.Jungleclear.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana)
-			&& Q.IsReady())
-            {
-                Q.Cast(Target);
-            }
+			if(!utility.Activator.AfterAttack.AIO)
+			AA();
         }
-*/
+
 		
         static void Combo()
         {

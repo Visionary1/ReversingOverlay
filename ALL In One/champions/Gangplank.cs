@@ -169,14 +169,14 @@ namespace ALL_In_One.champions
                
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
       
-                if (qTarget != null && !Player.IsDashing())
+                if (qTarget != null)
                     Q.Cast(qTarget);       
             }
 			
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var rTarget = TargetSelector.GetTarget(Q.Range, R.DamageType, true);
-                if (rTarget != null && !Player.IsDashing() && AIO_Func.getHealthPercent(rTarget) <= 50)
+                if (rTarget != null && AIO_Func.getHealthPercent(rTarget) <= 45)
                 R.Cast(rTarget.Position);
             }
 				
@@ -193,7 +193,7 @@ namespace ALL_In_One.champions
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
 
         
-                if (qTarget != null && !Player.IsDashing())
+                if (qTarget != null)
                     Q.Cast(qTarget);       
             }
 
@@ -243,7 +243,7 @@ namespace ALL_In_One.champions
             {
 				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))));
       
-                if (_m != null && !Player.IsDashing())
+                if (_m != null)
                     Q.Cast(_m);       
             }
 				
@@ -265,7 +265,7 @@ namespace ALL_In_One.champions
             {
 				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))));
       
-                if (_m != null && !Player.IsDashing())
+                if (_m != null)
                     Q.Cast(_m);       
             }
 			
@@ -286,7 +286,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.75f))/7) >= target.Health + target.HPRegenRate)
+                if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.75f))+1f) >= target.Health + target.HPRegenRate)
                     R.Cast(target.Position);
             }
         }
@@ -314,7 +314,7 @@ namespace ALL_In_One.champions
 			}
 
             if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
-                damage += R.GetDamage(enemy)*((R.Width/(enemy.MoveSpeed*0.75f))/7);
+                damage += R.GetDamage(enemy)*((R.Width/(enemy.MoveSpeed*0.75f))+1f);
 
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);

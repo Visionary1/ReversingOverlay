@@ -18,12 +18,12 @@ namespace ALL_In_One.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 1080f, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 1050f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 300f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, 350f, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 550f, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, 320f, TargetSelector.DamageType.Magical) { Delay = 0.35f};
+            R = new Spell(SpellSlot.R, 550f, TargetSelector.DamageType.Magical) { Delay = 0.25f};
 
-            Q.SetSkillshot(0.25f, 80f, 2000f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 90f, 2000f, true, SkillshotType.SkillshotLine);
 
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
@@ -80,12 +80,11 @@ namespace ALL_In_One.champions
                         Jungleclear();
                         break;
                     case Orbwalking.OrbwalkingMode.None:
+                        if (W.IsReady() && W.Instance.ToggleState == 2 && !HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)) && !MinionManager.GetMinions(W.Range, MinionTypes.All, MinionTeam.NotAlly).Any())
+                            W.Cast();
                         break;
                 }
             }
-
-            if (W.IsReady() && W.Instance.ToggleState == 2 && !HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)) && !MinionManager.GetMinions(W.Range, MinionTypes.All, MinionTeam.NotAlly).Any())
-                W.Cast();
 
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
@@ -140,13 +139,13 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-                if (HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)))
+                if (AIO_Func.SelfAOE_Prediction.HitCount(E.Delay, E.Range) >= 1)
                     E.Cast();
             }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-                if (HeroManager.Enemies.Count(x => x.IsValidTarget(R.Range)) >= AIO_Menu.Champion.Combo.getSliderValue("Cast R if Enemy number >=").Value)
+                if (AIO_Func.SelfAOE_Prediction.HitCount(R.Delay, R.Range) >= AIO_Menu.Champion.Combo.getSliderValue("Cast R if Enemy number >=").Value)
                     R.Cast();
             }
         }
@@ -175,7 +174,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
-                if (HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)))
+                if (AIO_Func.SelfAOE_Prediction.HitCount(E.Delay, E.Range) >= 1)
                     E.Cast();
             }
         }

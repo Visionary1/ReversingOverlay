@@ -87,7 +87,7 @@ namespace ALL_In_One
 				if(spell != null && target !=null)
 				{
 					var pred = spell.GetPrediction(target, true);
-					SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.Position.To2D()) / 2 ;
+					SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.ServerPosition.To2D()) / 2 ;
 
 					if (target.IsValidTarget(spell.Range))
 					{
@@ -121,7 +121,7 @@ namespace ALL_In_One
 					var collision = spell.GetCollision(ObjectManager.Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
 					var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
 
-					if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + ObjectManager.Player.Distance(target.Position) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+					if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + ObjectManager.Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
 					{
 						spell.Cast(pred.CastPosition);
 					}
@@ -139,12 +139,12 @@ namespace ALL_In_One
 
 				var _m = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => isKillable(m,spell,0) && HealthPrediction.GetHealthPrediction(m, (int)(ObjectManager.Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
 				if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
-                LCast(spell,_m,50,ALPHA);
+                LCast(spell,_m,50f,ALPHA);
 				else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
 				CCast(spell,_m);
 				else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
 				spell.Cast(_m);
-				else if(!spell.IsSkillshot)
+				else
 				spell.Cast(_m);
 				
 		}
@@ -174,21 +174,23 @@ namespace ALL_In_One
 				var Mobs = MinionManager.GetMinions(ObjectManager.Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 				if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>()) && getManaPercent(ObjectManager.Player) > AIO_Menu.Champion.Laneclear.IfMana)
 				{
-				if (Minions.Count <= 0)
-                return;
+				if (Minions.Count > 0)
+					{
 					if(!spell.IsSkillshot)
 					spell.Cast(Minions[0]);
 					else
 					spell.Cast();
+					}
 				}
 				if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>()) && getManaPercent(ObjectManager.Player) > AIO_Menu.Champion.Jungleclear.IfMana)
 				{
-				if (Mobs.Count <= 0)
-                return;
+				if (Mobs.Count > 0)
+					{
 					if(!spell.IsSkillshot)
 					spell.Cast(Mobs[0]);
 					else
 					spell.Cast();
+					}
 				}
 		}
 		
@@ -199,9 +201,31 @@ namespace ALL_In_One
 		
 		internal static int EnemyCount(float range, float min, float max)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
 		{
-			return GetEnemyList().Where(x => x.Distance(ObjectManager.Player.Position) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
+			return GetEnemyList().Where(x => x.Distance(ObjectManager.Player.ServerPosition) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
 		}
 		
+		internal static int ECTarget(Obj_AI_Hero target, float range, float min, float max)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
+		{
+			return GetEnemyList().Where(x => x.Distance(target.ServerPosition) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
+		}
+		
+        internal class SelfAOE_Prediction
+        {
+            internal static int HitCount(float delay, float range)
+            {
+                byte hitcount = 0;
+
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(range)))
+                {
+                    var pred = Prediction.GetPrediction(enemy, delay);
+
+                    if (ObjectManager.Player.ServerPosition.Distance(pred.UnitPosition) <= range)
+                        hitcount++;
+                }
+
+                return hitcount;
+            }
+        }
     }
 }
 

@@ -35,27 +35,25 @@ namespace ALL_In_One.champions
 			
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
-            AIO_Menu.Champion.Combo.addUseE();
+            AIO_Menu.Champion.Combo.addUseE(false);
 			AIO_Menu.Champion.Combo.addUseR();
 
 			AIO_Menu.Champion.Harass.addUseQ();
 			AIO_Menu.Champion.Harass.addUseW();
-			AIO_Menu.Champion.Harass.addUseE();
-            AIO_Menu.Champion.Harass.addIfMana();
-			
+			AIO_Menu.Champion.Harass.addUseE(false);
+
             AIO_Menu.Champion.Lasthit.addUseQ();
             AIO_Menu.Champion.Lasthit.addUseE();
-            AIO_Menu.Champion.Lasthit.addIfMana();
 
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseE();
-            AIO_Menu.Champion.Laneclear.addIfMana();
 
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseE();
-            AIO_Menu.Champion.Jungleclear.addIfMana();
 
+
+			AIO_Menu.Champion.Misc.addHitchanceSelector();
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(50, 0, 150));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
@@ -80,21 +78,30 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            if (Orbwalking.CanMove(10))
+            if (Orbwalking.CanMove(35))
             {
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                    Combo();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    Harass();
-					
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
-                    Lasthit();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                switch (Orbwalker.ActiveMode)
                 {
-                    Laneclear();
-                    Jungleclear();
+                    case Orbwalking.OrbwalkingMode.Combo:
+                        Orbwalker.SetAttack(true);
+                        Combo();
+                        break;
+                    case Orbwalking.OrbwalkingMode.Mixed:
+                        Orbwalker.SetAttack(true);
+                        Harass();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LastHit:
+                        Orbwalker.SetAttack(!AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady());
+                        Lasthit();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LaneClear:
+                        Orbwalker.SetAttack(true);
+                        Laneclear();
+                        Jungleclear();
+                        break;
+                    case Orbwalking.OrbwalkingMode.None:
+                        Orbwalker.SetAttack(true);
+                        break;
                 }
             }
 
@@ -123,14 +130,14 @@ namespace ALL_In_One.champions
 		var drawE = AIO_Menu.Champion.Drawings.ERange;
 		var drawR = AIO_Menu.Champion.Drawings.RRange;
 		var drawQQr = AIO_Menu.Champion.Drawings.getCircleValue("QQ Safe Range");
-		var drawEQr = AIO_Menu.Champion.Drawings.getCircleValue("EQ Range");
+		var drawEQ = AIO_Menu.Champion.Drawings.getCircleValue("EQ Range");
 		var QQTarget = TargetSelector.GetTarget(QQ.Range + Player.MoveSpeed * QQ.Delay, TargetSelector.DamageType.Magical);
 
 	
 		if (Q.IsReady() && drawQ.Active)
 		Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
 		
-		if (EQ.IsReady() && drawEQ.Active && Player.HasBuff("yasuoq3w") && Player.IsDashing)
+		if (EQ.IsReady() && drawEQ.Active && Player.HasBuff("yasuoq3w") && Dash.IsDashing(Player))
 		Render.Circle.DrawCircle(Player.Position, EQ.Range, drawEQ.Color);
 		
 		if (W.IsReady() && drawW.Active)
@@ -142,7 +149,7 @@ namespace ALL_In_One.champions
 		if (R.IsReady() && drawR.Active)
 		Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
 		
-		if (QQ.IsReady() && drawQQr.Active && Player.HasBuff("yasuoq3w") && !Player.IsDashing && QQTarget != null)
+		if (QQ.IsReady() && drawQQr.Active && !Dash.IsDashing(Player) &&QQTarget != null)
 		Render.Circle.DrawCircle(Player.Position, QQ.Range - QQTarget.MoveSpeed*QQ.Delay, drawQQr.Color);
 
 
@@ -161,7 +168,7 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
                 return;
 
-            if (QQ.IsReady() && Player.HasBuff("yasuoq3w") && !Player.IsDashing
+            if (QQ.IsReady() && Player.HasBuff("yasuoq3w") && !Dash.IsDashing(Player)
 			&& Player.Distance(sender.Position) <= QQ.Range)
                 QQ.Cast(sender.Position);
 
@@ -169,7 +176,7 @@ namespace ALL_In_One.champions
 
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsMe || Player.IsDead)
+            if (!sender.IsMe || Player.IsDead) // 야스오 바람장막 어떻게할까 고민중.
                 return;
 				
 
@@ -182,14 +189,14 @@ namespace ALL_In_One.champions
 			{
 				if (AIO_Menu.Champion.Harass.UseW && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-					Q.Cast(target);
+                AIO_Func.LCast(Q,target,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
 			}
 				
 			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
 			{
 				if (AIO_Menu.Champion.Combo.UseW && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-					Q.Cast(target);					
+                AIO_Func.LCast(Q,target,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
 			}
 		}
 		
@@ -212,28 +219,28 @@ namespace ALL_In_One.champions
 			var buff = AIO_Func.getBuffInstance(Player, "yasuoq3w");
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-				if(!Player.HasBuff("yasuoq3w"))
+				if(!Dash.IsDashing(Player) && !Player.HasBuff("yasuoq3w"))
 				{
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
 				if(qTarget.Distance(Player.Position) >= Player.AttackRange + 50)
-                Q.Cast(qTarget);
+                AIO_Func.LCast(Q,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
 				}
-				else if(!Player.IsDashing)
-				{
-                var qTarget = TargetSelector.GetTarget(QQ.Range, Q.DamageType, true);
-                AIO_Func.LCast(QQ,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
-				}
-				else
+				else if(Dash.IsDashing(Player))
 				{
 				var qTarget = TargetSelector.GetTarget(EQ.Range - 10, Q.DamageType, true);
 				EQ.Cast();
+				}
+				else
+				{
+                var qTarget = TargetSelector.GetTarget(QQ.Range, Q.DamageType, true);
+                AIO_Func.LCast(QQ,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
 				}
 			}
 			
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
-				if(!ETarget.HasBuff("yasuodashwrapper"))
+				if(!ETarget.HasBuff("YasuoDashWrapper"))
                 E.Cast(ETarget);
             }
 			
@@ -248,33 +255,31 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
-                return;
-				
+
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-				if(!Player.HasBuff("yasuoq3w"))
+				if(!Dash.IsDashing(Player) && !Player.HasBuff("yasuoq3w"))
 				{
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
 				if(qTarget.Distance(Player.Position) >= Player.AttackRange + 50)
-                Q.Cast(qTarget);
+                AIO_Func.LCast(Q,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
 				}
-				else if(!Player.IsDashing)
-				{
-                var qTarget = TargetSelector.GetTarget(QQ.Range, Q.DamageType, true);
-                AIO_Func.LCast(QQ,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
-				}
-				else
+				else if(Dash.IsDashing(Player))
 				{
 				var qTarget = TargetSelector.GetTarget(EQ.Range - 10, Q.DamageType, true);
 				EQ.Cast();
+				}
+				else
+				{
+                var qTarget = TargetSelector.GetTarget(QQ.Range, Q.DamageType, true);
+                AIO_Func.LCast(QQ,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
 				}
             }
 				
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
-				if(!ETarget.HasBuff("yasuodashwrapper"))
+				if(!ETarget.HasBuff("YasuoDashWrapper"))
                 E.Cast(ETarget);
             }
 
@@ -282,8 +287,6 @@ namespace ALL_In_One.champions
 		
         static void Lasthit()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Lasthit.IfMana))
-                return;
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
 
@@ -291,35 +294,52 @@ namespace ALL_In_One.champions
                 return;
 				
 				if(AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
-				AIO_Func.LH(Q,Menu.Item("Misc.Qtg").GetValue<Slider>().Value);
+				AIO_Func.LH(Q,float.MaxValue);
 				if(AIO_Menu.Champion.Lasthit.UseE && E.IsReady())
-				AIO_Func.LH(E,0);
+				AIO_Func.LH(E,0f);
 
         }
 		
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
-                return;
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
                 return;
+				
+				
+            if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
+            {
+                if (Q.CanCast(Minions[0]))
+                AIO_Func.LCast(Q,Minions[0],Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+			}
+            if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
+            {
+                if (E.CanCast(Minions[0]) && !Minions[0].HasBuff("YasuoDashWrapper"))
+                E.Cast(Minions[0]);
+			}
+
 
         }
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
-                return;
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
                 return;
-
-
+            if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
+            {
+                if (Q.CanCast(Mobs[0]))
+                AIO_Func.LCast(Q,Mobs[0],Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+			}
+            if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
+            {
+                if (E.CanCast(Mobs[0]) && !Mobs[0].HasBuff("YasuoDashWrapper"))
+                E.Cast(Mobs[0]);
+			}
         }
 
         static void KillstealQ()
@@ -334,7 +354,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-				if(E.CanCast(target) && AIO_Func.isKillable(target, E))
+				if(E.CanCast(target) && AIO_Func.isKillable(target, E) && !target.HasBuff("YasuoDashWrapper"))
 				E.Cast(target);
 			}
         }

@@ -22,14 +22,14 @@ namespace ALL_In_One.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 1250f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 800f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, 950f, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 2000f, TargetSelector.DamageType.Physical);
+            Q = new Spell(SpellSlot.Q, 1250, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, 800, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, 950, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 2000, TargetSelector.DamageType.Physical);
 			
             Q.SetSkillshot(1.0f, 85f, 2000f, false, SkillshotType.SkillshotLine);
             W.SetSkillshot(0.625f, 67.5f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            E.SetSkillshot(0.5f, 80f, 1600f, true, SkillshotType.SkillshotLine);
+            E.SetSkillshot(0.75f, 80f, 1600f, true, SkillshotType.SkillshotLine);
             R.SetTargetted(1.35f, 3200f);
             
             AIO_Menu.Champion.Combo.addUseQ();
@@ -50,8 +50,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
-            AIO_Menu.Champion.Misc.addItem("Made By Rl244", true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional QRange")).SetValue(new Slider(50, 0, 250));
+            AIO_Menu.Champion.Misc.addItem("Made By Rl244", true);
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
@@ -62,7 +62,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addWRange();
             AIO_Menu.Champion.Drawings.addERange();
             AIO_Menu.Champion.Drawings.addRRange();
-
+ 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
@@ -72,7 +72,7 @@ namespace ALL_In_One.champions
 
         static void Game_OnUpdate(EventArgs args)
         {
-            if (!Player.IsDead)
+            if (Player.IsDead)
                 return;
 				
 			R.Range = 1500f + R.Level*500f;
@@ -168,10 +168,10 @@ namespace ALL_In_One.champions
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
                 return;
 		
-            if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() &&
-				(AIO_Menu.Champion.Harass.UseE && !E.IsReady() || !AIO_Menu.Champion.Harass.UseE))
+            if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
 				var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+				if(AIO_Menu.Champion.Harass.UseE && !E.IsReady() || !AIO_Menu.Champion.Harass.UseE)
                 AIO_Func.LCast(Q,Qtarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
             }
 			
@@ -181,11 +181,10 @@ namespace ALL_In_One.champions
                 AIO_Func.CCast(W,Wtarget);
             }
 
-            if (AIO_Menu.Champion.Harass.UseE && E.IsReady() &&
-				(AIO_Menu.Champion.Harass.UseQ && Q.IsReady() || !AIO_Menu.Champion.Harass.UseQ))
+            if (AIO_Menu.Champion.Harass.UseE && E.IsReady() && Q.IsReady())
             {
 				var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
-                AIO_Func.LCast(E,Etarget,50,0);
+                AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,0);
             }
         }
 
@@ -202,14 +201,14 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
                 if (Minions.Any(x => x.IsValidTarget(E.Range)))
-                AIO_Func.LCast(E,Minions[0],50,0);
+                AIO_Func.LH(E,0);
             }
 			
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
 				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.E))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / Q.Speed), (int)(Q.Delay * 1000 + Game.Ping / 2)) > 0);			
                 if (_m != null)
-                AIO_Func.LCast(Q,_m,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LH(Q,float.MaxValue);
             }
 		}
 

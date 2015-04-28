@@ -29,10 +29,11 @@ namespace ALL_In_One.champions
 			R.SetTargetted(0.4f, float.MaxValue);
 			
             AIO_Menu.Champion.Combo.addUseQ();
+            AIO_Menu.Champion.Combo.addItem("Q After AA", false); 
             Menu.SubMenu("Combo").AddItem(new MenuItem("ComboQD", "Q Min Distance", true).SetValue(new Slider(275, 0, 425)));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("ComboED", "E Min Distance", true).SetValue(new Slider(150, 0, 550)));
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
+            Menu.SubMenu("Combo").AddItem(new MenuItem("ComboED", "E Min Distance", true).SetValue(new Slider(150, 0, 550)));
 
 			AIO_Menu.Champion.Harass.addUseQ();
 			AIO_Menu.Champion.Harass.addUseW();
@@ -48,6 +49,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
+            AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Drawings.addQRange();
@@ -161,6 +163,10 @@ namespace ALL_In_One.champions
 				if (AIO_Menu.Champion.Harass.UseW && W.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
 					W.Cast();
+					
+				if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && !W.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)) && AIO_Menu.Champion.Combo.getBoolValue("Q After AA"))
+					Q.Cast(target);
 			}
 				
 			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
@@ -168,6 +174,10 @@ namespace ALL_In_One.champions
 				if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
 					W.Cast();					
+					
+				if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && !W.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
+					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)) && AIO_Menu.Champion.Combo.getBoolValue("Q After AA"))
+					Q.Cast(target);
 			}
 		}
 		
@@ -239,7 +249,8 @@ namespace ALL_In_One.champions
 
             if (Minions.Count <= 0)
                 return;
-
+			if(AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
+			AIO_Func.LH(Q,0);
         }
 
         static void Jungleclear()
@@ -251,8 +262,8 @@ namespace ALL_In_One.champions
 
             if (Mobs.Count <= 0)
                 return;
-
-
+			if(AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
+			AIO_Func.LH(Q,0);
         }
 
         static void KillstealQ()

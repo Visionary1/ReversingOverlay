@@ -10,41 +10,44 @@ using SharpDX;
 
 using Color = System.Drawing.Color;
 
-
 namespace ALL_In_One.champions
 {
-    class Zyra//RL244
+    class Syndra//RL244
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
-        static Spell Q, W, E, R, P;
+        static Spell Q, QE, W, W2, E, R;
 
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 800f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 850f);
-            E = new Spell(SpellSlot.E, 1100f, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 700f, TargetSelector.DamageType.Magical);
-            P = new Spell(SpellSlot.Q, 1470f, TargetSelector.DamageType.True);
+            QE = new Spell(SpellSlot.Q, Q.Range + 500, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 925f, TargetSelector.DamageType.Magical);
+            W2 = new Spell(SpellSlot.W, 925f, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 675f, TargetSelector.DamageType.Magical);
 			
-            Q.SetSkillshot(0.625f, 85f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            W.SetSkillshot(0.25f, 50f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            E.SetSkillshot(0.5f, 120f, 1150f, false, SkillshotType.SkillshotLine);
-            R.SetSkillshot(0.5f, 500f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            P.SetSkillshot(0.5f, 70f, 1400f, false, SkillshotType.SkillshotLine);
-            
+			
+            Q.SetSkillshot(0.3f, 65f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            W.SetTargetted(0.25f, float.MaxValue);
+            W2.SetSkillshot(0.25f, 50f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            E.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 2500f, false, SkillshotType.SkillshotCone);
+            R.SetTargetted(0.75f, 2500f);
+			
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
-            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.Rt", "R min target counts")).SetValue(new Slider(2, 0, 5));
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana();
+			
+            AIO_Menu.Champion.Lasthit.addUseQ();
+            AIO_Menu.Champion.Lasthit.addIfMana();
 
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW(false);
@@ -60,6 +63,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addItem("Made By Rl244", true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Etg", "Additional ERange")).SetValue(new Slider(50, 0, 250));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
+            AIO_Menu.Champion.Misc.addItem("KillstealW", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
@@ -80,31 +84,46 @@ namespace ALL_In_One.champions
 
         static void Game_OnUpdate(EventArgs args)
         {
-            if (!ZyraDead() && Player.IsDead)
+            if (Player.IsDead)
                 return;
 				
-			if (ZyraDead())
-			{
-			CastP();
-			}
-
+			if(3 == R.Level)
+			R.Range = 750f;
+			
+			if(3 == E.Level)
+			E.Width = 60f * (float)Math.PI / 180 * 1.5f;
+				
             if (Orbwalking.CanMove(35))
             {
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                    Combo();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    Harass();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                switch (Orbwalker.ActiveMode)
                 {
-                    Laneclear();
-                    Jungleclear();
+                    case Orbwalking.OrbwalkingMode.Combo:
+                        Orbwalker.SetAttack(true);
+                        Combo();
+                        break;
+                    case Orbwalking.OrbwalkingMode.Mixed:
+                        Orbwalker.SetAttack(true);
+                        Harass();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LastHit:
+                        Orbwalker.SetAttack(!AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady());
+                        Lasthit();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LaneClear:
+                        Orbwalker.SetAttack(true);
+                        Laneclear();
+                        Jungleclear();
+                        break;
+                    case Orbwalking.OrbwalkingMode.None:
+                        Orbwalker.SetAttack(true);
+                        break;
                 }
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
                 KillstealQ();
+            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealW"))
+                KillstealW();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
@@ -113,7 +132,7 @@ namespace ALL_In_One.champions
 
         static void Drawing_OnDraw(EventArgs args)
         {
-            if (!ZyraDead() && Player.IsDead)
+            if (Player.IsDead)
                 return;
 
             var drawQ = AIO_Menu.Champion.Drawings.QRange;
@@ -138,15 +157,6 @@ namespace ALL_In_One.champions
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
-		
-        static bool ZyraDead()
-        {
-            return ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name ==
-                   ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Name ||
-                   ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name ==
-                   ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Name;
-        }
-
 		
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
@@ -174,7 +184,7 @@ namespace ALL_In_One.champions
                 AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
             }
 
-            if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && (Q.IsReady() || E.IsReady()))
+            if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
 				var Wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.CCast(W,Wtarget);
@@ -183,9 +193,8 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
 				var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-				var rt = Menu.Item("Combo.Rt").GetValue<Slider>().Value;
-				if(AIO_Func.getHealthPercent(Player) < 50 && AIO_Func.isKillable(Rtarget, getComboDamage(Rtarget)*2/3) || AIO_Func.ECTarget(Rtarget,R.Width,0,100) >= rt)
-                AIO_Func.CCast(R,Rtarget);
+				if(AIO_Func.isKillable(Rtarget, R))
+                R.Cast(Rtarget);
             }
         }
 
@@ -200,7 +209,7 @@ namespace ALL_In_One.champions
                 AIO_Func.CCast(Q,Qtarget);
             }
 			
-            if (AIO_Menu.Champion.Harass.UseW && W.IsReady() && (Q.IsReady() || E.IsReady()))
+            if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
 				var Wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.CCast(W,Wtarget);
@@ -213,6 +222,15 @@ namespace ALL_In_One.champions
             }
         }
 
+        static void Lasthit()
+        {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Lasthit.IfMana))
+                return;
+				
+            if (AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
+			AIO_Func.LH(Q,0);
+		}
+		
         static void Laneclear()
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
@@ -230,7 +248,7 @@ namespace ALL_In_One.champions
                 AIO_Func.LCast(E,_m,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
             }
 
-            if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady() && (Q.IsReady() || E.IsReady()))
+            if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
             {
                 if (Minions.Any(x => x.IsValidTarget(W.Range)))
                 AIO_Func.CCast(W,Minions[0]);
@@ -260,7 +278,7 @@ namespace ALL_In_One.champions
                 AIO_Func.CCast(Q,Mobs.FirstOrDefault());
             }
 
-            if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady() && (Q.IsReady() || E.IsReady()))
+            if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady())
             {
                 if (Mobs.Any(x => x.IsValidTarget(W.Range)))
                 AIO_Func.CCast(W,Mobs[0]);
@@ -283,12 +301,21 @@ namespace ALL_In_One.champions
             }
         }
 		
+        static void KillstealW()
+        {
+            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
+            {
+                if (W.CanCast(target) && AIO_Func.isKillable(target, W))
+                AIO_Func.CCast(W,target);
+            }
+        }
+		
         static void KillstealR()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (target.IsValidTarget(R.Range) && AIO_Func.isKillable(target, R))
-				AIO_Func.CCast(R,target);
+				R.Cast(target);
             }
         }
 		
@@ -301,32 +328,24 @@ namespace ALL_In_One.champions
             }
         }
 		
-		static void CastP()
-		{
-			if(P.IsReady())
-			{
-				var Ptarget = TargetSelector.GetTarget(P.Range, TargetSelector.DamageType.True);
-                AIO_Func.LCast(P,Ptarget,150,float.MaxValue);
-			}
-		}
-		
-		
         static float getComboDamage(Obj_AI_Base enemy)
         {
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, true);
+			{
+                damage += Q.GetDamage(enemy);
+			}
+				
+            if (W.IsReady())
+                damage += W.GetDamage(enemy);
 				
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
 
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
-				
-			if (ZyraDead() && P.IsReady())
-				damage += P.GetDamage(enemy);
-				
+
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
             return damage;

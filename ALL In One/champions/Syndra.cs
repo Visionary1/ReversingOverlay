@@ -18,11 +18,12 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
-        static Spell Q, W, W2, E, R;
+        static Spell Q, QE, W, W2, E, R;
 
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 800f, TargetSelector.DamageType.Magical);
+            QE = new Spell(SpellSlot.Q, Q.Range + 500, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 925f, TargetSelector.DamageType.Magical);
             W2 = new Spell(SpellSlot.W, 925f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Magical);
@@ -192,7 +193,8 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
 				var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(R,Rtarget);
+				if(AIO_Func.isKillable(Rtarget, R))
+                R.Cast(Rtarget);
             }
         }
 
@@ -332,9 +334,6 @@ namespace ALL_In_One.champions
 
             if (Q.IsReady())
 			{
-				if(5 == Q.Level)
-				damage += Q.GetDamage(enemy)*1.15f;
-				else
                 damage += Q.GetDamage(enemy);
 			}
 				

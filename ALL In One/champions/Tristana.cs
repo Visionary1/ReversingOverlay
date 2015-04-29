@@ -69,6 +69,9 @@ namespace ALL_In_One.champions
         {
             if (Player.IsDead)
                 return;
+				
+			E.Range = Player.AttackRange;
+			R.Range = Player.AttackRange;
 
             if (Orbwalking.CanMove(10))
             {

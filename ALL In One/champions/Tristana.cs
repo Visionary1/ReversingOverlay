@@ -40,10 +40,12 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW(false);
+            AIO_Menu.Champion.Laneclear.addUseE();
             AIO_Menu.Champion.Laneclear.addIfMana();
 			
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW(false);
+            AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
@@ -129,6 +131,7 @@ namespace ALL_In_One.champions
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
 			{
 			AIO_Func.AALcJc(Q);
+			AIO_Func.AALcJc(E);
 			}
 			
 			if(!utility.Activator.AfterAttack.AIO)

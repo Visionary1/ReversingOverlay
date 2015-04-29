@@ -121,7 +121,7 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            if (AIO_Menu.Champion.Misc.getBoolValue("Auto E") && sender.IsEnemy && sender.Type == GameObjectType.obj_AI_Hero && args.Target.IsAlly && E.IsReady() && Player.ServerPosition.Distance(args.Target.Position) <= E.Range)
+            if (AIO_Menu.Champion.Misc.getBoolValue("Auto E") && sender.IsEnemy && sender.Type == GameObjectType.obj_AI_Hero && args.Target.IsAlly && E.IsReady() && Player.ServerPosition.Distance(args.Target.Position) <= E.Range && args.Target.IsValid<Obj_AI_Hero>())
                 Utility.DelayAction.Add(100, () => E.Cast(Player));
         }
 

@@ -36,6 +36,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
+            AIO_Menu.Champion.Misc.addItem("Auto E", true);
 
             AIO_Menu.Champion.Drawings.addQRange();
             AIO_Menu.Champion.Drawings.addWRange();
@@ -48,6 +49,7 @@ namespace ALL_In_One.champions
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
+            Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -114,6 +116,15 @@ namespace ALL_In_One.champions
                 Q.Cast(sender);
         }
 
+        static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (Player.IsDead)
+                return;
+
+            if (AIO_Menu.Champion.Misc.getBoolValue("Auto E") && sender.IsEnemy && sender.Type == GameObjectType.obj_AI_Hero && args.Target.IsAlly && E.IsReady() && Player.ServerPosition.Distance(args.Target.Position) <= E.Range)
+                E.Cast(Player);
+        }
+
         static void Combo()
         {
 
@@ -123,10 +134,8 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
                 W.CastOnBestTarget();
 
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
-            {
-                
-            }
+            //if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
+            //{ }
         }
 
         static void Harass()

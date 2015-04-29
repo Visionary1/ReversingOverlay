@@ -122,7 +122,7 @@ namespace ALL_In_One.champions
                 return;
 
             if (AIO_Menu.Champion.Misc.getBoolValue("Auto E") && sender.IsEnemy && sender.Type == GameObjectType.obj_AI_Hero && args.Target.IsAlly && E.IsReady() && Player.ServerPosition.Distance(args.Target.Position) <= E.Range)
-                E.Cast(Player);
+                Utility.DelayAction.Add(100, () => E.Cast(Player));
         }
 
         static void Combo()

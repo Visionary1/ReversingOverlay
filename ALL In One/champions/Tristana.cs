@@ -61,7 +61,7 @@ namespace ALL_In_One.champions
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-			//Orbwalking.AfterAttack += Orbwalking_OnAfterAttack;
+			Orbwalking.AfterAttack += Orbwalking_OnAfterAttack;
 			//Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
@@ -265,7 +265,7 @@ namespace ALL_In_One.champions
                 damage += W.GetDamage(enemy);
 				
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage(enemy)*1.25f;
 
             if (R.IsReady())
                 damage += R.GetDamage(enemy);

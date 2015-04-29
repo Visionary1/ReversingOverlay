@@ -121,6 +121,9 @@ namespace ALL_In_One
                 case "Janna"://Added by xcsoft
                     champions.Janna.Load();
                     break;
+                case "Nami"://Added by xcsoft
+                    champions.Nami.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

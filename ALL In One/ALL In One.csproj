@@ -137,7 +137,7 @@
     <Compile Include="champions\MissFortune.cs" />
     <Compile Include="champions\_Mordekaiser.cs" />
     <Compile Include="champions\_Morgana.cs" />
-    <Compile Include="champions\_Nami.cs" />
+    <Compile Include="champions\Nami.cs" />
     <Compile Include="champions\_Nasus.cs" />
     <Compile Include="champions\Nautilus.cs" />
     <Compile Include="champions\_Nidalee.cs" />

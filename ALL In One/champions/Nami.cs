@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace ALL_In_One.champions
 {
-    class Janna
+    class Nami
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
@@ -18,18 +18,19 @@ namespace ALL_In_One.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 1100f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, 800f);
-            R = new Spell(SpellSlot.R, 550f);
+            Q = new Spell(SpellSlot.Q, 850f, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 725f, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, 800f, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 2500f, TargetSelector.DamageType.Magical);
 
-            Q.SetSkillshot(0.25f, 120f, 900f, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(1.0f, 200f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            R.SetSkillshot(0.5f, 250f, 850f, false, SkillshotType.SkillshotLine);
 
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             //AIO_Menu.Champion.Combo.addUseR();
 
-            AIO_Menu.Champion.Harass.addUseQ(false);
+            AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addIfMana();
 
@@ -73,6 +74,7 @@ namespace ALL_In_One.champions
             }
 
             Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
+            R.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -121,15 +123,14 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            if (AIO_Menu.Champion.Misc.getBoolValue("Auto E") && E.IsReady() && sender.IsEnemy && sender.Type == GameObjectType.obj_AI_Hero && args.Target.IsAlly && Player.ServerPosition.Distance(args.Target.Position) <= E.Range && args.Target.IsValid<Obj_AI_Hero>())
-                Utility.DelayAction.Add(100, () => E.Cast((Obj_AI_Hero)args.Target));
+            if (AIO_Menu.Champion.Misc.getBoolValue("Auto E") && E.IsReady() && sender.IsAlly && !sender.IsMe && sender.IsValidTarget(E.Range, false) && args.Target.IsValid<Obj_AI_Hero>())
+                E.Cast(sender);
         }
 
         static void Combo()
         {
-
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
-                Q.CastOnBestTarget();
+                Q.CastOnBestTarget(0f, false, true);
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
                 W.CastOnBestTarget();
@@ -144,7 +145,7 @@ namespace ALL_In_One.champions
                 return;
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
-                Q.CastOnBestTarget();
+                Q.CastOnBestTarget(0f, false, true);
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
                 W.CastOnBestTarget();
@@ -159,6 +160,12 @@ namespace ALL_In_One.champions
 
             if (W.IsReady())
                 damage += W.GetDamage(enemy);
+
+            if (E.IsReady())
+                damage += E.GetDamage(enemy);
+
+            if (R.IsReady())
+                damage += R.GetDamage(enemy);
 
             return damage;
         }

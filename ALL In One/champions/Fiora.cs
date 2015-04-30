@@ -13,7 +13,7 @@ using Color = System.Drawing.Color;
 
 namespace ALL_In_One.champions
 {
-    class Fiora // RL244
+    class Fiora // By RL244
     {
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} // 피오라.cs update.
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
@@ -275,12 +275,6 @@ namespace ALL_In_One.champions
 				
             if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
                 damage += R.GetDamage(enemy);
-
-            if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
-				damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat) + (float)Player.GetAutoAttackDamage(enemy, true);
-			
-            if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
-				damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra) + (float)Player.GetAutoAttackDamage(enemy, true);
 
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);

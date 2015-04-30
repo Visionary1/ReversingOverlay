@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class Darius//RL144
+    class Darius// By RL244
     {
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} //
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
@@ -294,31 +294,19 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-			{
                 damage += Q.GetDamage(enemy);
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
-			}
-			
-            if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
-			{
-			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
-			damage += (float)Player.GetAutoAttackDamage(enemy, true);
-			}
-			
-            if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
-			{
-			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
-			damage += (float)Player.GetAutoAttackDamage(enemy, true);
-			}
 
             if (W.IsReady())
                 damage += W.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, true);
 
+            if (E.IsReady())
+                damage += (float)Player.GetAutoAttackDamage(enemy, true)*2;
+				
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
-
-            if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+			{
+				var buff = AIO_Func.getBuffInstance(enemy, "dariushemo");
+                damage += R.GetDamage(enemy)*(1 + (float)buff.Count / 5) - 10;
+			}
 				
             return damage;
         }

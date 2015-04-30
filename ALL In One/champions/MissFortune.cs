@@ -19,7 +19,7 @@ missfortunepassivestack 미포 w패시브
 
 namespace ALL_In_One.champions
 {
-    class MissFortune//RL244
+    class MissFortune// By RL244 WIP
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}

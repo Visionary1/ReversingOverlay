@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class XinZhao //rl244
+    class XinZhao // By RL244
     {
         static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } } //메뉴얼 오브워커 넣기는 했지만. 음.. 
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
@@ -257,22 +257,7 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-			{
-                damage += Q.GetDamage(enemy);
-                damage += (float)Player.GetAutoAttackDamage(enemy, true); //평캔 스펠 사용시 평타 데미지 추가
-			}
-			
-            if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
-			{
-			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
-			damage += (float)Player.GetAutoAttackDamage(enemy, true);
-			}
-			
-            if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
-			{
-			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
-			damage += (float)Player.GetAutoAttackDamage(enemy, true);
-			}
+                damage += Q.GetDamage(enemy)+(float)Player.GetAutoAttackDamage(enemy, true); //평캔 스펠 사용시 평타 데미지 추가
 			
             if (E.IsReady())
                 damage += E.GetDamage(enemy);

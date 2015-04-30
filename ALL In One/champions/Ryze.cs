@@ -139,7 +139,10 @@ namespace ALL_In_One.champions
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-                Q.CastOnBestTarget();
+                var qTarget = TargetSelector.GetTargetNoCollision(Q);
+
+                if (Q.CanCast(qTarget))
+                    Q.Cast(qTarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
@@ -154,7 +157,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-                if(!Q.IsReady() && !E.IsReady() && AIO_Func.getHealthPercent(Player) <= 98 && HeroManager.Enemies.Any(x=>x.IsValidTarget(800f)))
+                if(!Q.IsReady() && !E.IsReady() && AIO_Func.getHealthPercent(Player) <= 98)
                     R.Cast();
             }
         }
@@ -166,7 +169,10 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-                Q.CastOnBestTarget();
+                var qTarget = TargetSelector.GetTargetNoCollision(Q);
+
+                if (Q.CanCast(qTarget))
+                    Q.Cast(qTarget);
             }
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())

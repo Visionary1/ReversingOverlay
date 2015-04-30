@@ -34,7 +34,7 @@ namespace ALL_In_One.champions
             Q.SetTargetted(0.25f, 3000f);
 
             AIO_Menu.Champion.Combo.addUseQ();
-            Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseQD", "Q Distance", true).SetValue(new Slider(150, 0, 600)));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQD", "Q Distance", true).SetValue(new Slider(150, 0, 600)));
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();

@@ -17,6 +17,12 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
+		static int UltST {get{var buff = AIO_Func.getBuffInstance(Player, "kogmawlivingartillery"); return buff != null ? buff.Count : 0;} }
+		static int UST = Menu.Item("Misc.Rst").GetValue<Slider>().Value; //유저가 선택한 스택
+		static int QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
+		static int ED = Menu.Item("Misc.Etg").GetValue<Slider>().Value; 
+
+
 
         static Spell Q, W, E, R;
 
@@ -59,6 +65,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addItem("Made By Rl244", true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional QRange")).SetValue(new Slider(50, 0, 250));
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Etg", "Additional ERange")).SetValue(new Slider(50, 0, 250));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Rst", "R Max Stacks")).SetValue(new Slider(1, 0, 10));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
@@ -162,16 +169,12 @@ namespace ALL_In_One.champions
 				if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseW ||
 				Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana)
 				&& W.IsReady())
-				{
-					W.Cast();
-				}
+				W.Cast();
 				
 				if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseQ ||
 				Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana)
 				&& Q.IsReady())
-				{
-                AIO_Func.LCast(Q,Target,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,0);
-				}
+                AIO_Func.LCast(Q,Target,QD,0);
 		}
 		
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
@@ -192,16 +195,16 @@ namespace ALL_In_One.champions
             {
 				var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
 				if(Qtarget.Distance(Player.ServerPosition) > Player.AttackRange)
-                AIO_Func.LCast(Q,Qtarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,0);
+                AIO_Func.LCast(Q,Qtarget,QD,0);
             }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
 				var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(E,Etarget,ED);
             }
 
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
+            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && UltST < UST)
             {
 				var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.CCast(R,Rtarget);
@@ -217,16 +220,16 @@ namespace ALL_In_One.champions
             {
 				var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 				if(Qtarget.Distance(Player.ServerPosition) > Player.AttackRange)
-                AIO_Func.LCast(Q,Qtarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,0);
+                AIO_Func.LCast(Q,Qtarget,QD,0);
             }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
 				var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(E,Etarget,ED);
             }
 			
-            if (AIO_Menu.Champion.Harass.UseR && R.IsReady())
+            if (AIO_Menu.Champion.Harass.UseR && R.IsReady() && UltST < UST)
             {
 				var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.CCast(R,Rtarget);
@@ -266,7 +269,7 @@ namespace ALL_In_One.champions
                 W.Cast();
 			
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady() && Mobs.Any(x=>x.IsValidTarget(E.Range)))
-                AIO_Func.LCast(E,Mobs[0],Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(E,Mobs[0],ED);
         }
 
         static void KillstealQ()
@@ -274,7 +277,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
-                AIO_Func.LCast(Q,target,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,0);
+                AIO_Func.LCast(Q,target,QD,0);
             }
         }
 		
@@ -292,7 +295,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (E.CanCast(target) && AIO_Func.isKillable(target, E))
-                AIO_Func.LCast(E,target,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(E,target,ED);
             }
         }
 		

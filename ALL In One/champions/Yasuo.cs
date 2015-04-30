@@ -14,8 +14,7 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, QQ, W, E, EQ, R;
-
-		
+		static int QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 	
 
         public static void Load()
         {
@@ -189,14 +188,14 @@ namespace ALL_In_One.champions
 			{
 				if (AIO_Menu.Champion.Harass.UseW && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                AIO_Func.LCast(Q,target,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(Q,target,QD);
 			}
 				
 			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
 			{
 				if (AIO_Menu.Champion.Combo.UseW && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
 					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                AIO_Func.LCast(Q,target,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(Q,target,QD);
 			}
 		}
 		
@@ -223,7 +222,7 @@ namespace ALL_In_One.champions
 				{
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
 				if(qTarget.Distance(Player.Position) >= Player.AttackRange + 50)
-                AIO_Func.LCast(Q,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(Q,qTarget,QD);
 				}
 				else if(Dash.IsDashing(Player))
 				{
@@ -233,7 +232,7 @@ namespace ALL_In_One.champions
 				else
 				{
                 var qTarget = TargetSelector.GetTarget(QQ.Range, Q.DamageType, true);
-                AIO_Func.LCast(QQ,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(QQ,qTarget,QD);
 				}
 			}
 			
@@ -262,7 +261,7 @@ namespace ALL_In_One.champions
 				{
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
 				if(qTarget.Distance(Player.Position) >= Player.AttackRange + 50)
-                AIO_Func.LCast(Q,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(Q,qTarget,QD);
 				}
 				else if(Dash.IsDashing(Player))
 				{
@@ -272,7 +271,7 @@ namespace ALL_In_One.champions
 				else
 				{
                 var qTarget = TargetSelector.GetTarget(QQ.Range, Q.DamageType, true);
-                AIO_Func.LCast(QQ,qTarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(QQ,qTarget,QD);
 				}
             }
 				
@@ -312,7 +311,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
                 if (Q.CanCast(Minions[0]))
-                AIO_Func.LCast(Q,Minions[0],Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(Q,Minions[0],QD);
 			}
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
@@ -333,7 +332,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
                 if (Q.CanCast(Mobs[0]))
-                AIO_Func.LCast(Q,Mobs[0],Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(Q,Mobs[0],QD);
 			}
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
             {

@@ -17,8 +17,8 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-
         static Spell Q, W, E, R;
+		static int QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
 
         public static void Load()
         {
@@ -147,7 +147,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
 				var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                AIO_Func.LCast(Q,Qtarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(Q,Qtarget,QD,float.MaxValue);
             }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
@@ -172,7 +172,7 @@ namespace ALL_In_One.champions
             {
 				var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
 				if(AIO_Menu.Champion.Harass.UseE && !E.IsReady() || !AIO_Menu.Champion.Harass.UseE)
-                AIO_Func.LCast(Q,Qtarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(Q,Qtarget,QD,float.MaxValue);
             }
 			
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
@@ -184,7 +184,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady() && Q.IsReady())
             {
 				var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
-                AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,0);
+                AIO_Func.LCast(E,Etarget,QD,0);
             }
         }
 
@@ -225,7 +225,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
                 if (Q.CanCast(Mobs.FirstOrDefault()))
-                AIO_Func.LCast(Q,Mobs.FirstOrDefault(),Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(Q,Mobs.FirstOrDefault(),QD);
 
             }
 			
@@ -242,7 +242,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
-                AIO_Func.LCast(Q,target,Menu.Item("Misc.Qtg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(Q,target,QD);
             }
         }
 				

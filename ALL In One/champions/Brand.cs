@@ -12,13 +12,13 @@ using SharpDX;
 using Color = System.Drawing.Color;
 namespace ALL_In_One.champions
 {
-    class Brand //RL244
+    class Brand // By RL244
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-
         static Spell Q, W, E, R;
+		static int QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
 
         public static void Load()
         {
@@ -145,10 +145,10 @@ namespace ALL_In_One.champions
 
             if (W.IsReady()
 				&& Player.Distance(gapcloser.Sender.Position) <= W.Range)
-                W.Cast((Vector3)gapcloser.End);
-            if (!W.IsReady() && Q.IsReady()
+                AIO_Func.CCast(W,gapcloser.Sender); //W.Cast((Vector3)gapcloser.End);
+            if (gapcloser.Sender.HasBuff("brandablaze") && Q.IsReady()
 				&& Player.Distance(gapcloser.Sender.Position) <= Q.Range)
-                Q.Cast((Vector3)gapcloser.End);
+                AIO_Func.LCast(Q,gapcloser.Sender,QD,0);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -158,10 +158,10 @@ namespace ALL_In_One.champions
 
             if (W.IsReady()
 			&& Player.Distance(sender.Position) <= W.Range)
-                CastW(sender);
-            if (!W.IsReady() && Q.IsReady()
+                AIO_Func.CCast(W,sender);
+            if (sender.HasBuff("brandablaze") && Q.IsReady()
 			&& Player.Distance(sender.Position) <= Q.Range)
-                CastQ(sender);
+                AIO_Func.LCast(Q,sender,QD,0);
         }
 		
 		enum PriorSpell
@@ -224,35 +224,35 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-		var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-			if(PriorSpell.Q != SelectedPriorSpell || Qtarget.HasBuff("brandablaze"))
-                CastQ(Qtarget);
+				var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+				if(PriorSpell.Q != SelectedPriorSpell || Qtarget.HasBuff("brandablaze"))
+					AIO_Func.LCast(Q,Qtarget,QD,0);
             }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-		var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-			if(PriorSpell.E != SelectedPriorSpell || Etarget.HasBuff("brandablaze"))
-                E.Cast(Etarget);
+				var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
+				if(PriorSpell.E != SelectedPriorSpell || Etarget.HasBuff("brandablaze"))
+					E.Cast(Etarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
-		var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-		if(PriorSpell.W != SelectedPriorSpell || Wtarget.HasBuff("brandablaze"))
-		AIO_Func.CCast(W,Wtarget);
+				var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+				if(PriorSpell.W != SelectedPriorSpell || Wtarget.HasBuff("brandablaze"))
+					AIO_Func.CCast(W,Wtarget);
 
             }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-		var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
+				var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
 			
-			if(Rtarget.Health + Rtarget.HPRegenRate <= R.GetDamage(Rtarget)*2)
-               { 
-				if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
-            	R.Cast(Rtarget);
-				}
+				if(Rtarget.Health + Rtarget.HPRegenRate <= R.GetDamage(Rtarget)*2)
+					{ 
+						if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
+						R.Cast(Rtarget);
+					}
             }
         }
 
@@ -263,20 +263,20 @@ namespace ALL_In_One.champions
 		
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-		var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                CastQ(Qtarget);
+				var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+                AIO_Func.LCast(Q,Qtarget,QD,0);
             }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
-		var Etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed*E.Delay, TargetSelector.DamageType.Magical);
+				var Etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed*E.Delay, TargetSelector.DamageType.Magical);
                 E.Cast(Etarget);
             }
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
-			var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-			AIO_Func.CCast(W,Wtarget);
+				var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+				AIO_Func.CCast(W,Wtarget);
             }
         }
 
@@ -291,24 +291,13 @@ namespace ALL_In_One.champions
                 return;
 
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
-            {
-		var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / Q.Speed), (int)(Q.Delay * 1000 + Game.Ping / 2)) > 0);			
-                if (_m != null)
-                    CastQ(_m);
-            }
+				AIO_Func.LH(Q);
 
-            if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
-            {
-                if (Minions.Any(x => x.IsValidTarget(W.Range)))
-                    CastW(Minions[0]);
-            }
+            if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady() && Minions.Any(x => x.IsValidTarget(W.Range)))
+				AIO_Func.CCast(W,Minions[0]);
 			
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
-            {
-		var _m = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.E))));			
-                if (_m != null)
-                    E.Cast(_m);
-            }
+				AIO_Func.LH(E);
 		}
 
         static void Jungleclear()
@@ -324,13 +313,13 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
                 if (Q.CanCast(Mobs.FirstOrDefault()))
-                    CastQ(Mobs.FirstOrDefault());
+                    AIO_Func.LCast(Q,Mobs.FirstOrDefault(),QD,0);
             }
 
             if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady())
             {
                 if (Mobs.Any(x=>x.IsValidTarget(W.Range)))
-                    CastW(Mobs[0]);
+					AIO_Func.CCast(W,Mobs[0]);
             }
 			
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
@@ -346,7 +335,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
-                    CastQ(target);
+                    AIO_Func.LCast(Q,target,QD,0);
             }
         }
 		
@@ -355,7 +344,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (W.CanCast(target) && AIO_Func.isKillable(target, W))
-                    CastW(target);
+                    AIO_Func.CCast(W,target);
             }
         }
 		
@@ -380,41 +369,6 @@ namespace ALL_In_One.champions
 			W.Cast(Wtarget, false, true);
             }
 		}
-		
-	static void CastQ(Obj_AI_Hero target)
-	{
-		if(target == null)
-		return;
-            var qpred = Q.GetPrediction(target, true);
-            var qcollision = Q.GetCollision(Player.ServerPosition.To2D(), new List<Vector2> { qpred.CastPosition.To2D() });
-            var minioncol = qcollision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
-			if (target.IsValidTarget(Q.Range - target.MoveSpeed*(Q.Delay +Player.Distance(target.Position)/Q.Speed) + Menu.Item("Misc.Qtg").GetValue<Slider>().Value) && minioncol <= 0 && qpred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-            {
-        	 Q.Cast(qpred.CastPosition);
-            }
-	}
-
-	static void CastQ(Obj_AI_Base target)
-	{
-		if(target == null)
-		return;
-            var prediction = Q.GetPrediction(target, true);
-            var minions = prediction.CollisionObjects.Count(thing => thing.IsMinion);
-
-            if (minions <= 0 && prediction.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-			{
-            	Q.Cast(prediction.CastPosition);
-			}
-	}
-	
-	static void CastW(Obj_AI_Base target)
-	{
-            var wpred = W.GetPrediction(target, true);
-			if (target.IsValidTarget(W.Range) && wpred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-            {
-        	 W.Cast(wpred.CastPosition);
-            }
-	}
 		
         static float getComboDamage(Obj_AI_Base enemy)
         {

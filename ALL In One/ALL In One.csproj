@@ -110,7 +110,7 @@
     <Compile Include="champions\_Hecarim.cs" />
     <Compile Include="champions\_Heimerdinger.cs" />
     <Compile Include="champions\_Irelia.cs" />
-    <Compile Include="champions\_Janna.cs" />
+    <Compile Include="champions\Janna.cs" />
     <Compile Include="champions\_JarvanIV.cs" />
     <Compile Include="champions\Jax.cs" />
     <Compile Include="champions\_Jayce.cs" />
@@ -137,7 +137,7 @@
     <Compile Include="champions\MissFortune.cs" />
     <Compile Include="champions\_Mordekaiser.cs" />
     <Compile Include="champions\_Morgana.cs" />
-    <Compile Include="champions\_Nami.cs" />
+    <Compile Include="champions\Nami.cs" />
     <Compile Include="champions\_Nasus.cs" />
     <Compile Include="champions\Nautilus.cs" />
     <Compile Include="champions\_Nidalee.cs" />
@@ -183,7 +183,7 @@
     <Compile Include="champions\Veigar.cs" />
     <Compile Include="champions\_VelKoz.cs" />
     <Compile Include="champions\Vi.cs" />
-    <Compile Include="champions\_Viktor.cs" />
+    <Compile Include="champions\Viktor.cs" />
     <Compile Include="champions\Vladimir.cs" />
     <Compile Include="champions\_Volibear.cs" />
     <Compile Include="champions\_Warwick.cs" />

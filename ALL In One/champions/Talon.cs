@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class Talon //RL144
+    class Talon // By RL244
     {
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} //메뉴얼 오브워커 넣기는 했지만. 음.. 
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
@@ -277,24 +277,9 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-			{
-                damage += Q.GetDamage(enemy);
-                damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
-			}
+                damage += Q.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
 			
-            if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
-			{
-			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
-			damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
-			}
-			
-            if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
-			{
-			damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
-			damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
-			}
-
-            if (W.IsReady())
+			if (W.IsReady())
                 damage += W.GetDamage(enemy);
 
             if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
@@ -304,7 +289,6 @@ namespace ALL_In_One.champions
                 damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
 
             if (E.IsReady())
-
                 damage = damage *(1 + 0.03f * E.Level);
 				
             return damage;

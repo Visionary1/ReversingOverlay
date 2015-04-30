@@ -19,12 +19,12 @@ namespace ALL_In_One.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 625f, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 880f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 600f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R);
 
-            Q.SetTargetted(0.25f, 2000f);
+            Q.SetSkillshot(0.25f, 50f, 1700f, true, SkillshotType.SkillshotLine);
             W.SetTargetted(0.25f, float.MaxValue);
             E.SetTargetted(0.25f, 2000f);
 
@@ -48,6 +48,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
+            AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addUseKillsteal();
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
@@ -72,10 +73,17 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(10))
             {
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                {
                     Combo();
+                    Orbwalker.SetAttack(!W.IsReady());
+                }
+                else
+                    Orbwalker.SetAttack(true);
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                {
                     Harass();
+                }
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 {
@@ -87,7 +95,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
 
-            Orbwalker.SetAttack(!W.IsReady());
+            Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -131,7 +139,10 @@ namespace ALL_In_One.champions
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-                Q.CastOnBestTarget();
+                var qTarget = TargetSelector.GetTargetNoCollision(Q);
+
+                if (Q.CanCast(qTarget))
+                    Q.Cast(qTarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
@@ -158,7 +169,10 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-                Q.CastOnBestTarget();
+                var qTarget = TargetSelector.GetTargetNoCollision(Q);
+
+                if (Q.CanCast(qTarget))
+                    Q.Cast(qTarget);
             }
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
@@ -184,7 +198,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
-                var qTarget = Minions.Where(x => Q.CanCast(x) && Q.IsKillable(x)).OrderByDescending(x => x.Health).FirstOrDefault();
+                var qTarget = Minions.Where(x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HitChance.Medium && Q.IsKillable(x)).OrderByDescending(x => x.Health).FirstOrDefault();
 
                 if (Q.CanCast(qTarget))
                     Q.Cast(qTarget);
@@ -217,8 +231,10 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
-                if (Q.CanCast(Mobs[0]))
-                    Q.Cast(Mobs[0]);
+                var qTarget = Mobs.FirstOrDefault(x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HitChance.Medium);
+
+                if (Q.CanCast(qTarget))
+                    Q.Cast(qTarget);
             }
 
             if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady())

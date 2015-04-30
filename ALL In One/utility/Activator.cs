@@ -41,7 +41,7 @@ namespace ALL_In_One.utility
             Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.AIO", "Use SpellWeaving AACancel")).SetValue(false);
             Menu.SubMenu("Killsteal").AddItem(new MenuItem("Killsteal.BS", "Blue Smite")).SetValue(true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.BF", "Debug Mode-Check Buff(In Combo mode)")).SetValue(false);
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Cb", "On Combo")).SetValue(true);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Cb", "On Combo")).SetValue(true); // Use Item on X mode
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Hr", "On Harass")).SetValue(true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Lc", "On LaneClear")).SetValue(false);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Jc", "On JungleClear")).SetValue(true);
@@ -72,7 +72,7 @@ namespace ALL_In_One.utility
 
         static void additems()
         {
-            BeforeAttack.additem("Youmuu", (int)ItemId.Youmuus_Ghostblade, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player));
+            BeforeAttack.additem("Youmuu", (int)ItemId.Youmuus_Ghostblade, Orbwalking.GetRealAutoAttackRange(Player));
             AfterAttack.additem("Tiamat", (int)ItemId.Tiamat_Melee_Only, 250f);
             AfterAttack.additem("Hydra", (int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
             AfterAttack.additem("Bilgewater", (int)ItemId.Bilgewater_Cutlass, 450f, true);
@@ -140,7 +140,7 @@ namespace ALL_In_One.utility
         {
             return (from potion in potions
                     where potion.TypeList.Contains(type)
-                    from item in ObjectManager.Player.InventoryItems
+                    from item in Player.InventoryItems
                     where item.Id == potion.ItemId && item.Charges >= potion.MinCharges
                     select item).FirstOrDefault();
         }
@@ -149,7 +149,7 @@ namespace ALL_In_One.utility
         {
             return (from potion in potions
                     where potion.TypeList.Contains(type)
-                    from buff in ObjectManager.Player.Buffs
+                    from buff in Player.Buffs
                     where buff.Name == potion.Name && buff.IsActive
                     select potion).Any();
         }
@@ -168,30 +168,30 @@ namespace ALL_In_One.utility
 
             internal static void Game_OnUpdate(EventArgs args)
             {
-                if (ObjectManager.Player.IsDead)
+                if (Player.IsDead)
                     return;
 
-                if(!ObjectManager.Player.IsRecalling() && !ObjectManager.Player.InFountain())
+                if(!Player.IsRecalling() && !Player.InFountain())
                 {
                     if (Menu.Item("AutoPotion.Use Health Potion").GetValue<bool>())
                     {
-                        if (AIO_Func.getHealthPercent(ObjectManager.Player) <= Menu.Item("AutoPotion.ifHealthPercent").GetValue<Slider>().Value)
+                        if (AIO_Func.getHealthPercent(Player) <= Menu.Item("AutoPotion.ifHealthPercent").GetValue<Slider>().Value)
                         {
                             var healthSlot = GetPotionSlot(PotionType.Health);
 
                             if (!IsBuffActive(PotionType.Health) && healthSlot != null)
-                                ObjectManager.Player.Spellbook.CastSpell(healthSlot.SpellSlot);
+                                Player.Spellbook.CastSpell(healthSlot.SpellSlot);
                         }
                     }
 
                     if (Menu.Item("AutoPotion.Use Mana Potion").GetValue<bool>())
                     {
-                        if (AIO_Func.getManaPercent(ObjectManager.Player) <= Menu.Item("AutoPotion.ifManaPercent").GetValue<Slider>().Value)
+                        if (AIO_Func.getManaPercent(Player) <= Menu.Item("AutoPotion.ifManaPercent").GetValue<Slider>().Value)
                         {
                             var manaSlot = GetPotionSlot(PotionType.Mana);
 
                             if (!IsBuffActive(PotionType.Mana) && manaSlot != null)
-                                ObjectManager.Player.Spellbook.CastSpell(manaSlot.SpellSlot);
+                                Player.Spellbook.CastSpell(manaSlot.SpellSlot);
                         }
                     }
                 }
@@ -201,7 +201,7 @@ namespace ALL_In_One.utility
 					var Target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
 					if(Target == null)
 					return;
-					foreach (var buff in ObjectManager.Player.Buffs)
+					foreach (var buff in Player.Buffs)
 					{
 						AIO_Func.sendDebugMsg("PLAYER : "+buff.Name);
 					}
@@ -218,14 +218,14 @@ namespace ALL_In_One.utility
 		{
 			internal static Spell RS;
 			internal static SpellSlot smiteSlot = SpellSlot.Unknown;
-			internal static float smrange = 700f;
+			internal static float smrange = 575f; //500f + player.width + target width. 대충 575f.. 정글몹에겐 700f 정도
             internal static void Game_OnUpdate(EventArgs args)
             {
 				setRSmiteSlot();
 			}
 			internal static void setRSmiteSlot()
 			{
-				foreach (var spell in ObjectManager.Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteduel", StringComparison.CurrentCultureIgnoreCase))) // Red Smite
+				foreach (var spell in Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteduel", StringComparison.CurrentCultureIgnoreCase))) // Red Smite
 				{
 					smiteSlot = spell.Slot;
 					RS = new Spell(smiteSlot, smrange);
@@ -253,7 +253,7 @@ namespace ALL_In_One.utility
 		{
 			internal static Spell BS;
 			internal static SpellSlot smiteSlot = SpellSlot.Unknown;
-			internal static float smrange = 700f;
+			internal static float smrange = 575f; //500f + player.width + target width. 대충 575f.. 정글몹에겐 700f 정도
             internal static void Game_OnUpdate(EventArgs args)
             {
 				setBSmiteSlot();
@@ -285,7 +285,7 @@ namespace ALL_In_One.utility
 			
 			internal static void setBSmiteSlot()
 			{
-				foreach (var spell in ObjectManager.Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteplayerganker", StringComparison.CurrentCultureIgnoreCase))) // Red Smite
+				foreach (var spell in Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteplayerganker", StringComparison.CurrentCultureIgnoreCase))) // Red Smite
 				{
 					smiteSlot = spell.Slot;
 					BS = new Spell(smiteSlot, smrange);
@@ -328,7 +328,7 @@ namespace ALL_In_One.utility
             internal static List<item> itemsList = new List<item>();
             internal static bool ALLCancelItemsAreCasted { get { return Menu.Item("AfterAttack.SF").GetValue<bool>() || !utility.Activator.AfterAttack.itemsList.Any(x => Items.CanUseItem((int)x.Id) && !x.isTargeted && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()); } }
 			internal static bool AIO { get { return Menu.Item("AfterAttack.AIO").GetValue<bool>(); } }
-            internal static bool SkillCasted = true; // 기본값이 false였으나 true로 바꾼 이유는. 아직 SF를 설정하지 않은 챔프가 해당 기능 켤 경우 아이템을 안쓰기때문. 어짜피 SF 쓰는 챔프는 AASkill(spell)만 게임 온 업데이트에 넣으면 알아서 true false 바꿔줌.
+            internal static bool SkillCasted = true; // 기본값이 false였으나 true로 바꾼 이유는. 아직 SF를 설정하지 않은 챔프가 해당 기능 켤 경우 아이템을 안쓰기때문. 어짜피 SF 쓰는 챔프는 AASkill(spell)만 게임 온 업데이트에 넣으면 알아서 true false 바꿔줌. 마이를 제외한 대부분 챔프는 스킬을 먼저 쓰는게 더 유리함 참고.
             internal static void additem(string itemName, int itemid, float itemRange, bool itemisTargeted = false)
             {
                 itemsList.Add(new item { Name = itemName, Id = itemid, Range = itemRange, isTargeted = itemisTargeted });
@@ -376,7 +376,7 @@ namespace ALL_In_One.utility
                 if (itemone != null)
                 {
 					var Minions = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Enemy);
-					var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+					var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral);
 					if((Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
 					Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && !AIO ||
 					Menu.Item("Misc.Jc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count >= 1 ||
@@ -402,6 +402,19 @@ namespace ALL_In_One.utility
 					}
 				}
             }
-        }
-    }
+		}
+		
+		internal static float getItemDamage(Obj_AI_Base enemy)
+		{
+			float damage = 0;
+				
+			if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
+				damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat) + (float)Player.GetAutoAttackDamage(enemy, true); //평-티아멧-평
+			
+			if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
+				damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra) + (float)Player.GetAutoAttackDamage(enemy, true); //평-히드라-평
+
+			return damage;
+		}
+	}
 }

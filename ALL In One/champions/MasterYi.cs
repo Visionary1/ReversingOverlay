@@ -241,18 +241,6 @@ namespace ALL_In_One.champions
 		    if (W.IsReady())
                 damage += (float)Player.GetAutoAttackDamage(enemy, false);
 				
-		    if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
-		    {
-			    damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
-			    damage += (float)Player.GetAutoAttackDamage(enemy, false);
-		    }
-		
-		    if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
-		    {
-			    damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
-			    damage += (float)Player.GetAutoAttackDamage(enemy, false);
-		    }
-
 		    if(!Player.IsWindingUp)
 			    damage += (float)Player.GetAutoAttackDamage(enemy, true);
 				

@@ -24,7 +24,7 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E, 550f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R);
 
-            Q.SetSkillshot(1.0f, 150f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(1.0f, 160f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             W.SetSkillshot(0.6f, 1f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
             AIO_Menu.Champion.Combo.addUseQ();
@@ -65,7 +65,7 @@ namespace ALL_In_One.champions
                 return;
 
             Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
-
+            
             if (Orbwalking.CanMove(10))
             {
                 switch (Orbwalker.ActiveMode)
@@ -118,14 +118,10 @@ namespace ALL_In_One.champions
         static void Combo()
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
-            {
                 Q.CastOnBestTarget(0f, false, true);
-            }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-            {
                 W.CastOnBestTarget();
-            }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
@@ -150,14 +146,10 @@ namespace ALL_In_One.champions
             }
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
-            {
                 Q.CastOnBestTarget(0f, false, true);
-            }
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
-            {
                 W.CastOnBestTarget();
-            }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {

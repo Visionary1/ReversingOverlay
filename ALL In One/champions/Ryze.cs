@@ -19,12 +19,12 @@ namespace ALL_In_One.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 625f, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 900f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 600f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R);
 
-            Q.SetTargetted(0.25f, 2000f);
+            Q.SetSkillshot(0.25f, 50f, 1700f, true, SkillshotType.SkillshotLine);
             W.SetTargetted(0.25f, float.MaxValue);
             E.SetTargetted(0.25f, 2000f);
 
@@ -48,6 +48,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
+            AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addUseKillsteal();
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
@@ -72,10 +73,17 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(10))
             {
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                {
                     Combo();
+                    Orbwalker.SetAttack(!W.IsReady());
+                }
+                else
+                    Orbwalker.SetAttack(true);
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                {
                     Harass();
+                }
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 {
@@ -87,7 +95,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
 
-            Orbwalker.SetAttack(!W.IsReady());
+            Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -146,7 +154,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-                if(!Q.IsReady() && !E.IsReady() && AIO_Func.getHealthPercent(Player) <= 98)
+                if(!Q.IsReady() && !E.IsReady() && AIO_Func.getHealthPercent(Player) <= 98 && HeroManager.Enemies.Any(x=>x.IsValidTarget(800f)))
                     R.Cast();
             }
         }

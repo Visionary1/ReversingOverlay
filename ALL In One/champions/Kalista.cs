@@ -89,6 +89,14 @@ namespace ALL_In_One.champions
             if (Menu.Item("mobsteal", true).GetValue<bool>() && E.IsReady())
                 Mobsteal(); 
             #endregion
+
+            #region E harass with lasthit for anytime
+            var Minion = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy).Where(x => x.Health <= E.GetDamage(x)).OrderBy(x => x.Health).FirstOrDefault();
+            var Target = HeroManager.Enemies.Where(x => E.CanCast(x) && E.GetDamage(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)).OrderByDescending(x => E.GetDamage(x)).FirstOrDefault();
+
+            if (E.CanCast(Minion) && E.CanCast(Target))
+                E.Cast();
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -147,12 +155,11 @@ namespace ALL_In_One.champions
                     Q.Cast(Qtarget);
             }
 
-            if (Menu.Item("comboUseE", true).GetValue<bool>() && E.IsReady())
+            if (Menu.Item("comboUseE", true).GetValue<Boolean>() && E.IsReady())
             {
-                var Minion = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy).Where(x => x.Health <= E.GetDamage(x)).OrderBy(x => x.Health).FirstOrDefault();
-                var Target = HeroManager.Enemies.Where(x => E.CanCast(x) && E.GetDamage(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)).OrderByDescending(x => E.GetDamage(x)).FirstOrDefault();
+                var eTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && E.GetDamage(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)).OrderByDescending(x => E.GetDamage(x)).FirstOrDefault();
 
-                if (Target.Health <= E.GetDamage(Target) || (E.CanCast(Minion) && E.CanCast(Target)))
+                if (eTarget != null && eTarget.Health <= E.GetDamage(eTarget))
                     E.Cast();
             }
         }

@@ -660,7 +660,7 @@ namespace ALL_In_One
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(drawDamageMenu);
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(drawDamageFill);
 
-                    DamageIndicator.DamageToUnit = damage + ALL_In_One.utility.Activator.getItemDamage;
+                    DamageIndicator.DamageToUnit = damage + utility.Activator.getItemDamage;
                     DamageIndicator.Enabled = drawDamageMenu.GetValue<bool>();
                     DamageIndicator.Fill = drawDamageFill.GetValue<Circle>().Active;
                     DamageIndicator.FillColor = drawDamageFill.GetValue<Circle>().Color;

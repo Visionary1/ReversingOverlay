@@ -124,6 +124,9 @@ namespace ALL_In_One
                 case "Nami"://Added by xcsoft
                     champions.Nami.Load();
                     break;
+                case "Sion"://Added by xcsoft
+                    champions.Sion.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

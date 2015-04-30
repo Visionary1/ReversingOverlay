@@ -28,7 +28,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
-            //AIO_Menu.Champion.Combo.addUseR();
+            AIO_Menu.Champion.Combo.addUseR(false);
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
@@ -135,8 +135,8 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
                 W.CastOnBestTarget();
 
-            //if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
-            //{ }
+            if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
+                R.CastIfWillHit(R.GetTarget(), 3);
         }
 
         static void Harass()

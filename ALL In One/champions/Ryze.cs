@@ -19,7 +19,7 @@ namespace ALL_In_One.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 900f, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 880f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 600f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R);
@@ -198,7 +198,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
-                var qTarget = Minions.Where(x => Q.CanCast(x) && Q.IsKillable(x)).OrderByDescending(x => x.Health).FirstOrDefault();
+                var qTarget = Minions.Where(x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HitChance.Medium && Q.IsKillable(x)).OrderByDescending(x => x.Health).FirstOrDefault();
 
                 if (Q.CanCast(qTarget))
                     Q.Cast(qTarget);
@@ -231,8 +231,10 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
-                if (Q.CanCast(Mobs[0]))
-                    Q.Cast(Mobs[0]);
+                var qTarget = Mobs.FirstOrDefault(x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HitChance.Medium);
+
+                if (Q.CanCast(qTarget))
+                    Q.Cast(qTarget);
             }
 
             if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady())

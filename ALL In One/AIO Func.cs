@@ -11,6 +11,7 @@ namespace ALL_In_One
     {
         internal static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static float SWDuration { get { var buff = AIO_Func.getBuffInstance(ObjectManager.Player, "MasterySpellWeaving"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static Obj_AI_Hero Player { get { return ObjectManager.Player; } } // Player 많이 쓰는데 괜히 ObjectManager.Player라고 하는거 너무길어요~~.
 
         internal static float getHealthPercent(Obj_AI_Base unit)
         {
@@ -118,10 +119,10 @@ namespace ALL_In_One
 				if(spell != null && target !=null)
 				{
 					var pred = spell.GetPrediction(target, true);
-					var collision = spell.GetCollision(ObjectManager.Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
+					var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
 					var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
 
-					if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + ObjectManager.Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+					if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
 					{
 						spell.Cast(pred.CastPosition);
 					}
@@ -137,7 +138,7 @@ namespace ALL_In_One
 			if(spell == null)
 			return;
 
-				var _m = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => isKillable(m,spell,0) && HealthPrediction.GetHealthPrediction(m, (int)(ObjectManager.Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
+				var _m = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => isKillable(m,spell,0) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
 				if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
                 LCast(spell,_m,50f,ALPHA);
 				else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
@@ -157,7 +158,7 @@ namespace ALL_In_One
 		
 		internal static bool AfterAttack()
 		{
-			return SWDuration > 4.85 && utility.Activator.AfterAttack.AIO;
+			return SWDuration > 4.95 && utility.Activator.AfterAttack.AIO;
 		}
 		
 		internal static void AASkill(Spell spell)
@@ -170,9 +171,10 @@ namespace ALL_In_One
 		
 		internal static void AALcJc(Spell spell) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
 		{
-				var Minions = MinionManager.GetMinions(ObjectManager.Player.AttackRange, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
-				var Mobs = MinionManager.GetMinions(ObjectManager.Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-				if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>()) && getManaPercent(ObjectManager.Player) > AIO_Menu.Champion.Laneclear.IfMana)
+				var Minions = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
+				var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+				if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				&& spell.IsReady() && getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana)
 				{
 				if (Minions.Count > 0)
 					{
@@ -182,7 +184,8 @@ namespace ALL_In_One
 					spell.Cast();
 					}
 				}
-				if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>()) && getManaPercent(ObjectManager.Player) > AIO_Menu.Champion.Jungleclear.IfMana)
+				if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				&& spell.IsReady() && getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana)
 				{
 				if (Mobs.Count > 0)
 					{
@@ -194,6 +197,44 @@ namespace ALL_In_One
 				}
 		}
 		
+		internal static void AACb(Spell spell, float ALPHA = float.MaxValue) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
+		{
+			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //
+			
+			if(target == null)
+			return;
+			
+			if((Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
+			&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
+			{
+				if(!spell.IsSkillshot)
+				spell.Cast(target);
+				else if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
+                LCast(spell,target,50f,ALPHA);
+				else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
+				CCast(spell,target);
+				else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+				spell.Cast(target);
+				else
+				spell.Cast();
+			}
+			
+			if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrUse" + spell.Slot.ToString(), true).GetValue<bool>())
+			&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana)
+			{
+				if(!spell.IsSkillshot)
+				spell.Cast(target);
+				else if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
+                LCast(spell,target,50f,ALPHA);
+				else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
+				CCast(spell,target);
+				else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+				spell.Cast(target);
+				else
+				spell.Cast();
+			}
+		}
+		
 		internal static List<Obj_AI_Hero> GetEnemyList()// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌.
 		{
 			return ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsValid && !x.IsDead && !x.IsInvulnerable).ToList();
@@ -201,7 +242,7 @@ namespace ALL_In_One
 		
 		internal static int EnemyCount(float range, float min = 0, float max = 100)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
 		{
-			return GetEnemyList().Where(x => x.Distance(ObjectManager.Player.ServerPosition) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
+			return GetEnemyList().Where(x => x.Distance(Player.ServerPosition) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
 		}
 		
 		internal static int ECTarget(Obj_AI_Hero target, float range, float min = 0, float max = 100)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
@@ -219,7 +260,7 @@ namespace ALL_In_One
                 {
                     var pred = Prediction.GetPrediction(enemy, delay);
 
-                    if (ObjectManager.Player.ServerPosition.Distance(pred.UnitPosition) <= range)
+                    if (Player.ServerPosition.Distance(pred.UnitPosition) <= range)
                         hitcount++;
                 }
 

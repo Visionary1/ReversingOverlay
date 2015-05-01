@@ -155,9 +155,7 @@ namespace ALL_In_One.champions
                 return;
 				
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-			{
 			AIO_Func.AALcJc(Q);
-			}
 			
 			if(!utility.Activator.AfterAttack.AIO)
 			AA();
@@ -165,16 +163,8 @@ namespace ALL_In_One.champions
 		
 		static void AA()
 		{
-				var Target = TargetSelector.GetTarget(Player.AttackRange + 50, Q.DamageType);
-				if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseW ||
-				Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana)
-				&& W.IsReady())
-				W.Cast();
-				
-				if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseQ ||
-				Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana)
-				&& Q.IsReady())
-                AIO_Func.LCast(Q,Target,QD,0);
+			AIO_Func.AACb(W);
+			AIO_Func.AACb(Q,QD,0f);
 		}
 		
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)

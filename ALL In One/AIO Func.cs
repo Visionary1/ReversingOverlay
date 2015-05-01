@@ -169,8 +169,8 @@ namespace ALL_In_One
 			utility.Activator.AfterAttack.SkillCasted = true;
 		}
 		
-		internal static void AALcJc(Spell spell) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
-		{
+		internal static void AALcJc(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
+		{// 아주 편하게 평캔 Lc, Jc를 구현할수 있습니다(그것도 분리해서!!). 그냥 AIO_Func.AALcJc(Q); 이렇게 쓰세요. 선형 스킬일 경우 세부 설정을 원할 경우 AIO_Func.AALcJc(E,ED,0f); 이런식으로 쓰세요.
 				var Minions = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
 				var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 				if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
@@ -179,6 +179,12 @@ namespace ALL_In_One
 				if (Minions.Count > 0)
 					{
 					if(!spell.IsSkillshot)
+					spell.Cast(Minions[0]);
+					else if(spell.Type == SkillshotType.SkillshotLine)
+					LCast(spell,Minions[0],ExtraTargetDistance,ALPHA);
+					else if(spell.Type == SkillshotType.SkillshotCircle)
+					CCast(spell,Minions[0]);
+					else if(spell.Type == SkillshotType.SkillshotCone)
 					spell.Cast(Minions[0]);
 					else
 					spell.Cast();
@@ -191,14 +197,20 @@ namespace ALL_In_One
 					{
 					if(!spell.IsSkillshot)
 					spell.Cast(Mobs[0]);
+					else if(spell.Type == SkillshotType.SkillshotLine)
+					LCast(spell,Mobs[0],ExtraTargetDistance,ALPHA);
+					else if(spell.Type == SkillshotType.SkillshotCircle)
+					CCast(spell,Mobs[0]);
+					else if(spell.Type == SkillshotType.SkillshotCone)
+					spell.Cast(Mobs[0]);
 					else
 					spell.Cast();
 					}
 				}
 		}
 		
-		internal static void AACb(Spell spell, float ALPHA = float.MaxValue) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
-		{
+		internal static void AACb(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
+		{ // 아주 편하게 평캔 Cb, Hr를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
 			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //
 			
 			if(target == null)
@@ -210,7 +222,7 @@ namespace ALL_In_One
 				if(!spell.IsSkillshot)
 				spell.Cast(target);
 				else if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
-                LCast(spell,target,50f,ALPHA);
+                LCast(spell,target,ExtraTargetDistance,ALPHA);
 				else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
 				CCast(spell,target);
 				else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
@@ -225,7 +237,7 @@ namespace ALL_In_One
 				if(!spell.IsSkillshot)
 				spell.Cast(target);
 				else if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
-                LCast(spell,target,50f,ALPHA);
+                LCast(spell,target,ExtraTargetDistance,ALPHA);
 				else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
 				CCast(spell,target);
 				else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬

@@ -58,7 +58,7 @@ namespace ALL_In_One.champions
             
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            //Orbwalking.AfterAttack += Orbwalking_OnAfterAttack; broken
+            Orbwalking.AfterAttack += Orbwalking_OnAfterAttack;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
@@ -88,6 +88,12 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
+				
+			#region AfterAttack
+			AIO_Func.AASkill(W);
+			if(AIO_Func.AfterAttack())
+			AA();
+			#endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -106,27 +112,25 @@ namespace ALL_In_One.champions
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
+		
+		static void AA()
+		{
+			AIO_Func.AACb(W);
+		}
 
         static void Orbwalking_OnAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (!W.IsReady() || !unit.IsMe || !(target.Type == GameObjectType.obj_AI_Hero))
+            var Target = (Obj_AI_Base)target;
+            if (!unit.IsMe || Target == null)
                 return;
+				
+            var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
+            var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
-                return;
-
-
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseW)
-            {
-                W.Cast();
-                Orbwalking.ResetAutoAttackTimer();
-            }
-            else
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseW && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana)
-                {
-                    W.Cast();
-                    Orbwalking.ResetAutoAttackTimer();
-                }
+			if(Minions.Count > 3 || Mobs.Count > 0)
+			AIO_Func.AALcJc(W);
+			if(!utility.Activator.AfterAttack.AIO)
+			AA();
         }
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
@@ -137,8 +141,6 @@ namespace ALL_In_One.champions
             if (sender is Obj_AI_Hero && sender.IsEnemy && args.Target.IsMe && !args.SData.IsAutoAttack() && E.IsReady() && !args.SData.Name.Contains("summoner") && args.SData.Name != "TormentedSoil") 
                 E.Cast();
 
-
-            //xcsoftFunc.sendDebugMsg(args.SData.Name);
         }
         static float getBuffDuration // afterattack tempfix
         {
@@ -173,7 +175,7 @@ namespace ALL_In_One.champions
                     Q.Cast(qTarget);
 
             }
-
+/*
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady()) // afterattack tempfix
             {
                 if (getBuffDuration > 1.95 && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
@@ -181,7 +183,7 @@ namespace ALL_In_One.champions
                     W.Cast();
                     Orbwalking.ResetAutoAttackTimer();
                 }
-            }
+            }*/
         }
 
         static void Harass()
@@ -196,15 +198,6 @@ namespace ALL_In_One.champions
 
                 if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= HitChance.VeryHigh)
                     Q.Cast(qTarget);
-            }
-
-            if (AIO_Menu.Champion.Combo.UseW && W.IsReady()) // afterattack tempfix
-            {
-                if (getBuffDuration > 1.95 && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                {
-                    W.Cast();
-                    Orbwalking.ResetAutoAttackTimer();
-                }
             }
         }
 
@@ -225,13 +218,6 @@ namespace ALL_In_One.champions
                 if (farmloc.MinionsHit >= 3)
                     Q.Cast(farmloc.Position);
             }
-
-            if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
-            {
-                if (Minions.Count >= 4)
-                    W.Cast();
-            }
-
         }
 
         static void Jungleclear()
@@ -252,13 +238,6 @@ namespace ALL_In_One.champions
                 if (Q.CanCast(Mobs.FirstOrDefault()))
                     Q.Cast(Mobs.FirstOrDefault());
             }
-
-            if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady())
-            {
-                if (W.CanCast(Mobs.FirstOrDefault()))
-                    W.Cast(Mobs.FirstOrDefault());
-            }
-
         }
 
         static void Killsteal()
@@ -274,16 +253,16 @@ namespace ALL_In_One.champions
 
         static float getComboDamage(Obj_AI_Base enemy)
         {
-
             float damage = 0;
-
 
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
 
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
-
+                damage += W.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, true);
+				
+            if(!Player.IsWindingUp)
+                damage += (float)Player.GetAutoAttackDamage(enemy, true);
 
             return damage;
         }

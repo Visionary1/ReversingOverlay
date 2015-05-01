@@ -234,7 +234,7 @@ namespace ALL_In_One.champions
 		
         static void Lasthit()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.LastHit.IfMana))
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Lasthit.IfMana))
                 return;
 
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())

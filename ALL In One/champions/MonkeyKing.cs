@@ -125,7 +125,6 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || !target.IsValidTarget())
                 return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
 			AIO_Func.AALcJc(Q); //정글 클리어 or 라인 클리어 Q 사용 설정시 Q로 평캔.
 
 			if(!utility.Activator.AfterAttack.AIO) //무기연성 방식이 아닐 경우.

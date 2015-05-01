@@ -131,11 +131,8 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || (Target == null))
                 return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-			{
 			AIO_Func.AALcJc(Q);
 			AIO_Func.AALcJc(E);
-			}
 			
 			if(!utility.Activator.AfterAttack.AIO)
 			AA();

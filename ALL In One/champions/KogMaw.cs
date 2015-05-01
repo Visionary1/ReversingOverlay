@@ -48,6 +48,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addUseR();
             AIO_Menu.Champion.Harass.addIfMana();
+			
+            AIO_Menu.Champion.Lasthit.addUseQ();
+            AIO_Menu.Champion.Lasthit.addIfMana();
 
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW();
@@ -98,6 +101,9 @@ namespace ALL_In_One.champions
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                     Harass();
+					
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
+                    Lasthit();
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 {
@@ -154,7 +160,6 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || (Target == null))
                 return;
 				
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
 			AIO_Func.AALcJc(Q);
 			
 			if(!utility.Activator.AfterAttack.AIO)
@@ -226,6 +231,15 @@ namespace ALL_In_One.champions
             }
 			
         }
+		
+        static void Lasthit()
+        {
+            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.LastHit.IfMana))
+                return;
+
+            if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
+                AIO_Func.LH(Q,0f);
+		}
 
         static void Laneclear()
         {

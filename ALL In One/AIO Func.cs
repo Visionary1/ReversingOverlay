@@ -216,7 +216,7 @@ namespace ALL_In_One
 		}
 		
 		internal static void AACb(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, string Cost = "Mana") //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
-		{ // 아주 편하게 평캔 Cb, Hr를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
+		{ // 아주 편하게 평캔 Cb, Hrs를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
 			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //
 			
 			if(target == null)
@@ -240,7 +240,7 @@ namespace ALL_In_One
 			}
 			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
 			{
-				if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
 				&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && (getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana || !(Cost == "Mana")))
 				{
 					if(!spell.IsSkillshot)

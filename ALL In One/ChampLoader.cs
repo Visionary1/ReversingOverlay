@@ -127,6 +127,9 @@ namespace ALL_In_One
                 case "Sion"://Added by xcsoft
                     champions.Sion.Load();
                     break;
+                case "MonkeyKing"://Added by xcsoft
+                    champions.MonkeyKing.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

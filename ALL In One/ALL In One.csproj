@@ -187,7 +187,7 @@
     <Compile Include="champions\Vladimir.cs" />
     <Compile Include="champions\_Volibear.cs" />
     <Compile Include="champions\_Warwick.cs" />
-    <Compile Include="champions\_Wukong.cs" />
+    <Compile Include="champions\MonkeyKing.cs" />
     <Compile Include="champions\_Xerath.cs" />
     <Compile Include="champions\XinZhao.cs" />
     <Compile Include="champions\Yasuo.cs" />

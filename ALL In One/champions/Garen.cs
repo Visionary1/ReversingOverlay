@@ -59,6 +59,7 @@ namespace ALL_In_One.champions
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
+            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -87,6 +88,11 @@ namespace ALL_In_One.champions
             if (Menu.Item("miscKs", true).GetValue<bool>())
                 Killsteal();
             #endregion
+			#region AfterAttack
+			AIO_Func.AASkill(Q);
+			if(AIO_Func.AfterAttack())
+			AA();
+			#endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -135,14 +141,26 @@ namespace ALL_In_One.champions
                 W.Cast();
         }
 
+		static void AA()
+		{
+			AIO_Func.AACb(Q,0,0,"NoCost");
+		}
+		
+        static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
+        {
+            var Target = (Obj_AI_Base)target;
+            if (!unit.IsMe || Target == null)
+                return;
+
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+			AIO_Func.AALcJc(Q,0,0,"NoCost");
+
+			if(!utility.Activator.AfterAttack.AIO)
+			AA();
+        }
+		
         static void Combo()
         {
-            if (Menu.Item("CbUseQ", true).GetValue<bool>() && Q.IsReady())
-            {
-                if (HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
-                    Q.Cast();
-            }
-
             if (Menu.Item("CbUseE", true).GetValue<bool>() && E1isReady && !QisOn)
             {
                 if (HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)))
@@ -160,12 +178,6 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
-            if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
-            {
-                if (HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
-                    Q.Cast();
-            }
-
             if (Menu.Item("HrsUseE", true).GetValue<bool>() && E1isReady && !QisOn)
             {
                 if (HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)))
@@ -180,12 +192,6 @@ namespace ALL_In_One.champions
             if (Minions.Count <= 0)
                 return;
 
-            if (Menu.Item("LcUseQ", true).GetValue<bool>() && Q.IsReady())
-            {
-                if (Minions.Any(x => x.IsValidTarget(Q.Range)))
-                    Q.Cast();
-            }
-
             if (Menu.Item("LcUseE", true).GetValue<bool>() && E1isReady)
             {
                 if (Minions.Count(x => x.IsValidTarget(E.Range)) >= 3)
@@ -199,12 +205,6 @@ namespace ALL_In_One.champions
 
             if (Mobs.Count <= 0)
                 return;
-
-            if (Menu.Item("JcUseQ", true).GetValue<bool>() && Q.IsReady())
-            {
-                if (Mobs.Any(x => x.IsValidTarget(Q.Range)))
-                    Q.Cast();
-            }
 
             if (Menu.Item("JcUseE", true).GetValue<bool>() && E1isReady)
             {

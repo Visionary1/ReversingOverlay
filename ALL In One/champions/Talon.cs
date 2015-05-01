@@ -158,20 +158,7 @@ namespace ALL_In_One.champions
 		
 		static void AA() // 챔피언 대상 평캔 ( 빼낸 이유는 AA방식 두개로 할시 두번 적어야 해서 단순화하기 위함.
 		{
-			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //탈론은 타겟이 필요한건 아니지만. Base로 쓰기 위해.
-			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-			{
-				if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-					Q.Cast();
-			}
-				
-			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-			{
-				if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-					Q.Cast();					
-			}
+			AIO_Func.AACb(Q);
 		}
 		
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)

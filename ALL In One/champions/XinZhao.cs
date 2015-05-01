@@ -140,41 +140,13 @@ namespace ALL_In_One.champions
             if (!sender.IsMe || Player.IsDead)
                 return;
 				
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && args.Target.Type != GameObjectType.obj_AI_Minion)
-            {
-                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name
-                    && HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)))
-					{
-						if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-                        W.Cast();
-					}
-            }
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && args.Target.Type != GameObjectType.obj_AI_Minion)
-            {
-                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name
-                    && HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)))
-					{
-						if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
-                        W.Cast();
-					}
-            }
         }
 
 		static void AA()
 		{
-			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-			{
-				if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-					Q.Cast();
-			}
-				
-			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-			{
-				if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-					Q.Cast();					
-			}
+			AIO_Func.AACb(Q);
+			if(!Q.IsReady())
+			AIO_Func.AACb(W);
 		}
 		
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)

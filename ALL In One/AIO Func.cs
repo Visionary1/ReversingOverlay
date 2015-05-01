@@ -169,12 +169,12 @@ namespace ALL_In_One
 			utility.Activator.AfterAttack.SkillCasted = true;
 		}
 		
-		internal static void AALcJc(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
+		internal static void AALcJc(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, string Cost = "Mana") //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
 		{// 아주 편하게 평캔 Lc, Jc를 구현할수 있습니다(그것도 분리해서!!). 그냥 AIO_Func.AALcJc(Q); 이렇게 쓰세요. 선형 스킬일 경우 세부 설정을 원할 경우 AIO_Func.AALcJc(E,ED,0f); 이런식으로 쓰세요.
 				var Minions = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
 				var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 				if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
-				&& spell.IsReady() && getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana)
+				&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana || !(Cost == "Mana")))
 				{
 				if (Minions.Count > 0)
 					{
@@ -191,7 +191,7 @@ namespace ALL_In_One
 					}
 				}
 				if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
-				&& spell.IsReady() && getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana)
+				&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana || !(Cost == "Mana")))
 				{
 				if (Mobs.Count > 0)
 					{
@@ -209,7 +209,7 @@ namespace ALL_In_One
 				}
 		}
 		
-		internal static void AACb(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
+		internal static void AACb(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, string Cost = "Mana") //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
 		{ // 아주 편하게 평캔 Cb, Hr를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
 			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //
 			
@@ -232,7 +232,7 @@ namespace ALL_In_One
 			}
 			
 			if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrUse" + spell.Slot.ToString(), true).GetValue<bool>())
-			&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana)
+			&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && (getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana || !(Cost == "Mana")))
 			{
 				if(!spell.IsSkillshot)
 				spell.Cast(target);

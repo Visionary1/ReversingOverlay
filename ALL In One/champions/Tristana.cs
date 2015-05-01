@@ -31,7 +31,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW(false);
             AIO_Menu.Champion.Combo.addUseE();
-			AIO_Menu.Champion.Combo.addUseR();
+			AIO_Menu.Champion.Combo.addUseR(false);
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW(false);
@@ -144,27 +144,14 @@ namespace ALL_In_One.champions
 		static void AA()
 		{
 			var Target = TargetSelector.GetTarget(Player.AttackRange, E.DamageType);
-			
-			if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseE ||
-			Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseE && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana)
-			&& E.IsReady())
-			{
-				E.Cast(Target);
-			}
-			
+			AIO_Func.AACb(Q);
+			AIO_Func.AACb(E);
 			if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseR ||
 			Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseR && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana)
 			&& R.IsReady() && Target.Health + Target.HPRegenRate <= R.GetDamage(Target)+ (float)Player.GetAutoAttackDamage(Target, true))
-			{
+			{ // 평-R-평 => Kill
 				R.Cast(Target);
 			}
-			
-			if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseQ ||
-			Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseQ && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana)
-			&& Q.IsReady())
-			{
-				Q.Cast();
-			}		
 		}
 	
         static void Combo()

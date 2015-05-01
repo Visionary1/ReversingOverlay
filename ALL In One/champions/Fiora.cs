@@ -169,22 +169,10 @@ namespace ALL_In_One.champions
 
 	static void AA()
 	{
-		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-		{	
-			if (AIO_Menu.Champion.Harass.UseE && E.IsReady()
-				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-			&& utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
-				E.Cast();
-
-		}
+		AIO_Func.AACb(E);
 			
 		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-		{
-			if (AIO_Menu.Champion.Combo.UseE && E.IsReady()
-				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-				&& utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
-				E.Cast();
-				
+		{				
 			foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
 			{
 			if (AIO_Menu.Champion.Combo.UseR && R.IsReady()

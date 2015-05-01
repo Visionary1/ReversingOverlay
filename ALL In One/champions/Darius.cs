@@ -157,28 +157,9 @@ namespace ALL_In_One.champions
 		
 		static void AA() // 챔피언 대상 평캔 ( 빼낸 이유는 AA방식 두개로 할시 두번 적어야 해서 단순화하기 위함.
 		{
-			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //
-			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-			{
-				if (AIO_Menu.Champion.Harass.UseW && W.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-					W.Cast();
-					
-				if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && !W.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)) && AIO_Menu.Champion.Combo.getBoolValue("Q After AA"))
-					Q.Cast(target);
-			}
-				
-			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-			{
-				if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-					W.Cast();					
-					
-				if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && !W.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)) && AIO_Menu.Champion.Combo.getBoolValue("Q After AA"))
-					Q.Cast(target);
-			}
+			AIO_Func.AACb(W);
+			if(!W.IsReady() && AIO_Menu.Champion.Combo.getBoolValue("Q After AA"))
+			AIO_Func.AACb(Q);
 		}
 		
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -188,10 +169,8 @@ namespace ALL_In_One.champions
                 return;
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-			{
-			AIO_Func.AALcJc(Q);
 			AIO_Func.AALcJc(W);
-			}
+			
 			if(!utility.Activator.AfterAttack.AIO)
 			AA();
         }

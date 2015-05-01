@@ -83,7 +83,11 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
 			KillstealR();
             #endregion
-			
+			#region AfterAttack
+			AIO_Func.AASkill(Q);
+			if(AIO_Func.AfterAttack())
+			AA();
+			#endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -116,41 +120,18 @@ namespace ALL_In_One.champions
 
         }
 		
+		static void AA()
+		{
+			AIO_Func.AACb(Q);
+		}
+		
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
-
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-            {
-			var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
-			var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-			if(Minions.Count + Mobs.Count <= 0)
-			return;
-			
-			if (Minions.Count >= 1)
-			AALaneclear();
-			
-			if (Mobs.Count >= 1)
-			AAJungleclear();
-					
-			}
-			
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-            {
-                if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-                    && Q.CanCast(Target))
-                    Q.Cast(Target);
-			}
-				
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-            {
-                if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-                    && Q.CanCast(Target))
-                    Q.Cast(Target);					
-			}
+			if(!utility.Activator.AfterAttack.AIO)
+				AA();
         }
 
         static void Combo()

@@ -98,8 +98,11 @@ namespace ALL_In_One.champions
                 KillstealQ();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
-
-				
+			#region AfterAttack
+			AIO_Func.AASkill(E);
+			if(AIO_Func.AfterAttack())
+			AA();
+			#endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -147,6 +150,11 @@ namespace ALL_In_One.champions
                 R.Cast();
         }
 		
+		static void AA()
+		{
+			AIO_Func.AACb(E);
+		}
+		
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
@@ -154,34 +162,10 @@ namespace ALL_In_One.champions
                 return;
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-            {
-			var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
-			var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+			AIO_Func.AALcJc(E);
 
-			if(Minions.Count + Mobs.Count <= 0)
-			return;
-			
-			if (Minions.Count >= 1)
-			AALaneclear();
-			
-			if (Mobs.Count >= 1)
-			AAJungleclear();
-					
-			}
-			
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-            {
-                if (AIO_Menu.Champion.Harass.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                    E.Cast();
-			}
-				
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-            {
-                if (AIO_Menu.Champion.Combo.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-                    && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                    E.Cast();					
-			}
+			if(!utility.Activator.AfterAttack.AIO)
+			AA();
         }
 
         static void AALaneclear()

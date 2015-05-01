@@ -65,9 +65,6 @@ namespace ALL_In_One.champions
             }
 
             E.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
-
-            if(AIO_Menu.Champion.Misc.getBoolValue("Ultimate Control") && Player.HasBuff("SionR"))
-                Player.IssueOrder(GameObjectOrder.MoveTo, Player.Position.Extend(Game.CursorPos, 100f));
         }
 
         static void Drawing_OnDraw(EventArgs args)

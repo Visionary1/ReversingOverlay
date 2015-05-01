@@ -167,34 +167,6 @@ namespace ALL_In_One.champions
 			AA();
         }
 
-        static void AALaneclear()
-        {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
-                return;
-
-			var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
-
-			if (Minions.Count <= 0)
-                return;
-				
-			if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
-				E.Cast();
-        }
-
-        static void AAJungleclear()
-        {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
-                return;
-
-            var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-            if (Mobs.Count <= 0)
-                return;
-				
-            if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
-                E.Cast();
-        }
-		
         static void Combo()
         {
 

@@ -179,7 +179,7 @@ namespace ALL_In_One
 			var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 			
 			if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
-			&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana || !(Cost == "Mana")))
+			&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && (getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana || !(Cost == "Mana")))
 			{
 				if (Minions.Count > 0)
 				{
@@ -197,7 +197,7 @@ namespace ALL_In_One
 			}
 			
 			if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
-			&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana || !(Cost == "Mana")))
+			&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && (getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana || !(Cost == "Mana")))
 			{
 				if (Mobs.Count > 0)
 				{

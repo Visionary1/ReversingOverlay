@@ -145,6 +145,9 @@ namespace ALL_In_One
                 case "Nasus"://Added by RL244
                     champions.Nasus.Load();
                     break;
+                case "Zed"://Added by xcsoft
+                    champions.Zed.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

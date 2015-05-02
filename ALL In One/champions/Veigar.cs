@@ -250,7 +250,11 @@ namespace ALL_In_One.champions
                 AIO_Func.LH(Q);
 
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady() && Minions.Any(x => x.IsValidTarget(W.Range)))
-				W.Cast(Minions[0], false, true);
+			{
+				var farmloc = W.GetCircularFarmLocation(Minions);
+                if (farmloc.MinionsHit >= 3)
+                    W.Cast(farmloc.Position);
+			}
         }
 
         static void Jungleclear()
@@ -266,7 +270,7 @@ namespace ALL_In_One.champions
                 AIO_Func.LCast(Q,Mobs.FirstOrDefault(),QD,0f);
 
             if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady() && Mobs.Any(x=>x.IsValidTarget(W.Range)))
-				W.Cast(Mobs[0], false, true);
+				AIO_Func.CCast(W,Mobs[0]);
         }
 
         static void KillstealQ()

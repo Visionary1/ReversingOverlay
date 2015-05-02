@@ -130,6 +130,9 @@ namespace ALL_In_One
                 case "MonkeyKing"://Added by xcsoft
                     champions.MonkeyKing.Load();
                     break;
+                case "Evelynn"://Added by RL244
+                    champions.Evelynn.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

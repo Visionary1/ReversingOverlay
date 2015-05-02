@@ -96,7 +96,7 @@
     <Compile Include="champions\_Draven.cs" />
     <Compile Include="champions\_DrMundo.cs" />
     <Compile Include="champions\_Elise.cs" />
-    <Compile Include="champions\_Evelynn.cs" />
+    <Compile Include="champions\Evelynn.cs" />
     <Compile Include="champions\_Ezreal.cs" />
     <Compile Include="champions\_Fiddlesticks.cs" />
     <Compile Include="champions\Fiora.cs" />

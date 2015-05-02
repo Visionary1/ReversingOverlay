@@ -12,6 +12,7 @@ namespace ALL_In_One
         internal static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static float SWDuration { get { var buff = AIO_Func.getBuffInstance(ObjectManager.Player, "MasterySpellWeaving"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } } // Player 많이 쓰는데 괜히 ObjectManager.Player라고 하는거 너무길어요~~.
+
         internal static Orbwalking.Orbwalker Orbwalker;
 		
         internal static float getHealthPercent(Obj_AI_Base unit)
@@ -283,6 +284,21 @@ namespace ALL_In_One
                     var pred = Prediction.GetPrediction(enemy, delay);
 
                     if (Player.ServerPosition.Distance(pred.UnitPosition) <= range)
+                        hitcount++;
+                }
+
+                return hitcount;
+            }
+
+            internal static int HitCount(float delay, float range, SharpDX.Vector3 sourcePosition)
+            {
+                byte hitcount = 0;
+
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(range)))
+                {
+                    var pred = Prediction.GetPrediction(enemy, delay);
+
+                    if (sourcePosition.Distance(pred.UnitPosition) <= range)
                         hitcount++;
                 }
 

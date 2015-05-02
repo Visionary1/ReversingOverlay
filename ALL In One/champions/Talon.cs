@@ -25,7 +25,7 @@ namespace ALL_In_One.champions
             Q = new Spell(SpellSlot.Q);
             W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 500f, TargetSelector.DamageType.Physical);
+            R = new Spell(SpellSlot.R, 500f, TargetSelector.DamageType.Physical) {Delay = 0.25f};
 
             W.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 2000f, false, SkillshotType.SkillshotCone);
             E.SetTargetted(0.25f, float.MaxValue);

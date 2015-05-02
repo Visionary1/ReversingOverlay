@@ -133,6 +133,18 @@ namespace ALL_In_One
                 case "Evelynn"://Added by RL244
                     champions.Evelynn.Load();
                     break;
+                case "Kassadin"://Added by RL244
+                    champions.Kassadin.Load();
+                    break;
+                case "Mordekaiser"://Added by RL244
+                    champions.Mordekaiser.Load();
+                    break;
+                case "Trundle"://Added by RL244
+                    champions.Trundle.Load();
+                    break;
+                case "Nasus"://Added by RL244
+                    champions.Nasus.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

@@ -55,13 +55,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>C:\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -96,7 +96,7 @@
     <Compile Include="champions\_Draven.cs" />
     <Compile Include="champions\_DrMundo.cs" />
     <Compile Include="champions\_Elise.cs" />
-    <Compile Include="champions\_Evelynn.cs" />
+    <Compile Include="champions\Evelynn.cs" />
     <Compile Include="champions\_Ezreal.cs" />
     <Compile Include="champions\_Fiddlesticks.cs" />
     <Compile Include="champions\Fiora.cs" />
@@ -117,7 +117,7 @@
     <Compile Include="champions\_Jinx.cs" />
     <Compile Include="champions\Kalista.cs" />
     <Compile Include="champions\Karma.cs" />
-    <Compile Include="champions\_Kassadin.cs" />
+    <Compile Include="champions\Kassadin.cs" />
     <Compile Include="champions\Katarina.cs" />
     <Compile Include="champions\_Kayle.cs" />
     <Compile Include="champions\_Kennen.cs" />
@@ -135,10 +135,10 @@
     <Compile Include="champions\_Maokai.cs" />
     <Compile Include="champions\MasterYi.cs" />
     <Compile Include="champions\MissFortune.cs" />
-    <Compile Include="champions\_Mordekaiser.cs" />
+    <Compile Include="champions\Mordekaiser.cs" />
     <Compile Include="champions\_Morgana.cs" />
     <Compile Include="champions\Nami.cs" />
-    <Compile Include="champions\_Nasus.cs" />
+    <Compile Include="champions\Nasus.cs" />
     <Compile Include="champions\Nautilus.cs" />
     <Compile Include="champions\_Nidalee.cs" />
     <Compile Include="champions\_Nocturne.cs" />
@@ -160,7 +160,7 @@
     <Compile Include="champions\_Shen.cs" />
     <Compile Include="champions\_Shyvana.cs" />
     <Compile Include="champions\_Singed.cs" />
-    <Compile Include="champions\_Sion.cs" />
+    <Compile Include="champions\Sion.cs" />
     <Compile Include="champions\Sivir.cs" />
     <Compile Include="champions\_Skarner.cs" />
     <Compile Include="champions\_Sona.cs" />
@@ -172,7 +172,7 @@
     <Compile Include="champions\_Teemo.cs" />
     <Compile Include="champions\_Thresh.cs" />
     <Compile Include="champions\Tristana.cs" />
-    <Compile Include="champions\_Trundle.cs" />
+    <Compile Include="champions\Trundle.cs" />
     <Compile Include="champions\_Tryndamere.cs" />
     <Compile Include="champions\_TwistedFate.cs" />
     <Compile Include="champions\_Twitch.cs" />
@@ -187,13 +187,13 @@
     <Compile Include="champions\Vladimir.cs" />
     <Compile Include="champions\_Volibear.cs" />
     <Compile Include="champions\_Warwick.cs" />
-    <Compile Include="champions\_Wukong.cs" />
+    <Compile Include="champions\MonkeyKing.cs" />
     <Compile Include="champions\_Xerath.cs" />
     <Compile Include="champions\XinZhao.cs" />
     <Compile Include="champions\Yasuo.cs" />
     <Compile Include="champions\_Yorick.cs" />
     <Compile Include="champions\_Zac.cs" />
-    <Compile Include="champions\_Zed.cs" />
+    <Compile Include="champions\Zed.cs" />
     <Compile Include="champions\_Ziggs.cs" />
     <Compile Include="champions\_Zilean.cs" />
     <Compile Include="champions\Zyra.cs" />

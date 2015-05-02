@@ -124,6 +124,30 @@ namespace ALL_In_One
                 case "Nami"://Added by xcsoft
                     champions.Nami.Load();
                     break;
+                case "Sion"://Added by xcsoft
+                    champions.Sion.Load();
+                    break;
+                case "MonkeyKing"://Added by xcsoft
+                    champions.MonkeyKing.Load();
+                    break;
+                case "Evelynn"://Added by RL244
+                    champions.Evelynn.Load();
+                    break;
+                case "Kassadin"://Added by RL244
+                    champions.Kassadin.Load();
+                    break;
+                case "Mordekaiser"://Added by RL244
+                    champions.Mordekaiser.Load();
+                    break;
+                case "Trundle"://Added by RL244
+                    champions.Trundle.Load();
+                    break;
+                case "Nasus"://Added by RL244
+                    champions.Nasus.Load();
+                    break;
+                case "Zed"://Added by xcsoft
+                    champions.Zed.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
                     break;

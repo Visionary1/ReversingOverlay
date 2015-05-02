@@ -24,7 +24,7 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E, 600f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R);
 
-            Q.SetSkillshot(0.25f, 50f, 1700f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 50f, 2000f, true, SkillshotType.SkillshotLine);
             W.SetTargetted(0.25f, float.MaxValue);
             E.SetTargetted(0.25f, 2000f);
 

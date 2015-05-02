@@ -20,11 +20,11 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 1150f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 5200f);
+            W = new Spell(SpellSlot.W, 5000f);
             E = new Spell(SpellSlot.E, 1000f, TargetSelector.DamageType.Physical);
-            R = new Spell(SpellSlot.R, 1400f);
+            R = new Spell(SpellSlot.R, 1500f);
 
-            Q.SetSkillshot(0.25f, 40f, 1700f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 40f, 1200f, true, SkillshotType.SkillshotLine);
 
             Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("comboUseQ", "Use Q", true).SetValue(true));
             Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("comboUseE", "Use E", true).SetValue(true));

@@ -150,22 +150,8 @@ namespace ALL_In_One.champions
 
 		static void AA() // 챔피언 대상 평캔 ( 빼낸 이유는 AA방식 두개로 할시 두번 적어야 해서 단순화하기 위함.
 		{
-			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //
-			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-			{
-				if (AIO_Menu.Champion.Harass.UseW && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                Q.Cast(target);
-				if (AIO_Menu.Champion.Harass.UseW && W.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                W.Cast();
-			}
-				
-			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-			{
-				if (AIO_Menu.Champion.Combo.UseW && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                Q.Cast(target);
-				if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                W.Cast();
-			}
+			AIO_Func.AACb(Q);
+			AIO_Func.AACb(W);
 		}
 		
         static void Orbwalking_OnAfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -174,11 +160,8 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || (Target == null))
                 return;
 				
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-			{
 			AIO_Func.AALcJc(Q);
 			AIO_Func.AALcJc(W);
-			}
 			
 			if(!utility.Activator.AfterAttack.AIO)
 			AA();

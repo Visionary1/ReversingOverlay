@@ -169,22 +169,10 @@ namespace ALL_In_One.champions
 
 	static void AA()
 	{
-		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-		{	
-			if (AIO_Menu.Champion.Harass.UseE && E.IsReady()
-				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-			&& utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
-				E.Cast();
-
-		}
+		AIO_Func.AACb(E);
 			
 		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-		{
-			if (AIO_Menu.Champion.Combo.UseE && E.IsReady()
-				&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x))
-				&& utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
-				E.Cast();
-				
+		{				
 			foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
 			{
 			if (AIO_Menu.Champion.Combo.UseR && R.IsReady()
@@ -201,7 +189,6 @@ namespace ALL_In_One.champions
 		if (!unit.IsMe || Target == null)
 			return;
 
-		if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
 			AIO_Func.AALcJc(E);
 		
 		if(!utility.Activator.AfterAttack.AIO)
@@ -270,13 +257,13 @@ namespace ALL_In_One.champions
             if (W.IsReady())
                 damage += W.GetDamage(enemy);
 								
-			if(E.IsReady())
+			if (E.IsReady())
                 damage += (float)Player.GetAutoAttackDamage(enemy, true) * 2;
 				
             if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
                 damage += R.GetDamage(enemy);
 
-            if(!Player.IsWindingUp)
+            if (!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
 				
             return damage;

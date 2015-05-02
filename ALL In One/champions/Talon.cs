@@ -25,7 +25,7 @@ namespace ALL_In_One.champions
             Q = new Spell(SpellSlot.Q);
             W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 500f, TargetSelector.DamageType.Physical);
+            R = new Spell(SpellSlot.R, 500f, TargetSelector.DamageType.Physical) {Delay = 0.25f};
 
             W.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 2000f, false, SkillshotType.SkillshotCone);
             E.SetTargetted(0.25f, float.MaxValue);
@@ -158,20 +158,7 @@ namespace ALL_In_One.champions
 		
 		static void AA() // 챔피언 대상 평캔 ( 빼낸 이유는 AA방식 두개로 할시 두번 적어야 해서 단순화하기 위함.
 		{
-			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //탈론은 타겟이 필요한건 아니지만. Base로 쓰기 위해.
-			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-			{
-				if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-					Q.Cast();
-			}
-				
-			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-			{
-				if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted
-					&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-					Q.Cast();					
-			}
+			AIO_Func.AACb(Q);
 		}
 		
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -180,7 +167,6 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || Target == null)
                 return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
 			AIO_Func.AALcJc(Q);
 			if(!utility.Activator.AfterAttack.AIO)
 			AA();

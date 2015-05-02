@@ -37,6 +37,7 @@ namespace ALL_In_One.champions
             Menu.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("CbUseR", "Use R", true).SetValue(true));
 
             Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsUseQ", "Use Q", true).SetValue(true));
+            Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsUseW", "Use W", true).SetValue(false));
             Menu.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("HrsMana", "if Mana % >", true).SetValue(new Slider(60, 0, 100)));
 
             Menu.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("LcUseQ", "Use Q", true).SetValue(true));
@@ -147,14 +148,8 @@ namespace ALL_In_One.champions
 
 		static void AA()
 		{
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-            {
-                if (Menu.Item("CbUseW", true).GetValue<bool>() && W.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)) && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
-	                W.Cast();
-	
-	            if (Menu.Item("CbUseR", true).GetValue<bool>() && R.IsReady())
-				    R.Cast();
-		    }
+			AIO_Func.AACb(W);
+			AIO_Func.AACb(R);
 		}
 		
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)

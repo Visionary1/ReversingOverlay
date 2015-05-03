@@ -12,8 +12,8 @@ namespace ALL_In_One
         internal static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static float SWDuration { get { var buff = AIO_Func.getBuffInstance(ObjectManager.Player, "MasterySpellWeaving"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } } // Player 많이 쓰는데 괜히 ObjectManager.Player라고 하는거 너무길어요~~.
+        static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } } // 이거 지우면 평캔 관련 다날라갑니다. 절대 지우기 ㄴ
 
-        internal static Orbwalking.Orbwalker Orbwalker;
 		
         internal static float getHealthPercent(Obj_AI_Base unit)
         {
@@ -173,7 +173,7 @@ namespace ALL_In_One
 		
 		internal static void AALcJc(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, string Cost = "Mana") //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
 		{// 아주 편하게 평캔 Lc, Jc를 구현할수 있습니다(그것도 분리해서!!). 그냥 AIO_Func.AALcJc(Q); 이렇게 쓰세요. 선형 스킬일 경우 세부 설정을 원할 경우 AIO_Func.AALcJc(E,ED,0f); 이런식으로 쓰세요.
-            if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
+			if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
 			return;
 			
 			var Minions = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
@@ -184,13 +184,16 @@ namespace ALL_In_One
 			{
 				if (Minions.Count > 0)
 				{
-					if(!spell.IsSkillshot)
-					spell.Cast(Minions[0]);
-					else if(spell.Type == SkillshotType.SkillshotLine)
+					if(spell.IsSkillshot)
+					{
+					if(spell.Type == SkillshotType.SkillshotLine)
 					LCast(spell,Minions[0],ExtraTargetDistance,ALPHA);
 					else if(spell.Type == SkillshotType.SkillshotCircle)
 					CCast(spell,Minions[0]);
 					else if(spell.Type == SkillshotType.SkillshotCone)
+					spell.Cast(Minions[0]);
+					}
+					else if(!spell.IsSkillshot && spell.Speed != null)
 					spell.Cast(Minions[0]);
 					else
 					spell.Cast();
@@ -202,13 +205,16 @@ namespace ALL_In_One
 			{
 				if (Mobs.Count > 0)
 				{
-					if(!spell.IsSkillshot)
-					spell.Cast(Mobs[0]);
-					else if(spell.Type == SkillshotType.SkillshotLine)
+					if(spell.IsSkillshot)
+					{
+					if(spell.Type == SkillshotType.SkillshotLine)
 					LCast(spell,Mobs[0],ExtraTargetDistance,ALPHA);
 					else if(spell.Type == SkillshotType.SkillshotCircle)
 					CCast(spell,Mobs[0]);
 					else if(spell.Type == SkillshotType.SkillshotCone)
+					spell.Cast(Mobs[0]);
+					}
+					else if(!spell.IsSkillshot && spell.Speed != null)
 					spell.Cast(Mobs[0]);
 					else
 					spell.Cast();
@@ -220,20 +226,21 @@ namespace ALL_In_One
 		{ // 아주 편하게 평캔 Cb, Hrs를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
 			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //
 			
-			if(target == null)
-			return;
 			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
 			{
 				if((Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
 				&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
 				{
-					if(!spell.IsSkillshot)
-					spell.Cast(target);
-					else if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
-					LCast(spell,target,ExtraTargetDistance,ALPHA);
-					else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
-					CCast(spell,target);
-					else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+					if(spell.IsSkillshot)
+					{
+						if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
+						LCast(spell,target,ExtraTargetDistance,ALPHA);
+						else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
+						CCast(spell,target);
+						else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+						spell.Cast(target);
+					}
+					else if(!spell.IsSkillshot)
 					spell.Cast(target);
 					else
 					spell.Cast();
@@ -244,13 +251,16 @@ namespace ALL_In_One
 				if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
 				&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && (getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana || !(Cost == "Mana")))
 				{
-					if(!spell.IsSkillshot)
-					spell.Cast(target);
-					else if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
-					LCast(spell,target,ExtraTargetDistance,ALPHA);
-					else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
-					CCast(spell,target);
-					else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+					if(spell.IsSkillshot)
+					{
+						if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
+						LCast(spell,target,ExtraTargetDistance,ALPHA);
+						else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
+						CCast(spell,target);
+						else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+						spell.Cast(target);
+					}
+					else if(!spell.IsSkillshot && spell.Speed != null)
 					spell.Cast(target);
 					else
 					spell.Cast();

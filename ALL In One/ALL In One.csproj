@@ -55,13 +55,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>C:\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>C:\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -121,7 +121,7 @@
     <Compile Include="champions\Katarina.cs" />
     <Compile Include="champions\_Kayle.cs" />
     <Compile Include="champions\_Kennen.cs" />
-    <Compile Include="champions\_KhaZix.cs" />
+    <Compile Include="champions\KhaZix.cs" />
     <Compile Include="champions\KogMaw.cs" />
     <Compile Include="champions\_LeBlanc.cs" />
     <Compile Include="champions\_LeeSin.cs" />
@@ -158,7 +158,7 @@
     <Compile Include="champions\_Sejuani.cs" />
     <Compile Include="champions\_Shaco.cs" />
     <Compile Include="champions\_Shen.cs" />
-    <Compile Include="champions\_Shyvana.cs" />
+    <Compile Include="champions\Shyvana.cs" />
     <Compile Include="champions\_Singed.cs" />
     <Compile Include="champions\Sion.cs" />
     <Compile Include="champions\Sivir.cs" />

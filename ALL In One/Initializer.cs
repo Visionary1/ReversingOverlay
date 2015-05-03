@@ -14,7 +14,7 @@ namespace ALL_In_One
         {
             AIO_Menu.initialize();
 
-            if (!ChampLoader.champSupportedCheck("ALL IN ONE: ", "ALL_In_One.champions."))
+            if (!ChampLoader.champSupportedCheck("[TeamProjects] All In One: ", "ALL_In_One.champions."))
                 return;
 
             AIO_Menu.addSubMenu("Champion", "AIO: " + ObjectManager.Player.ChampionName);

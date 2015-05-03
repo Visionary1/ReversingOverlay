@@ -487,6 +487,11 @@ namespace ALL_In_One
                     return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<bool>();
                 }
 
+                internal static Slider getSliderValue(string DisplayName, bool ChampUniq = true)
+                {
+                    return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<Slider>();
+                }
+
                 internal static StringList getStringListValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<StringList>();

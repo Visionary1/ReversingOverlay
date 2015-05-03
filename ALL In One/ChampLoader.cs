@@ -1,6 +1,7 @@
 ﻿using System;
 
 using LeagueSharp;
+using LSConsole = LeagueSharp.Console.Console;
 
 namespace ALL_In_One
 {
@@ -145,8 +146,11 @@ namespace ALL_In_One
                 case "Nasus"://Added by RL244
                     champions.Nasus.Load();
                     break;
-                case "Zed"://Added by xcsoft
+                case "Zed"://Added by xcsoft (Incomplete)
                     champions.Zed.Load();
+                    break;
+                case "Jinx"://Added by xcsoft
+                    champions.Jinx.Load();
                     break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
@@ -164,7 +168,8 @@ namespace ALL_In_One
             catch
             {
                 AIO_Func.sendDebugMsg(tag + ObjectManager.Player.ChampionName + " Not supported.", false);
-                Game.PrintChat(AIO_Func.colorChat(System.Drawing.Color.SpringGreen, tag) + AIO_Func.colorChat(System.Drawing.Color.DeepPink, ObjectManager.Player.ChampionName) + " Not supported.");
+                //Game.PrintChat(AIO_Func.colorChat(System.Drawing.Color.SpringGreen, tag) + AIO_Func.colorChat(System.Drawing.Color.DeepPink, ObjectManager.Player.ChampionName) + " Not supported.");
+                LSConsole.WriteLine(tag + ObjectManager.Player.ChampionName + " Not supported.");
 
                 AIO_Menu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported", null);
                 return false;

@@ -60,6 +60,9 @@
     <Reference Include="LeagueSharp.Common">
       <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
+    <Reference Include="LeagueSharp.Console">
+      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\LeagueSharp.Console.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
@@ -114,7 +117,7 @@
     <Compile Include="champions\_JarvanIV.cs" />
     <Compile Include="champions\Jax.cs" />
     <Compile Include="champions\_Jayce.cs" />
-    <Compile Include="champions\_Jinx.cs" />
+    <Compile Include="champions\Jinx.cs" />
     <Compile Include="champions\Kalista.cs" />
     <Compile Include="champions\Karma.cs" />
     <Compile Include="champions\Kassadin.cs" />

@@ -7,7 +7,7 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One
 {
-    class AIO_Func
+    static class AIO_Func
     {
         internal static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static float SWDuration { get { var buff = AIO_Func.getBuffInstance(ObjectManager.Player, "MasterySpellWeaving"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
@@ -272,7 +272,38 @@ namespace ALL_In_One
 		{
 			return GetEnemyList().Where(x => x.Distance(target.ServerPosition) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
 		}
-		
+
+        internal static double UnitIsImmobileUntil(Obj_AI_Base unit)
+        {
+            var result =
+                unit.Buffs.Where(
+                    buff =>
+                        buff.IsActive && Game.Time <= buff.EndTime &&
+                        (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun ||
+                         buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
+                    .Aggregate(0d, (current, buff) => Math.Max(current, buff.EndTime));
+            return (result - Game.Time);
+        }
+
+        internal static bool CollisionCheck(Obj_AI_Hero source, Obj_AI_Hero target, float width)
+        {
+            var input = new PredictionInput
+            {
+                Radius = width,
+                Unit = source,
+            };
+
+            input.CollisionObjects[0] = CollisionableObjects.Heroes;
+            input.CollisionObjects[1] = CollisionableObjects.YasuoWall;
+
+            return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Where(x => x.NetworkId != x.NetworkId).Any();
+        }
+
+        internal static int CountEnemyMinionsInRange(this SharpDX.Vector3 point, float range)
+        {
+            return ObjectManager.Get<Obj_AI_Minion>().Count(h => h.IsValidTarget(range, true, point));
+        }
+
         internal class SelfAOE_Prediction
         {
             internal static int HitCount(float delay, float range)

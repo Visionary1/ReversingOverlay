@@ -177,7 +177,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 var eTarget = TargetSelector.GetTarget(E.Range, W.DamageType, true);
-				if(eTarget.Distance(Player.Position) > 600 || eTarget.Distance(Player.Position) <= 600 && !W.IsReady())
+				if(eTarget.Distance(Player.Position) > 600 || eTarget.Distance(Player.Position) >= 200 && eTarget.Distance(Player.Position) <= 600 && !W.IsReady())
                 E.Cast(eTarget);
             }
 			

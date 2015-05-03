@@ -176,8 +176,8 @@ namespace ALL_In_One
 			if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
 			return;
 			
-			var Minions = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
-			var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+			var Minions = MinionManager.GetMinions(Player.AttackRange/2+200f, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
+			var Mobs = MinionManager.GetMinions(Player.AttackRange/2+200f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 			
 			if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
 			&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && (getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana || !(Cost == "Mana")))
@@ -193,7 +193,7 @@ namespace ALL_In_One
 					else if(spell.Type == SkillshotType.SkillshotCone)
 					spell.Cast(Minions[0]);
 					}
-					else if(!spell.IsSkillshot && spell.Speed != null)
+					else if(!spell.IsSkillshot)
 					spell.Cast(Minions[0]);
 					else
 					spell.Cast();
@@ -214,7 +214,7 @@ namespace ALL_In_One
 					else if(spell.Type == SkillshotType.SkillshotCone)
 					spell.Cast(Mobs[0]);
 					}
-					else if(!spell.IsSkillshot && spell.Speed != null)
+					else if(!spell.IsSkillshot)
 					spell.Cast(Mobs[0]);
 					else
 					spell.Cast();
@@ -260,7 +260,7 @@ namespace ALL_In_One
 						else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
 						spell.Cast(target);
 					}
-					else if(!spell.IsSkillshot && spell.Speed != null)
+					else if(!spell.IsSkillshot)
 					spell.Cast(target);
 					else
 					spell.Cast();

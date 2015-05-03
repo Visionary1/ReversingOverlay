@@ -6,7 +6,7 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class _Renekton
+    class Renekton
     {
     }
 }

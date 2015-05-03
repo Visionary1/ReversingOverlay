@@ -124,18 +124,20 @@ namespace ALL_In_One.champions
             if (!sender.IsMe || Player.IsDead)
                 return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && args.Target.Type != GameObjectType.obj_AI_Minion)
+            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+			&& args.Target.Type != GameObjectType.obj_AI_Minion)
             {
                 if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
                 {
-                    if (Menu.Item("CbUseW", true).GetValue<bool>())
+                    if ((Menu.Item("CbUseW", true).GetValue<bool>() || Menu.Item("HrsUseW", true).GetValue<bool>()))
                     {
                         Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
                         Utility.DelayAction.Add(50, Wcancel);
                     }
                 }
 
-                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name)
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo &&
+				args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name)
                 {
                     Orbwalking.ResetAutoAttackTimer();
 

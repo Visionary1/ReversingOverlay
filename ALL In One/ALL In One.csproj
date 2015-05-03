@@ -124,7 +124,7 @@
     <Compile Include="champions\Katarina.cs" />
     <Compile Include="champions\_Kayle.cs" />
     <Compile Include="champions\_Kennen.cs" />
-    <Compile Include="champions\_KhaZix.cs" />
+    <Compile Include="champions\KhaZix.cs" />
     <Compile Include="champions\KogMaw.cs" />
     <Compile Include="champions\_LeBlanc.cs" />
     <Compile Include="champions\_LeeSin.cs" />
@@ -161,7 +161,7 @@
     <Compile Include="champions\_Sejuani.cs" />
     <Compile Include="champions\_Shaco.cs" />
     <Compile Include="champions\_Shen.cs" />
-    <Compile Include="champions\_Shyvana.cs" />
+    <Compile Include="champions\Shyvana.cs" />
     <Compile Include="champions\_Singed.cs" />
     <Compile Include="champions\Sion.cs" />
     <Compile Include="champions\Sivir.cs" />

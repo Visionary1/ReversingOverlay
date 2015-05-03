@@ -67,6 +67,7 @@ namespace ALL_In_One.champions
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
+            Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
         }
 
@@ -129,6 +130,24 @@ namespace ALL_In_One.champions
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
 		
+        static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!sender.IsMe || Player.IsDead)
+                return;
+
+            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed))
+            {
+                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.E).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
+                {
+                    if (AIO_Menu.Champion.Combo.UseQ || AIO_Menu.Champion.Harass.UseQ)
+                    {
+						var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+						AIO_Func.LCast(Q,Qtarget,QD,float.MaxValue);
+                    }
+                }
+            }
+
+        }
 		
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
@@ -171,7 +190,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
 				var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-				if(AIO_Menu.Champion.Harass.UseE && !E.IsReady() || !AIO_Menu.Champion.Harass.UseE)
                 AIO_Func.LCast(Q,Qtarget,QD,float.MaxValue);
             }
 			

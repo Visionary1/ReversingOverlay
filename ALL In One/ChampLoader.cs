@@ -149,6 +149,12 @@ namespace ALL_In_One
                 case "Zed"://Added by xcsoft (Incomplete)
                     champions.Zed.Load();
                     break;
+                case "KhaZix"://Added by RL244
+                    champions.KhaZix.Load();
+                    break;
+                case "Shyvana"://Added by RL244
+                    champions.Shyvana.Load();
+                    break;
                 case "Jinx"://Added by xcsoft
                     champions.Jinx.Load();
                     break;

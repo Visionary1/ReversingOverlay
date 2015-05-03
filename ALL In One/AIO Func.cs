@@ -61,11 +61,8 @@ namespace ALL_In_One
             return target.Health + (target.HPRegenRate/2) <= spell.GetDamage(target, stage);
         }
 
-        internal static void sendDebugMsg(string message, bool printchat = false, string tag = "AIO_DebugMsg: ")
+        internal static void sendDebugMsg(string message, string tag = "[TeamProjects] All In One: ")
         {
-            //if (printchat)
-                //Game.PrintChat(tag + message);
-
             Console.WriteLine(tag + message);
             LSConsole.WriteLine(tag + message);
             
@@ -109,7 +106,7 @@ namespace ALL_In_One
 					}
 				}
 				else
-					sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
+					sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed");
 			}
 			else
 			sendDebugMsg("It is not circular skill. Debug needed");
@@ -133,7 +130,7 @@ namespace ALL_In_One
 					}
 				}
 				else
-					sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
+					sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed");
 			}
 		}
 

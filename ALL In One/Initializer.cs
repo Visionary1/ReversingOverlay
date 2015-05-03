@@ -14,7 +14,7 @@ namespace ALL_In_One
         {
             AIO_Menu.initialize();
 
-            if (!ChampLoader.champSupportedCheck("[TeamProjects] All In One: ", "ALL_In_One.champions."))
+            if (!ChampLoader.champSupportedCheck("ALL_In_One.champions."))
                 return;
 
             AIO_Menu.addSubMenu("Champion", "AIO: " + ObjectManager.Player.ChampionName);
@@ -37,8 +37,7 @@ namespace ALL_In_One
             Drawing.OnDraw += Drawing_OnDraw;
 
             LSConsole.Show();
-            LSConsole.WriteLine("[*] All In One: " + ObjectManager.Player.ChampionName + " Loaded.");
-            //Game.PrintChat(AIO_Func.colorChat(Color.SpringGreen, "[TeamProjects] All In One: ") + AIO_Func.colorChat(Color.DeepPink, ObjectManager.Player.ChampionName) + " Loaded");
+            LSConsole.WriteLine("[TeamProjects] All In One: " + ObjectManager.Player.ChampionName + " Loaded.");
         }
 
         static void Drawing_OnDraw(EventArgs args)

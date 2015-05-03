@@ -159,23 +159,22 @@ namespace ALL_In_One
                     champions.Jinx.Load();
                     break;
                 default:
-                    AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.", true);
+                    AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.");
                     break;
             } 
         }
 
-        internal static bool champSupportedCheck(string tag, string checkNamespace)
+        internal static bool champSupportedCheck(string checkNamespace)
         {
             try
             {
-               AIO_Func.sendDebugMsg(tag + Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " Supported.", false);
+               AIO_Func.sendDebugMsg(Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " Supported.");
                return true;
             }
             catch
             {
-                AIO_Func.sendDebugMsg(tag + ObjectManager.Player.ChampionName + " Not supported.", false);
-                //Game.PrintChat(AIO_Func.colorChat(System.Drawing.Color.SpringGreen, tag) + AIO_Func.colorChat(System.Drawing.Color.DeepPink, ObjectManager.Player.ChampionName) + " Not supported.");
-                LSConsole.WriteLine(tag + ObjectManager.Player.ChampionName + " Not supported.");
+                AIO_Func.sendDebugMsg(ObjectManager.Player.ChampionName + " Not supported.");
+                LSConsole.WriteLine(ObjectManager.Player.ChampionName + " Not supported.");
 
                 AIO_Menu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " Not supported", null);
                 return false;

@@ -113,8 +113,8 @@ namespace ALL_In_One.champions
             var drawR = AIO_Menu.Champion.Drawings.RRange;
             var drawP = AIO_Menu.Champion.Drawings.getCircleValue("Passive Timer");
 
-            if (drawQ.Active && Q.IsReady())
-                Render.Circle.DrawCircle(Player.Position, GetQActiveRange + 30, drawQ.Color);
+            if (drawQ.Active && !QisActive)
+                Render.Circle.DrawCircle(Player.Position, GetQActiveRange, drawQ.Color);
 
             if (drawW.Active && W.IsReady())
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
@@ -134,6 +134,14 @@ namespace ALL_In_One.champions
                     var targetpos = Drawing.WorldToScreen(Player.Position);
                     Drawing.DrawText(targetpos[0] - 10, targetpos[1], drawP.Color, (passive.EndTime - Game.ClockTime).ToString("0.00"));
                 }
+            }
+
+            if(QisActive)
+            {
+                var aaTarget = Orbwalker.GetTarget();
+
+                if (aaTarget != null)
+                    Render.Circle.DrawCircle(aaTarget.Position, 200, Color.Red);
             }
         }
 
@@ -160,7 +168,7 @@ namespace ALL_In_One.champions
                 return;
             }
 
-            if (AIO_Func.SelfAOE_Prediction.HitCount(0.1f, 200, Unit.Position) >= AIO_Menu.Champion.Misc.getSliderValue("Switch to FISHBONES If Hit Enemy Number >=").Value)
+            if (AIO_Func.SelfAOE_Prediction.HitCount(0.25f, 200, Unit.Position) >= AIO_Menu.Champion.Misc.getSliderValue("Switch to FISHBONES If Hit Enemy Number >=").Value)
             {
                 QSwitch(true);
                 return;

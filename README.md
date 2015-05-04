@@ -1,5 +1,5 @@
 # L# TeamProjects
-48/124(38.7%) champions supported
+49/124(39.5%) champions supported
 ##Director
 + xcsoft
 

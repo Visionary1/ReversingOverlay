@@ -18,9 +18,9 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 		static int UltST {get{var buff = AIO_Func.getBuffInstance(Player, "kogmawlivingartillery"); return buff != null ? buff.Count : 0;} }
-		static int UST = Menu.Item("Misc.Rst").GetValue<Slider>().Value; //유저가 선택한 스택
-		static int QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
-		static int ED = Menu.Item("Misc.Etg").GetValue<Slider>().Value; 
+		static int UST = 1;
+		static float QD = 50; 
+		static float ED = 50; 
 
 
 
@@ -93,6 +93,9 @@ namespace ALL_In_One.champions
         {
             if (Player.IsDead)
                 return;
+			QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
+			ED = Menu.Item("Misc.Etg").GetValue<Slider>().Value; 
+			UST = Menu.Item("Misc.Rst").GetValue<Slider>().Value; //유저가 선택한 스택
 			R.Range = 900f +R.Level*300f;
             if (Orbwalking.CanMove(10))
             {

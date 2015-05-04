@@ -61,7 +61,6 @@ namespace ALL_In_One.champions
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
 			
         }
@@ -130,30 +129,6 @@ namespace ALL_In_One.champions
 		
 		if (drawRTimer.Active && getRBuffDuration > 0)
 		Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R: " + getRBuffDuration.ToString("0.00"));
-        }
-		
-        static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
-        {
-            if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
-                return;
-
-
-        }
-
-        static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
-        {
-            if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
-                return;
-
-
-        }
-
-        static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (!sender.IsMe || Player.IsDead)
-                return;
-				
-
         }
 		
 		static void AA() // 챔피언 대상 평캔 ( 빼낸 이유는 AA방식 두개로 할시 두번 적어야 해서 단순화하기 위함.

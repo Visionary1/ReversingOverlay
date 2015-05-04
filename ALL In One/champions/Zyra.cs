@@ -19,7 +19,7 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R, P;
-		static int ED = Menu.Item("Misc.Etg").GetValue<Slider>().Value; 
+		static float ED = 50f; 
 
         public static void Load()
         {
@@ -85,6 +85,8 @@ namespace ALL_In_One.champions
 				
 			if (ZyraDead())
 				CastP();
+				
+			ED = Menu.Item("Misc.Etg").GetValue<Slider>().Value; 
 
             if (Orbwalking.CanMove(35))
             {

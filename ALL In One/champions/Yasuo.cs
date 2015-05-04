@@ -14,7 +14,7 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, QQ, W, E, EQ, R;
-		static int QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 	
+		static float QD = 50f; 	
 
         public static void Load()
         {
@@ -76,6 +76,8 @@ namespace ALL_In_One.champions
         {
             if (Player.IsDead)
                 return;
+
+			QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
 
             if (Orbwalking.CanMove(35))
             {

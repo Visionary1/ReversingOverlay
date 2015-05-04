@@ -18,7 +18,7 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-		static int QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
+		static float QD = 50f;
 
         public static void Load()
         {
@@ -69,13 +69,13 @@ namespace ALL_In_One.champions
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-        }
+		}
 
         static void Game_OnUpdate(EventArgs args)
         {
             if (Player.IsDead)
                 return;
-				
+			QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
 			R.Range = 1500f + R.Level*500f;
 			
             if (Orbwalking.CanMove(10))

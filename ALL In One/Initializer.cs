@@ -12,6 +12,9 @@ namespace ALL_In_One
     {
         internal static void initialize()
         {
+            LSConsole.Show();
+            LSConsole.Maximize();
+
             AIO_Menu.initialize();
 
             if (!ChampLoader.champSupportedCheck("ALL_In_One.champions."))
@@ -35,10 +38,10 @@ namespace ALL_In_One
             AIO_Menu.Champion.Drawings.addItem("Jungle Position", true, false);
 
             Drawing.OnDraw += Drawing_OnDraw;
+            
+            LSConsole.WriteLine("[TeamProjects] ALL In One: " + ObjectManager.Player.ChampionName + " Loaded.");
+            LSConsole.WriteLine("[TeamProjects] ALL In One: Early Access.");
 
-            LSConsole.Show();
-            LSConsole.Maximize();
-            LSConsole.WriteLine("[TeamProjects] All In One: " + ObjectManager.Player.ChampionName + " Loaded.");
         }
 
         static void Drawing_OnDraw(EventArgs args)

@@ -61,7 +61,7 @@ namespace ALL_In_One
             return target.Health + (target.HPRegenRate/2) <= spell.GetDamage(target, stage);
         }
 
-        internal static void sendDebugMsg(string message, string tag = "[TeamProjects] All In One: ")
+        internal static void sendDebugMsg(string message, string tag = "[TeamProjects] ALL In One: ")
         {
             Console.WriteLine(tag + message);
             LSConsole.WriteLine(tag + message);
@@ -71,16 +71,6 @@ namespace ALL_In_One
         internal static bool anyoneValidInRange(float range)
         {
             return HeroManager.Enemies.Any(x => x.IsValidTarget(range));
-        }
-
-        internal static String colorChat(System.Drawing.Color color, String text) 
-        { 
-            return "<font color = \"" + colorToHex(color) + "\">" + text + "</font>"; 
-        }
-
-        internal static String colorToHex(System.Drawing.Color c)
-        { 
-            return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2"); 
         }
 		
 		internal static void CCast(Spell spell, Obj_AI_Base target) //for Circular spells

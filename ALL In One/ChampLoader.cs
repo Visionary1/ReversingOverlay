@@ -158,6 +158,9 @@ namespace ALL_In_One
                 case "Jinx"://Added by xcsoft
                     champions.Jinx.Load();
                     break;
+                case "Yorick"://Added by RL244
+                    champions.Yorick.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.");
                     break;

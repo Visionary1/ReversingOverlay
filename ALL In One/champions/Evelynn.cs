@@ -17,12 +17,12 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-		static int RM = Menu.Item("ComboRM").GetValue<Slider>().Value; 
+		static int RM = 1; 
 		
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 500f) {Delay = 0.25f}; // Q.Speed = 2000f(에서 거리에 따라 점점 감소)
+            Q = new Spell(SpellSlot.Q, 500f); // Q.Speed = 2000f(에서 거리에 따라 점점 감소)
             W = new Spell(SpellSlot.W);
             E = new Spell(SpellSlot.E, 225f, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R, 650f, TargetSelector.DamageType.Magical);
@@ -57,7 +57,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Drawings.addQRange();
-            AIO_Menu.Champion.Drawings.addItem("Q Safe Range", new Circle(true, Color.Red));
+//            AIO_Menu.Champion.Drawings.addItem("Q Safe Range", new Circle(true, Color.Red));
             AIO_Menu.Champion.Drawings.addERange();
 			AIO_Menu.Champion.Drawings.addRRange();
 			
@@ -73,6 +73,7 @@ namespace ALL_In_One.champions
         {
             if (Player.IsDead)
                 return;
+			//Q.Range = 500f;
 
             if (Orbwalking.CanMove(10))
             {
@@ -115,8 +116,8 @@ namespace ALL_In_One.champions
 		var drawQ = AIO_Menu.Champion.Drawings.QRange;
 		var drawE = AIO_Menu.Champion.Drawings.ERange;
 		var drawR = AIO_Menu.Champion.Drawings.RRange;
-		var drawQr = AIO_Menu.Champion.Drawings.getCircleValue("Q Safe Range");
-		var qTarget = TargetSelector.GetTarget(Q.Range + Player.MoveSpeed * Q.Delay, TargetSelector.DamageType.Magical);
+//		var drawQr = AIO_Menu.Champion.Drawings.getCircleValue("Q Safe Range");
+//		var qTarget = TargetSelector.GetTarget(Q.Range + Player.MoveSpeed * Q.Delay, TargetSelector.DamageType.Magical);
 
 	
 		if (Q.IsReady() && drawQ.Active)
@@ -127,10 +128,10 @@ namespace ALL_In_One.champions
 		
 		if (R.IsReady() && drawR.Active)
 		Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
-		
+/*		
 		if (Q.IsReady() && drawQr.Active && qTarget != null)
 		Render.Circle.DrawCircle(Player.Position, Q.Range - qTarget.MoveSpeed*Q.Delay, drawQr.Color);
-
+*/
 
         }
 		
@@ -153,9 +154,11 @@ namespace ALL_In_One.champions
 		
         static void Combo()
         {
+			RM = Menu.Item("ComboRM").GetValue<Slider>().Value;
+
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-                var qTarget = TargetSelector.GetTarget(Q.Range - 10, Q.DamageType, true);
+                var qTarget = TargetSelector.GetTarget(Q.Range - 10, R.DamageType, true);
 				if(qTarget.Distance(Player.ServerPosition) <= Q.Range - 10)
                 Q.Cast();
             }
@@ -178,7 +181,7 @@ namespace ALL_In_One.champions
 				
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-                var qTarget = TargetSelector.GetTarget(Q.Range - 10, Q.DamageType, true);
+                var qTarget = TargetSelector.GetTarget(Q.Range - 10, R.DamageType, true);
 				if(qTarget.Distance(Player.ServerPosition) <= Q.Range - 10)
                 Q.Cast();
             }
@@ -206,12 +209,13 @@ namespace ALL_In_One.champions
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
-            var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
+            var Minions = MinionManager.GetMinions(500f, MinionTypes.All, MinionTeam.Enemy);
 
-            if (Minions.Count <= 0)
-                return;
+            if (Minions.Count > 0)
+            {
 			if(AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
 			Q.Cast();
+			}
         }
 
         static void Jungleclear()
@@ -219,12 +223,13 @@ namespace ALL_In_One.champions
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
-            var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var Mobs = MinionManager.GetMinions(500f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
-            if (Mobs.Count <= 0)
-                return;
+            if (Mobs.Count > 0)
+            {
 			if(AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
 			Q.Cast();
+			}
         }
 
         static void KillstealQ()

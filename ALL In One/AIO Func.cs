@@ -268,6 +268,96 @@ namespace ALL_In_One
 			}
 		}
 		
+		internal static void SC(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, string Cost = "Mana") //
+		{ // 
+			var target = TargetSelector.GetTarget(spell.Range, spell.DamageType, true); //
+			
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+			{
+				if((Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				&& spell.IsReady())
+				{
+					if(spell.IsSkillshot)
+					{
+						if(spell.Type == SkillshotType.SkillshotLine)
+						LCast(spell,target,ExtraTargetDistance,ALPHA);
+						else if(spell.Type == SkillshotType.SkillshotCircle)
+						CCast(spell,target);
+						else if(spell.Type == SkillshotType.SkillshotCone)
+						spell.Cast(target);
+					}
+					else
+					spell.Cast(target);
+				}
+			}
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+			{
+				if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana || !(Cost == "Mana")))
+				{
+					if(spell.IsSkillshot)
+					{
+						if(spell.Type == SkillshotType.SkillshotLine)
+						LCast(spell,target,ExtraTargetDistance,ALPHA);
+						else if(spell.Type == SkillshotType.SkillshotCircle)
+						CCast(spell,target);
+						else if(spell.Type == SkillshotType.SkillshotCone)
+						spell.Cast(target);
+					}
+					else
+					spell.Cast(target);
+				}
+			}
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+			{			
+				var Minions = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
+				var Mobs = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+				
+				if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana || !(Cost == "Mana")))
+				{
+					if (Minions.Count > 0)
+					{
+						if(spell.IsSkillshot)
+						{
+							if(spell.Type == SkillshotType.SkillshotLine)
+							{
+								if(ALPHA > 1f)
+								LCast(spell,Minions[0],ExtraTargetDistance,ALPHA);
+								else
+								LH(spell, ALPHA);
+							}
+							else if(spell.Type == SkillshotType.SkillshotCircle)
+							CCast(spell,Minions[0]);
+							else if(spell.Type == SkillshotType.SkillshotCone)
+							spell.Cast(Minions[0]);
+						}
+						else
+						LH(spell);
+					}
+				}
+				
+				if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana || !(Cost == "Mana")))
+				{
+					if (Mobs.Count > 0)
+					{
+						if(spell.IsSkillshot)
+						{
+							if(spell.Type == SkillshotType.SkillshotLine)
+							LCast(spell,Mobs[0],ExtraTargetDistance,ALPHA);
+							else if(spell.Type == SkillshotType.SkillshotCircle)
+							CCast(spell,Mobs[0]);
+							else if(spell.Type == SkillshotType.SkillshotCone)
+							spell.Cast(Mobs[0]);
+						}
+						else
+						spell.Cast(Mobs[0]);
+					}
+				}
+			}
+		}
+		
 		internal static List<Obj_AI_Hero> GetEnemyList()// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌.
 		{
 			return ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsValid && !x.IsDead && !x.IsInvulnerable).ToList();

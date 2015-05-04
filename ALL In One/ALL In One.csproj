@@ -194,7 +194,7 @@
     <Compile Include="champions\_Xerath.cs" />
     <Compile Include="champions\XinZhao.cs" />
     <Compile Include="champions\Yasuo.cs" />
-    <Compile Include="champions\_Yorick.cs" />
+    <Compile Include="champions\Yorick.cs" />
     <Compile Include="champions\_Zac.cs" />
     <Compile Include="champions\Zed.cs" />
     <Compile Include="champions\_Ziggs.cs" />

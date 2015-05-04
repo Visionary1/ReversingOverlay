@@ -150,7 +150,7 @@ namespace ALL_In_One.champions
         {
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType,);
+                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
 
                 if (qTarget != null)
                     Q.Cast(qTarget);

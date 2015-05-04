@@ -37,6 +37,7 @@ namespace ALL_In_One
             Drawing.OnDraw += Drawing_OnDraw;
 
             LSConsole.Show();
+            LSConsole.Maximize();
             LSConsole.WriteLine("[TeamProjects] All In One: " + ObjectManager.Player.ChampionName + " Loaded.");
         }
 

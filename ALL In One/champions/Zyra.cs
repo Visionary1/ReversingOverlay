@@ -86,10 +86,11 @@ namespace ALL_In_One.champions
 			if (ZyraDead())
 				CastP();
 				
-			ED = Menu.Item("Misc.Etg").GetValue<Slider>().Value; 
 
             if (Orbwalking.CanMove(35))
             {
+			ED = Menu.Item("Misc.Etg").GetValue<Slider>().Value; 
+
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 

@@ -93,12 +93,13 @@ namespace ALL_In_One.champions
         {
             if (Player.IsDead)
                 return;
+
+            if (Orbwalking.CanMove(30))
+            {
+			R.Range = 900f +R.Level*300f;
 			QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
 			ED = Menu.Item("Misc.Etg").GetValue<Slider>().Value; 
 			UST = Menu.Item("Misc.Rst").GetValue<Slider>().Value; //유저가 선택한 스택
-			R.Range = 900f +R.Level*300f;
-            if (Orbwalking.CanMove(10))
-            {
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 

@@ -77,10 +77,10 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-			QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
 
             if (Orbwalking.CanMove(35))
             {
+			QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
                 switch (Orbwalker.ActiveMode)
                 {
                     case Orbwalking.OrbwalkingMode.Combo:

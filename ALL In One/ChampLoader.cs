@@ -230,6 +230,10 @@ namespace ALL_In_One
 					MadeBy("RL244");
                     champions.JarvanIV.Load();
                     break;
+                case "Teemo":
+					MadeBy("RL244");
+                    champions.Teemo.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.");
                     break;

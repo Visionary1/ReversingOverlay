@@ -172,7 +172,7 @@
     <Compile Include="champions\Syndra.cs" />
     <Compile Include="champions\Talon.cs" />
     <Compile Include="champions\_Taric.cs" />
-    <Compile Include="champions\_Teemo.cs" />
+    <Compile Include="champions\Teemo.cs" />
     <Compile Include="champions\_Thresh.cs" />
     <Compile Include="champions\Tristana.cs" />
     <Compile Include="champions\Trundle.cs" />

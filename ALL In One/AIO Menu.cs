@@ -487,6 +487,11 @@ namespace ALL_In_One
                     return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<bool>();
                 }
 
+                internal static Slider getSliderValue(string DisplayName, bool ChampUniq = true)
+                {
+                    return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<Slider>();
+                }
+
                 internal static StringList getStringListValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<StringList>();
@@ -660,7 +665,7 @@ namespace ALL_In_One
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(drawDamageMenu);
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(drawDamageFill);
 
-                    DamageIndicator.DamageToUnit = damage + utility.Activator.getItemDamage;
+                    DamageIndicator.DamageToUnit = damage;
                     DamageIndicator.Enabled = drawDamageMenu.GetValue<bool>();
                     DamageIndicator.Fill = drawDamageFill.GetValue<Circle>().Active;
                     DamageIndicator.FillColor = drawDamageFill.GetValue<Circle>().Color;

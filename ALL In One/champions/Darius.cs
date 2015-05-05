@@ -52,6 +52,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
+            AIO_Menu.Champion.Misc.addUseInterrupter();
             AIO_Menu.Champion.Drawings.addQRange();
             AIO_Menu.Champion.Drawings.addERange(false);
             AIO_Menu.Champion.Drawings.addItem("E Safe Range", new Circle(true, Color.Red));
@@ -63,6 +64,7 @@ namespace ALL_In_One.champions
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
+            Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
 			
         }
 
@@ -128,14 +130,6 @@ namespace ALL_In_One.champions
 
         }
 		
-        static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
-        {
-            if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
-                return;
-
-
-        }
-
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
         {
             if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
@@ -144,7 +138,6 @@ namespace ALL_In_One.champions
             if (E.IsReady()
 			&& Player.Distance(sender.Position) <= E.Range)
                 E.Cast(sender.Position);
-
         }
 
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

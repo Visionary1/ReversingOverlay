@@ -4,6 +4,7 @@ using System.Reflection;
 
 using LeagueSharp;
 using LeagueSharp.Common;
+using LSConsole = LeagueSharp.Console.Console;
 
 namespace ALL_In_One
 {
@@ -11,9 +12,12 @@ namespace ALL_In_One
     {
         internal static void initialize()
         {
+            LSConsole.Show();
+            LSConsole.Maximize();
+
             AIO_Menu.initialize();
 
-            if (!ChampLoader.champSupportedCheck("ALL IN ONE: ", "ALL_In_One.champions."))
+            if (!ChampLoader.champSupportedCheck("ALL_In_One.champions."))
                 return;
 
             AIO_Menu.addSubMenu("Champion", "AIO: " + ObjectManager.Player.ChampionName);
@@ -34,8 +38,10 @@ namespace ALL_In_One
             AIO_Menu.Champion.Drawings.addItem("Jungle Position", true, false);
 
             Drawing.OnDraw += Drawing_OnDraw;
+            
+            LSConsole.WriteLine("[TeamProjects] ALL In One: " + ObjectManager.Player.ChampionName + " Loaded.");
+            LSConsole.WriteLine("[TeamProjects] ALL In One: Early Access.");
 
-            Game.PrintChat(AIO_Func.colorChat(Color.SpringGreen, "[TeamProject] All In One: ") + AIO_Func.colorChat(Color.DeepPink, ObjectManager.Player.ChampionName) + " Loaded");
         }
 
         static void Drawing_OnDraw(EventArgs args)

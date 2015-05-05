@@ -24,7 +24,7 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E, 600f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R);
 
-            Q.SetSkillshot(0.25f, 50f, 2000f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 50f, 1700f, true, SkillshotType.SkillshotLine);
             W.SetTargetted(0.25f, float.MaxValue);
             E.SetTargetted(0.25f, 2000f);
 
@@ -141,7 +141,7 @@ namespace ALL_In_One.champions
             {
                 var qTarget = TargetSelector.GetTargetNoCollision(Q);
 
-                if (Q.CanCast(qTarget))
+                if (qTarget.IsValidTarget(Q.Range))
                     Q.Cast(qTarget);
             }
 
@@ -157,7 +157,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-                if(!Q.IsReady() && !E.IsReady() && AIO_Func.getHealthPercent(Player) <= 98)
+                if(!Q.IsReady() && !E.IsReady() && AIO_Func.getHealthPercent(Player) <= 98 && Player.CountEnemiesInRange(Q.Range) >= 1)
                     R.Cast();
             }
         }
@@ -171,7 +171,7 @@ namespace ALL_In_One.champions
             {
                 var qTarget = TargetSelector.GetTargetNoCollision(Q);
 
-                if (Q.CanCast(qTarget))
+                if (qTarget.IsValidTarget(Q.Range))
                     Q.Cast(qTarget);
             }
 
@@ -200,21 +200,21 @@ namespace ALL_In_One.champions
             {
                 var qTarget = Minions.Where(x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HitChance.Medium && Q.IsKillable(x)).OrderByDescending(x => x.Health).FirstOrDefault();
 
-                if (Q.CanCast(qTarget))
+                if (qTarget != null)
                     Q.Cast(qTarget);
             }
 
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
             {
-                var wTarget = Minions.Where(x => W.CanCast(x) && W.IsKillable(x)).OrderByDescending(x => x.Health).FirstOrDefault();
-
-                if (W.CanCast(wTarget))
+                var wTarget = Minions.Where(x => x.IsValidTarget(W.Range) && W.IsKillable(x)).OrderByDescending(x => x.Health).FirstOrDefault();
+                
+                if (wTarget != null)
                     W.Cast(wTarget);
             }
 
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
-                if (E.CanCast(Minions[0]))
+                if (Minions[0].IsValidTarget(E.Range))
                     E.Cast(Minions[0]);
             }
         }
@@ -233,19 +233,19 @@ namespace ALL_In_One.champions
             {
                 var qTarget = Mobs.FirstOrDefault(x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HitChance.Medium);
 
-                if (Q.CanCast(qTarget))
+                if (qTarget != null)
                     Q.Cast(qTarget);
             }
 
             if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady())
             {
-                if (Q.CanCast(Mobs[0]))
-                    Q.Cast(Mobs[0]);
+                if (Mobs[0].IsValidTarget(W.Range))
+                    W.Cast(Mobs[0]);
             }
 
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
             {
-                if (E.CanCast(Mobs[0]))
+                if (Mobs[0].IsValidTarget(E.Range))
                     E.Cast(Mobs[0]);
             }
         }

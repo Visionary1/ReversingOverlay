@@ -4,16 +4,17 @@ using System.Collections.Generic;
 
 using LeagueSharp;
 using LeagueSharp.Common;
+using LSConsole = LeagueSharp.Console.Console;
 
 namespace ALL_In_One
 {
-    class AIO_Func
+    static class AIO_Func
     {
         internal static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static float SWDuration { get { var buff = AIO_Func.getBuffInstance(ObjectManager.Player, "MasterySpellWeaving"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } } // Player 많이 쓰는데 괜히 ObjectManager.Player라고 하는거 너무길어요~~.
+        static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } } // 이거 지우면 평캔 관련 다날라갑니다. 절대 지우기 ㄴ
 
-        internal static Orbwalking.Orbwalker Orbwalker;
 		
         internal static float getHealthPercent(Obj_AI_Base unit)
         {
@@ -60,27 +61,16 @@ namespace ALL_In_One
             return target.Health + (target.HPRegenRate/2) <= spell.GetDamage(target, stage);
         }
 
-        internal static void sendDebugMsg(string message, bool printchat = true, string tag = "AIO_DebugMsg: ")
+        internal static void sendDebugMsg(string message, string tag = "[TeamProjects] ALL In One: ")
         {
-            if (printchat)
-                Game.PrintChat(tag + message);
-
             Console.WriteLine(tag + message);
+            LSConsole.WriteLine(tag + message);
+            
         }
 
         internal static bool anyoneValidInRange(float range)
         {
             return HeroManager.Enemies.Any(x => x.IsValidTarget(range));
-        }
-
-        internal static String colorChat(System.Drawing.Color color, String text) 
-        { 
-            return "<font color = \"" + colorToHex(color) + "\">" + text + "</font>"; 
-        }
-
-        internal static String colorToHex(System.Drawing.Color c)
-        { 
-            return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2"); 
         }
 		
 		internal static void CCast(Spell spell, Obj_AI_Base target) //for Circular spells
@@ -106,7 +96,7 @@ namespace ALL_In_One
 					}
 				}
 				else
-					sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
+					sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed");
 			}
 			else
 			sendDebugMsg("It is not circular skill. Debug needed");
@@ -130,7 +120,7 @@ namespace ALL_In_One
 					}
 				}
 				else
-					sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed",true);
+					sendDebugMsg(spell.ToString()+" can't cast on"+target.ToString()+". Debug needed");
 			}
 		}
 
@@ -173,24 +163,27 @@ namespace ALL_In_One
 		
 		internal static void AALcJc(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, string Cost = "Mana") //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
 		{// 아주 편하게 평캔 Lc, Jc를 구현할수 있습니다(그것도 분리해서!!). 그냥 AIO_Func.AALcJc(Q); 이렇게 쓰세요. 선형 스킬일 경우 세부 설정을 원할 경우 AIO_Func.AALcJc(E,ED,0f); 이런식으로 쓰세요.
-            if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
+			if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
 			return;
 			
-			var Minions = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
-			var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+			var Minions = MinionManager.GetMinions(Player.AttackRange/2+200f, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
+			var Mobs = MinionManager.GetMinions(Player.AttackRange/2+200f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 			
 			if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
 			&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && (getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana || !(Cost == "Mana")))
 			{
 				if (Minions.Count > 0)
 				{
-					if(!spell.IsSkillshot)
-					spell.Cast(Minions[0]);
-					else if(spell.Type == SkillshotType.SkillshotLine)
+					if(spell.IsSkillshot)
+					{
+					if(spell.Type == SkillshotType.SkillshotLine)
 					LCast(spell,Minions[0],ExtraTargetDistance,ALPHA);
 					else if(spell.Type == SkillshotType.SkillshotCircle)
 					CCast(spell,Minions[0]);
 					else if(spell.Type == SkillshotType.SkillshotCone)
+					spell.Cast(Minions[0]);
+					}
+					else if(!spell.IsSkillshot)
 					spell.Cast(Minions[0]);
 					else
 					spell.Cast();
@@ -202,13 +195,16 @@ namespace ALL_In_One
 			{
 				if (Mobs.Count > 0)
 				{
-					if(!spell.IsSkillshot)
-					spell.Cast(Mobs[0]);
-					else if(spell.Type == SkillshotType.SkillshotLine)
+					if(spell.IsSkillshot)
+					{
+					if(spell.Type == SkillshotType.SkillshotLine)
 					LCast(spell,Mobs[0],ExtraTargetDistance,ALPHA);
 					else if(spell.Type == SkillshotType.SkillshotCircle)
 					CCast(spell,Mobs[0]);
 					else if(spell.Type == SkillshotType.SkillshotCone)
+					spell.Cast(Mobs[0]);
+					}
+					else if(!spell.IsSkillshot)
 					spell.Cast(Mobs[0]);
 					else
 					spell.Cast();
@@ -220,20 +216,21 @@ namespace ALL_In_One
 		{ // 아주 편하게 평캔 Cb, Hrs를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
 			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //
 			
-			if(target == null)
-			return;
 			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
 			{
 				if((Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
 				&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
 				{
-					if(!spell.IsSkillshot)
-					spell.Cast(target);
-					else if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
-					LCast(spell,target,ExtraTargetDistance,ALPHA);
-					else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
-					CCast(spell,target);
-					else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+					if(spell.IsSkillshot)
+					{
+						if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
+						LCast(spell,target,ExtraTargetDistance,ALPHA);
+						else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
+						CCast(spell,target);
+						else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+						spell.Cast(target);
+					}
+					else if(!spell.IsSkillshot)
 					spell.Cast(target);
 					else
 					spell.Cast();
@@ -244,16 +241,109 @@ namespace ALL_In_One
 				if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
 				&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && (getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana || !(Cost == "Mana")))
 				{
-					if(!spell.IsSkillshot)
-					spell.Cast(target);
-					else if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
-					LCast(spell,target,ExtraTargetDistance,ALPHA);
-					else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
-					CCast(spell,target);
-					else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+					if(spell.IsSkillshot)
+					{
+						if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
+						LCast(spell,target,ExtraTargetDistance,ALPHA);
+						else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
+						CCast(spell,target);
+						else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+						spell.Cast(target);
+					}
+					else if(!spell.IsSkillshot)
 					spell.Cast(target);
 					else
 					spell.Cast();
+				}
+			}
+		}
+		
+		internal static void SC(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, string Cost = "Mana") //
+		{ // 
+			var target = TargetSelector.GetTarget(spell.Range, spell.DamageType, true); //
+			
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+			{
+				if((Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				&& spell.IsReady())
+				{
+					if(spell.IsSkillshot)
+					{
+						if(spell.Type == SkillshotType.SkillshotLine)
+						LCast(spell,target,ExtraTargetDistance,ALPHA);
+						else if(spell.Type == SkillshotType.SkillshotCircle)
+						CCast(spell,target);
+						else if(spell.Type == SkillshotType.SkillshotCone)
+						spell.Cast(target);
+					}
+					else
+					spell.Cast(target);
+				}
+			}
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+			{
+				if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana || !(Cost == "Mana")))
+				{
+					if(spell.IsSkillshot)
+					{
+						if(spell.Type == SkillshotType.SkillshotLine)
+						LCast(spell,target,ExtraTargetDistance,ALPHA);
+						else if(spell.Type == SkillshotType.SkillshotCircle)
+						CCast(spell,target);
+						else if(spell.Type == SkillshotType.SkillshotCone)
+						spell.Cast(target);
+					}
+					else
+					spell.Cast(target);
+				}
+			}
+			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+			{			
+				var Minions = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
+				var Mobs = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+				
+				if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana || !(Cost == "Mana")))
+				{
+					if (Minions.Count > 0)
+					{
+						if(spell.IsSkillshot)
+						{
+							if(spell.Type == SkillshotType.SkillshotLine)
+							{
+								if(ALPHA > 1f)
+								LCast(spell,Minions[0],ExtraTargetDistance,ALPHA);
+								else
+								LH(spell, ALPHA);
+							}
+							else if(spell.Type == SkillshotType.SkillshotCircle)
+							CCast(spell,Minions[0]);
+							else if(spell.Type == SkillshotType.SkillshotCone)
+							spell.Cast(Minions[0]);
+						}
+						else
+						LH(spell);
+					}
+				}
+				
+				if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana || !(Cost == "Mana")))
+				{
+					if (Mobs.Count > 0)
+					{
+						if(spell.IsSkillshot)
+						{
+							if(spell.Type == SkillshotType.SkillshotLine)
+							LCast(spell,Mobs[0],ExtraTargetDistance,ALPHA);
+							else if(spell.Type == SkillshotType.SkillshotCircle)
+							CCast(spell,Mobs[0]);
+							else if(spell.Type == SkillshotType.SkillshotCone)
+							spell.Cast(Mobs[0]);
+						}
+						else
+						spell.Cast(Mobs[0]);
+					}
 				}
 			}
 		}
@@ -272,7 +362,38 @@ namespace ALL_In_One
 		{
 			return GetEnemyList().Where(x => x.Distance(target.ServerPosition) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
 		}
-		
+
+        internal static double UnitIsImmobileUntil(Obj_AI_Base unit)
+        {
+            var result =
+                unit.Buffs.Where(
+                    buff =>
+                        buff.IsActive && Game.Time <= buff.EndTime &&
+                        (buff.Type == BuffType.Charm || buff.Type == BuffType.Knockup || buff.Type == BuffType.Stun ||
+                         buff.Type == BuffType.Suppression || buff.Type == BuffType.Snare))
+                    .Aggregate(0d, (current, buff) => Math.Max(current, buff.EndTime));
+            return (result - Game.Time);
+        }
+
+        internal static bool CollisionCheck(Obj_AI_Hero source, Obj_AI_Hero target, float width)
+        {
+            var input = new PredictionInput
+            {
+                Radius = width,
+                Unit = source,
+            };
+
+            input.CollisionObjects[0] = CollisionableObjects.Heroes;
+            input.CollisionObjects[1] = CollisionableObjects.YasuoWall;
+
+            return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Where(x => x.NetworkId != x.NetworkId).Any();
+        }
+
+        internal static int CountEnemyMinionsInRange(this SharpDX.Vector3 point, float range)
+        {
+            return ObjectManager.Get<Obj_AI_Minion>().Count(h => h.IsValidTarget(range, true, point));
+        }
+
         internal class SelfAOE_Prediction
         {
             internal static int HitCount(float delay, float range)

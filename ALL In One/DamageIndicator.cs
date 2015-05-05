@@ -49,7 +49,7 @@ namespace ALL_In_One
             foreach (var unit in HeroManager.Enemies.Where(h => h.IsValid && h.IsHPBarRendered))
             {
                 var barPos = unit.HPBarPosition;
-                var damage = _damageToUnit(unit);
+                var damage = _damageToUnit(unit) + utility.Activator.getItemDamage(unit);
                 var percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
                 var yPos = barPos.Y + YOffset;
                 var xPosDamage = barPos.X + XOffset + Width * percentHealthAfterDamage;

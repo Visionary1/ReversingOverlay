@@ -18,7 +18,7 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-		static int QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
+		static float QD = 50f;
 
         public static void Load()
         {
@@ -85,6 +85,8 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
+			QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
+
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 

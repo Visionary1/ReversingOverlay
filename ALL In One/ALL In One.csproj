@@ -100,8 +100,8 @@
     <Compile Include="champions\_DrMundo.cs" />
     <Compile Include="champions\_Elise.cs" />
     <Compile Include="champions\Evelynn.cs" />
-    <Compile Include="champions\_Ezreal.cs" />
-    <Compile Include="champions\_Fiddlesticks.cs" />
+    <Compile Include="champions\Ezreal.cs" />
+    <Compile Include="champions\Fiddlesticks.cs" />
     <Compile Include="champions\Fiora.cs" />
     <Compile Include="champions\_Fizz.cs" />
     <Compile Include="champions\_Galio.cs" />
@@ -189,7 +189,7 @@
     <Compile Include="champions\Viktor.cs" />
     <Compile Include="champions\Vladimir.cs" />
     <Compile Include="champions\_Volibear.cs" />
-    <Compile Include="champions\_Warwick.cs" />
+    <Compile Include="champions\Warwick.cs" />
     <Compile Include="champions\MonkeyKing.cs" />
     <Compile Include="champions\_Xerath.cs" />
     <Compile Include="champions\XinZhao.cs" />

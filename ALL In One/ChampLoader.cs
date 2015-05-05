@@ -218,6 +218,14 @@ namespace ALL_In_One
 					MadeBy("RL244");
                     champions.Rengar.Load();
                     break;
+                case "Warwick":
+					MadeBy("RL244");
+                    champions.Warwick.Load();
+                    break;
+                case "Ezreal":
+					MadeBy("RL244");
+                    champions.Ezreal.Load();
+                    break;
                 case "JarvanIV": //WIP
 					MadeBy("RL244");
                     champions.JarvanIV.Load();

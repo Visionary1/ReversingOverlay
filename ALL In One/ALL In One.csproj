@@ -114,7 +114,7 @@
     <Compile Include="champions\_Heimerdinger.cs" />
     <Compile Include="champions\_Irelia.cs" />
     <Compile Include="champions\Janna.cs" />
-    <Compile Include="champions\_JarvanIV.cs" />
+    <Compile Include="champions\JarvanIV.cs" />
     <Compile Include="champions\Jax.cs" />
     <Compile Include="champions\_Jayce.cs" />
     <Compile Include="champions\Jinx.cs" />
@@ -153,8 +153,8 @@
     <Compile Include="champions\_Quinn.cs" />
     <Compile Include="champions\_Rammus.cs" />
     <Compile Include="champions\_RekSai.cs" />
-    <Compile Include="champions\_Renekton.cs" />
-    <Compile Include="champions\_Rengar.cs" />
+    <Compile Include="champions\Renekton.cs" />
+    <Compile Include="champions\Rengar.cs" />
     <Compile Include="champions\_Riven.cs" />
     <Compile Include="champions\_Rumble.cs" />
     <Compile Include="champions\Ryze.cs" />

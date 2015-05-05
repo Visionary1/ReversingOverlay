@@ -210,6 +210,18 @@ namespace ALL_In_One
 					MadeBy("RL244");
                     champions.Yorick.Load();
                     break;
+                case "Renekton":
+					MadeBy("RL244");
+                    champions.Renekton.Load();
+                    break;
+                case "Rengar":
+					MadeBy("RL244");
+                    champions.Rengar.Load();
+                    break;
+                case "JarvanIV": //WIP
+					MadeBy("RL244");
+                    champions.JarvanIV.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.");
                     break;

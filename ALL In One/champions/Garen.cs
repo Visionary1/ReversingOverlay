@@ -143,7 +143,7 @@ namespace ALL_In_One.champions
 
 		static void AA()
 		{
-			AIO_Func.AACb(Q,0,0,"NoCost");
+			AIO_Func.AACb(Q,0,0,0f);
 		}
 		
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -152,7 +152,7 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || Target == null)
                 return;
 
-			AIO_Func.AALcJc(Q,0,0,"NoCost");
+			AIO_Func.AALcJc(Q,0,0,0f);
 
 			if(!utility.Activator.AfterAttack.AIO)
 			AA();

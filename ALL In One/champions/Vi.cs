@@ -93,12 +93,12 @@ namespace ALL_In_One.champions
             if (Menu.Item("miscKs", true).GetValue<bool>())
                 Killsteal();
             #endregion
-			
-			#region AfterAttack
-			AIO_Func.AASkill(E);
-			if(AIO_Func.AfterAttack())
-			AA();
-			#endregion
+            
+            #region AfterAttack
+            AIO_Func.AASkill(E);
+            if(AIO_Func.AfterAttack())
+            AA();
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -142,11 +142,11 @@ namespace ALL_In_One.champions
             if (R.CanCast(sender) && args.DangerLevel >= Interrupter2.DangerLevel.High)
                 R.Cast(sender);
         }
-		
-		static void AA()
-		{
-			AIO_Func.AACb(E);
-		}
+        
+        static void AA()
+        {
+            AIO_Func.AACb(E);
+        }
 
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
@@ -155,8 +155,8 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || !Orbwalking.CanMove(10) || !E.IsReady() || Target == null)
                 return;
 
-			if(!utility.Activator.AfterAttack.AIO)
-			AA();
+            if(!utility.Activator.AfterAttack.AIO)
+            AA();
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {

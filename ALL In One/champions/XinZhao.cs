@@ -14,7 +14,7 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-		
+        
         static float getWBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "XenZhaoBattleCry"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
@@ -25,7 +25,7 @@ namespace ALL_In_One.champions
             R = new Spell(SpellSlot.R, 187.5f, TargetSelector.DamageType.Physical);
 
             E.SetTargetted(0.25f, float.MaxValue);
-			
+            
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
@@ -52,8 +52,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addERange();
             AIO_Menu.Champion.Drawings.addRRange();
             AIO_Menu.Champion.Drawings.addItem("W Timer", new Circle(true, Color.LightGreen));
-			
-	    AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
+            
+        AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -61,7 +61,7 @@ namespace ALL_In_One.champions
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
-			
+            
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -88,11 +88,11 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
             #endregion
-			#region AfterAttack
-			AIO_Func.AASkill(Q);
-			if(AIO_Func.AfterAttack())
-			AA();
-			#endregion
+            #region AfterAttack
+            AIO_Func.AASkill(Q);
+            if(AIO_Func.AfterAttack())
+            AA();
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -103,7 +103,7 @@ namespace ALL_In_One.champions
 
             var drawE = AIO_Menu.Champion.Drawings.ERange;
             var drawR = AIO_Menu.Champion.Drawings.RRange;
-			var drawWTimer = AIO_Menu.Champion.Drawings.getCircleValue("W Timer");
+            var drawWTimer = AIO_Menu.Champion.Drawings.getCircleValue("W Timer");
 
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
@@ -115,14 +115,14 @@ namespace ALL_In_One.champions
                 Drawing.DrawText(pos_temp[0], pos_temp[1], drawWTimer.Color, "W: " + getWBuffDuration.ToString("0.00"));
             }
         }
-		
+        
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
             if (AIO_Func.getHealthPercent(Player) <= 50&& R.IsReady()
-			&& Player.Distance(gapcloser.Sender.Position) <= R.Range)
+            && Player.Distance(gapcloser.Sender.Position) <= R.Range)
                 R.Cast();
         }
 
@@ -139,25 +139,25 @@ namespace ALL_In_One.champions
         {
             if (!sender.IsMe || Player.IsDead)
                 return;
-				
+                
         }
 
-		static void AA()
-		{
-			AIO_Func.AACb(Q);
-			if(!Q.IsReady())
-			AIO_Func.AACb(W);
-		}
-		
+        static void AA()
+        {
+            AIO_Func.AACb(Q);
+            if(!Q.IsReady())
+            AIO_Func.AACb(W);
+        }
+        
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
-			AIO_Func.AALcJc(Q);
-			AIO_Func.AALcJc(W);
-			if(!utility.Activator.AfterAttack.AIO)
-			AA();
+            AIO_Func.AALcJc(Q);
+            AIO_Func.AALcJc(W);
+            if(!utility.Activator.AfterAttack.AIO)
+            AA();
         }
 
         static void Combo()
@@ -168,11 +168,11 @@ namespace ALL_In_One.champions
             }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady()
-			&& HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+            && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
             {
                 R.Cast();
             }
-				
+                
         }
 
         static void Harass()
@@ -181,7 +181,7 @@ namespace ALL_In_One.champions
                 return;
 
         }
-		
+        
         static void Laneclear()
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
@@ -191,7 +191,7 @@ namespace ALL_In_One.champions
 
             if (Minions.Count <= 0)
                 return;
-				
+                
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
                 E.Cast(Minions[0]);
         }
@@ -206,7 +206,7 @@ namespace ALL_In_One.champions
             if (Mobs.Count <= 0)
                 return;
 
-			
+            
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
                 E.Cast(Mobs[0]);
         }
@@ -226,10 +226,10 @@ namespace ALL_In_One.champions
 
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy)+(float)Player.GetAutoAttackDamage(enemy, true); //평캔 스펠 사용시 평타 데미지 추가
-			
+            
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
-				
+                
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
 

@@ -126,8 +126,8 @@ namespace ALL_In_One.champions
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-				var target = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-				AIO_Func.CCast(Q,target);
+                var target = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+                AIO_Func.CCast(Q,target);
             }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
@@ -213,7 +213,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
-					AIO_Func.CCast(Q,target);
+                    AIO_Func.CCast(Q,target);
 
                 if (W.CanCast(target) && AIO_Func.isKillable(target, W))
                     W.Cast(target, false, true);

@@ -88,11 +88,11 @@ namespace ALL_In_One.champions
             if (Menu.Item("miscKs", true).GetValue<bool>())
                 Killsteal();
             #endregion
-			#region AfterAttack
-			AIO_Func.AASkill(Q);
-			if(AIO_Func.AfterAttack())
-			AA();
-			#endregion
+            #region AfterAttack
+            AIO_Func.AASkill(Q);
+            if(AIO_Func.AfterAttack())
+            AA();
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -141,23 +141,23 @@ namespace ALL_In_One.champions
                 W.Cast();
         }
 
-		static void AA()
-		{
-			AIO_Func.AACb(Q,0,0,"NoCost");
-		}
-		
+        static void AA()
+        {
+            AIO_Func.AACb(Q,0,0,0f);
+        }
+        
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
 
-			AIO_Func.AALcJc(Q,0,0,"NoCost");
+            AIO_Func.AALcJc(Q,0,0,0f);
 
-			if(!utility.Activator.AfterAttack.AIO)
-			AA();
+            if(!utility.Activator.AfterAttack.AIO)
+            AA();
         }
-		
+        
         static void Combo()
         {
             if (Menu.Item("CbUseE", true).GetValue<bool>() && E1isReady && !QisOn)

@@ -26,7 +26,7 @@ namespace ALL_In_One.champions
             Q.SetTargetted(0.25f, float.MaxValue);
             R.SetSkillshot(0.25f, 575f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
-			
+            
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
@@ -47,14 +47,14 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addQRange();
             AIO_Menu.Champion.Drawings.addERange();
             AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.LightGreen));
-			
-			AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
+            
+            AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
-			
+            
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -81,13 +81,13 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.UseKillsteal)
             Killsteal();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
-			KillstealR();
+            KillstealR();
             #endregion
-			#region AfterAttack
-			AIO_Func.AASkill(Q);
-			if(AIO_Func.AfterAttack())
-			AA();
-			#endregion
+            #region AfterAttack
+            AIO_Func.AASkill(Q);
+            if(AIO_Func.AfterAttack())
+            AA();
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -95,43 +95,43 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-		var drawQ = AIO_Menu.Champion.Drawings.QRange;
-		var drawE = AIO_Menu.Champion.Drawings.ERange;
-		var drawETimer = AIO_Menu.Champion.Drawings.getCircleValue("E Timer");
-		
-		if (Q.IsReady() && drawQ.Active)
-		Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
-		
-		if (E.IsReady() && drawE.Active)
-		Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+        var drawQ = AIO_Menu.Champion.Drawings.QRange;
+        var drawE = AIO_Menu.Champion.Drawings.ERange;
+        var drawETimer = AIO_Menu.Champion.Drawings.getCircleValue("E Timer");
+        
+        if (Q.IsReady() && drawQ.Active)
+        Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+        
+        if (E.IsReady() && drawE.Active)
+        Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
 
-		var pos_temp = Drawing.WorldToScreen(Player.Position);
-		
-		if (drawETimer.Active && getEBuffDuration > 0)
-		Drawing.DrawText(pos_temp[0], pos_temp[1], drawETimer.Color, "E: " + getEBuffDuration.ToString("0.00"));
-		
+        var pos_temp = Drawing.WorldToScreen(Player.Position);
+        
+        if (drawETimer.Active && getEBuffDuration > 0)
+        Drawing.DrawText(pos_temp[0], pos_temp[1], drawETimer.Color, "E: " + getEBuffDuration.ToString("0.00"));
+        
         }
 
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe || Player.IsDead)
                 return;
-				
+                
 
         }
-		
-		static void AA()
-		{
-			AIO_Func.AACb(Q);
-		}
-		
+        
+        static void AA()
+        {
+            AIO_Func.AACb(Q);
+        }
+        
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
-			if(!utility.Activator.AfterAttack.AIO)
-				AA();
+            if(!utility.Activator.AfterAttack.AIO)
+                AA();
         }
 
         static void Combo()
@@ -151,21 +151,21 @@ namespace ALL_In_One.champions
                 if (qTarget != null)
                     Q.Cast(qTarget);       
             }
-			
+            
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var rTarget = TargetSelector.GetTarget(Q.Range, R.DamageType, true);
                 if (rTarget != null && AIO_Func.getHealthPercent(rTarget) <= 45)
                 R.Cast(rTarget.Position);
             }
-				
+                
         }
 
         static void Harass()
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
                 return;
-				
+                
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
                
@@ -177,17 +177,17 @@ namespace ALL_In_One.champions
             }
 
         }
-		
+        
         static void AALaneclear()
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
-			var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
+            var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
 
-			if (Minions.Count <= 0)
+            if (Minions.Count <= 0)
                 return;
-				
+                
                 //if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
                 //    Q.Cast(Minions[0]);
         }
@@ -201,7 +201,7 @@ namespace ALL_In_One.champions
 
             if (Mobs.Count <= 0)
                 return;
-				
+                
             //if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
             //    Q.Cast(Mobs[0]);
         }
@@ -217,15 +217,15 @@ namespace ALL_In_One.champions
             if (Minions.Count <= 0)
                 return;
 
-				
+                
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
-				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))));
+                var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))));
       
                 if (_m != null)
                     Q.Cast(_m);       
             }
-				
+                
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
                 E.Cast();
         }
@@ -242,12 +242,12 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
-				var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))));
+                var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))));
       
                 if (_m != null)
                     Q.Cast(_m);       
             }
-			
+            
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
                 E.Cast();
         }
@@ -260,22 +260,22 @@ namespace ALL_In_One.champions
                     Q.Cast(target);
             }
         }
-		
+        
         static void KillstealR()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))+3f) >= target.Health + target.HPRegenRate
-					&& target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 2)
+                    && target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 2)
                     R.Cast(target.ServerPosition);
                 else if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))+2f) >= target.Health + target.HPRegenRate
-					&& target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 1)
+                    && target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 1)
                     R.Cast(target.ServerPosition);
                 else if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))+1f) >= target.Health + target.HPRegenRate
-					&& target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 0)
+                    && target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 0)
                     R.Cast(target.ServerPosition);
                 else if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))) >= target.Health + target.HPRegenRate
-					&& target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() == 0)
+                    && target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() == 0)
                     R.Cast(target.ServerPosition);
             }
         }

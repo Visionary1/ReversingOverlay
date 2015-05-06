@@ -77,8 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIO Menu.cs" />
-    <Compile Include="champions\Karthus.cs" />
-    <Compile Include="champions\_Aatrox.cs" />
+    <Compile Include="champions\Aatrox.cs" />
     <Compile Include="champions\_Akali.cs" />
     <Compile Include="champions\_Alistar.cs" />
     <Compile Include="champions\Amumu.cs" />
@@ -97,11 +96,11 @@
     <Compile Include="champions\Darius.cs" />
     <Compile Include="champions\_Diana.cs" />
     <Compile Include="champions\_Draven.cs" />
-    <Compile Include="champions\_DrMundo.cs" />
+    <Compile Include="champions\DrMundo.cs" />
     <Compile Include="champions\_Elise.cs" />
     <Compile Include="champions\Evelynn.cs" />
-    <Compile Include="champions\_Ezreal.cs" />
-    <Compile Include="champions\_Fiddlesticks.cs" />
+    <Compile Include="champions\Ezreal.cs" />
+    <Compile Include="champions\Fiddlesticks.cs" />
     <Compile Include="champions\Fiora.cs" />
     <Compile Include="champions\_Fizz.cs" />
     <Compile Include="champions\_Galio.cs" />
@@ -114,12 +113,13 @@
     <Compile Include="champions\_Heimerdinger.cs" />
     <Compile Include="champions\_Irelia.cs" />
     <Compile Include="champions\Janna.cs" />
-    <Compile Include="champions\_JarvanIV.cs" />
+    <Compile Include="champions\JarvanIV.cs" />
     <Compile Include="champions\Jax.cs" />
     <Compile Include="champions\_Jayce.cs" />
     <Compile Include="champions\Jinx.cs" />
     <Compile Include="champions\Kalista.cs" />
     <Compile Include="champions\Karma.cs" />
+    <Compile Include="champions\Karthus.cs" />
     <Compile Include="champions\Kassadin.cs" />
     <Compile Include="champions\Katarina.cs" />
     <Compile Include="champions\_Kayle.cs" />
@@ -145,7 +145,7 @@
     <Compile Include="champions\Nautilus.cs" />
     <Compile Include="champions\_Nidalee.cs" />
     <Compile Include="champions\_Nocturne.cs" />
-    <Compile Include="champions\_Nunu.cs" />
+    <Compile Include="champions\Nunu.cs" />
     <Compile Include="champions\_Olaf.cs" />
     <Compile Include="champions\_Orianna.cs" />
     <Compile Include="champions\_Pantheon.cs" />
@@ -153,8 +153,8 @@
     <Compile Include="champions\_Quinn.cs" />
     <Compile Include="champions\_Rammus.cs" />
     <Compile Include="champions\_RekSai.cs" />
-    <Compile Include="champions\_Renekton.cs" />
-    <Compile Include="champions\_Rengar.cs" />
+    <Compile Include="champions\Renekton.cs" />
+    <Compile Include="champions\Rengar.cs" />
     <Compile Include="champions\_Riven.cs" />
     <Compile Include="champions\_Rumble.cs" />
     <Compile Include="champions\Ryze.cs" />
@@ -172,7 +172,7 @@
     <Compile Include="champions\Syndra.cs" />
     <Compile Include="champions\Talon.cs" />
     <Compile Include="champions\_Taric.cs" />
-    <Compile Include="champions\_Teemo.cs" />
+    <Compile Include="champions\Teemo.cs" />
     <Compile Include="champions\_Thresh.cs" />
     <Compile Include="champions\Tristana.cs" />
     <Compile Include="champions\Trundle.cs" />
@@ -189,7 +189,7 @@
     <Compile Include="champions\Viktor.cs" />
     <Compile Include="champions\Vladimir.cs" />
     <Compile Include="champions\_Volibear.cs" />
-    <Compile Include="champions\_Warwick.cs" />
+    <Compile Include="champions\Warwick.cs" />
     <Compile Include="champions\MonkeyKing.cs" />
     <Compile Include="champions\_Xerath.cs" />
     <Compile Include="champions\XinZhao.cs" />
@@ -202,6 +202,7 @@
     <Compile Include="champions\Zyra.cs" />
     <Compile Include="ChampLoader.cs" />
     <Compile Include="utility\Activator.cs" />
+    <Compile Include="common\Damage.cs" />
     <Compile Include="AIO Func.cs" />
     <Compile Include="champions\__BASE.cs" />
     <Compile Include="DamageIndicator.cs" />

@@ -88,12 +88,12 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
-				
-			#region AfterAttack
-			AIO_Func.AASkill(W);
-			if(AIO_Func.AfterAttack())
-			AA();
-			#endregion
+                
+            #region AfterAttack
+            AIO_Func.AASkill(W);
+            if(AIO_Func.AfterAttack())
+            AA();
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -112,25 +112,25 @@ namespace ALL_In_One.champions
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
-		
-		static void AA()
-		{
-			AIO_Func.AACb(W);
-		}
+        
+        static void AA()
+        {
+            AIO_Func.AACb(W);
+        }
 
         static void Orbwalking_OnAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
-				
+                
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
-			if(Minions.Count > 3 || Mobs.Count > 0)
-			AIO_Func.AALcJc(W);
-			if(!utility.Activator.AfterAttack.AIO)
-			AA();
+            if(Minions.Count > 3 || Mobs.Count > 0)
+            AIO_Func.AALcJc(W);
+            if(!utility.Activator.AfterAttack.AIO)
+            AA();
         }
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
@@ -260,7 +260,7 @@ namespace ALL_In_One.champions
 
             if (W.IsReady())
                 damage += W.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, true);
-				
+                
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
 

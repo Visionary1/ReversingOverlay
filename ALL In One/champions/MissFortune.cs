@@ -26,7 +26,7 @@ namespace ALL_In_One.champions
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
-		
+        
 
         public static void Load()
         {
@@ -35,7 +35,7 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E, 800f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 1400f, TargetSelector.DamageType.Physical);
 
-			
+            
             Q.SetTargetted(0.25f, 1400f);
             E.SetSkillshot(0.25f, 150f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             R.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 2000f, false, SkillshotType.SkillshotCone);
@@ -53,10 +53,10 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Laneclear.addUseW(false);
             AIO_Menu.Champion.Laneclear.addUseE(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
-			
+            
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
-			AIO_Menu.Champion.Jungleclear.addUseE();
+            AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
@@ -74,8 +74,8 @@ namespace ALL_In_One.champions
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-			Orbwalking.AfterAttack += Orbwalking_OnAfterAttack;
-			//Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
+            Orbwalking.AfterAttack += Orbwalking_OnAfterAttack;
+            //Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -110,12 +110,12 @@ namespace ALL_In_One.champions
                 KillstealQ();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
-			#region AfterAttack
-			AIO_Func.AASkill(Q);
-			if(AIO_Func.AfterAttack())
-			AA();
-			#endregion
-		}
+            #region AfterAttack
+            AIO_Func.AASkill(Q);
+            if(AIO_Func.AfterAttack())
+            AA();
+            #endregion
+        }
 
         static void Drawing_OnDraw(EventArgs args)
         {
@@ -131,49 +131,49 @@ namespace ALL_In_One.champions
 
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
-		
+        
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
 
         }
 
-		
+        
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
             if (E.IsReady()
-				&& Player.Distance(gapcloser.Sender.Position) <= E.Range)
+                && Player.Distance(gapcloser.Sender.Position) <= E.Range)
                 E.Cast((SharpDX.Vector3)gapcloser.End);
         }
 
-		static void AA() // 챔피언 대상 평캔 ( 빼낸 이유는 AA방식 두개로 할시 두번 적어야 해서 단순화하기 위함.
-		{
-			AIO_Func.AACb(Q);
-			AIO_Func.AACb(W);
-		}
-		
+        static void AA() // 챔피언 대상 평캔 ( 빼낸 이유는 AA방식 두개로 할시 두번 적어야 해서 단순화하기 위함.
+        {
+            AIO_Func.AACb(Q);
+            AIO_Func.AACb(W);
+        }
+        
         static void Orbwalking_OnAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || (Target == null))
                 return;
-				
-			AIO_Func.AALcJc(Q);
-			AIO_Func.AALcJc(W);
-			
-			if(!utility.Activator.AfterAttack.AIO)
-			AA();
+                
+            AIO_Func.AALcJc(Q);
+            AIO_Func.AALcJc(W);
+            
+            if(!utility.Activator.AfterAttack.AIO)
+            AA();
         }
 
-		
+        
         static void Combo()
         {
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-				var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
+                var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
                 AIO_Func.CCast(E,Etarget);
             }
 
@@ -186,7 +186,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
-				var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
+                var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.CCast(E,Etarget);
             }
 
@@ -196,7 +196,7 @@ namespace ALL_In_One.champions
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
-		
+        
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
@@ -204,18 +204,18 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady() && Minions.Any(x => x.IsValidTarget(E.Range)))
                 AIO_Func.CCast(E,Minions[0]);
-		}
+        }
 
         static void Jungleclear()
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
-		
+        
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
                 return;
-			
+            
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady() && Mobs.Any(x=>x.IsValidTarget(E.Range)))
                 AIO_Func.CCast(E,Mobs[0]);
         }
@@ -228,17 +228,17 @@ namespace ALL_In_One.champions
                 Q.Cast(target);
             }
         }
-		
+        
         static void KillstealR()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (target.IsValidTarget(R.Range) && AIO_Func.isKillable(target, R))
-				AIO_Func.CCast(R,target);
+                AIO_Func.CCast(R,target);
             }
         }
-		
-		
+        
+        
         static float getComboDamage(Obj_AI_Base enemy)
         {
             float damage = 0;
@@ -248,13 +248,13 @@ namespace ALL_In_One.champions
 
             if (W.IsReady())
                 damage += W.GetDamage(enemy);
-				
+                
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
 
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
-				
+                
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
             return damage;

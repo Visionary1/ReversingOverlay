@@ -25,7 +25,7 @@ namespace ALL_In_One.champions
         {
             Q = new Spell(SpellSlot.Q, 260f + 37.5f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W, 125f + 37.5f, TargetSelector.DamageType.Magical){Delay = 0.25f};
-            E = new Spell(SpellSlot.E, 325f, TargetSelector.DamageType.Physical);//그냥 접근기로 쓰게 넣었음
+            E = new Spell(SpellSlot.E, 325f + Player.AttackRange, TargetSelector.DamageType.Physical);//그냥 접근기로 쓰게 넣었음
             R = new Spell(SpellSlot.R, 550f, TargetSelector.DamageType.Magical);
 
             Q.SetSkillshot(0.25f, 112.5f, 2000f, false, SkillshotType.SkillshotCircle);
@@ -74,7 +74,7 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(10))
             {
                 AIO_Func.SC(W,0,0,0f);
-                AIO_Func.SC(E,150f,0,0f);
+                AIO_Func.SC(E,200f,float.MaxValue,0f);
                 switch (Orbwalker.ActiveMode)
                 {
                     case Orbwalking.OrbwalkingMode.Combo:
@@ -114,7 +114,7 @@ namespace ALL_In_One.champions
             if (W.IsReady() && drawW.Active)
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
             if (E.IsReady() && drawE.Active)
-                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+                Render.Circle.DrawCircle(Player.Position, E.Range - Player.AttackRange, drawE.Color);
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
             var pos_temp = Drawing.WorldToScreen(Player.Position);
@@ -138,7 +138,7 @@ namespace ALL_In_One.champions
             if ((int) args.Type != 70)
             return;
             
-            if(Qtimer > Utils.TickCount - 90)
+            if(Qtimer > Utils.TickCount - 80)
             {
             Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             Orbwalking.ResetAutoAttackTimer();
@@ -180,8 +180,8 @@ namespace ALL_In_One.champions
             }
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
-                if(qTarget != null && qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 10)
+                var qTarget = TargetSelector.GetTarget(Q.Range+40, Q.DamageType, true);
+                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 40 || Qtimer < Utils.TickCount - 140))
                 Q.Cast(qTarget.ServerPosition);
             }
         }
@@ -190,8 +190,8 @@ namespace ALL_In_One.champions
         {
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-                var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
-                if(qTarget != null && qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 10)
+                var qTarget = TargetSelector.GetTarget(Q.Range+40, Q.DamageType, true);
+                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 40 || Qtimer < Utils.TickCount - 140))
                 Q.Cast(qTarget.ServerPosition);
             }
         }

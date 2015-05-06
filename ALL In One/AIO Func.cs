@@ -141,7 +141,7 @@ namespace ALL_In_One
         
         internal static bool AfterAttack()
         {
-            return SWDuration > 4.95 && utility.Activator.AfterAttack.AIO;
+            return SWDuration > 4.85 && utility.Activator.AfterAttack.AIO;
         }
         
         internal static void AASkill(Spell spell)

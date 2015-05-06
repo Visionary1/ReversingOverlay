@@ -24,12 +24,12 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 260f + 37.5f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 125f + 37.5f, TargetSelector.DamageType.Magical){Delay = 0.25f};
+            W = new Spell(SpellSlot.W, 125f + 55f, TargetSelector.DamageType.Magical){Delay = 0.25f};
             E = new Spell(SpellSlot.E, 325f + Player.AttackRange, TargetSelector.DamageType.Physical);//그냥 접근기로 쓰게 넣었음
             R = new Spell(SpellSlot.R, 550f, TargetSelector.DamageType.Magical);
 
             Q.SetSkillshot(0.25f, 112.5f, 2000f, false, SkillshotType.SkillshotCircle);
-            E.SetSkillshot(0.25f, 100f, 2000f, false, SkillshotType.SkillshotLine); //그냥 접근기로 쓰게 넣었음
+            E.SetSkillshot(0.25f, 150f, 2000f, false, SkillshotType.SkillshotCircle); //그냥 접근기로 쓰게 넣었음
             R.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 2200f, false, SkillshotType.SkillshotCone);
             
             AIO_Menu.Champion.Combo.addUseQ();
@@ -64,6 +64,7 @@ namespace ALL_In_One.champions
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             AttackableUnit.OnDamage += OnDamage;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+			Spellbook.OnCastSpell += OnCastSpell;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -74,7 +75,7 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(10))
             {
                 AIO_Func.SC(W,0,0,0f);
-                AIO_Func.SC(E,200f,float.MaxValue,0f);
+                AIO_Func.SC(E,50f,float.MaxValue,0f);
                 switch (Orbwalker.ActiveMode)
                 {
                     case Orbwalking.OrbwalkingMode.Combo:
@@ -129,6 +130,19 @@ namespace ALL_In_One.champions
             if (args.SData.Name == "RivenTriCleave")
             Qtimer = Utils.TickCount;
         }
+		
+        static void OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
+        {
+            if (!sender.Owner.IsMe)
+            return;
+            if (args.Slot == SpellSlot.W)
+			{
+			if(Items.HasItem((int)ItemId.Ravenous_Hydra_Melee_Only) && Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
+            Items.UseItem((int)ItemId.Ravenous_Hydra_Melee_Only);
+			if(Items.HasItem((int)ItemId.Tiamat_Melee_Only) && Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
+			Items.UseItem((int)ItemId.Tiamat_Melee_Only);
+			}
+		}
         
         static void OnDamage(AttackableUnit sender, AttackableUnitDamageEventArgs args)
         {
@@ -138,16 +152,16 @@ namespace ALL_In_One.champions
             if ((int) args.Type != 70)
             return;
             
-            if(Qtimer > Utils.TickCount - 80)
+            if(Qtimer > Utils.TickCount - 120)
             {
             Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-            Orbwalking.ResetAutoAttackTimer();
+            Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
             }
         }
         
         static void AA()
         {
-            if(NextQCastAllowed)
+            if(NextQCastAllowed || Qtimer > Utils.TickCount - 1000)
             AIO_Func.AACb(Q,0,0,0);
         }
         
@@ -157,7 +171,6 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || Target == null)
                 return;
             AIO_Func.AALcJc(Q,0,0,0);
-            AIO_Func.AALcJc(E,0,0,0);
             if(!utility.Activator.AfterAttack.AIO)
             AA();
         }
@@ -181,7 +194,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
                 var qTarget = TargetSelector.GetTarget(Q.Range+40, Q.DamageType, true);
-                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 40 || Qtimer < Utils.TickCount - 140))
+                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 80 || Qtimer < Utils.TickCount - 1000))
                 Q.Cast(qTarget.ServerPosition);
             }
         }
@@ -191,7 +204,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
                 var qTarget = TargetSelector.GetTarget(Q.Range+40, Q.DamageType, true);
-                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 40 || Qtimer < Utils.TickCount - 140))
+                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 80 || Qtimer < Utils.TickCount - 1000))
                 Q.Cast(qTarget.ServerPosition);
             }
         }

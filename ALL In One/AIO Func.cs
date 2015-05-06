@@ -168,32 +168,25 @@ namespace ALL_In_One
 			
 			var Minions = MinionManager.GetMinions(Player.AttackRange/2+200f, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
 			var Mobs = MinionManager.GetMinions(Player.AttackRange/2+200f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-			
-			if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
-			&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && (getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana || Cost != 1f))
+			bool HM = true;
+			bool LM = true;
+			bool LHM = true;
+			if (Cost == 1f)
 			{
-				if (Minions.Count > 0)
-				{
-					if(spell.IsSkillshot)
-					{
-					if(spell.Type == SkillshotType.SkillshotLine)
-					LCast(spell,Minions[0],ExtraTargetDistance,ALPHA);
-					else if(spell.Type == SkillshotType.SkillshotCircle)
-					CCast(spell,Minions[0]);
-					else if(spell.Type == SkillshotType.SkillshotCone)
-					spell.Cast(Minions[0]);
-					}
-					else if(!spell.IsSkillshot)
-					spell.Cast(Minions[0]);
-					else
-					spell.Cast();
-				}
+				HM = getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana;
+				LM = getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana;
+				LHM = getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana;
 			}
-			
-			if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
-			&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && (getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana || Cost != 1f))
+			else
 			{
-				if (Mobs.Count > 0)
+				HM = true;
+				LM = true;
+				LHM = true;
+			}
+			if (Mobs.Count > 0)
+			{
+				if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && LHM)
 				{
 					if(spell.IsSkillshot)
 					{
@@ -208,14 +201,54 @@ namespace ALL_In_One
 					spell.Cast(Mobs[0]);
 					else
 					spell.Cast();
+					Utility.DelayAction.Add(35, Orbwalking.ResetAutoAttackTimer);
 				}
 			}
+			else if (Minions.Count > 0)
+			{
+				if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+				&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && LM)
+				{
+					if(spell.IsSkillshot)
+					{
+					if(spell.Type == SkillshotType.SkillshotLine)
+					LCast(spell,Minions[0],ExtraTargetDistance,ALPHA);
+					else if(spell.Type == SkillshotType.SkillshotCircle)
+					CCast(spell,Minions[0]);
+					else if(spell.Type == SkillshotType.SkillshotCone)
+					spell.Cast(Minions[0]);
+					}
+					else if(!spell.IsSkillshot)
+					spell.Cast(Minions[0]);
+					else
+					spell.Cast();
+					Utility.DelayAction.Add(35, Orbwalking.ResetAutoAttackTimer);
+				}
+				else
+				return;
+			}
+			else
+			return;
 		}
 		
 		internal static void AACb(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
 		{ // 아주 편하게 평캔 Cb, Hrs를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
 			var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //
-			
+			bool HM = true;
+			bool LM = true;
+			bool LHM = true;
+			if (Cost == 1f)
+			{
+				HM = getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana;
+				LM = getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana;
+				LHM = getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana;
+			}
+			else
+			{
+				HM = true;
+				LM = true;
+				LHM = true;
+			}
 			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
 			{
 				if((Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
@@ -234,12 +267,15 @@ namespace ALL_In_One
 					spell.Cast(target);
 					else
 					spell.Cast();
+					Utility.DelayAction.Add(35, Orbwalking.ResetAutoAttackTimer);
 				}
+				else
+				return;
 			}
 			else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
 			{
 				if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
-				&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && (getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana || Cost != 1f))
+				&& spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && HM)
 				{
 					if(spell.IsSkillshot)
 					{
@@ -254,14 +290,31 @@ namespace ALL_In_One
 					spell.Cast(target);
 					else
 					spell.Cast();
+					Utility.DelayAction.Add(35, Orbwalking.ResetAutoAttackTimer);
 				}
+				else
+				return;
 			}
 		}
 		
 		internal static void SC(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //
 		{ // 
 			var target = TargetSelector.GetTarget(spell.Range, spell.DamageType, true); //
-			
+			bool HM = true;
+			bool LM = true;
+			bool LHM = true;
+			if (Cost == 1f)
+			{
+				HM = getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana;
+				LM = getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana;
+				LHM = getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana;
+			}
+			else
+			{
+				HM = true;
+				LM = true;
+				LHM = true;
+			}
 			if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
 			{
 				if((Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
@@ -279,11 +332,13 @@ namespace ALL_In_One
 					else
 					spell.Cast(target);
 				}
+				else
+				return;
 			}
 			else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
 			{
 				if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
-				&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana || Cost != 1f))
+				&& spell.IsReady() && HM)
 				{
 					if(spell.IsSkillshot)
 					{
@@ -297,16 +352,38 @@ namespace ALL_In_One
 					else
 					spell.Cast(target);
 				}
+				else
+				return;
 			}
 			else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
 			{			
 				var Minions = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
 				var Mobs = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 				
-				if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
-				&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana || Cost != 1f))
+				if (Mobs.Count > 0)
 				{
-					if (Minions.Count > 0)
+					if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+					&& spell.IsReady() && LHM)
+					{
+						if(spell.IsSkillshot)
+						{
+							if(spell.Type == SkillshotType.SkillshotLine)
+							LCast(spell,Mobs[0],ExtraTargetDistance,ALPHA);
+							else if(spell.Type == SkillshotType.SkillshotCircle)
+							CCast(spell,Mobs[0]);
+							else if(spell.Type == SkillshotType.SkillshotCone)
+							spell.Cast(Mobs[0]);
+						}
+						else
+						spell.Cast(Mobs[0]);
+					}
+					else
+					return;
+				}
+				else if (Minions.Count > 0)
+				{
+					if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+					&& spell.IsReady() && LM)
 					{
 						if(spell.IsSkillshot)
 						{
@@ -325,32 +402,19 @@ namespace ALL_In_One
 						else
 						LH(spell);
 					}
+					else
+					return;
 				}
-				
-				if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
-				&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana || Cost != 1f))
-				{
-					if (Mobs.Count > 0)
-					{
-						if(spell.IsSkillshot)
-						{
-							if(spell.Type == SkillshotType.SkillshotLine)
-							LCast(spell,Mobs[0],ExtraTargetDistance,ALPHA);
-							else if(spell.Type == SkillshotType.SkillshotCircle)
-							CCast(spell,Mobs[0]);
-							else if(spell.Type == SkillshotType.SkillshotCone)
-							spell.Cast(Mobs[0]);
-						}
-						else
-						spell.Cast(Mobs[0]);
-					}
-				}
+				else
+				return;
 			}
 			else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
 			{
 				if(Menu.Item("Lasthit.Use " + spell.Slot.ToString(), true).GetValue<bool>()
 				&& spell.IsReady() && (getManaPercent(Player) > AIO_Menu.Champion.Lasthit.IfMana || Cost != 1f))
 				LH(spell,ALPHA);
+				else
+				return;
 			}
 		}
 		

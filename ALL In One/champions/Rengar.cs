@@ -18,7 +18,7 @@ namespace ALL_In_One.champions
 		
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q){Delay = 0.25f};
+            Q = new Spell(SpellSlot.Q);
             W = new Spell(SpellSlot.W, 500f, TargetSelector.DamageType.Magical){Delay = 0.25f};
             E = new Spell(SpellSlot.E, 1000f, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R);

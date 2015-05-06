@@ -234,6 +234,10 @@ namespace ALL_In_One
 					MadeBy("RL244");
                     champions.Teemo.Load();
                     break;
+                case "Aatrox":
+					MadeBy("RL244");
+                    champions.Aatrox.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.");
                     break;

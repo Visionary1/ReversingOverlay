@@ -77,8 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIO Menu.cs" />
-    <Compile Include="champions\Karthus.cs" />
-    <Compile Include="champions\_Aatrox.cs" />
+    <Compile Include="champions\Aatrox.cs" />
     <Compile Include="champions\_Akali.cs" />
     <Compile Include="champions\_Alistar.cs" />
     <Compile Include="champions\Amumu.cs" />
@@ -120,6 +119,7 @@
     <Compile Include="champions\Jinx.cs" />
     <Compile Include="champions\Kalista.cs" />
     <Compile Include="champions\Karma.cs" />
+    <Compile Include="champions\Karthus.cs" />
     <Compile Include="champions\Kassadin.cs" />
     <Compile Include="champions\Katarina.cs" />
     <Compile Include="champions\_Kayle.cs" />

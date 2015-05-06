@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 
 namespace ALL_In_One.champions
 {
-    class Riven// By RL244 rivenpassiveaaboost rivenpassive rivenwindslashready RivenFengShuiEngine
+    class Riven// By RL244 rivenpassiveaaboost rivenpassive rivenwindslashready RivenFengShuiEngine RivenFeint riventricleavesoundone riventricleavesoundtwo
        //리븐을 만드려면 멘탈이 강해야합니다. 굿럭 - 오토평캔 만들다 때려치운 xcsoft. By RL244 왕위를 계승하는 중입니다..soft시여..
     {
         static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } }
@@ -19,7 +19,7 @@ namespace ALL_In_One.champions
         static int Qtimer;
         static float Qps {get {var buff = AIO_Func.getBuffInstance(Player, "rivenpassiveaaboost"); return buff != null ? buff.Count : 0; } }
         static float getRBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "RivenFengShuiEngine"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static bool NextQCastAllowed {get {return Qps <= 2;}}
+        static bool NextQCastAllowed {get {return Qps <= 1;}}
         
         public static void Load()
         {
@@ -210,7 +210,7 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, false);
+                damage += Q.GetDamage(enemy)*3 + (float)Player.GetAutoAttackDamage(enemy, false)*4;
             
             if (W.IsReady())
                 damage += W.GetDamage(enemy);

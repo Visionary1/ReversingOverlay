@@ -33,10 +33,10 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana();
-			
-			AIO_Menu.Champion.Laneclear.addUseQ(false); // AIO_Func.AALcJc(Q)를 위해서 추가함. 사용자에 따라 평캔 원할수도 있으니까.. 기본은 false로
+            
+            AIO_Menu.Champion.Laneclear.addUseQ(false); // AIO_Func.AALcJc(Q)를 위해서 추가함. 사용자에 따라 평캔 원할수도 있으니까.. 기본은 false로
             AIO_Menu.Champion.Laneclear.addIfMana(); // 이하동일
-			
+            
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
@@ -81,12 +81,12 @@ namespace ALL_In_One.champions
             #region Killsteal
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
-			#endregion
-			#region AfterAttack
-			AIO_Func.AASkill(Q); // 액티베이터에서 아이템 - 스킬 중 선으로 쓸 것을 선택할수 있도록 Q스킬이 AA용 스킬임을 인식시킴. 이걸 해야 평q히드라평 콤보가 가능. 기본은 평히드라평q
-			if(AIO_Func.AfterAttack()) // 지금은 딱히 필요없을수도 있지만.. 암튼 무기연성
-			AA();
-			#endregion
+            #endregion
+            #region AfterAttack
+            AIO_Func.AASkill(Q); // 액티베이터에서 아이템 - 스킬 중 선으로 쓸 것을 선택할수 있도록 Q스킬이 AA용 스킬임을 인식시킴. 이걸 해야 평q히드라평 콤보가 가능. 기본은 평히드라평q
+            if(AIO_Func.AfterAttack()) // 지금은 딱히 필요없을수도 있지만.. 암튼 무기연성
+            AA();
+            #endregion
 
             Orbwalker.SetAttack(!Player.HasBuff("MonkeyKingSpinToWin", true));
         }
@@ -114,21 +114,21 @@ namespace ALL_In_One.champions
             if (R.CanCast(sender) && args.DangerLevel == Interrupter2.DangerLevel.High)
                 CastR1();
         }
-		
-		static void AA()
-		{
-			AIO_Func.AACb(Q); // AIO_Func 참고.. 딱히 길게 할 필요 없을것 같아서 짧게 줄였습니다.
-		}
+        
+        static void AA()
+        {
+            AIO_Func.AACb(Q); // AIO_Func 참고.. 딱히 길게 할 필요 없을것 같아서 짧게 줄였습니다.
+        }
 
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             if (!unit.IsMe || !target.IsValidTarget())
                 return;
 
-			AIO_Func.AALcJc(Q); //정글 클리어 or 라인 클리어 Q 사용 설정시 Q로 평캔.
+            AIO_Func.AALcJc(Q); //정글 클리어 or 라인 클리어 Q 사용 설정시 Q로 평캔.
 
-			if(!utility.Activator.AfterAttack.AIO) //무기연성 방식이 아닐 경우.
-			AA();
+            if(!utility.Activator.AfterAttack.AIO) //무기연성 방식이 아닐 경우.
+            AA();
         }
 
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

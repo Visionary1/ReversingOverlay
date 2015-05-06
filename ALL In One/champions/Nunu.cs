@@ -5,49 +5,52 @@ using System.Drawing;
 
 using LeagueSharp;
 using LeagueSharp.Common;
+
 namespace ALL_In_One.champions
 {
-    class Warwick// By RL244
+    class Nunu// By RL244
     {
         static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-        
+        static SpellSlot smiteSlot = SpellSlot.Unknown;
+        static Spell smite;
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 400f, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 125f);
             W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E, 1500f, TargetSelector.DamageType.Physical);
-            R = new Spell(SpellSlot.R, 700f, TargetSelector.DamageType.Magical);
-            Q.SetTargetted(0.5f, float.MaxValue);
-            R.SetTargetted(0.25f, float.MaxValue);
+            E = new Spell(SpellSlot.E, 550f, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 650, TargetSelector.DamageType.Magical);
+            Q.SetTargetted(0.25f, float.MaxValue);
+            E.SetTargetted(0.25f, float.MaxValue);
             
             
-            AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
-            AIO_Menu.Champion.Combo.addUseR(false);
+            AIO_Menu.Champion.Combo.addUseE();
 
-            AIO_Menu.Champion.Harass.addUseQ();
-            AIO_Menu.Champion.Harass.addUseW(false);
+            AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana();
 
             AIO_Menu.Champion.Lasthit.addUseQ();
+            AIO_Menu.Champion.Lasthit.addUseE();
             AIO_Menu.Champion.Lasthit.addIfMana(20);
             
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW(false);
+            AIO_Menu.Champion.Laneclear.addUseE(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
+            AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
-            AIO_Menu.Champion.Misc.addHitchanceSelector();
-            AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
+            AIO_Menu.Champion.Misc.addItem("KillstealE", true);
+            AIO_Menu.Champion.Misc.addItem("ObjectSteal(Dragon/Baron)", true);
             AIO_Menu.Champion.Drawings.addQRange();
+            AIO_Menu.Champion.Drawings.addERange();
             AIO_Menu.Champion.Drawings.addRRange();
-
         
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -64,14 +67,17 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(35))
             {
                 AIO_Func.SC(Q);
+                AIO_Func.SC(E);
                 AIO_Func.SC(R);
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                    Combo();
             }
 
             #region Killsteal
-            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
-                KillstealQ();
+            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
+                KillstealE();
+            #endregion
+            #region ObjectSteal
+            if (AIO_Menu.Champion.Misc.getBoolValue("ObjectSteal(Dragon/Baron)"))
+                ObjectSteal();
             #endregion
             #region AfterAttack
             //AIO_Func.AASkill(Q);
@@ -108,23 +114,47 @@ namespace ALL_In_One.champions
             AA();
         }
 
-        static void Combo()
-        {            
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
+        static void ObjectSteal()
+        {
+            float smdmg = setSmiteDamage();
+            setSmiteSlot();
+            foreach (var target in MinionManager.GetMinions(Player.AttackRange/2+200f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).OrderByDescending(x => x.Health).Where(x => x.Name.ToLower().Contains("Dragon") || x.Name.ToLower().Contains("Baron")))
             {
-                foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
-                {
-                    if (R.CanCast(target) && AIO_Func.isKillable(target, getComboDamage(target)))
-                        R.Cast(target);
-                }
+                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q.GetDamage(target) + smdmg) && Q.IsReady() && smite.IsReady())
+                    Q.Cast(target);
+                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q.GetDamage(target)) && Q.IsReady())
+                    Q.Cast(target);
+                if (Q.CanCast(target) && AIO_Func.isKillable(target, smdmg) && smite.IsReady())
+                    smite.Cast(target);
             }
         }
-        static void KillstealQ()
+        public static void setSmiteSlot()
+        {
+            foreach (var spell in Player.Spellbook.Spells.Where(spell => spell.Name.ToLower().Contains("summonersmite")))
+            {
+                smiteSlot = spell.Slot;
+                smite = new Spell(smiteSlot, 550);
+                return;
+            }
+        }
+        public static float setSmiteDamage() //스마이트 데미지
+        {
+            float level = Player.Level;
+            float[] damage =
+            {
+            20*level + 370,
+            30*level + 330,
+            40*level + 240,
+            50*level + 100
+            };
+            return damage.Max();
+        }
+        static void KillstealE()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
-                    Q.Cast(target);
+                if (E.CanCast(target) && AIO_Func.isKillable(target, E))
+                    E.Cast(target);
             }
         }
 
@@ -134,9 +164,10 @@ namespace ALL_In_One.champions
 
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
-                
+            if (E.IsReady())
+                damage += E.GetDamage(enemy);            
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage(enemy)/5*2;
                 
             return damage;
         }

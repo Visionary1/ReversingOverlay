@@ -14,7 +14,7 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-		
+        
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 580f, TargetSelector.DamageType.Magical);
@@ -23,8 +23,8 @@ namespace ALL_In_One.champions
             R = new Spell(SpellSlot.R, 230f, TargetSelector.DamageType.Magical);
             Q.SetTargetted(0.25f, 1800f);
             R.SetSkillshot(1f, 200f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-			
-			
+            
+            
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseR();
 
@@ -33,7 +33,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Lasthit.addUseQ(false);
             AIO_Menu.Champion.Lasthit.addIfMana(20);
-			
+            
             AIO_Menu.Champion.Laneclear.addUseQ(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
 
@@ -45,8 +45,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addQRange();
             AIO_Menu.Champion.Drawings.addRRange();
 
-		
-			AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
+        
+            AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -60,7 +60,7 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(35))
             {
-				AIO_Func.SC(R);
+                AIO_Func.SC(R);
                 switch (Orbwalker.ActiveMode)
                 {
                     case Orbwalking.OrbwalkingMode.Combo:
@@ -78,11 +78,11 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
                 KillstealQ();
             #endregion
-			#region AfterAttack
-			AIO_Func.AASkill(Q);
-			if(AIO_Func.AfterAttack())
-			AA();
-			#endregion
+            #region AfterAttack
+            AIO_Func.AASkill(Q);
+            if(AIO_Func.AfterAttack())
+            AA();
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -97,29 +97,29 @@ namespace ALL_In_One.champions
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
-	
-		static void AA()
-		{
-			AIO_Func.AACb(Q);
-		}
-		
+    
+        static void AA()
+        {
+            AIO_Func.AACb(Q);
+        }
+        
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
-			AIO_Func.AALcJc(Q);
-			if(!utility.Activator.AfterAttack.AIO)
-			AA();
+            AIO_Func.AALcJc(Q);
+            if(!utility.Activator.AfterAttack.AIO)
+            AA();
         }
 
         static void Combo()
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-				var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                if(Qtarget.Distance(Player.ServerPosition) > Player.AttackRange);
-				Q.Cast(Qtarget);
+                var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+                if(Qtarget.Distance(Player.ServerPosition) > Player.AttackRange)
+                Q.Cast(Qtarget);
             }
         }
         static void Harass()
@@ -128,9 +128,9 @@ namespace ALL_In_One.champions
                 return;
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-				var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                if(Qtarget.Distance(Player.ServerPosition) > Player.AttackRange);
-				Q.Cast(Qtarget);
+                var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+                if(Qtarget.Distance(Player.ServerPosition) > Player.AttackRange)
+                Q.Cast(Qtarget);
             }
         }
         static void KillstealQ()
@@ -148,10 +148,10 @@ namespace ALL_In_One.champions
 
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
-				
+                
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
-				
+                
             return damage;
         }
     }

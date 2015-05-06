@@ -13,7 +13,7 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-		
+        
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 600f, TargetSelector.DamageType.Magical);
@@ -24,7 +24,7 @@ namespace ALL_In_One.champions
 
             E.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, float.MaxValue, false, SkillshotType.SkillshotCone);
             R.SetTargetted(0.25f, float.MaxValue);
-			
+            
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
@@ -51,8 +51,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addERange();
             AIO_Menu.Champion.Drawings.addRRange();
 
-		
-			AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
+        
+            AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -85,11 +85,11 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
             #endregion
-			#region AfterAttack
-			AIO_Func.AASkill(Q);
-			if(AIO_Func.AfterAttack())
-			AA();
-			#endregion
+            #region AfterAttack
+            AIO_Func.AASkill(Q);
+            if(AIO_Func.AfterAttack())
+            AA();
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -110,20 +110,20 @@ namespace ALL_In_One.champions
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
-		
-		static void AA()
-		{
-			AIO_Func.AACb(Q);
-		}
-		
+        
+        static void AA()
+        {
+            AIO_Func.AACb(Q);
+        }
+        
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
-			AIO_Func.AALcJc(Q);
-			if(!utility.Activator.AfterAttack.AIO)
-			AA();
+            AIO_Func.AALcJc(Q);
+            if(!utility.Activator.AfterAttack.AIO)
+            AA();
         }
 
         static void Combo()
@@ -132,15 +132,15 @@ namespace ALL_In_One.champions
                 W.Cast(Player);
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-				var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
+                var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
                 E.Cast(Etarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-				var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-				if(AIO_Func.isKillable(Rtarget, E.GetDamage(Rtarget)+R.GetDamage(Rtarget)-Rtarget.HPRegenRate) && E.IsReady())
-				R.Cast(Rtarget);
+                var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
+                if(AIO_Func.isKillable(Rtarget, E.GetDamage(Rtarget)+R.GetDamage(Rtarget)-Rtarget.HPRegenRate) && E.IsReady())
+                R.Cast(Rtarget);
             }
         }
 
@@ -148,15 +148,15 @@ namespace ALL_In_One.champions
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
                 return;
-		
+        
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
-				var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
+                var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
                 E.Cast(Etarget);
             }
 
         }
-		
+        
         static void Laneclear()
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
@@ -186,7 +186,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
                 E.Cast(Mobs[0]);
         }
-		
+        
         static void KillstealE()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
@@ -195,12 +195,12 @@ namespace ALL_In_One.champions
                     E.Cast(target);
             }
         }
-		
+        
         static void KillstealR()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-					if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target) - target.HPRegenRate*2))
+                    if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target) - target.HPRegenRate*2))
                     R.Cast(target);
             }
         }
@@ -211,13 +211,13 @@ namespace ALL_In_One.champions
 
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
-			
-			if (W.IsReady())
-				damage += W.GetDamage(enemy);
-			
+            
+            if (W.IsReady())
+                damage += W.GetDamage(enemy);
+            
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
-				
+                
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
 

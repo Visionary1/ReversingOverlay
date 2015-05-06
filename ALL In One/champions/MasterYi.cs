@@ -14,7 +14,7 @@ namespace ALL_In_One.champions
         static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-		
+        
         static Spell Q, W, E, R;
 
         static void Wcancel() { Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); }
@@ -53,7 +53,7 @@ namespace ALL_In_One.champions
             Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawRTimer", "R Timer", true).SetValue(new Circle(true, Color.LightGreen)));
             Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawPTimer", "P Timer", true).SetValue(new Circle(true, Color.LightGreen)));
 
-			AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
+            AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -81,18 +81,18 @@ namespace ALL_In_One.champions
                 }
             }
 
-			Orbwalker.SetAttack(Player.IsTargetable);
+            Orbwalker.SetAttack(Player.IsTargetable);
 
             #region Killsteal
             if (Menu.Item("miscKs", true).GetValue<bool>())
                 Killsteal();
             #endregion
-			
-			#region AfterAttack
-			AIO_Func.AASkill(W);
-			if(AIO_Func.AfterAttack())
-			AA();
-			#endregion
+            
+            #region AfterAttack
+            AIO_Func.AASkill(W);
+            if(AIO_Func.AfterAttack())
+            AA();
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -125,7 +125,7 @@ namespace ALL_In_One.champions
                 return;
 
             if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-			&& args.Target.Type != GameObjectType.obj_AI_Minion)
+            && args.Target.Type != GameObjectType.obj_AI_Minion)
             {
                 if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
                 {
@@ -137,7 +137,7 @@ namespace ALL_In_One.champions
                 }
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo &&
-				args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name)
+                args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name)
                 {
                     Orbwalking.ResetAutoAttackTimer();
 
@@ -148,20 +148,20 @@ namespace ALL_In_One.champions
 
         }
 
-		static void AA()
-		{
-			AIO_Func.AACb(W);
-			AIO_Func.AACb(R);
-		}
-		
+        static void AA()
+        {
+            AIO_Func.AACb(W);
+            AIO_Func.AACb(R);
+        }
+        
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
 
             if (!unit.IsMe || Target == null)
                 return;
-			if(!utility.Activator.AfterAttack.AIO)
-			AA();
+            if(!utility.Activator.AfterAttack.AIO)
+            AA();
         }
 
         static void Combo()
@@ -226,21 +226,21 @@ namespace ALL_In_One.champions
         {
             float damage = 0;
 
-		    if (Q.IsReady())
+            if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
-				
-		    if (E.IsReady())
+                
+            if (E.IsReady())
                 damage += E.GetDamage(enemy);
-				
-		    if (getPBuffDuration > 0)
+                
+            if (getPBuffDuration > 0)
                 damage += (float)Player.GetAutoAttackDamage(enemy, false) / 2;
-				
-		    if (W.IsReady())
+                
+            if (W.IsReady())
                 damage += (float)Player.GetAutoAttackDamage(enemy, false);
-				
-		    if(!Player.IsWindingUp)
-			    damage += (float)Player.GetAutoAttackDamage(enemy, true);
-				
+                
+            if(!Player.IsWindingUp)
+                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+                
                 return damage;
             }
     }

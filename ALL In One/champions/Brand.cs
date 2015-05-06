@@ -18,7 +18,7 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-		static float QD = 50f;
+        static float QD = 50f;
 
         public static void Load()
         {
@@ -27,7 +27,7 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E, 625f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 750f, TargetSelector.DamageType.Magical);
 
-			
+            
             Q.SetSkillshot(0.25f, 70f, 1400f, true, SkillshotType.SkillshotLine);
             W.SetSkillshot(0.625f, 250f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             E.SetTargetted(0.25f, float.MaxValue);
@@ -47,14 +47,14 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Laneclear.addUseW();
             AIO_Menu.Champion.Laneclear.addUseE();
             AIO_Menu.Champion.Laneclear.addIfMana();
-			
+            
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
-			AIO_Menu.Champion.Jungleclear.addUseE();
+            AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
-			PrioritySelector();
+            PrioritySelector();
             AIO_Menu.Champion.Misc.addItem("Made By Rl244", true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(50, 0, 250));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
@@ -85,7 +85,7 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
-			QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
+            QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
@@ -106,9 +106,9 @@ namespace ALL_In_One.champions
                 KillstealW();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
                 KillstealE();
-			if (AIO_Menu.Champion.Misc.getBoolValue("W on stuned target"))
-				stw();
-				
+            if (AIO_Menu.Champion.Misc.getBoolValue("W on stuned target"))
+                stw();
+                
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -117,11 +117,11 @@ namespace ALL_In_One.champions
                 return;
 
             var drawQ = AIO_Menu.Champion.Drawings.QRange;
-			var drawQr = AIO_Menu.Champion.Drawings.getCircleValue("Q Safe Range");
+            var drawQr = AIO_Menu.Champion.Drawings.getCircleValue("Q Safe Range");
             var drawW = AIO_Menu.Champion.Drawings.WRange;
             var drawE = AIO_Menu.Champion.Drawings.ERange;
             var drawR = AIO_Menu.Champion.Drawings.RRange;
-			var qtarget = TargetSelector.GetTarget(Q.Range + Player.MoveSpeed * Q.Delay, TargetSelector.DamageType.Magical);
+            var qtarget = TargetSelector.GetTarget(Q.Range + Player.MoveSpeed * Q.Delay, TargetSelector.DamageType.Magical);
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
@@ -131,25 +131,25 @@ namespace ALL_In_One.champions
 
             if (Q.IsReady() && drawQr.Active && qtarget != null)
                 Render.Circle.DrawCircle(Player.Position, Q.Range - qtarget.MoveSpeed*Q.Delay, drawQr.Color);
-		
+        
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
-		
+        
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
 
-		
+        
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
             if (W.IsReady()
-				&& Player.Distance(gapcloser.Sender.Position) <= W.Range)
+                && Player.Distance(gapcloser.Sender.Position) <= W.Range)
                 AIO_Func.CCast(W,gapcloser.Sender); //W.Cast((Vector3)gapcloser.End);
             if (gapcloser.Sender.HasBuff("brandablaze") && Q.IsReady()
-				&& Player.Distance(gapcloser.Sender.Position) <= Q.Range)
+                && Player.Distance(gapcloser.Sender.Position) <= Q.Range)
                 AIO_Func.LCast(Q,gapcloser.Sender,QD,0);
         }
 
@@ -159,102 +159,102 @@ namespace ALL_In_One.champions
                 return;
 
             if (W.IsReady()
-			&& Player.Distance(sender.Position) <= W.Range)
+            && Player.Distance(sender.Position) <= W.Range)
                 AIO_Func.CCast(W,sender);
             if (sender.HasBuff("brandablaze") && Q.IsReady()
-			&& Player.Distance(sender.Position) <= Q.Range)
+            && Player.Distance(sender.Position) <= Q.Range)
                 AIO_Func.LCast(Q,sender,QD,0);
         }
-		
-		enum PriorSpell
-		{
-		Q = 0,
-		W = 1,
-		E = 2,
-		N = 3
-		}
-		
-		static void PrioritySelector(PriorSpell defaultSpell = PriorSpell.N)
-		{
-			int defaultindex;
+        
+        enum PriorSpell
+        {
+        Q = 0,
+        W = 1,
+        E = 2,
+        N = 3
+        }
+        
+        static void PrioritySelector(PriorSpell defaultSpell = PriorSpell.N)
+        {
+            int defaultindex;
 
-			switch (defaultSpell)
-			{
-				case PriorSpell.Q:
-					defaultindex = 0;
-					break;
-				case PriorSpell.W:
-					defaultindex = 1;
-					break;
-				case PriorSpell.E:
-					defaultindex = 2;
-					break;
-				case PriorSpell.N:
-					defaultindex = 3;
-					break;
-				default:
-					defaultindex = 3;
-					break;
-			}
+            switch (defaultSpell)
+            {
+                case PriorSpell.Q:
+                    defaultindex = 0;
+                    break;
+                case PriorSpell.W:
+                    defaultindex = 1;
+                    break;
+                case PriorSpell.E:
+                    defaultindex = 2;
+                    break;
+                case PriorSpell.N:
+                    defaultindex = 3;
+                    break;
+                default:
+                    defaultindex = 3;
+                    break;
+            }
 
-			Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.PriorSpell", "PriorSpell", true)).SetValue(new StringList(new string[] { "Q", "W", "E", "None" }, defaultindex));
-		}
-		
-		static PriorSpell SelectedPriorSpell
-		{
-			get
-			{
-				switch (Menu.SubMenu("Misc").Item("Misc.PriorSpell", true).GetValue<StringList>().SelectedValue)
-				{
-					case "Q":
-						return PriorSpell.Q;
-					case "W":
-						return PriorSpell.W;
-					case "E":
-						return PriorSpell.E;
-					case "None":
-						return PriorSpell.N;
-					default:
-						return PriorSpell.N;
-				}
-			}
-		}
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.PriorSpell", "PriorSpell", true)).SetValue(new StringList(new string[] { "Q", "W", "E", "None" }, defaultindex));
+        }
+        
+        static PriorSpell SelectedPriorSpell
+        {
+            get
+            {
+                switch (Menu.SubMenu("Misc").Item("Misc.PriorSpell", true).GetValue<StringList>().SelectedValue)
+                {
+                    case "Q":
+                        return PriorSpell.Q;
+                    case "W":
+                        return PriorSpell.W;
+                    case "E":
+                        return PriorSpell.E;
+                    case "None":
+                        return PriorSpell.N;
+                    default:
+                        return PriorSpell.N;
+                }
+            }
+        }
 
-		
+        
         static void Combo()
         {
 
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-				var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-				if(PriorSpell.Q != SelectedPriorSpell || Qtarget.HasBuff("brandablaze"))
-					AIO_Func.LCast(Q,Qtarget,QD,0);
+                var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+                if(PriorSpell.Q != SelectedPriorSpell || Qtarget.HasBuff("brandablaze"))
+                    AIO_Func.LCast(Q,Qtarget,QD,0);
             }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-				var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-				if(PriorSpell.E != SelectedPriorSpell || Etarget.HasBuff("brandablaze"))
-					E.Cast(Etarget);
+                var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
+                if(PriorSpell.E != SelectedPriorSpell || Etarget.HasBuff("brandablaze"))
+                    E.Cast(Etarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
-				var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-				if(PriorSpell.W != SelectedPriorSpell || Wtarget.HasBuff("brandablaze"))
-					AIO_Func.CCast(W,Wtarget);
+                var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+                if(PriorSpell.W != SelectedPriorSpell || Wtarget.HasBuff("brandablaze"))
+                    AIO_Func.CCast(W,Wtarget);
 
             }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-				var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-			
-				if(Rtarget.Health + Rtarget.HPRegenRate <= R.GetDamage(Rtarget)*2)
-					{ 
-						if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
-						R.Cast(Rtarget);
-					}
+                var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
+            
+                if(Rtarget.Health + Rtarget.HPRegenRate <= R.GetDamage(Rtarget)*2)
+                    { 
+                        if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
+                        R.Cast(Rtarget);
+                    }
             }
         }
 
@@ -262,23 +262,23 @@ namespace ALL_In_One.champions
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
                 return;
-		
+        
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-				var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+                var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
                 AIO_Func.LCast(Q,Qtarget,QD,0);
             }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
-				var Etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed*E.Delay, TargetSelector.DamageType.Magical);
+                var Etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed*E.Delay, TargetSelector.DamageType.Magical);
                 E.Cast(Etarget);
             }
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
-				var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-				AIO_Func.CCast(W,Wtarget);
+                var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+                AIO_Func.CCast(W,Wtarget);
             }
         }
 
@@ -286,27 +286,27 @@ namespace ALL_In_One.champions
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
-		
+        
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
                 return;
 
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
-				AIO_Func.LH(Q);
+                AIO_Func.LH(Q);
 
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady() && Minions.Any(x => x.IsValidTarget(W.Range)))
-				AIO_Func.CCast(W,Minions[0]);
-			
+                AIO_Func.CCast(W,Minions[0]);
+            
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
-				AIO_Func.LH(E);
-		}
+                AIO_Func.LH(E);
+        }
 
         static void Jungleclear()
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
-		
+        
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
@@ -321,9 +321,9 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady())
             {
                 if (Mobs.Any(x=>x.IsValidTarget(W.Range)))
-					AIO_Func.CCast(W,Mobs[0]);
+                    AIO_Func.CCast(W,Mobs[0]);
             }
-			
+            
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
             {
                 if (Mobs.Any(x=>x.IsValidTarget(E.Range)))
@@ -340,7 +340,7 @@ namespace ALL_In_One.champions
                     AIO_Func.LCast(Q,target,QD,0);
             }
         }
-		
+        
         static void KillstealW()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
@@ -349,7 +349,7 @@ namespace ALL_In_One.champions
                     AIO_Func.CCast(W,target);
             }
         }
-		
+        
         static void KillstealE()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
@@ -358,20 +358,20 @@ namespace ALL_In_One.champions
                     E.Cast(target);
             }
         }
-		
-		static void stw()
-		{
-			if (W.IsReady() && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
+        
+        static void stw()
+        {
+            if (W.IsReady() && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
             {
-			var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-			if(Wtarget == null)
-			return;
-			var pred = W.GetPrediction(Wtarget);
-			if (pred.Hitchance == HitChance.Immobile || Wtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= W.Delay - 0.4f && W.IsReady())
-			W.Cast(Wtarget, false, true);
+            var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+            if(Wtarget == null)
+            return;
+            var pred = W.GetPrediction(Wtarget);
+            if (pred.Hitchance == HitChance.Immobile || Wtarget.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime && (b.Type == BuffType.Charm || b.Type == BuffType.Knockback || b.Type == BuffType.Stun || b.Type == BuffType.Suppression || b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) - Game.Time >= W.Delay - 0.4f && W.IsReady())
+            W.Cast(Wtarget, false, true);
             }
-		}
-		
+        }
+        
         static float getComboDamage(Obj_AI_Base enemy)
         {
             float damage = 0;
@@ -381,13 +381,13 @@ namespace ALL_In_One.champions
 
             if (W.IsReady())
                 damage += W.GetDamage(enemy);
-				
+                
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
 
             if (R.IsReady())
                 damage += R.GetDamage(enemy) * 2;
-				
+                
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
             return damage;

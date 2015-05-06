@@ -66,7 +66,7 @@ namespace ALL_In_One.champions
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
-			Orbwalking.AfterAttack += Orbwalking_AfterAttack;
+            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -153,7 +153,7 @@ namespace ALL_In_One.champions
 
             }
         }
-		
+        
         static void Combo()
         {
 

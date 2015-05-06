@@ -14,7 +14,7 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-		
+        
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q);
@@ -25,7 +25,7 @@ namespace ALL_In_One.champions
             W.SetSkillshot(0.25f, 100f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             E.SetTargetted(0.25f, float.MaxValue);
             R.SetTargetted(0.25f, float.MaxValue);
-			
+            
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
@@ -35,7 +35,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana();
-			
+            
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW();
             AIO_Menu.Champion.Laneclear.addUseE();
@@ -53,8 +53,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addERange();
             AIO_Menu.Champion.Drawings.addRRange();
 
-		
-			AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
+        
+            AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -68,8 +68,8 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
-				AIO_Func.SC(W);
-				AIO_Func.SC(E);
+                AIO_Func.SC(W);
+                AIO_Func.SC(E);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
             }
@@ -80,11 +80,11 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
                 KillstealE();
             #endregion
-			#region AfterAttack
-			AIO_Func.AASkill(Q);
-			if(AIO_Func.AfterAttack())
-			AA();
-			#endregion
+            #region AfterAttack
+            AIO_Func.AASkill(Q);
+            if(AIO_Func.AfterAttack())
+            AA();
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -102,28 +102,28 @@ namespace ALL_In_One.champions
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
-		
-		static void AA()
-		{
-			AIO_Func.AACb(Q);
-		}
-		
+        
+        static void AA()
+        {
+            AIO_Func.AACb(Q);
+        }
+        
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
-			AIO_Func.AALcJc(Q);
-			if(!utility.Activator.AfterAttack.AIO)
-			AA();
+            AIO_Func.AALcJc(Q);
+            if(!utility.Activator.AfterAttack.AIO)
+            AA();
         }
 
         static void Combo()
-        {			
+        {            
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-				if(AIO_Func.getHealthPercent(Player) < 40 && AIO_Func.EnemyCount(700f) > 0)
-				R.Cast(Player);
+                if(AIO_Func.getHealthPercent(Player) < 40 && AIO_Func.EnemyCount(700f) > 0)
+                R.Cast(Player);
             }
         }
 
@@ -150,16 +150,16 @@ namespace ALL_In_One.champions
 
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, false);
-			
-			if (W.IsReady())
-				damage += W.GetDamage(enemy);
-			
+            
+            if (W.IsReady())
+                damage += W.GetDamage(enemy);
+            
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
-				
+                
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
-				
+                
             return damage;
         }
     }

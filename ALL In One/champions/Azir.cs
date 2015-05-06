@@ -45,10 +45,10 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Laneclear.addUseW();
             AIO_Menu.Champion.Laneclear.addUseE(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
-			
+            
             AIO_Menu.Champion.Jungleclear.addUseQ(false);
             AIO_Menu.Champion.Jungleclear.addUseW();
-			AIO_Menu.Champion.Jungleclear.addUseE(false);
+            AIO_Menu.Champion.Jungleclear.addUseE(false);
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addUseKillsteal();
@@ -165,7 +165,7 @@ namespace ALL_In_One.champions
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Lasthit.IfMana))
                 return;
-				
+                
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
@@ -242,10 +242,10 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-				{
+                {
                 damage += Q.GetDamage(enemy);
                 damage += W.GetDamage(enemy);
-				}
+                }
 
             if (W.IsReady())
                 damage += W.GetDamage(enemy);
@@ -255,7 +255,7 @@ namespace ALL_In_One.champions
 
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
-				
+                
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true) + W.GetDamage(enemy);;
             return damage;

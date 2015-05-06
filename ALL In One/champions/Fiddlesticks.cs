@@ -14,7 +14,7 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-		
+        
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 575f, TargetSelector.DamageType.Physical);
@@ -25,8 +25,8 @@ namespace ALL_In_One.champions
             W.SetTargetted(0.25f, float.MaxValue);
             E.SetTargetted(0.25f, 1200f);
             R.SetSkillshot(1.5f, 600f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-			
-			
+            
+            
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
@@ -35,7 +35,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseW(false);
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana();
-			
+            
             AIO_Menu.Champion.Laneclear.addUseQ(false);
             AIO_Menu.Champion.Laneclear.addUseW(false);
             AIO_Menu.Champion.Laneclear.addUseE();
@@ -54,8 +54,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addERange();
             AIO_Menu.Champion.Drawings.addRRange();
 
-		
-			AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
+        
+            AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -70,9 +70,9 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(35))
             {
-				AIO_Func.SC(Q);
-				AIO_Func.SC(W);
-				AIO_Func.SC(E);
+                AIO_Func.SC(Q);
+                AIO_Func.SC(W);
+                AIO_Func.SC(E);
             }
 
             #region Killsteal
@@ -96,7 +96,7 @@ namespace ALL_In_One.champions
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
-		
+        
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
@@ -111,10 +111,10 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
                 return;
 
-            if (E.IsReady()	&& Player.Distance(sender.Position) <= E.Range)
+            if (E.IsReady()    && Player.Distance(sender.Position) <= E.Range)
                 E.Cast(sender);
-				
-            if (Q.IsReady()	&& Player.Distance(sender.Position) <= Q.Range)
+                
+            if (Q.IsReady()    && Player.Distance(sender.Position) <= Q.Range)
                 Q.Cast(sender);
         }
         static void KillstealE()
@@ -130,15 +130,15 @@ namespace ALL_In_One.champions
         {
             float damage = 0;
 
-			if (W.IsReady())
-				damage += W.GetDamage(enemy)*3;
-			
+            if (W.IsReady())
+                damage += W.GetDamage(enemy)*3;
+            
             if (E.IsReady())
                 damage += E.GetDamage(enemy)*2;
-				
+                
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
-				
+                
             return damage;
         }
     }

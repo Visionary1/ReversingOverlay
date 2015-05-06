@@ -19,7 +19,7 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q);
-            W = new Spell(SpellSlot.W){Range = 162.5f};
+            W = new Spell(SpellSlot.W){Range = 162.5f + 32.5f}; //162.5f
             E = new Spell(SpellSlot.E, 925f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 1000f, TargetSelector.DamageType.Magical);
 

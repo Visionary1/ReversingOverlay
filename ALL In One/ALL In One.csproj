@@ -138,6 +138,7 @@
     <Compile Include="champions\_Maokai.cs" />
     <Compile Include="champions\MasterYi.cs" />
     <Compile Include="champions\MissFortune.cs" />
+    <Compile Include="champions\MonkeyKing.cs" />
     <Compile Include="champions\Mordekaiser.cs" />
     <Compile Include="champions\_Morgana.cs" />
     <Compile Include="champions\Nami.cs" />
@@ -155,7 +156,7 @@
     <Compile Include="champions\_RekSai.cs" />
     <Compile Include="champions\Renekton.cs" />
     <Compile Include="champions\Rengar.cs" />
-    <Compile Include="champions\_Riven.cs" />
+    <Compile Include="champions\Riven.cs" />
     <Compile Include="champions\_Rumble.cs" />
     <Compile Include="champions\Ryze.cs" />
     <Compile Include="champions\_Sejuani.cs" />
@@ -188,9 +189,8 @@
     <Compile Include="champions\Vi.cs" />
     <Compile Include="champions\Viktor.cs" />
     <Compile Include="champions\Vladimir.cs" />
-    <Compile Include="champions\_Volibear.cs" />
+    <Compile Include="champions\Volibear.cs" />
     <Compile Include="champions\Warwick.cs" />
-    <Compile Include="champions\MonkeyKing.cs" />
     <Compile Include="champions\_Xerath.cs" />
     <Compile Include="champions\XinZhao.cs" />
     <Compile Include="champions\Yasuo.cs" />

@@ -19,8 +19,8 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 1000f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 162.5f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, Player.AttackRange, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, 190f, TargetSelector.DamageType.Magical); // 실제 범위는 162.5이지만 상대 챔피언의ㅏ width 덕분에 조금 더 멀리있어도 데미지를 입음. 1티모미터는 75f정도.
+            E = new Spell(SpellSlot.E, Player.AttackRange + 32.5f, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R){Delay = 0.25f};
 
             Q.SetSkillshot(0.25f, 60f, 2000f, true, SkillshotType.SkillshotLine); 

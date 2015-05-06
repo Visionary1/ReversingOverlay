@@ -163,7 +163,7 @@ namespace ALL_In_One.champions
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !AIO_Menu.Champion.Combo.UseW || !AIO_Menu.Champion.Harass.UseW ||
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && !(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
             return;
-            if (IsOnHit(args.SData.Name) && args.Target.IsMe && Player.Distance(args.End) < 150)
+            if (IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && Player.Distance(args.End) < 110)
             W.Cast();
         }
 

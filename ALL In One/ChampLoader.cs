@@ -111,7 +111,7 @@ namespace ALL_In_One
                     champions.Zyra.Load();
                     break;
                 case "Caitlyn":
-                    MadeBy("RL244");
+                    MadeBy("RL244"); // Work In Progress
                     champions.Caitlyn.Load();
                     break;
                 case "MissFortune":
@@ -210,7 +210,7 @@ namespace ALL_In_One
                     MadeBy("RL244");
                     champions.Yorick.Load();
                     break;
-                case "Renekton":
+                case "Renekton": // Work In Progress
                     MadeBy("RL244");
                     champions.Renekton.Load();
                     break;
@@ -226,7 +226,7 @@ namespace ALL_In_One
                     MadeBy("RL244");
                     champions.Ezreal.Load();
                     break;
-                case "JarvanIV": //WIP
+                case "JarvanIV": // Work In Progress
                     MadeBy("RL244");
                     champions.JarvanIV.Load();
                     break;
@@ -245,6 +245,14 @@ namespace ALL_In_One
                 case "DrMundo":
                     MadeBy("RL244");
                     champions.DrMundo.Load();
+                    break;
+                case "Volibear": // Work In Progress
+                    MadeBy("RL244");
+                    champions.Volibear.Load();
+                    break;
+                case "Riven": 
+                    MadeBy("RL244");
+                    champions.Riven.Load();
                     break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.");

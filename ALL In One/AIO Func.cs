@@ -190,8 +190,10 @@ namespace ALL_In_One
                         else if(!spell.IsSkillshot)
                         spell.Cast(Mobs[0]);
                         else
-                        spell.Cast();
-                        Utility.DelayAction.Add(35, Orbwalking.ResetAutoAttackTimer);
+						{
+							spell.Cast();
+							Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+						}
                     }
                 }
                 if (Minions.Count > 0)
@@ -211,8 +213,10 @@ namespace ALL_In_One
                         else if(!spell.IsSkillshot)
                         spell.Cast(Minions[0]);
                         else
-                        spell.Cast();
-                        Utility.DelayAction.Add(35, Orbwalking.ResetAutoAttackTimer);
+						{
+							spell.Cast();
+							Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+						}
                     }
                 }
             }
@@ -253,8 +257,10 @@ namespace ALL_In_One
                     else if(!spell.IsSkillshot)
                     spell.Cast(target);
                     else
-                    spell.Cast();
-                    Utility.DelayAction.Add(35, Orbwalking.ResetAutoAttackTimer);
+					{
+						spell.Cast();
+						Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+					}
                 }
             }
             else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
@@ -274,8 +280,10 @@ namespace ALL_In_One
                     else if(!spell.IsSkillshot)
                     spell.Cast(target);
                     else
-                    spell.Cast();
-                    Utility.DelayAction.Add(35, Orbwalking.ResetAutoAttackTimer);
+					{
+						spell.Cast();
+						Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+					}
                 }
             }
         }

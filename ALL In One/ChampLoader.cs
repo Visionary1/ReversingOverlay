@@ -217,8 +217,8 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Yorick.Load();
                     break;
-                case "Renekton": // Work In Progress
-                    MadeBy(Developer.RL244);
+                case "Renekton": 
+                    MadeBy(Developer.RL244); // Work In Progress
                     champions.Renekton.Load();
                     break;
                 case "Rengar":
@@ -272,6 +272,10 @@ namespace ALL_In_One
                 case "Vayne": 
                     MadeBy(Developer.RL244);
                     champions.Vayne.Load();
+                    break;
+                case "Kayle": 
+                    MadeBy(Developer.RL244);
+                    champions.Kayle.Load();
                     break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader)Champ Not Supported.");

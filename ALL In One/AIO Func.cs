@@ -454,6 +454,20 @@ namespace ALL_In_One
                 }
             }
         }
+		
+		internal static void Heal(Spell spell, float Mana = 40, float Max = 60, float Cost = 1f)
+		{
+			bool M = true;
+			if (Cost == 1f)
+			M = getManaPercent(Player) > Mana;
+			else
+			M = true;
+			foreach (var Ally in HeroManager.Allies.Where(x => x.Distance(Player.ServerPosition) <= spell.Range && getHealthPercent(x) < Max))
+			{
+				if (spell.IsReady() && M)
+					spell.Cast(Ally);
+			}
+		}
         
         internal static List<Obj_AI_Hero> GetEnemyList()// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌.
         {

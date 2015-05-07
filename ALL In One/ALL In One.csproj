@@ -123,7 +123,7 @@
     <Compile Include="champions\Karthus.cs" />
     <Compile Include="champions\Kassadin.cs" />
     <Compile Include="champions\Katarina.cs" />
-    <Compile Include="champions\_Kayle.cs" />
+    <Compile Include="champions\Kayle.cs" />
     <Compile Include="champions\_Kennen.cs" />
     <Compile Include="champions\KhaZix.cs" />
     <Compile Include="champions\KogMaw.cs" />

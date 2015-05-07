@@ -49,7 +49,7 @@ namespace ALL_In_One.champions
 
             Menu.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("miscKs", "Use KillSteal", true).SetValue(true));
 
-            AIO_Menu.Champion.Drawings.addQRange();
+            AIO_Menu.Champion.Drawings.addQrange();
             Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawRTimer", "R Timer", true).SetValue(new Circle(true, Color.LightGreen)));
             Menu.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("drawPTimer", "P Timer", true).SetValue(new Circle(true, Color.LightGreen)));
 
@@ -100,7 +100,7 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = AIO_Menu.Champion.Drawings.QRange;
+            var drawQ = AIO_Menu.Champion.Drawings.Qrange;
             var drawRTimer = Menu.Item("drawRTimer", true).GetValue<Circle>();
             var drawPTimer = Menu.Item("drawPTimer", true).GetValue<Circle>();
 

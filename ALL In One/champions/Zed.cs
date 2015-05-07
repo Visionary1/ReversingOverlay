@@ -53,10 +53,10 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
 
-            AIO_Menu.Champion.Drawings.addQRange();
-            AIO_Menu.Champion.Drawings.addWRange(false);
-            AIO_Menu.Champion.Drawings.addERange();
-            AIO_Menu.Champion.Drawings.addRRange();
+            AIO_Menu.Champion.Drawings.addQrange();
+            AIO_Menu.Champion.Drawings.addWrange(false);
+            AIO_Menu.Champion.Drawings.addErange();
+            AIO_Menu.Champion.Drawings.addRrange();
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -101,10 +101,10 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = AIO_Menu.Champion.Drawings.QRange;
-            var drawW = AIO_Menu.Champion.Drawings.WRange;
-            var drawE = AIO_Menu.Champion.Drawings.ERange;
-            var drawR = AIO_Menu.Champion.Drawings.RRange;
+            var drawQ = AIO_Menu.Champion.Drawings.Qrange;
+            var drawW = AIO_Menu.Champion.Drawings.Wrange;
+            var drawE = AIO_Menu.Champion.Drawings.Erange;
+            var drawR = AIO_Menu.Champion.Drawings.Rrange;
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color, 3);

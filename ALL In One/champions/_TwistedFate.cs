@@ -68,10 +68,10 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();//Misc서브메뉴에 Use Anti-Gapcloser 옵션추가
             AIO_Menu.Champion.Misc.addUseInterrupter();//Misc서브메뉴에 Use Interrupter 옵션 추가.
 
-            AIO_Menu.Champion.Drawings.addQRange();//Drawings서브메뉴에 Q Range 옵션추가.
-            AIO_Menu.Champion.Drawings.addQRange();
-            AIO_Menu.Champion.Drawings.addERange();
-            AIO_Menu.Champion.Drawings.addRRange();
+            AIO_Menu.Champion.Drawings.addQrange();//Drawings서브메뉴에 Q Range 옵션추가.
+            AIO_Menu.Champion.Drawings.addQrange();
+            AIO_Menu.Champion.Drawings.addErange();
+            AIO_Menu.Champion.Drawings.addRrange();
 
             // Drawings 서브메뉴에 데미지표시기 추가하는 메소드.
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
@@ -122,10 +122,10 @@ namespace ALL_In_One.champions
 
             //Drawings 설정 정보를 변수에 불러오는겁니다.
             //사용하지 않는 옵션은 지우세요 인게임에서 오류납니다.
-            var drawQ = AIO_Menu.Champion.Drawings.QRange;
-            var drawW = AIO_Menu.Champion.Drawings.WRange;
-            var drawE = AIO_Menu.Champion.Drawings.ERange;
-            var drawR = AIO_Menu.Champion.Drawings.RRange;
+            var drawQ = AIO_Menu.Champion.Drawings.Qrange;
+            var drawW = AIO_Menu.Champion.Drawings.Wrange;
+            var drawE = AIO_Menu.Champion.Drawings.Erange;
+            var drawR = AIO_Menu.Champion.Drawings.Rrange;
 
             //Q스펠이 준비상태(쿨타임아닌상태)이고 Q Range옵션이 On 이면 Q사거리를 플레이어 챔피언위치에다가 그리는겁니다. 이하동문
             if (Q.IsReady() && drawQ.Active)

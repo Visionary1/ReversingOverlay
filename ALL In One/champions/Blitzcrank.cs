@@ -59,9 +59,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
 
-            AIO_Menu.Champion.Drawings.addQRange(false);
+            AIO_Menu.Champion.Drawings.addQrange(false);
             AIO_Menu.Champion.Drawings.addItem("Q Safe Range", new Circle(true, Color.Red));
-            AIO_Menu.Champion.Drawings.addRRange();
+            AIO_Menu.Champion.Drawings.addRrange();
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -110,8 +110,8 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = AIO_Menu.Champion.Drawings.QRange;
-            var drawR = AIO_Menu.Champion.Drawings.RRange;
+            var drawQ = AIO_Menu.Champion.Drawings.Qrange;
+            var drawR = AIO_Menu.Champion.Drawings.Rrange;
             var drawQr = AIO_Menu.Champion.Drawings.getCircleValue("Q Safe Range");
             var qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 

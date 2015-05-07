@@ -605,27 +605,27 @@ namespace ALL_In_One
                     return MainMenu_Manual.Item("Drawings." + DisplayName, ChampUniq).GetValue<Circle>();
                 }
 
-                internal static void addQRange(bool Enabled = true)
+                internal static void addQrange(bool Enabled = true)
                 {
                     addItem("Q Range", new Circle(Enabled, System.Drawing.Color.FromArgb(200, System.Drawing.Color.SpringGreen)));
                 }
 
-                internal static void addWRange(bool Enabled = true)
+                internal static void addWrange(bool Enabled = true)
                 {
                     addItem("W Range", new Circle(Enabled, System.Drawing.Color.FromArgb(200, System.Drawing.Color.SpringGreen)));
                 }
 
-                internal static void addERange(bool Enabled = true)
+                internal static void addErange(bool Enabled = true)
                 {
                     addItem("E Range", new Circle(Enabled, System.Drawing.Color.FromArgb(200, System.Drawing.Color.SpringGreen)));
                 }
 
-                internal static void addRRange(bool Enabled = true)
+                internal static void addRrange(bool Enabled = true)
                 {
                     addItem("R Range", new Circle(Enabled, System.Drawing.Color.FromArgb(200, System.Drawing.Color.SpringGreen)));
                 }
 
-                internal static Circle QRange
+                internal static Circle Qrange
                 {
                     get
                     {
@@ -633,7 +633,7 @@ namespace ALL_In_One
                     }
                 }
 
-                internal static Circle WRange
+                internal static Circle Wrange
                 {
                     get
                     {
@@ -641,7 +641,7 @@ namespace ALL_In_One
                     }
                 }
 
-                internal static Circle ERange
+                internal static Circle Erange
                 {
                     get
                     {
@@ -649,7 +649,7 @@ namespace ALL_In_One
                     }
                 }
 
-                internal static Circle RRange
+                internal static Circle Rrange
                 {
                     get
                     {

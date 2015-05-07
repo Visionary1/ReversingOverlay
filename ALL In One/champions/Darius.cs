@@ -53,10 +53,10 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Misc.addUseInterrupter();
-            AIO_Menu.Champion.Drawings.addQRange();
-            AIO_Menu.Champion.Drawings.addERange(false);
+            AIO_Menu.Champion.Drawings.addQrange();
+            AIO_Menu.Champion.Drawings.addErange(false);
             AIO_Menu.Champion.Drawings.addItem("E Safe Range", new Circle(true, Color.Red));
-            AIO_Menu.Champion.Drawings.addRRange();
+            AIO_Menu.Champion.Drawings.addRrange();
             
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -108,9 +108,9 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-        var drawQ = AIO_Menu.Champion.Drawings.QRange;
-        var drawE = AIO_Menu.Champion.Drawings.ERange;
-        var drawR = AIO_Menu.Champion.Drawings.RRange;
+        var drawQ = AIO_Menu.Champion.Drawings.Qrange;
+        var drawE = AIO_Menu.Champion.Drawings.Erange;
+        var drawR = AIO_Menu.Champion.Drawings.Rrange;
         var drawEr = AIO_Menu.Champion.Drawings.getCircleValue("E Safe Range");
         var eTarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed * E.Delay, TargetSelector.DamageType.Magical);
 

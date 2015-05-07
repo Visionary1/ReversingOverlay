@@ -50,9 +50,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addUseKillsteal();
-            AIO_Menu.Champion.Drawings.addWRange();
-            AIO_Menu.Champion.Drawings.addERange();
-            AIO_Menu.Champion.Drawings.addRRange();
+            AIO_Menu.Champion.Drawings.addWrange();
+            AIO_Menu.Champion.Drawings.addErange();
+            AIO_Menu.Champion.Drawings.addRrange();
             AIO_Menu.Champion.Drawings.addItem("Q Timer", new Circle(true, Color.LightGreen));
             AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.LightGreen));
             AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.LightGreen));
@@ -103,9 +103,9 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-        var drawW = AIO_Menu.Champion.Drawings.WRange;
-        var drawE = AIO_Menu.Champion.Drawings.ERange;
-        var drawR = AIO_Menu.Champion.Drawings.RRange;
+        var drawW = AIO_Menu.Champion.Drawings.Wrange;
+        var drawE = AIO_Menu.Champion.Drawings.Erange;
+        var drawR = AIO_Menu.Champion.Drawings.Rrange;
         var drawQTimer = AIO_Menu.Champion.Drawings.getCircleValue("Q Timer");
         var drawETimer = AIO_Menu.Champion.Drawings.getCircleValue("E Timer");
         var drawRTimer = AIO_Menu.Champion.Drawings.getCircleValue("R Timer");

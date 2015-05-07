@@ -55,7 +55,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
 
-            AIO_Menu.Champion.Drawings.addWRange();
+            AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
@@ -107,7 +107,7 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawW = AIO_Menu.Champion.Drawings.WRange;
+            var drawW = AIO_Menu.Champion.Drawings.Wrange;
 
             if (W.IsReady() && drawW.Active)
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);

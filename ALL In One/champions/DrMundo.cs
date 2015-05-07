@@ -45,7 +45,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("AutoR", true);
-            AIO_Menu.Champion.Drawings.addQRange();
+            AIO_Menu.Champion.Drawings.addQrange();
 
         
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
@@ -82,7 +82,7 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = AIO_Menu.Champion.Drawings.QRange;
+            var drawQ = AIO_Menu.Champion.Drawings.Qrange;
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
         }

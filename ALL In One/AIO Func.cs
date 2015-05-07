@@ -400,10 +400,11 @@ namespace ALL_In_One
         internal static void MouseSC(Spell spell, float Cost = 1f) // 베인 니달리 리븐 등등.,.,
         {
 			Obj_AI_Hero target = null;
+			float TRange = 500f; // spell.Range
 			if(Player.AttackRange > 200)
             target = TargetSelector.GetTarget(Player.AttackRange + 200f, TargetSelector.DamageType.True, true);
 			else
-            target = TargetSelector.GetTarget(Player.AttackRange + 400f, TargetSelector.DamageType.True, true);
+            target = TargetSelector.GetTarget(Player.AttackRange + 500f, TargetSelector.DamageType.True, true);
             bool HM = true;
             bool LM = true;
             bool LHM = true;
@@ -419,22 +420,25 @@ namespace ALL_In_One
                 LM = true;
                 LHM = true;
             }
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-            {
-                if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
-                && spell.IsReady())
-				spell.Cast(Game.CursorPos);
-            }
-            else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-            {
-                if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
-                && spell.IsReady() && HM)
-				spell.Cast(Game.CursorPos);
-            }
-            else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+			if(target != null)
+			{
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+				{
+					if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
+					&& spell.IsReady())
+					spell.Cast(Game.CursorPos);
+				}
+				else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+				{
+					if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
+					&& spell.IsReady() && HM)
+					spell.Cast(Game.CursorPos);
+				}
+			}
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {            
-                var Minions = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy);
-                var Mobs = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+                var Minions = MinionManager.GetMinions(TRange, MinionTypes.All, MinionTeam.Enemy);
+                var Mobs = MinionManager.GetMinions(TRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                 
                 if (Mobs.Count > 0)
                 {

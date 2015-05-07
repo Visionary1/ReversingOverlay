@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="AIO Menu.cs" />
     <Compile Include="champions\Aatrox.cs" />
+    <Compile Include="champions\Ahri.cs" />
     <Compile Include="champions\_Akali.cs" />
     <Compile Include="champions\_Alistar.cs" />
     <Compile Include="champions\Amumu.cs" />
@@ -92,7 +93,7 @@
     <Compile Include="champions\Caitlyn.cs" />
     <Compile Include="champions\Cassiopeia.cs" />
     <Compile Include="champions\Chogath.cs" />
-    <Compile Include="champions\_Corki.cs" />
+    <Compile Include="champions\Corki.cs" />
     <Compile Include="champions\Darius.cs" />
     <Compile Include="champions\_Diana.cs" />
     <Compile Include="champions\_Draven.cs" />
@@ -212,7 +213,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="champions\_Ahri.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

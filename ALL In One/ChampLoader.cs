@@ -250,9 +250,17 @@ namespace ALL_In_One
                     MadeBy("RL244");
                     champions.Volibear.Load();
                     break;
-                case "Riven": 
+                case "Riven": //Hell..
                     MadeBy("RL244");
                     champions.Riven.Load();
+                    break;
+                case "Ahri": 
+                    MadeBy("RL244");
+                    champions.Ahri.Load();
+                    break;
+                case "Corki": 
+                    MadeBy("RL244");
+                    champions.Corki.Load();
                     break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.");

@@ -15,7 +15,8 @@ namespace ALL_In_One.champions
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
         static float getRBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "vayneinquisition"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-
+        static float StealthDuration { get { var buff = AIO_Func.getBuffInstance(Player, "vaynetumblefade"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float RQD {get{return Menu.Item("Misc.RQD").GetValue<Slider>().Value; }}
 
         public static void Load()
         {
@@ -48,6 +49,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.RQD", "RQ Stealth Duration", true).SetValue(new Slider(450, 0, 1000)));
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
 
@@ -73,7 +75,7 @@ namespace ALL_In_One.champions
 				AIO_Func.SC(R);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
-				if(Player.HasBuff("vaynetumblefade")) //은신 시간동안 평타 X
+				if(StealthDuration > 1- RQD/1000) //은신 시간동안 평타 X
 				Orbwalker.SetAttack(false);
 				else
 				Orbwalker.SetAttack(true);

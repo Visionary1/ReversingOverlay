@@ -16,15 +16,15 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-        static int Qtimer;
+        static int Qtimer = 0;
         static float Qps {get {var buff = AIO_Func.getBuffInstance(Player, "rivenpassiveaaboost"); return buff != null ? buff.Count : 0; } }
         static float getRBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "RivenFengShuiEngine"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static bool NextQCastAllowed {get {return Qps <= 1;}}
+        static bool NextQCastAllowed {get {return Qps <= 1;}} //NextQCastAllowed 쓰는거 잠시 보류
         
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 260f + 37.5f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 125f + 55f, TargetSelector.DamageType.Magical){Delay = 0.25f};
+            W = new Spell(SpellSlot.W, 250f + 37.5f, TargetSelector.DamageType.Magical){Delay = 0.25f};
             E = new Spell(SpellSlot.E, 325f + Player.AttackRange, TargetSelector.DamageType.Physical);//그냥 접근기로 쓰게 넣었음
             R = new Spell(SpellSlot.R, 550f, TargetSelector.DamageType.Magical);
 
@@ -50,6 +50,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
+            AIO_Menu.Champion.Misc.addItem("Inteligent Q", true);
             AIO_Menu.Champion.Drawings.addQRange();
             AIO_Menu.Champion.Drawings.addWRange();
             AIO_Menu.Champion.Drawings.addERange();
@@ -161,7 +162,7 @@ namespace ALL_In_One.champions
         
         static void AA()
         {
-            if(NextQCastAllowed || Qtimer > Utils.TickCount - 1000)
+            if(Qtimer < Utils.TickCount - 250)
             AIO_Func.AACb(Q,0,0,0);
         }
         
@@ -170,6 +171,7 @@ namespace ALL_In_One.champions
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
+			if(Qtimer < Utils.TickCount - 250)
             AIO_Func.AALcJc(Q,0,0,0);
             if(!utility.Activator.AfterAttack.AIO)
             AA();
@@ -191,20 +193,20 @@ namespace ALL_In_One.champions
                     }
                 }
             }
-            if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
+            if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Inteligent Q"))
             {
                 var qTarget = TargetSelector.GetTarget(Q.Range+40, Q.DamageType, true);
-                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 80 || Qtimer < Utils.TickCount - 1000))
+                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 90 || Qtimer < Utils.TickCount - 1200))
                 Q.Cast(qTarget.ServerPosition);
             }
         }
         
         static void Harass()
         {
-            if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
+            if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Inteligent Q"))
             {
                 var qTarget = TargetSelector.GetTarget(Q.Range+40, Q.DamageType, true);
-                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 80 || Qtimer < Utils.TickCount - 1000))
+                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 90 || Qtimer < Utils.TickCount - 1200))
                 Q.Cast(qTarget.ServerPosition);
             }
         }

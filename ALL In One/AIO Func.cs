@@ -402,7 +402,7 @@ namespace ALL_In_One
 			Obj_AI_Hero target = null;
 			float TRange = 500f; // spell.Range
 			if(Player.AttackRange > 200)
-            target = TargetSelector.GetTarget(Player.AttackRange + 200f, TargetSelector.DamageType.True, true);
+            target = TargetSelector.GetTarget(Player.AttackRange + 300f, TargetSelector.DamageType.True, true);
 			else
             target = TargetSelector.GetTarget(Player.AttackRange + 500f, TargetSelector.DamageType.True, true);
             bool HM = true;
@@ -453,8 +453,6 @@ namespace ALL_In_One
                     spell.Cast(Game.CursorPos);
                 }
             }
-            else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
-			spell.Cast(Game.CursorPos);
         }
         
         internal static List<Obj_AI_Hero> GetEnemyList()// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌.

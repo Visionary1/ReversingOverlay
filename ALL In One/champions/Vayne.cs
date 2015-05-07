@@ -75,6 +75,8 @@ namespace ALL_In_One.champions
                     Combo();
 				if(Player.HasBuff("vaynetumblefade")) //은신 시간동안 평타 X
 				Orbwalker.SetAttack(false);
+				else
+				Orbwalker.SetAttack(true);
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))

@@ -51,7 +51,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
-            AIO_Menu.Champion.Misc.addItem("Made By Rl244", true);
+            AIO_Menu.Champion.Misc.addItem("Made By Rl244", null);
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             

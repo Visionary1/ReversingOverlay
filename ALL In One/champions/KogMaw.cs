@@ -65,7 +65,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
-            AIO_Menu.Champion.Misc.addItem("Made By Rl244", true);
+            AIO_Menu.Champion.Misc.addItem("Made By Rl244", null);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Qrange")).SetValue(new Slider(50, 0, 250));
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Etg", "Additional Erange")).SetValue(new Slider(50, 0, 250));
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Rst", "R Max Stacks")).SetValue(new Slider(1, 0, 10));

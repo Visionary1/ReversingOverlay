@@ -30,24 +30,26 @@ namespace ALL_In_One
 
         internal static void addItem(string DisplayName, object Value, bool ChampUniq = false)
         {
-            MainMenu_Manual.AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq)).SetValue(Value);
-        }
+            if(Value == null)
+            {
+                MainMenu_Manual.AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq));
+                return;
+            }
 
-        internal static void addItem(string Name, string DisplayName, object Value, bool ChampUniq = false)
-        {
-            MainMenu_Manual.AddItem(new MenuItem(Name, DisplayName, ChampUniq)).SetValue(Value);
+            MainMenu_Manual.AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq)).SetValue(Value);
         }
 
         internal class Champion
         {
             internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
             {
-                MainMenu_Manual.SubMenu("Champion").AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq)).SetValue(Value);
-            }
+                if (Value == null)
+                {
+                    MainMenu_Manual.AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq));
+                    return;
+                }
 
-            internal static void addItem(string Name, string DisplayName, object Value, bool ChampUniq = true)
-            {
-                MainMenu_Manual.SubMenu("Champion").AddItem(new MenuItem(Name, DisplayName, ChampUniq)).SetValue(Value);
+                MainMenu_Manual.SubMenu("Champion").AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq)).SetValue(Value);
             }
 
             internal static void addOrbwalker()
@@ -64,6 +66,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("Combo." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("Combo." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -147,6 +155,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("Harass." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("Harass." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -230,6 +244,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Lasthit").AddItem(new MenuItem("Lasthit." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Lasthit").AddItem(new MenuItem("Lasthit." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -313,6 +333,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("Laneclear." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("Laneclear." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -396,6 +422,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -479,6 +511,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("Misc." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("Misc." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -587,6 +625,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("Drawings." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("Drawings." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -683,19 +727,6 @@ namespace ALL_In_One
                         DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
                     };
                 }
-            }
-        }
-
-        internal class Activator
-        {
-            internal static void addItem(string DisplayName, object Value, bool ChampUniq = false)
-            {
-                MainMenu_Manual.SubMenu("Activator").AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq)).SetValue(Value);
-            }
-
-            internal static void addItem(string Name, string DisplayName, object Value, bool ChampUniq = false)
-            {
-                MainMenu_Manual.SubMenu("Activator").AddItem(new MenuItem(Name, DisplayName, ChampUniq)).SetValue(Value);
             }
         }
     }

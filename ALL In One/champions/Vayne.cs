@@ -51,7 +51,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
 
-            AIO_Menu.Champion.Drawings.addWRange();
+            AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.Blue));
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -92,7 +92,7 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawW = AIO_Menu.Champion.Drawings.WRange;
+            var drawW = AIO_Menu.Champion.Drawings.Wrange;
             var drawRTimer = AIO_Menu.Champion.Drawings.getCircleValue("R Timer");
             var pos_temp = Drawing.WorldToScreen(Player.Position);
             if (W.IsReady() && drawW.Active)

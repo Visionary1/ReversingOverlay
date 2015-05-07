@@ -74,7 +74,13 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(10))
             {
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                {
                     Combo();
+
+                    Orbwalker.SetAttack(!stunisReady);
+                }
+                else
+                    Orbwalker.SetAttack(true);
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                     Harass();
@@ -111,8 +117,6 @@ namespace ALL_In_One.champions
             if (Menu.Item("miscKs", true).GetValue<bool>())
                 Killsteal(); 
             #endregion
-
-            Orbwalker.SetAttack(!stunisReady);
         }
 
         static void Drawing_OnDraw(EventArgs args)

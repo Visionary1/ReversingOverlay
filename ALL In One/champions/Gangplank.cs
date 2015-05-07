@@ -44,8 +44,8 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addUseKillsteal();
             AIO_Menu.Champion.Misc.addItem("KillstealR", false);
-            AIO_Menu.Champion.Drawings.addQRange();
-            AIO_Menu.Champion.Drawings.addERange();
+            AIO_Menu.Champion.Drawings.addQrange();
+            AIO_Menu.Champion.Drawings.addErange();
             AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.LightGreen));
             
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
@@ -95,8 +95,8 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-        var drawQ = AIO_Menu.Champion.Drawings.QRange;
-        var drawE = AIO_Menu.Champion.Drawings.ERange;
+        var drawQ = AIO_Menu.Champion.Drawings.Qrange;
+        var drawE = AIO_Menu.Champion.Drawings.Erange;
         var drawETimer = AIO_Menu.Champion.Drawings.getCircleValue("E Timer");
         
         if (Q.IsReady() && drawQ.Active)

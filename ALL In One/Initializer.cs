@@ -28,8 +28,8 @@ namespace ALL_In_One
             ChampLoader.Load(ObjectManager.Player.ChampionName);
             utility.Activator.Load();
 
-            AIO_Menu.MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("BLANK", string.Empty));
-            AIO_Menu.MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));
+            AIO_Menu.Champion.Drawings.addItem(" ", null, false);
+            AIO_Menu.Champion.Drawings.addItem("--PUBLIC OPTIONS--", null, false);
 
             AIO_Menu.Champion.Drawings.addItem("Auto-Attack Real Range", new Circle(true, Color.Silver), false);
             AIO_Menu.Champion.Drawings.addItem("Auto-Attack Target", new Circle(true, Color.Red), false);

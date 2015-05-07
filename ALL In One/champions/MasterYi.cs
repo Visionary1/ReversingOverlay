@@ -49,7 +49,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
 
-            AIO_Menu.Champion.Drawings.addQRange();
+            AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.Blue));
             AIO_Menu.Champion.Drawings.addItem("P Timer", new Circle(true, Color.Black));
 
@@ -100,7 +100,7 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = AIO_Menu.Champion.Drawings.QRange;
+            var drawQ = AIO_Menu.Champion.Drawings.Qrange;
             var drawRTimer = AIO_Menu.Champion.Drawings.getCircleValue("R Timer");
             var drawPTimer = AIO_Menu.Champion.Drawings.getCircleValue("P Timer");
             var pos_temp = Drawing.WorldToScreen(Player.Position);

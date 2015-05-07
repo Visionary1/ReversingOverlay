@@ -175,7 +175,7 @@ namespace ALL_In_One
                 }
                 if (Mobs.Count > 0)
                 {
-                    if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                    if(Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
                     && spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && LHM)
                     {
                         if(spell.IsSkillshot)
@@ -198,7 +198,7 @@ namespace ALL_In_One
                 }
                 if (Minions.Count > 0)
                 {
-                    if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                    if(Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() //  || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
                     && spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && LM)
                     {
                         if(spell.IsSkillshot)
@@ -242,7 +242,7 @@ namespace ALL_In_One
             }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if((Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() // || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>()) 구버전 지원 중단
                 && spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
                 {
                     if(spell.IsSkillshot)
@@ -265,7 +265,7 @@ namespace ALL_In_One
             }
             else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() // || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>() 구버전 더이상 지원안함.
                 && spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && HM)
                 {
                     if(spell.IsSkillshot)
@@ -308,7 +308,7 @@ namespace ALL_In_One
             }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if((Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
                 && spell.IsReady())
                 {
                     if(spell.IsSkillshot)
@@ -326,7 +326,7 @@ namespace ALL_In_One
             }
             else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
                 && spell.IsReady() && HM)
                 {
                     if(spell.IsSkillshot)
@@ -349,7 +349,7 @@ namespace ALL_In_One
                 
                 if (Mobs.Count > 0)
                 {
-                    if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                    if(Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
                     && spell.IsReady() && LHM)
                     {
                         if(spell.IsSkillshot)
@@ -367,7 +367,7 @@ namespace ALL_In_One
                 }
                 if (Minions.Count > 0)
                 {
-                    if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                    if(Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
                     && spell.IsReady() && LM)
                     {
                         if(spell.IsSkillshot)
@@ -421,13 +421,13 @@ namespace ALL_In_One
             }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if((Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
                 && spell.IsReady())
 				spell.Cast(Game.CursorPos);
             }
             else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
                 && spell.IsReady() && HM)
 				spell.Cast(Game.CursorPos);
             }
@@ -438,13 +438,13 @@ namespace ALL_In_One
                 
                 if (Mobs.Count > 0)
                 {
-                    if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                    if(Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
                     && spell.IsReady() && LHM)
                     spell.Cast(Game.CursorPos);
                 }
                 if (Minions.Count > 0)
                 {
-                    if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                    if(Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
                     && spell.IsReady() && LM)
                     spell.Cast(Game.CursorPos);
                 }

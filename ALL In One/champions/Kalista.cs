@@ -253,7 +253,7 @@ namespace ALL_In_One.champions
 
         static void Killsteal()
         {
-            var target = HeroManager.Enemies.FirstOrDefault(x => !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield) && E.CanCast(x) && (x.Health + (x.HPRegenRate / 2)) <= E.GetDamage(x));
+            var target = HeroManager.Enemies.FirstOrDefault(x => !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield) && x.IsValidTarget(E.Range) && E.IsKillable(x));
 
             if (E.CanCast(target))
                 E.Cast();

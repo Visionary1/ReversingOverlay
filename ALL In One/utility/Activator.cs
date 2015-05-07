@@ -202,7 +202,7 @@ namespace ALL_In_One.utility
                 {
 					if(Environment.TickCount - pastTime > 500) //랙 줄이려고 추가함
 					pastTime = Environment.TickCount;
-					if(Environment.TickCount - pastTime > 490)
+					if(Environment.TickCount - pastTime > 499)
 					{
 						var Target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
 						if(Target == null)

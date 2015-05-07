@@ -51,7 +51,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.Blue));
-            AIO_Menu.Champion.Drawings.addItem("P Timer", new Circle(true, Color.Black));
+            AIO_Menu.Champion.Drawings.addItem("P Timer", new Circle(true, Color.LightGreen));
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 

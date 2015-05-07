@@ -165,6 +165,8 @@ namespace ALL_In_One.utility
 
                 Menu.SubMenu("OnUpdate").AddItem(new MenuItem("OnUpdate.Use " + itemid.ToString(), "Use " + itemName)).SetValue(true);
             }
+			
+			internal static float pastTime = 0; //버프 체크시 랙 덜걸리도록..
 
             internal static void Game_OnUpdate(EventArgs args)
             {
@@ -198,18 +200,30 @@ namespace ALL_In_One.utility
                 
                 if(Menu.Item("Misc.BF").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) // 개발 편의를 위해 추가한 버프 체크기.
                 {
-                    var Target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
-                    if(Target == null)
-                    return;
-                    foreach (var buff in Player.Buffs)
-                    {
-                        AIO_Func.sendDebugMsg("PLAYER : "+buff.Name);
-                    }
-                    
-                    foreach (var buff in Target.Buffs)
-                    {
-                        AIO_Func.sendDebugMsg("TARGET : "+buff.Name);
-                    }
+					if(Environment.TickCount - pastTime > 500) //랙 줄이려고 추가함
+					pastTime = Environment.TickCount;
+					if(Environment.TickCount - pastTime > 490)
+					{
+						var Target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
+						if(Target == null)
+						{
+							foreach (var buff in Player.Buffs)
+							{
+								AIO_Func.sendDebugMsg("PLAYER : "+buff.Name);
+							}
+						}
+						else
+						{
+							foreach (var buff in Player.Buffs)
+							{
+								AIO_Func.sendDebugMsg("PLAYER : "+buff.Name);
+							}
+							foreach (var buff in Target.Buffs)
+							{
+								AIO_Func.sendDebugMsg("TARGET : "+buff.Name);
+							}
+						}
+					}
                 }
             }
         }

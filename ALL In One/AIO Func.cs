@@ -398,8 +398,12 @@ namespace ALL_In_One
         }
 		
         internal static void MouseSC(Spell spell, float Cost = 1f) // 베인 니달리 리븐 등등.,.,
-        { 
-            var target = TargetSelector.GetTarget(Player.AttackRange + 200f, spell.DamageType, true); //
+        {
+			Obj_AI_Hero target = null;
+			if(Player.AttackRange > 200)
+            target = TargetSelector.GetTarget(Player.AttackRange + 200f, TargetSelector.DamageType.True, true);
+			else
+            target = TargetSelector.GetTarget(Player.AttackRange + 400f, TargetSelector.DamageType.True, true);
             bool HM = true;
             bool LM = true;
             bool LHM = true;

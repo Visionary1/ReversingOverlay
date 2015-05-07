@@ -22,7 +22,7 @@ namespace ALL_In_One.champions
             Q = new Spell(SpellSlot.Q);
             W = new Spell(SpellSlot.W);
             E = new Spell(SpellSlot.E, 550f, TargetSelector.DamageType.Physical);
-            R = new Spell(SpellSlot.R, 700f, TargetSelector.DamageType.Physical) {Delay = 0.25f};
+            R = new Spell(SpellSlot.R, Player.AttackRange+50f, TargetSelector.DamageType.Physical) {Delay = 0.25f};
 
             E.SetTargetted(0.25f, 2400f);
             

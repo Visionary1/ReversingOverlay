@@ -76,7 +76,7 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(10))
             {
                 AIO_Func.SC(W,0,0,0f);
-                AIO_Func.SC(E,50f,float.MaxValue,0f);
+                AIO_Func.MouseSC(E,0f);
                 switch (Orbwalker.ActiveMode)
                 {
                     case Orbwalking.OrbwalkingMode.Combo:

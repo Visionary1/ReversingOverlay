@@ -396,6 +396,58 @@ namespace ALL_In_One
                 LH(spell,ALPHA);
             }
         }
+		
+        internal static void MouseSC(Spell spell, float Cost = 1f) // 베인 니달리 리븐 등등.,.,
+        { 
+            var target = TargetSelector.GetTarget(Player.AttackRange + 200f, spell.DamageType, true); //
+            bool HM = true;
+            bool LM = true;
+            bool LHM = true;
+            if (Cost == 1f)
+            {
+                HM = getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana;
+                LM = getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana;
+                LHM = getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana;
+            }
+            else
+            {
+                HM = true;
+                LM = true;
+                LHM = true;
+            }
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            {
+                if((Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                && spell.IsReady())
+				spell.Cast(Game.CursorPos);
+            }
+            else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+            {
+                if((Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                && spell.IsReady() && HM)
+				spell.Cast(Game.CursorPos);
+            }
+            else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            {            
+                var Minions = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy);
+                var Mobs = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+                
+                if (Mobs.Count > 0)
+                {
+                    if((Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                    && spell.IsReady() && LHM)
+                    spell.Cast(Game.CursorPos);
+                }
+                if (Minions.Count > 0)
+                {
+                    if((Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                    && spell.IsReady() && LM)
+                    spell.Cast(Game.CursorPos);
+                }
+            }
+            else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
+			spell.Cast(Game.CursorPos);
+        }
         
         internal static List<Obj_AI_Hero> GetEnemyList()// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌.
         {

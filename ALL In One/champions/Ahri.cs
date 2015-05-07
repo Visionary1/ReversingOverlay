@@ -53,6 +53,8 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
+            AIO_Menu.Champion.Misc.addUseAntiGapcloser();
+            AIO_Menu.Champion.Misc.addUseInterrupter();
             AIO_Menu.Champion.Drawings.addQRange();
             AIO_Menu.Champion.Drawings.addWRange();
             AIO_Menu.Champion.Drawings.addERange();
@@ -63,6 +65,8 @@ namespace ALL_In_One.champions
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
+            AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
+            Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -102,6 +106,25 @@ namespace ALL_In_One.champions
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+        }
+        static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
+        {
+            if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
+                return;
+
+            if (Q.IsReady()
+                && Player.Distance(gapcloser.Sender.Position) <= Q.Range)
+                AIO_Func.LCast(Q,gapcloser.Sender,QD); //W.Cast((Vector3)gapcloser.End);
+        }
+
+        static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
+        {
+            if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
+                return;
+
+            if (E.IsReady()
+            && Player.Distance(sender.Position) <= E.Range)
+                AIO_Func.LCast(E,sender);
         }
         
         static void Combo()

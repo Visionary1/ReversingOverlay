@@ -184,7 +184,7 @@
     <Compile Include="champions\_Udyr.cs" />
     <Compile Include="champions\Urgot.cs" />
     <Compile Include="champions\_Varus.cs" />
-    <Compile Include="champions\_Vayne.cs" />
+    <Compile Include="champions\Vayne.cs" />
     <Compile Include="champions\Veigar.cs" />
     <Compile Include="champions\_VelKoz.cs" />
     <Compile Include="champions\Vi.cs" />

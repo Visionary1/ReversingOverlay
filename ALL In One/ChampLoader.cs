@@ -111,7 +111,7 @@ namespace ALL_In_One
                     champions.Zyra.Load();
                     break;
                 case "Caitlyn":
-                    MadeBy("RL244"); // Work In Progress
+                    MadeBy("RL244"); 
                     champions.Caitlyn.Load();
                     break;
                 case "MissFortune":
@@ -143,7 +143,7 @@ namespace ALL_In_One
                     champions.Amumu.Load();
                     break;
                 case "Yasuo":
-                    MadeBy("RL244");// Work In Progress
+                    MadeBy("RL244");
                     champions.Yasuo.Load();
                     break;
                 case "Syndra":
@@ -226,7 +226,7 @@ namespace ALL_In_One
                     MadeBy("RL244");
                     champions.Ezreal.Load();
                     break;
-                case "JarvanIV": // Work In Progress
+                case "JarvanIV": 
                     MadeBy("RL244");
                     champions.JarvanIV.Load();
                     break;
@@ -246,11 +246,11 @@ namespace ALL_In_One
                     MadeBy("RL244");
                     champions.DrMundo.Load();
                     break;
-                case "Volibear": // Work In Progress
+                case "Volibear": 
                     MadeBy("RL244");
                     champions.Volibear.Load();
                     break;
-                case "Riven": //Hell..
+                case "Riven": 
                     MadeBy("RL244");
                     champions.Riven.Load();
                     break;
@@ -262,6 +262,10 @@ namespace ALL_In_One
                     MadeBy("RL244");
                     champions.Corki.Load();
                     break;
+                case "Vayne": 
+                    MadeBy("RL244");
+                    champions.Vayne.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(champLoader)Champ Not Supported.");
                     break;
@@ -270,7 +274,7 @@ namespace ALL_In_One
         
         internal static void MadeBy(string Creator)
         {
-            AIO_Func.sendDebugMsg(ObjectManager.Player.ChampionName + " Made By '" + Creator+"'.","[TeamProjects] AIO : ");
+            AIO_Func.sendDebugMsg(ObjectManager.Player.ChampionName + " Made By '" + Creator+"'.");
         }
 
         internal static bool champSupportedCheck(string checkNamespace)

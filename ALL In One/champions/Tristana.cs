@@ -214,7 +214,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (W.CanCast(target) && AIO_Func.isKillable(target, W))
+                if (W.CanCast(target) && AIO_Func.isKillable(target, W.GetDamage(target) + (float)Player.GetAutoAttackDamage(target, true)))
                 AIO_Func.CCast(W,target);
             }
         }

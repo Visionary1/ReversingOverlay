@@ -18,7 +18,7 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-        static float QD = 50f;
+        static float QD {get{return Menu.Item("Misc.Qtg").GetValue<Slider>().Value; }}
 
         public static void Load()
         {
@@ -50,7 +50,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional QRange")).SetValue(new Slider(50, 0, 250));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional QRange")).SetValue(new Slider(25, 0, 150));
             AIO_Menu.Champion.Misc.addItem("Made By Rl244", true);
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
@@ -80,7 +80,6 @@ namespace ALL_In_One.champions
             
             if (Orbwalking.CanMove(10))
             {
-            QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 
@@ -225,9 +224,9 @@ namespace ALL_In_One.champions
             
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
-                var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.E))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / Q.Speed), (int)(Q.Delay * 1000 + Game.Ping / 2)) > 0);            
-                if (_m != null)
-                AIO_Func.LH(Q,float.MaxValue);
+                var Farmloc = Q.GetLineFarmLocation(Minions);
+                if (Farmloc.MinionsHit >= 6)
+                    Q.Cast(Farmloc.Position);
             }
         }
 
@@ -243,9 +242,9 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
-                if (Q.CanCast(Mobs.FirstOrDefault()))
-                AIO_Func.LCast(Q,Mobs.FirstOrDefault(),QD);
-
+                var Farmloc = Q.GetLineFarmLocation(Mobs);
+                if (Farmloc.MinionsHit >= 6)
+                    Q.Cast(Farmloc.Position);
             }
             
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())

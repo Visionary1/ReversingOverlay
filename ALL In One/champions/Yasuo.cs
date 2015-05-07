@@ -14,7 +14,7 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, QQ, W, E, EQ, R;
-        static float QD = 50f;     
+        static float QD {get{return Menu.Item("Misc.Qtg").GetValue<Slider>().Value; }}
 
         public static void Load()
         {
@@ -33,19 +33,17 @@ namespace ALL_In_One.champions
             R.SetTargetted(0.4f, float.MaxValue);
             
             AIO_Menu.Champion.Combo.addUseQ();
-            AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE(false);
             AIO_Menu.Champion.Combo.addUseR();
 
             AIO_Menu.Champion.Harass.addUseQ();
-            AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE(false);
 
             AIO_Menu.Champion.Lasthit.addUseQ();
             AIO_Menu.Champion.Lasthit.addUseE();
 
             AIO_Menu.Champion.Laneclear.addUseQ();
-            AIO_Menu.Champion.Laneclear.addUseE();
+            AIO_Menu.Champion.Laneclear.addUseE(false);
 
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
@@ -56,6 +54,7 @@ namespace ALL_In_One.champions
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(50, 0, 150));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
+            AIO_Menu.Champion.Misc.addItem("AutoW", true);
             AIO_Menu.Champion.Drawings.addQRange();
             AIO_Menu.Champion.Drawings.addItem("QQ Safe Range", new Circle(true, Color.Red));
             AIO_Menu.Champion.Drawings.addItem("EQ Range", new Circle(true, Color.Red));
@@ -80,7 +79,6 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(35))
             {
-            QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
                 switch (Orbwalker.ActiveMode)
                 {
                     case Orbwalking.OrbwalkingMode.Combo:
@@ -174,13 +172,25 @@ namespace ALL_In_One.champions
                 QQ.Cast(sender.Position);
 
         }
+		
+        static readonly string[] Attacks = { "jarvanivcataclysmattack", "monkeykingdoubleattack", "shyvanadoubleattack", "shyvanadoubleattackdragon", "caitlynheadshotmissile", "frostarrow", "garenslash2", "kennenmegaproc", "masteryidoublestrike", "quinnwenhanced", "renektonexecute", "renektonsuperexecute", "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "viktorqbuff", "xenzhaothrust2", "xenzhaothrust3" };
+        static readonly string[] NoAttacks = { "zyragraspingplantattack", "zyragraspingplantattack2", "zyragraspingplantattackfire", "zyragraspingplantattack2fire" };
+        static readonly string[] OHSP = { "Parley", "EzrealMysticShot"};
+        static readonly string[] AttackResets = { "dariusnoxiantacticsonh", "fioraflurry", "garenq", "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "leonashieldofdaybreak", "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade", "parley", "poppydevastatingblow", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack", "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie", "volibearq", "xenzhaocombotarget", "yorickspectral" };
 
+        static bool IsSkill(string name)
+        {
+            return !(name.ToLower().Contains("attack")) && !Attacks.Contains(name.ToLower()) && !AttackResets.Contains(name.ToLower()) || NoAttacks.Contains(name.ToLower()) ||
+            OHSP.Contains(name.ToLower());
+        }
+		
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsMe || Player.IsDead) // 야스오 바람장막 어떻게할까 고민중.
+            if (!sender.IsMe || Player.IsDead) // 바람장막
                 return;
-                
-
+            if (IsSkill(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady()
+			&& Player.Distance(args.End) < 250 && AIO_Menu.Champion.Misc.getBoolValue("AutoW"))
+            W.Cast(args.End);
         }
         
         static void AA() // 챔피언 대상 평캔 ( 빼낸 이유는 AA방식 두개로 할시 두번 적어야 해서 단순화하기 위함.

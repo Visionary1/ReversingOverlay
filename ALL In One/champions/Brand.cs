@@ -251,10 +251,10 @@ namespace ALL_In_One.champions
                 var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
             
                 if(Rtarget.Health + Rtarget.HPRegenRate <= R.GetDamage(Rtarget)*2)
-                    { 
-                        if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
-                        R.Cast(Rtarget);
-                    }
+                { 
+                    if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
+                    R.Cast(Rtarget);
+                }
             }
         }
 

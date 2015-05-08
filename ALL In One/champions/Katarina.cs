@@ -256,7 +256,7 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage(enemy) + Q.GetDamage(enemy, 1);
 
             if (W.IsReady())
                 damage += W.GetDamage(enemy);
@@ -264,8 +264,8 @@ namespace ALL_In_One.champions
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
 
-            if (R.IsReady())
-                damage += R.GetDamage(enemy) * 5;
+            if (!Player.IsDead && R.Instance.State != SpellState.Cooldown)
+                damage += R.GetDamage(enemy, 1);
 
             return damage;
         }

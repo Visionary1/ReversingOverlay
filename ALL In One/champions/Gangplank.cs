@@ -76,8 +76,8 @@ namespace ALL_In_One.champions
                     Laneclear();
                     Jungleclear();
                 }
-				if(AIO_Func.UnitIsImmobileUntil(Player) > 0.5 && AIO_Menu.Champion.Misc.getBoolValue("Cleanse(W)") && W.IsReady())
-				W.Cast();
+                if(AIO_Func.UnitIsImmobileUntil(Player) > 0.5 && AIO_Menu.Champion.Misc.getBoolValue("Cleanse(W)") && W.IsReady())
+                W.Cast();
             }
 
             #region Killsteal

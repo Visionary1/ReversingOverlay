@@ -172,7 +172,7 @@ namespace ALL_In_One.champions
                 QQ.Cast(sender.Position);
 
         }
-		
+        
         static readonly string[] Attacks = { "jarvanivcataclysmattack", "monkeykingdoubleattack", "shyvanadoubleattack", "shyvanadoubleattackdragon", "caitlynheadshotmissile", "frostarrow", "garenslash2", "kennenmegaproc", "masteryidoublestrike", "quinnwenhanced", "renektonexecute", "renektonsuperexecute", "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "viktorqbuff", "xenzhaothrust2", "xenzhaothrust3" };
         static readonly string[] NoAttacks = { "zyragraspingplantattack", "zyragraspingplantattack2", "zyragraspingplantattackfire", "zyragraspingplantattack2fire" };
         static readonly string[] OHSP = { "Parley", "EzrealMysticShot"};
@@ -183,13 +183,13 @@ namespace ALL_In_One.champions
             return !(name.ToLower().Contains("attack")) && !Attacks.Contains(name.ToLower()) && !AttackResets.Contains(name.ToLower()) || NoAttacks.Contains(name.ToLower()) ||
             OHSP.Contains(name.ToLower());
         }
-		
+        
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe || Player.IsDead) // 바람장막
                 return;
             if (IsSkill(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady()
-			&& Player.Distance(args.End) < 250 && AIO_Menu.Champion.Misc.getBoolValue("AutoW"))
+            && Player.Distance(args.End) < 250 && AIO_Menu.Champion.Misc.getBoolValue("AutoW"))
             W.Cast(args.End);
         }
         

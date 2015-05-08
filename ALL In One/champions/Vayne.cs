@@ -72,13 +72,13 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
-				AIO_Func.SC(R);
+                AIO_Func.SC(R);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
-				if(StealthDuration > 1- RQD/1000) //은신 시간동안 평타 X
-				Orbwalker.SetAttack(false);
-				else
-				Orbwalker.SetAttack(true);
+                if(StealthDuration > 1- RQD/1000) //은신 시간동안 평타 X
+                Orbwalker.SetAttack(false);
+                else
+                Orbwalker.SetAttack(true);
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
@@ -129,7 +129,7 @@ namespace ALL_In_One.champions
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || (Target == null))
                 return;
-			if(!(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo))
+            if(!(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo))
             AIO_Func.MouseSC(Q);
             AIO_Func.AALcJc(E);
             
@@ -140,9 +140,9 @@ namespace ALL_In_One.champions
         static void AA()
         {
             var Target = TargetSelector.GetTarget(Player.AttackRange, E.DamageType);
-			var buff = AIO_Func.getBuffInstance(Target, "vaynesilvereddebuf");
+            var buff = AIO_Func.getBuffInstance(Target, "vaynesilvereddebuf");
             AIO_Func.MouseSC(Q);
-			if(buff.Count > 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+            if(buff.Count > 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             AIO_Func.AACb(E);
         }
     
@@ -202,7 +202,7 @@ namespace ALL_In_One.champions
                 
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
-				
+                
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
             return damage;

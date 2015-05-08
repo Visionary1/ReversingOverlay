@@ -15,7 +15,7 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-		static float WM {get{return Menu.Item("Misc.WM").GetValue<Slider>().Value; }}
+        static float WM {get{return Menu.Item("Misc.WM").GetValue<Slider>().Value; }}
 
         public static void Load()
         {
@@ -76,7 +76,7 @@ namespace ALL_In_One.champions
                 }
             }
             if (AIO_Menu.Champion.Misc.getBoolValue("Auto W"))
-				AIO_Func.Heal(W,WM);
+                AIO_Func.Heal(W,WM);
             Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
             R.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
         }

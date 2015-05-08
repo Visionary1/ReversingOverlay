@@ -81,7 +81,8 @@ namespace ALL_In_One
                 {
                     var pred = spell.GetPrediction(target, true);
                     SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.ServerPosition.To2D()) / 2 ;
-
+					SharpDX.Vector2 castVec2 = Player.ServerPosition.To2D() +
+											   SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (spell.Range);
                     if (target.IsValidTarget(spell.Range))
                     {
                         if(target.MoveSpeed*spell.Delay <= spell.Width*2/3)
@@ -94,6 +95,16 @@ namespace ALL_In_One
                             spell.Cast(pred.CastPosition);
                         }
                     }
+					else if (target.IsValidTarget(spell.Range + spell.Width)) //사거리 밖 대상에 대해서
+					{
+						if(Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width)
+						{
+							if(Player.Distance(pred.CastPosition) <= spell.Range+spell.Width)
+							spell.Cast(pred.CastPosition);
+							else
+							spell.Cast(castVec2);
+						}
+					}
                 }
             }
         }
@@ -190,10 +201,10 @@ namespace ALL_In_One
                         else if(!spell.IsSkillshot)
                         spell.Cast(Mobs[0]);
                         else
-						{
-							spell.Cast();
-							Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
-						}
+                        {
+                            spell.Cast();
+                            Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+                        }
                     }
                 }
                 if (Minions.Count > 0)
@@ -213,10 +224,10 @@ namespace ALL_In_One
                         else if(!spell.IsSkillshot)
                         spell.Cast(Minions[0]);
                         else
-						{
-							spell.Cast();
-							Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
-						}
+                        {
+                            spell.Cast();
+                            Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+                        }
                     }
                 }
             }
@@ -257,10 +268,10 @@ namespace ALL_In_One
                     else if(!spell.IsSkillshot)
                     spell.Cast(target);
                     else
-					{
-						spell.Cast();
-						Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
-					}
+                    {
+                        spell.Cast();
+                        Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+                    }
                 }
             }
             else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
@@ -280,10 +291,10 @@ namespace ALL_In_One
                     else if(!spell.IsSkillshot)
                     spell.Cast(target);
                     else
-					{
-						spell.Cast();
-						Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
-					}
+                    {
+                        spell.Cast();
+                        Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+                    }
                 }
             }
         }
@@ -306,45 +317,51 @@ namespace ALL_In_One
                 LM = true;
                 LHM = true;
             }
-			if(target != null)
-			{
-				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-				{
-					if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
-					&& spell.IsReady())
-					{
-						if(spell.IsSkillshot)
-						{
-							if(spell.Type == SkillshotType.SkillshotLine)
-							LCast(spell,target,ExtraTargetDistance,ALPHA);
-							else if(spell.Type == SkillshotType.SkillshotCircle)
-							CCast(spell,target);
-							else if(spell.Type == SkillshotType.SkillshotCone)
-							spell.Cast(target);
-						}
-						else
-						spell.Cast(target);
-					}
-				}
-				else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-				{
-					if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
-					&& spell.IsReady() && HM)
-					{
-						if(spell.IsSkillshot)
-						{
-							if(spell.Type == SkillshotType.SkillshotLine)
-							LCast(spell,target,ExtraTargetDistance,ALPHA);
-							else if(spell.Type == SkillshotType.SkillshotCircle)
-							CCast(spell,target);
-							else if(spell.Type == SkillshotType.SkillshotCone)
-							spell.Cast(target);
-						}
-						else
-						spell.Cast(target);
-					}
-				}
-			}
+            if(target != null)
+            {
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                {
+                    if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                    && spell.IsReady())
+                    {
+                        if(spell.IsSkillshot)
+                        {
+                            if(spell.Type == SkillshotType.SkillshotLine)
+                            LCast(spell,target,ExtraTargetDistance,ALPHA);
+                            else if(spell.Type == SkillshotType.SkillshotCircle)
+							{
+							var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width, spell.DamageType, true);
+                            CCast(spell,ctarget);
+							}
+                            else if(spell.Type == SkillshotType.SkillshotCone)
+                            spell.Cast(target);
+                        }
+                        else
+                        spell.Cast(target);
+                    }
+                }
+                else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                {
+                    if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                    && spell.IsReady() && HM)
+                    {
+                        if(spell.IsSkillshot)
+                        {
+                            if(spell.Type == SkillshotType.SkillshotLine)
+                            LCast(spell,target,ExtraTargetDistance,ALPHA);
+                            else if(spell.Type == SkillshotType.SkillshotCircle)
+							{
+							var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width, spell.DamageType, true);
+                            CCast(spell,ctarget);
+							}
+                            else if(spell.Type == SkillshotType.SkillshotCone)
+                            spell.Cast(target);
+                        }
+                        else
+                        spell.Cast(target);
+                    }
+                }
+            }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {            
                 var Minions = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -400,14 +417,14 @@ namespace ALL_In_One
                 LH(spell,ALPHA);
             }
         }
-		
+        
         internal static void MouseSC(Spell spell, float Cost = 1f) // 베인 니달리 리븐 등등.,.,
         {
-			Obj_AI_Hero target = null;
-			float TRange = 500f; // spell.Range
-			if(Player.AttackRange > 200)
+            Obj_AI_Hero target = null;
+            float TRange = 500f; // spell.Range
+            if(Player.AttackRange > 200)
             target = TargetSelector.GetTarget(Player.AttackRange + 300f, TargetSelector.DamageType.True, true);
-			else
+            else
             target = TargetSelector.GetTarget(Player.AttackRange + 500f, TargetSelector.DamageType.True, true);
             bool HM = true;
             bool LM = true;
@@ -424,21 +441,21 @@ namespace ALL_In_One
                 LM = true;
                 LHM = true;
             }
-			if(target != null)
-			{
-				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-				{
-					if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
-					&& spell.IsReady())
-					spell.Cast(Game.CursorPos);
-				}
-				else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-				{
-					if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
-					&& spell.IsReady() && HM)
-					spell.Cast(Game.CursorPos);
-				}
-			}
+            if(target != null)
+            {
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                {
+                    if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                    && spell.IsReady())
+                    spell.Cast(Game.CursorPos);
+                }
+                else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                {
+                    if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
+                    && spell.IsReady() && HM)
+                    spell.Cast(Game.CursorPos);
+                }
+            }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {            
                 var Minions = MinionManager.GetMinions(TRange, MinionTypes.All, MinionTeam.Enemy);
@@ -458,20 +475,20 @@ namespace ALL_In_One
                 }
             }
         }
-		
-		internal static void Heal(Spell spell, float Mana = 40, float Max = 60, float Cost = 1f)
-		{
-			bool M = true;
-			if (Cost == 1f)
-			M = getManaPercent(Player) > Mana;
-			else
-			M = true;
-			foreach (var Ally in HeroManager.Allies.Where(x => x.Distance(Player.ServerPosition) <= spell.Range && getHealthPercent(x) < Max))
-			{
-				if (spell.IsReady() && M && Ally != null)
-					spell.Cast(Ally);
-			}
-		}
+        
+        internal static void Heal(Spell spell, float Mana = 40, float Max = 60, float Cost = 1f)
+        {
+            bool M = true;
+            if (Cost == 1f)
+            M = getManaPercent(Player) > Mana;
+            else
+            M = true;
+            foreach (var Ally in HeroManager.Allies.Where(x => x.Distance(Player.ServerPosition) <= spell.Range && getHealthPercent(x) < Max && (Player.ChampionName == "Soraka" ? x!=Player : x!=null))) //소라카는 자신을 힐 못하니까!
+            {
+                if (spell.IsReady() && M && Ally != null)
+                    spell.Cast(Ally);
+            }
+        }
         
         internal static List<Obj_AI_Hero> GetEnemyList()// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌.
         {

@@ -65,7 +65,7 @@ namespace ALL_In_One.champions
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             AttackableUnit.OnDamage += OnDamage;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
-			Spellbook.OnCastSpell += OnCastSpell;
+            Spellbook.OnCastSpell += OnCastSpell;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -131,19 +131,19 @@ namespace ALL_In_One.champions
             if (args.SData.Name == "RivenTriCleave")
             Qtimer = Utils.TickCount;
         }
-		
+        
         static void OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
         {
             if (!sender.Owner.IsMe)
             return;
             if (args.Slot == SpellSlot.W)
-			{
-			if(Items.HasItem((int)ItemId.Ravenous_Hydra_Melee_Only) && Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
+            {
+            if(Items.HasItem((int)ItemId.Ravenous_Hydra_Melee_Only) && Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
             Items.UseItem((int)ItemId.Ravenous_Hydra_Melee_Only);
-			if(Items.HasItem((int)ItemId.Tiamat_Melee_Only) && Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
-			Items.UseItem((int)ItemId.Tiamat_Melee_Only);
-			}
-		}
+            if(Items.HasItem((int)ItemId.Tiamat_Melee_Only) && Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
+            Items.UseItem((int)ItemId.Tiamat_Melee_Only);
+            }
+        }
         
         static void OnDamage(AttackableUnit sender, AttackableUnitDamageEventArgs args)
         {
@@ -171,7 +171,7 @@ namespace ALL_In_One.champions
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
-			if(Qtimer < Utils.TickCount - 250)
+            if(Qtimer < Utils.TickCount - 250)
             AIO_Func.AALcJc(Q,0,0,0);
             if(!utility.Activator.AfterAttack.AIO)
             AA();

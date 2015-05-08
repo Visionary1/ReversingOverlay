@@ -15,9 +15,9 @@ namespace ALL_In_One.champions
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
         static float getRBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "JudicatorRighteousFury"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-		static float getEBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "JudicatorRighteousFury"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getEBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "JudicatorRighteousFury"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static float getWBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "JudicatorIntervention"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-		static float WM {get{return Menu.Item("Misc.WM").GetValue<Slider>().Value; }}
+        static float WM {get{return Menu.Item("Misc.WM").GetValue<Slider>().Value; }}
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 650f, TargetSelector.DamageType.Magical);
@@ -73,8 +73,8 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
-				AIO_Func.SC(Q);
-				AIO_Func.SC(E);
+                AIO_Func.SC(Q);
+                AIO_Func.SC(E);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
             }
@@ -91,21 +91,21 @@ namespace ALL_In_One.champions
                 return;
 
             var drawQ = AIO_Menu.Champion.Drawings.Qrange;
-			var drawW = AIO_Menu.Champion.Drawings.Wrange;
-			var drawE = AIO_Menu.Champion.Drawings.Erange;
-			var drawR = AIO_Menu.Champion.Drawings.Rrange;
+            var drawW = AIO_Menu.Champion.Drawings.Wrange;
+            var drawE = AIO_Menu.Champion.Drawings.Erange;
+            var drawR = AIO_Menu.Champion.Drawings.Rrange;
             var drawWTimer = AIO_Menu.Champion.Drawings.getCircleValue("W Timer");
             var drawETimer = AIO_Menu.Champion.Drawings.getCircleValue("E Timer");
             var drawRTimer = AIO_Menu.Champion.Drawings.getCircleValue("R Timer");
             var pos_temp = Drawing.WorldToScreen(Player.Position);
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
-			if (W.IsReady() && drawW.Active)
-				Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
-			if (E.IsReady() && drawE.Active)
-				Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
-			if (R.IsReady() && drawR.Active)
-				Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+            if (W.IsReady() && drawW.Active)
+                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
+            if (E.IsReady() && drawE.Active)
+                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+            if (R.IsReady() && drawR.Active)
+                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
             if (drawWTimer.Active && getWBuffDuration > 0)
                 Drawing.DrawText(pos_temp[0], pos_temp[1], drawWTimer.Color, "W: " + getWBuffDuration.ToString("0.00"));
             if (drawETimer.Active && getEBuffDuration > 0)
@@ -124,30 +124,30 @@ namespace ALL_In_One.champions
                 && Player.Distance(gapcloser.Sender.Position) <= Q.Range)
                 Q.Cast(gapcloser.Sender);
         }
-		
+        
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-			var Sender = (Obj_AI_Base) sender;
-			var STarget = (Obj_AI_Hero) args.Target;
+            var Sender = (Obj_AI_Base) sender;
+            var STarget = (Obj_AI_Hero) args.Target;
             if (!sender.IsMe || Player.IsDead) // 
                 return;
             if (args.Target.IsMe && !sender.IsAlly && R.IsReady() && AIO_Func.getHealthPercent(Player) < 25 //args.Target.IsMe && AIO_Menu.Champion.Misc.getBoolValue("R Myself Only")
-				&& Player.Distance(args.End) < 150 && AIO_Menu.Champion.Combo.UseR)
-				R.Cast(Player);
+                && Player.Distance(args.End) < 150 && AIO_Menu.Champion.Combo.UseR)
+                R.Cast(Player);
             if (!sender.IsAlly && R.IsReady() && AIO_Func.getHealthPercent(Player) < 25 && Player.Distance(args.End) < 150 &&
-				Sender.Distance(Player.ServerPosition) <= 1000f && AIO_Menu.Champion.Combo.UseR)
-				R.Cast(Player);
+                Sender.Distance(Player.ServerPosition) <= 1000f && AIO_Menu.Champion.Combo.UseR)
+                R.Cast(Player);
             if (!sender.IsAlly && R.IsReady() && AIO_Func.getHealthPercent(Player) < 15 &&
-				Sender.Distance(Player.ServerPosition) <= 700f && AIO_Menu.Champion.Combo.UseR)
-				R.Cast(Player);
-		}
+                Sender.Distance(Player.ServerPosition) <= 700f && AIO_Menu.Champion.Combo.UseR)
+                R.Cast(Player);
+        }
     
         static void Combo()
         {
             var Target = TargetSelector.GetTarget(Q.Range, Q.DamageType);
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && Target != null)
             {
-				W.Cast(Player);
+                W.Cast(Player);
             }
         }
 
@@ -170,7 +170,7 @@ namespace ALL_In_One.champions
                 
             if (E.IsReady())
                 damage += (E.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, true))*2;
-				
+                
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
             return damage;

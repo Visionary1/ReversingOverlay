@@ -43,7 +43,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addUseKillsteal();
-            AIO_Menu.Champion.Misc.addItem("KillstealR", false);
+            AIO_Menu.Champion.Misc.addItem("KillstealR", true);
+            AIO_Menu.Champion.Misc.addItem("Cleanse(W)", true);
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addErange();
             AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.LightGreen));
@@ -75,6 +76,8 @@ namespace ALL_In_One.champions
                     Laneclear();
                     Jungleclear();
                 }
+				if(AIO_Func.UnitIsImmobileUntil(Player) > 0.5 && AIO_Menu.Champion.Misc.getBoolValue("Cleanse(W)") && W.IsReady())
+				W.Cast();
             }
 
             #region Killsteal

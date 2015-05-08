@@ -95,7 +95,7 @@
     <Compile Include="champions\Chogath.cs" />
     <Compile Include="champions\Corki.cs" />
     <Compile Include="champions\Darius.cs" />
-    <Compile Include="champions\_Diana.cs" />
+    <Compile Include="champions\Diana.cs" />
     <Compile Include="champions\_Draven.cs" />
     <Compile Include="champions\DrMundo.cs" />
     <Compile Include="champions\_Elise.cs" />
@@ -148,7 +148,7 @@
     <Compile Include="champions\_Nidalee.cs" />
     <Compile Include="champions\_Nocturne.cs" />
     <Compile Include="champions\Nunu.cs" />
-    <Compile Include="champions\_Olaf.cs" />
+    <Compile Include="champions\Olaf.cs" />
     <Compile Include="champions\_Orianna.cs" />
     <Compile Include="champions\_Pantheon.cs" />
     <Compile Include="champions\_Poppy.cs" />

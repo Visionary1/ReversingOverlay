@@ -71,8 +71,8 @@ namespace ALL_In_One.champions
                 AIO_Func.SC(W);
                 AIO_Func.SC(E);
                 AIO_Func.SC(R);
-				if(AIO_Func.UnitIsImmobileUntil(Player) > 0.5 && AIO_Menu.Champion.Combo.UseR && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && R.IsReady())
-				R.Cast();
+                if(AIO_Func.UnitIsImmobileUntil(Player) > 0.5 && AIO_Menu.Champion.Combo.UseR && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && R.IsReady())
+                R.Cast();
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))

@@ -8,16 +8,19 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class Diana// By RL244 dianamoonlight DianaPassiveMarker DianaOrbs dianashield
+    class Diana// By RL244 dianamoonlight DianaPassiveMarker DianaOrbs dianashield dianaarcready
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
+        static float getWBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "dianashield"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getPBuffDuration { get { var buff = (Player.HasBuff("dianaarcready") ? AIO_Func.getBuffInstance(Player, "DianaPassiveMarker") : null); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 830f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 200f, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 200f + 37.5f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 350f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 825f, TargetSelector.DamageType.Magical);
 
@@ -51,13 +54,15 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addErange();
-            AIO_Menu.Champion.Drawings.addErange();
+            AIO_Menu.Champion.Drawings.addRrange();
+            AIO_Menu.Champion.Drawings.addItem("W Timer", new Circle(true, Color.Red));
+            AIO_Menu.Champion.Drawings.addItem("P Timer", new Circle(true, Color.LightGreen));
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
-		}
+        }
 
         static void Game_OnUpdate(EventArgs args)
         {
@@ -72,19 +77,36 @@ namespace ALL_In_One.champions
                 //AIO_Func.SC(R);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
-				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                     Harass();
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear) 
-				{
-					Laneclear();
-					Jungleclear();
-				}
+                {
+                    Laneclear();
+                    Jungleclear();
+                }
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
                 KillstealQ();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
+			/* 커먼에 이거좀 추가해줬으면..!!
+            #region Diana
+            p = new PassiveDamage
+            {
+                ChampionName = "Diana",
+                IsActive = (source, target) => (source.HasBuff("DianaPassiveMarker") && source.HasBuff("dianaarcready")),
+                GetDamage =
+                    (source, target) =>
+                        (float)
+                            source.CalcDamage(
+                                target, DamageType.Magical,
+								new float[] { 20,25,30,35,40,50,60,70,80,90,105,120,135,155,175,200,225,250 }[source.Level - 1]
+								+(float)0.8d * source.FlatMagicDamageMod),
+            };
+            AttackPassives.Add(p);
+            #endregion
+			*/
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -96,6 +118,9 @@ namespace ALL_In_One.champions
             var drawW = AIO_Menu.Champion.Drawings.Wrange;
             var drawE = AIO_Menu.Champion.Drawings.Erange;
             var drawR = AIO_Menu.Champion.Drawings.Rrange;
+            var drawWTimer = AIO_Menu.Champion.Drawings.getCircleValue("W Timer");
+            var drawPTimer = AIO_Menu.Champion.Drawings.getCircleValue("P Timer");
+            var pos_temp = Drawing.WorldToScreen(Player.Position);
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
             if (W.IsReady() && drawW.Active)
@@ -104,6 +129,10 @@ namespace ALL_In_One.champions
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+            if (drawWTimer.Active && getWBuffDuration > 0)
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawWTimer.Color, "W: " + getWBuffDuration.ToString("0.00"));
+            if (drawPTimer.Active && getPBuffDuration > 0)
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawPTimer.Color, "P: " + getPBuffDuration.ToString("0.00"));
         }
 
         
@@ -117,14 +146,14 @@ namespace ALL_In_One.champions
         }
         static void Combo()
         {
-			if(AIO_Menu.Champion.Combo.UseR)
-			{
-				foreach (var Enemy in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff("dianamoonlight")).OrderByDescending(x => x.Health))
-				{
-					if (R.IsReady() && Enemy != null)
-						R.Cast(Enemy);
-				}
-			}
+            if(AIO_Menu.Champion.Combo.UseR)
+            {
+                foreach (var Enemy in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff("dianamoonlight")).OrderByDescending(x => x.Health))
+                {
+                    if (R.IsReady() && Enemy != null)
+                        R.Cast(Enemy);
+                }
+            }
 
         }
         static void Harass()
@@ -133,13 +162,13 @@ namespace ALL_In_One.champions
                 return;
 
             if (AIO_Menu.Champion.Harass.UseR && R.IsReady())
-				{
-					foreach (var Enemy in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff("dianamoonlight")).OrderByDescending(x => x.Health))
-					{
-						if (R.IsReady() && Enemy != null)
-							R.Cast(Enemy);
-					}
-				}
+                {
+                    foreach (var Enemy in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff("dianamoonlight")).OrderByDescending(x => x.Health))
+                    {
+                        if (R.IsReady() && Enemy != null)
+                            R.Cast(Enemy);
+                    }
+                }
         }
         static void Laneclear()
         {
@@ -150,16 +179,16 @@ namespace ALL_In_One.champions
 
             if (Mobs.Count <= 0)
                 return;
-			if (AIO_Menu.Champion.Laneclear.UseR)
-			{
-				foreach (var Enemy in Mobs.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff("dianamoonlight")).OrderByDescending(x => x.MaxHealth))
-				{
-					if (R.IsReady() && Enemy != null)
-						R.Cast(Enemy);
-				}
-			}
+            if (AIO_Menu.Champion.Laneclear.UseR)
+            {
+                foreach (var Enemy in Mobs.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff("dianamoonlight")).OrderByDescending(x => x.MaxHealth))
+                {
+                    if (R.IsReady() && Enemy != null)
+                        R.Cast(Enemy);
+                }
+            }
         }
-		
+        
         static void Jungleclear()
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
@@ -170,16 +199,16 @@ namespace ALL_In_One.champions
             if (Mobs.Count <= 0)
                 return;
 
-			if (AIO_Menu.Champion.Jungleclear.UseR)
-			{
-				foreach (var Enemy in Mobs.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff("dianamoonlight")).OrderByDescending(x => x.MaxHealth))
-				{
-					if (R.IsReady() && Enemy != null)
-						R.Cast(Enemy);
-				}
-			}
+            if (AIO_Menu.Champion.Jungleclear.UseR)
+            {
+                foreach (var Enemy in Mobs.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff("dianamoonlight")).OrderByDescending(x => x.MaxHealth))
+                {
+                    if (R.IsReady() && Enemy != null)
+                        R.Cast(Enemy);
+                }
+            }
         }
-		
+        
         static void KillstealQ()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
@@ -198,6 +227,12 @@ namespace ALL_In_One.champions
             }
         }
         
+        static float DianaPDamage(Obj_AI_Base enemy) //Code Made By RL244. 
+        {
+            return (float)Damage.CalcDamage(Player,enemy, Damage.DamageType.Magical, 
+			new float[] { 20,25,30,35,40,50,60,70,80,90,105,120,135,155,175,200,225,250 }[Player.Level - 1]//20 + (Player.Level-1)*(3d + 1.169d * (Player.Level-1)) + 
+		    +(float)0.8d * Player.FlatMagicDamageMod);
+        }
         
         static float getComboDamage(Obj_AI_Base enemy)
         {
@@ -209,6 +244,8 @@ namespace ALL_In_One.champions
                 damage += W.GetDamage(enemy);
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
+            if (Player.HasBuff("dianaarcready"))
+                damage += DianaPDamage(enemy);
             return damage;
         }
     }

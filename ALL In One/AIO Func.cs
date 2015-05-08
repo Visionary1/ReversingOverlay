@@ -73,6 +73,11 @@ namespace ALL_In_One
             return HeroManager.Enemies.Any(x => x.IsValidTarget(range));
         }
         
+        internal static float GetDamageCalc(Obj_AI_Base Sender,Obj_AI_Base Target,Damage.DamageType Type, double Equation = 0d) 
+        {
+            return (float)Damage.CalcDamage(Sender,Target, Type, Equation);
+        }
+        
         internal static void CCast(Spell spell, Obj_AI_Base target) //for Circular spells
         {
             if(spell.Type == SkillshotType.SkillshotCircle || spell.Type == SkillshotType.SkillshotCone) // Cone 스킬은 임시로
@@ -81,8 +86,8 @@ namespace ALL_In_One
                 {
                     var pred = spell.GetPrediction(target, true);
                     SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.ServerPosition.To2D()) / 2 ;
-					SharpDX.Vector2 castVec2 = Player.ServerPosition.To2D() +
-											   SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (spell.Range);
+                    SharpDX.Vector2 castVec2 = Player.ServerPosition.To2D() +
+                                               SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (spell.Range);
                     if (target.IsValidTarget(spell.Range))
                     {
                         if(target.MoveSpeed*spell.Delay <= spell.Width*2/3)
@@ -95,16 +100,16 @@ namespace ALL_In_One
                             spell.Cast(pred.CastPosition);
                         }
                     }
-					else if (target.IsValidTarget(spell.Range + spell.Width)) //사거리 밖 대상에 대해서
-					{
-						if(Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width)
-						{
-							if(Player.Distance(pred.CastPosition) <= spell.Range+spell.Width)
-							spell.Cast(pred.CastPosition);
-							else
-							spell.Cast(castVec2);
-						}
-					}
+                    else if (target.IsValidTarget(spell.Range + spell.Width)) //사거리 밖 대상에 대해서
+                    {
+                        if(Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width)
+                        {
+                            if(Player.Distance(pred.CastPosition) <= spell.Range+spell.Width)
+                            spell.Cast(pred.CastPosition);
+                            else
+                            spell.Cast(castVec2);
+                        }
+                    }
                 }
             }
         }
@@ -329,10 +334,10 @@ namespace ALL_In_One
                             if(spell.Type == SkillshotType.SkillshotLine)
                             LCast(spell,target,ExtraTargetDistance,ALPHA);
                             else if(spell.Type == SkillshotType.SkillshotCircle)
-							{
-							var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width, spell.DamageType, true);
+                            {
+                            var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width, spell.DamageType, true);
                             CCast(spell,ctarget);
-							}
+                            }
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.Cast(target);
                         }
@@ -350,10 +355,10 @@ namespace ALL_In_One
                             if(spell.Type == SkillshotType.SkillshotLine)
                             LCast(spell,target,ExtraTargetDistance,ALPHA);
                             else if(spell.Type == SkillshotType.SkillshotCircle)
-							{
-							var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width, spell.DamageType, true);
+                            {
+                            var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width, spell.DamageType, true);
                             CCast(spell,ctarget);
-							}
+                            }
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.Cast(target);
                         }

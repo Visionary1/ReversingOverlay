@@ -139,6 +139,9 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
+            if (R.Instance.Name != "KatarinaR")
+                return;
+
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
                 Q.CastOnBestTarget();
 
@@ -240,7 +243,7 @@ namespace ALL_In_One.champions
                 if (W.CanCast(target) && AIO_Func.isKillable(target, W))
                     W.Cast();
 
-                if (E.CanCast(target) && AIO_Func.isKillable(target, E.GetDamage(target) + Q.GetDamage(target) + W.GetDamage(target)))
+                if (E.CanCast(target) && AIO_Func.isKillable(target, E.GetDamage(target) + (Q.IsReady() ? Q.GetDamage(target) : 0) + (W.IsReady() ? W.GetDamage(target) : 0)))
                     E.Cast(target);
 
                 if (R.CanCast(target) && AIO_Func.isKillable(target, R))

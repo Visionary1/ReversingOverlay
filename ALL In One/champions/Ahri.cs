@@ -79,7 +79,7 @@ namespace ALL_In_One.champions
                 AIO_Func.SC(Q,QD);
                 AIO_Func.SC(W);
                 AIO_Func.SC(E,QD,0);
-                AIO_Func.SC(R);
+                //AIO_Func.MouseSC(R); <- 이거 안써도 될듯.
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
             }
@@ -134,10 +134,11 @@ namespace ALL_In_One.champions
             {
                 foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
                 {
-                    if (R.CanCast(target) && AIO_Func.isKillable(target, getComboDamage(target)) && target.Distance(Player.ServerPosition) < 1000)
-                        AIO_Func.LCast(R,target);
-                    else if (R.CanCast(target) && AIO_Func.isKillable(target, R) && target.Distance(Player.ServerPosition) < 3000)
-                        AIO_Func.LCast(R,target);
+                    if (R.CanCast(target) && AIO_Func.isKillable(target, (Q.IsReady() ? Q.GetDamage(target) : 0) + (W.IsReady() ? W.GetDamage(target) : 0)
+					+ (E.IsReady() ? E.GetDamage(target) : 0) +(R.IsReady() ? R.GetDamage(target)*3 : 0)) && target.Distance(Player.ServerPosition) < 1000 && target.Distance(Game.CursorPos) < 600f)
+                        R.Cast(Game.CursorPos);
+                    else if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target)*2) && target.Distance(Player.ServerPosition) < 900 && target.Distance(Game.CursorPos) < 600f)
+                        R.Cast(Game.CursorPos);
                 }
             }
         }
@@ -165,7 +166,7 @@ namespace ALL_In_One.champions
                 damage += E.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, false);
                 
             if (R.IsReady())
-                damage += R.GetDamage(enemy)*1;
+                damage += R.GetDamage(enemy)*2;
                 
             return damage;
         }

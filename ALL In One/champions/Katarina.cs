@@ -115,8 +115,6 @@ namespace ALL_In_One.champions
             {
                 if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)) && R.Instance.Name == "KatarinaR")
                     R.Cast();
-                else
-                    R.Cast();
             }
 
             if (R.Instance.Name != "KatarinaR")

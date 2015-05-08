@@ -100,11 +100,11 @@ namespace ALL_In_One
                             spell.Cast(pred.CastPosition);
                         }
                     }
-                    else if (target.IsValidTarget(spell.Range + spell.Width)) //사거리 밖 대상에 대해서
+                    else if (target.IsValidTarget(spell.Range + spell.Width/2)) //사거리 밖 대상에 대해서
                     {
-                        if(Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width)
+                        if(Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2)
                         {
-                            if(Player.Distance(pred.CastPosition) <= spell.Range+spell.Width)
+                            if(Player.Distance(pred.CastPosition) <= spell.Range+spell.Width/2)
                             spell.Cast(pred.CastPosition);
                             else
                             spell.Cast(castVec2);
@@ -335,7 +335,7 @@ namespace ALL_In_One
                             LCast(spell,target,ExtraTargetDistance,ALPHA);
                             else if(spell.Type == SkillshotType.SkillshotCircle)
                             {
-                            var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width, spell.DamageType, true);
+                            var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width/2, spell.DamageType, true);
                             CCast(spell,ctarget);
                             }
                             else if(spell.Type == SkillshotType.SkillshotCone)
@@ -356,7 +356,7 @@ namespace ALL_In_One
                             LCast(spell,target,ExtraTargetDistance,ALPHA);
                             else if(spell.Type == SkillshotType.SkillshotCircle)
                             {
-                            var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width, spell.DamageType, true);
+                            var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width/2, spell.DamageType, true);
                             CCast(spell,ctarget);
                             }
                             else if(spell.Type == SkillshotType.SkillshotCone)

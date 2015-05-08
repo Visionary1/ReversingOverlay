@@ -36,8 +36,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addIfMana();
 
-            AIO_Menu.Champion.Laneclear.addUseQ();
-            AIO_Menu.Champion.Laneclear.addUseW();
+            AIO_Menu.Champion.Laneclear.addUseQ(false);
+            AIO_Menu.Champion.Laneclear.addUseW(false);
             AIO_Menu.Champion.Laneclear.addUseR(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
             
@@ -220,9 +220,15 @@ namespace ALL_In_One.champions
         
         static void KillstealR()
         {
-            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
+            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health)) // Advanced Kill Combo by rl244
             {
-                if (R.CanCast(target) && AIO_Func.isKillable(target, R))
+                if (R.CanCast(target) && Player.HasBuff("DianaOrbs") && Player.HasBuff("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage(target) + DianaPDamage(target) + W.GetDamage(target) +(float)Player.GetAutoAttackDamage(target, false)))
+                R.Cast(target);
+                else if (R.CanCast(target) && Player.HasBuff("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage(target) + DianaPDamage(target) + (float)Player.GetAutoAttackDamage(target, false)))
+                R.Cast(target);
+				else if (R.CanCast(target) && Player.HasBuff("DianaOrbs") && AIO_Func.isKillable(target, R.GetDamage(target) + W.GetDamage(target) + (float)Player.GetAutoAttackDamage(target, false)))
+                R.Cast(target);
+                else if (R.CanCast(target) && AIO_Func.isKillable(target, R))
                 R.Cast(target);
             }
         }
@@ -241,7 +247,7 @@ namespace ALL_In_One.champions
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage(enemy)*2;
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
             if (Player.HasBuff("dianaarcready"))

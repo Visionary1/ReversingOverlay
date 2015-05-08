@@ -24,7 +24,7 @@ namespace ALL_In_One.champions
             R = new Spell(SpellSlot.R, 600f, TargetSelector.DamageType.Magical); //이동거리는 450이지만 데미지는 600까지 줌
 
             Q.SetSkillshot(0.25f, 100f, 1600f, false, SkillshotType.SkillshotLine); // 450~2500까지 증가하는 아리의 미사일.
-            E.SetSkillshot(0.25f, 60f, 1550f, false, SkillshotType.SkillshotLine);
+            E.SetSkillshot(0.25f, 60f, 1550f, true, SkillshotType.SkillshotLine);
             R.SetSkillshot(0.25f, 600f, 1600f, false, SkillshotType.SkillshotLine);
             
             AIO_Menu.Champion.Combo.addUseQ();

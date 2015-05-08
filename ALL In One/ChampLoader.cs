@@ -277,6 +277,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Kayle.Load();
                     break;
+                case "Soraka": 
+                    MadeBy(Developer.RL244);
+                    champions.Soraka.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader)Champ Not Supported.");
                     break;

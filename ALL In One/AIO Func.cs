@@ -306,43 +306,46 @@ namespace ALL_In_One
                 LM = true;
                 LHM = true;
             }
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-            {
-                if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
-                && spell.IsReady())
-                {
-                    if(spell.IsSkillshot)
-                    {
-                        if(spell.Type == SkillshotType.SkillshotLine)
-                        LCast(spell,target,ExtraTargetDistance,ALPHA);
-                        else if(spell.Type == SkillshotType.SkillshotCircle)
-                        CCast(spell,target);
-                        else if(spell.Type == SkillshotType.SkillshotCone)
-                        spell.Cast(target);
-                    }
-                    else
-                    spell.Cast(target);
-                }
-            }
-            else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-            {
-                if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
-                && spell.IsReady() && HM)
-                {
-                    if(spell.IsSkillshot)
-                    {
-                        if(spell.Type == SkillshotType.SkillshotLine)
-                        LCast(spell,target,ExtraTargetDistance,ALPHA);
-                        else if(spell.Type == SkillshotType.SkillshotCircle)
-                        CCast(spell,target);
-                        else if(spell.Type == SkillshotType.SkillshotCone)
-                        spell.Cast(target);
-                    }
-                    else
-                    spell.Cast(target);
-                }
-            }
-            else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+			if(target != null)
+			{
+				if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+				{
+					if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>())
+					&& spell.IsReady())
+					{
+						if(spell.IsSkillshot)
+						{
+							if(spell.Type == SkillshotType.SkillshotLine)
+							LCast(spell,target,ExtraTargetDistance,ALPHA);
+							else if(spell.Type == SkillshotType.SkillshotCircle)
+							CCast(spell,target);
+							else if(spell.Type == SkillshotType.SkillshotCone)
+							spell.Cast(target);
+						}
+						else
+						spell.Cast(target);
+					}
+				}
+				else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+				{
+					if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("HrsUse" + spell.Slot.ToString(), true).GetValue<bool>())
+					&& spell.IsReady() && HM)
+					{
+						if(spell.IsSkillshot)
+						{
+							if(spell.Type == SkillshotType.SkillshotLine)
+							LCast(spell,target,ExtraTargetDistance,ALPHA);
+							else if(spell.Type == SkillshotType.SkillshotCircle)
+							CCast(spell,target);
+							else if(spell.Type == SkillshotType.SkillshotCone)
+							spell.Cast(target);
+						}
+						else
+						spell.Cast(target);
+					}
+				}
+			}
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {            
                 var Minions = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy);
                 var Mobs = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
@@ -391,7 +394,8 @@ namespace ALL_In_One
             }
             else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
             {
-                if(Menu.Item("Lasthit.Use " + spell.Slot.ToString(), true).GetValue<bool>()
+                var Mini = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.NotAlly);
+                if(Menu.Item("Lasthit.Use " + spell.Slot.ToString(), true).GetValue<bool>() && Mini.Count() > 0
                 && spell.IsReady() && LHM)
                 LH(spell,ALPHA);
             }
@@ -464,7 +468,7 @@ namespace ALL_In_One
 			M = true;
 			foreach (var Ally in HeroManager.Allies.Where(x => x.Distance(Player.ServerPosition) <= spell.Range && getHealthPercent(x) < Max))
 			{
-				if (spell.IsReady() && M)
+				if (spell.IsReady() && M && Ally != null)
 					spell.Cast(Ally);
 			}
 		}

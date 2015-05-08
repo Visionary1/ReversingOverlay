@@ -12,9 +12,10 @@ namespace ALL_In_One.champions
     class Nami
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
+        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-
         static Spell Q, W, E, R;
+		static float WM {get{return Menu.Item("Misc.WM").GetValue<Slider>().Value; }}
 
         public static void Load()
         {
@@ -38,6 +39,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
             AIO_Menu.Champion.Misc.addItem("Auto E", true);
+            AIO_Menu.Champion.Misc.addItem("Auto W", true);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.WM", "W If Mana >")).SetValue(new Slider(40, 0, 100));
 
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addWrange();
@@ -72,7 +75,8 @@ namespace ALL_In_One.champions
                         break;
                 }
             }
-
+            if (AIO_Menu.Champion.Misc.getBoolValue("Auto W"))
+				AIO_Func.Heal(W,WM);
             Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
             R.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
         }

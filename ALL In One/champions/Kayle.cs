@@ -8,14 +8,16 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class Kayle// By RL244
+    class Kayle// By RL244 
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-        static float getRBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "vayneinquisition"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static float WM {get{return Menu.Item("Misc.WM").GetValue<Slider>().Value; }}
+        static float getRBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "JudicatorRighteousFury"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+		static float getEBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "JudicatorRighteousFury"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getWBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "JudicatorIntervention"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+		static float WM {get{return Menu.Item("Misc.WM").GetValue<Slider>().Value; }}
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 650f, TargetSelector.DamageType.Magical);
@@ -44,8 +46,8 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
-            AIO_Menu.Champion.Misc.addItem("AutoW", true);
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.WM", "W If Mana >", true).SetValue(new Slider(40, 0, 100)));
+            AIO_Menu.Champion.Misc.addItem("Auto W", true);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.WM", "W If Mana >")).SetValue(new Slider(40, 0, 100));
             //AIO_Menu.Champion.Misc.addItem("R Myself Only", true);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
 
@@ -53,7 +55,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addErange();
             AIO_Menu.Champion.Drawings.addRrange();
-            AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.Blue));
+            AIO_Menu.Champion.Drawings.addItem("W Timer", new Circle(true, Color.Red));
+            AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.Blue));
+            AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.LightGreen));
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
@@ -71,11 +75,13 @@ namespace ALL_In_One.champions
             {
 				AIO_Func.SC(Q);
 				AIO_Func.SC(E);
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                    Combo();
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
                 KillstealQ();
-            if (AIO_Menu.Champion.Misc.getBoolValue("AutoW"))
+            if (AIO_Menu.Champion.Misc.getBoolValue("Auto W"))
                 AIO_Func.Heal(W,WM);
         }
 
@@ -88,6 +94,8 @@ namespace ALL_In_One.champions
 			var drawW = AIO_Menu.Champion.Drawings.Wrange;
 			var drawE = AIO_Menu.Champion.Drawings.Erange;
 			var drawR = AIO_Menu.Champion.Drawings.Rrange;
+            var drawWTimer = AIO_Menu.Champion.Drawings.getCircleValue("W Timer");
+            var drawETimer = AIO_Menu.Champion.Drawings.getCircleValue("E Timer");
             var drawRTimer = AIO_Menu.Champion.Drawings.getCircleValue("R Timer");
             var pos_temp = Drawing.WorldToScreen(Player.Position);
             if (Q.IsReady() && drawQ.Active)
@@ -98,6 +106,10 @@ namespace ALL_In_One.champions
 				Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
 			if (R.IsReady() && drawR.Active)
 				Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+            if (drawWTimer.Active && getWBuffDuration > 0)
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawWTimer.Color, "W: " + getWBuffDuration.ToString("0.00"));
+            if (drawETimer.Active && getEBuffDuration > 0)
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawETimer.Color, "E: " + getEBuffDuration.ToString("0.00"));
             if (drawRTimer.Active && getRBuffDuration > 0)
                 Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R: " + getRBuffDuration.ToString("0.00"));
         }
@@ -115,10 +127,18 @@ namespace ALL_In_One.champions
 		
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
+			var Sender = (Obj_AI_Base) sender;
+			var STarget = (Obj_AI_Hero) args.Target;
             if (!sender.IsMe || Player.IsDead) // 
                 return;
             if (args.Target.IsMe && !sender.IsAlly && R.IsReady() && AIO_Func.getHealthPercent(Player) < 25 //args.Target.IsMe && AIO_Menu.Champion.Misc.getBoolValue("R Myself Only")
 				&& Player.Distance(args.End) < 150 && AIO_Menu.Champion.Combo.UseR)
+				R.Cast(Player);
+            if (!sender.IsAlly && R.IsReady() && AIO_Func.getHealthPercent(Player) < 25 && Player.Distance(args.End) < 150 &&
+				Sender.Distance(Player.ServerPosition) <= 1000f && AIO_Menu.Champion.Combo.UseR)
+				R.Cast(Player);
+            if (!sender.IsAlly && R.IsReady() && AIO_Func.getHealthPercent(Player) < 15 &&
+				Sender.Distance(Player.ServerPosition) <= 700f && AIO_Menu.Champion.Combo.UseR)
 				R.Cast(Player);
 		}
     

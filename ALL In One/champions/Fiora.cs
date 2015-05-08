@@ -34,7 +34,7 @@ namespace ALL_In_One.champions
             Q.SetTargetted(0.25f, 3000f);
 
             AIO_Menu.Champion.Combo.addUseQ();
-            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.QD", "Q Distance", true).SetValue(new Slider(150, 0, 600)));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.QD", "Q Distance")).SetValue(new Slider(150, 0, 600));
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
@@ -199,7 +199,7 @@ namespace ALL_In_One.champions
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady()) 
             {
-                var qd = Menu.Item("Combo.QD", true).GetValue<Slider>().Value;
+                var qd = Menu.Item("Combo.QD").GetValue<Slider>().Value;
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
                 var fqTarget = TargetSelector.GetTarget(Q.Range * 2, Q.DamageType);
     //                var fminion = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => t.Distance(fqTarget.Position)).

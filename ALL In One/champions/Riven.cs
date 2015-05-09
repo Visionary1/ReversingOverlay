@@ -12,7 +12,7 @@ namespace ALL_In_One.champions
     class Riven// By RL244 rivenpassiveaaboost rivenpassive rivenwindslashready RivenFengShuiEngine RivenFeint riventricleavesoundone riventricleavesoundtwo
        //아 Q 짜증..
     {
-        static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } }
+        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} 
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
@@ -21,12 +21,15 @@ namespace ALL_In_One.champions
         static float getRBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "RivenFengShuiEngine"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static bool NextQCastAllowed {get {return Qps <= 2;}} //NextQCastAllowed 쓰는거 잠시 보류
         static bool Qmove;
+        static float RD {get{return Menu.Item("Combo.RD").GetValue<Slider>().Value; }}
+
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 260f + 37.5f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W, 250f + 37.5f, TargetSelector.DamageType.Magical){Delay = 0.25f};
             E = new Spell(SpellSlot.E, 325f + Player.AttackRange, TargetSelector.DamageType.Physical);//그냥 접근기로 쓰게 넣었음
-            R = new Spell(SpellSlot.R, 550f, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 1100f, TargetSelector.DamageType.Magical);
+			
 
             Q.SetSkillshot(0.25f, 250f, 2000f, false, SkillshotType.SkillshotCircle);
             E.SetSkillshot(0.25f, 150f, 2000f, false, SkillshotType.SkillshotCircle); //그냥 접근기로 쓰게 넣었음
@@ -36,6 +39,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
+            AIO_Menu.Champion.Combo.addItem("Use Auto R2", false);
+            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.RD", "R Min Distance")).SetValue(new Slider(350, 0, 700));
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
@@ -50,7 +55,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
-            AIO_Menu.Champion.Misc.addItem("Inteligent Q", false);
+            AIO_Menu.Champion.Misc.addItem("Inteligent Q", true);
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addErange();
@@ -167,35 +172,41 @@ namespace ALL_In_One.champions
         {
             if(Qmove)
             return;
-
-			/*if (Player.Distance(Sender.Position) < 250)
-			{
-				var SP = Player.ServerPosition.Extend(Sender.ServerPosition, 100);
-				Player.IssueOrder(GameObjectOrder.MoveTo, SP);
-				Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
-			}
-			else*/
-			var CP = Player.ServerPosition.Extend(Game.CursorPos, 200);
-			Player.IssueOrder(GameObjectOrder.MoveTo, CP);
-			Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+            var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
+            var M = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth);
+			var Target = (qTarget != null ? qTarget : M[0]);
 			
+			if (Player.Distance(Target.Position) < 250)
+			{
+				var SP = Player.ServerPosition.Extend(Target.ServerPosition, 150);
+				Player.IssueOrder(GameObjectOrder.MoveTo, SP);
+				Orbwalking.ResetAutoAttackTimer();
+			}
+			else
+			{
+				var CP = Player.ServerPosition.Extend(Game.CursorPos, 200);
+				Player.IssueOrder(GameObjectOrder.MoveTo, CP);
+				Orbwalking.ResetAutoAttackTimer();
+			}
 			Qmove = true;
         }
-        static void OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args) //Code from yol riven
+        static void OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args) 
         {
             if (!sender.IsMe || (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None)) return;
             var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
+            var M = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth);
+			var Target = (qTarget != null ? qTarget : M[0]);
             if (args.Animation.Contains("Spell1"))
             {
                 Utility.DelayAction.Add(125 + Game.Ping/2, MotionCancle);
             }
-            if (Qmove && args.Animation.Contains("Run") && qTarget != null)
+            if (Qmove && args.Animation.Contains("Run") && Target != null)
             {
                 Qmove = false;
                 Orbwalking.LastAATick = Utils.TickCount + Game.Ping/2;
                 Player.IssueOrder(GameObjectOrder.AttackUnit, qTarget);
             }
-            if (Qmove && args.Animation.Contains("Idle") && qTarget != null)
+            if (Qmove && args.Animation.Contains("Idle") && Target != null)
             {
                 Qmove = false;
                 Orbwalking.LastAATick = Utils.TickCount + Game.Ping/2;
@@ -204,7 +215,7 @@ namespace ALL_In_One.champions
         }
         static void AA()
         {
-            if(Qtimer < Utils.TickCount - 250)
+            if(Qtimer < Utils.TickCount - 150)
             AIO_Func.AACb(Q,0,0,0);
         }
         
@@ -213,7 +224,7 @@ namespace ALL_In_One.champions
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
-            if((Qtimer < Utils.TickCount - 250)) // && NextQCastAllowed
+            if(Qtimer < Utils.TickCount - 150) // && NextQCastAllowed
             AIO_Func.AALcJc(Q,0,0,0);
             if(!utility.Activator.AfterAttack.AIO)
             AA();
@@ -226,9 +237,9 @@ namespace ALL_In_One.champions
                 var rTarget = TargetSelector.GetTarget(W.Range, R.DamageType, true);
                 if(rTarget != null && !Player.HasBuff("rivenwindslashready"))
                 R.Cast();
-                if(Player.HasBuff("rivenwindslashready"))
+                if(Player.HasBuff("rivenwindslashready") && AIO_Menu.Champion.Combo.getBoolValue("Use Auto R2"))
                 {
-                    foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
+                    foreach (var target in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) >= RD).OrderByDescending(x => x.Health))
                     {
                         if (R.CanCast(target) && AIO_Func.isKillable(target, R))
                             R.Cast(target);
@@ -255,10 +266,23 @@ namespace ALL_In_One.champions
 
         static void KillstealR()
         {
-            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
+            foreach (var target in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) >= RD).OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && AIO_Func.isKillable(target, R))
+                if (R.CanCast(target) && AIO_Func.isKillable(target, R) && E.IsReady())
+				{
+					E.Cast(target.ServerPosition);
+					if(!Player.HasBuff("rivenwindslashready"))
+					R.Cast();
+					else
                     R.Cast(target);
+				}
+                else if (R.CanCast(target) && AIO_Func.isKillable(target, R))
+				{
+					if(!Player.HasBuff("rivenwindslashready"))
+					R.Cast();
+					else
+                    R.Cast(target);
+				}
             }
         }
 

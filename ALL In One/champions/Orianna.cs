@@ -106,6 +106,8 @@ namespace ALL_In_One.champions
             Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
 
             Q.UpdateSourcePosition(BallPosition);
+            W.UpdateSourcePosition(BallPosition, BallPosition);
+            R.UpdateSourcePosition(BallPosition, BallPosition);
         }
 
         static void Drawing_OnDraw(EventArgs args)

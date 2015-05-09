@@ -32,7 +32,7 @@ namespace ALL_In_One.champions
             R.SetTargetted(0.4f, float.MaxValue);
             
             AIO_Menu.Champion.Combo.addUseQ();
-            AIO_Menu.Champion.Combo.addUseE(false);
+            AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
 
             AIO_Menu.Champion.Harass.addUseQ();
@@ -42,7 +42,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Lasthit.addUseE();
 
             AIO_Menu.Champion.Laneclear.addUseQ();
-            AIO_Menu.Champion.Laneclear.addUseE(false);
+            AIO_Menu.Champion.Laneclear.addUseE();
 
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
@@ -245,7 +245,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
-                if(!ETarget.HasBuff("YasuoDashWrapper"))
+                if(!ETarget.HasBuff("YasuoDashWrapper") && Player.HasBuff("yasuoq3w"))
                 E.Cast(ETarget);
             }
             
@@ -304,7 +304,7 @@ namespace ALL_In_One.champions
         {
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
-
+            var EM = MinionManager.GetMinions(Game.CursorPos, E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => !x.HasBuff("YasuoDashWrapper"));
             if (Minions.Count <= 0)
                 return;
                 
@@ -314,10 +314,11 @@ namespace ALL_In_One.champions
                 if (Q.CanCast(Minions[0]))
                 AIO_Func.LCast(Q,Minions[0],QD);
             }
+			
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
-                if (E.CanCast(Minions[0]) && !Minions[0].HasBuff("YasuoDashWrapper"))
-                E.Cast(Minions[0]);
+                if (E.CanCast(EM))
+                E.Cast(EM);
             }
 
 
@@ -327,6 +328,7 @@ namespace ALL_In_One.champions
         {
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var EM = MinionManager.GetMinions(Game.CursorPos, E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => !x.HasBuff("YasuoDashWrapper"));
 
             if (Mobs.Count <= 0)
                 return;
@@ -337,8 +339,8 @@ namespace ALL_In_One.champions
             }
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
             {
-                if (E.CanCast(Mobs[0]) && !Mobs[0].HasBuff("YasuoDashWrapper"))
-                E.Cast(Mobs[0]);
+                if (E.CanCast(EM))
+                E.Cast(EM);
             }
         }
 

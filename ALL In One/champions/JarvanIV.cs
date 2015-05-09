@@ -8,14 +8,17 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class JarvanIV// By RL244
+    class JarvanIV// By RL244 jarvanivmartialcadence jarvanivdemacianstandardbuff jarvanivmartialcadencecheck (target)jarvanivdragonstrikedebuff jarvanivdragonstrikeph2 (target) JarvanIVGoldenAegis JarvanIVCataclysm
     {
-        static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } }
+        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
         static float QD {get{return Menu.Item("Misc.Qtg").GetValue<Slider>().Value; }}
-        
+        static float getEBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "jarvanivdemacianstandardbuff"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getWBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "JarvanIVGoldenAegis"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getRBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "JarvanIVCataclysm"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 770f, TargetSelector.DamageType.Physical);
@@ -54,8 +57,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addErange();
             AIO_Menu.Champion.Drawings.addRrange();
-
-        
+            AIO_Menu.Champion.Drawings.addItem("W Timer", new Circle(true, Color.Red));
+            AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.LightGreen));
+			AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.LightGreen));  
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
@@ -70,11 +74,10 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
-                if(Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
+                if(Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo || !E.IsReady())
                     AIO_Func.SC(Q,QD);
                 AIO_Func.SC(W);
                 AIO_Func.SC(E);
-                AIO_Func.SC(R);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
             }
@@ -95,12 +98,22 @@ namespace ALL_In_One.champions
             var drawQ = AIO_Menu.Champion.Drawings.Qrange;
             var drawE = AIO_Menu.Champion.Drawings.Erange;
             var drawR = AIO_Menu.Champion.Drawings.Rrange;
+            var drawWTimer = AIO_Menu.Champion.Drawings.getCircleValue("W Timer");
+            var drawETimer = AIO_Menu.Champion.Drawings.getCircleValue("E Timer");
+            var drawRTimer = AIO_Menu.Champion.Drawings.getCircleValue("R Timer");
+            var pos_temp = Drawing.WorldToScreen(Player.Position);
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+            if (drawWTimer.Active && getWBuffDuration > 0)
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawWTimer.Color, "W: " + getWBuffDuration.ToString("0.00"));
+            if (drawETimer.Active && getEBuffDuration > 0)
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawETimer.Color, "E: " + getEBuffDuration.ToString("0.00"));
+            if (drawRTimer.Active && getRBuffDuration > 0)
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R: " + getRBuffDuration.ToString("0.00"));
         }
         
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -126,7 +139,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-                if(AIO_Func.isKillable(Rtarget, Q.GetDamage(Rtarget) + R.GetDamage(Rtarget)))
+                if(AIO_Func.isKillable(Rtarget, Q.GetDamage(Rtarget) + R.GetDamage(Rtarget)) && Player.HasBuff("JarvanIVCataclysm"))
                 R.Cast(Rtarget);
             }
         }
@@ -134,7 +147,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
+                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q) && Player.HasBuff("JarvanIVCataclysm"))
                     AIO_Func.LCast(Q,target,QD);
             }
         }
@@ -147,7 +160,13 @@ namespace ALL_In_One.champions
                     R.Cast(target);
             }
         }
-
+		
+        static float JarvanPDamage(Obj_AI_Base enemy) //Code Made By RL244. 
+        {
+            return (float)Damage.CalcDamage(Player,enemy, Damage.DamageType.Physical, 
+            (float)(!enemy.HasBuff("jarvanivmartialcadencecheck") ? (enemy.MaxHealth - enemy.Health)*0.1d : 0));
+        }
+		
         static float getComboDamage(Obj_AI_Base enemy)
         {
             float damage = 0;
@@ -163,6 +182,9 @@ namespace ALL_In_One.champions
                 
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
+				
+			if (!enemy.HasBuff("jarvanivmartialcadencecheck"))
+				damage += JarvanPDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, false);
                 
             return damage;
         }

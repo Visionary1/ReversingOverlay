@@ -557,6 +557,19 @@ namespace ALL_In_One
             return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Where(x => x.NetworkId != x.NetworkId).Any();
         }
 
+        internal static bool CollisionCheck(SharpDX.Vector3 from, Obj_AI_Hero target, float width)
+        {
+            var input = new PredictionInput
+            {
+                Radius = width,
+                From = from
+            };
+
+            input.CollisionObjects[0] = CollisionableObjects.Heroes;
+
+            return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Where(x => x.NetworkId != x.NetworkId).Any();
+        }
+
         internal static int CountEnemyMinionsInRange(this SharpDX.Vector3 point, float range)
         {
             return ObjectManager.Get<Obj_AI_Minion>().Count(h => h.IsValidTarget(range, true, point));

@@ -152,8 +152,8 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            if (AIO_Menu.Champion.Misc.getBoolValue("Auto-E") && sender.IsEnemy && sender.Type == GameObjectType.obj_AI_Hero && args.Target.IsMe && E.IsReady())
-                E.CastOnUnit(Player);
+            if (AIO_Menu.Champion.Misc.getBoolValue("Auto-E") && sender.IsEnemy && sender.Type == GameObjectType.obj_AI_Hero && args.Target.IsAlly && E.IsReady())
+                E.CastOnUnit((Obj_AI_Hero)args.Target);
         }
 
         static void Combo()
@@ -171,7 +171,8 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-
+                if (AIO_Func.CollisionCheck(BallPosition, Player, 70f))
+                    E.Cast(Player);
             }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
@@ -199,6 +200,8 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
+                if (AIO_Func.CollisionCheck(BallPosition, Player, 70f))
+                    E.Cast(Player);
             }
         }
 

@@ -186,11 +186,25 @@ namespace ALL_In_One.champions
         
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsMe || Player.IsDead) // 바람장막
+            if (Player.IsDead) // 바람장막
                 return;
-            if (IsSkill(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady()
-            && Player.Distance(args.End) < 250 && AIO_Menu.Champion.Misc.getBoolValue("AutoW"))
-            W.Cast(args.End);
+                
+            if(!sender.IsMe)
+            {
+                if (IsSkill(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady()
+                && Player.Distance(args.End) < 250 && AIO_Menu.Champion.Misc.getBoolValue("AutoW"))
+                W.Cast(args.End);
+            }
+            else
+            {
+                if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseQ || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseQ))
+                {
+                    if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.E).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(EQ.Range)))
+                    {
+                        EQ.Cast();
+                    }
+                }
+            }
         }
         
         static void AA() // 챔피언 대상 평캔 ( 빼낸 이유는 AA방식 두개로 할시 두번 적어야 해서 단순화하기 위함.
@@ -214,16 +228,11 @@ namespace ALL_In_One.champions
             var buff = AIO_Func.getBuffInstance(Player, "yasuoq3w");
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-                if(!Dash.IsDashing(Player) && !Player.HasBuff("yasuoq3w"))
+                if(!Player.HasBuff("yasuoq3w"))
                 {
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
                 if(qTarget.Distance(Player.Position) >= Player.AttackRange + 50)
                 AIO_Func.LCast(Q,qTarget,QD);
-                }
-                else if(Dash.IsDashing(Player))
-                {
-                var qTarget = TargetSelector.GetTarget(EQ.Range - 10, Q.DamageType, true);
-                EQ.Cast();
                 }
                 else
                 {
@@ -253,16 +262,11 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-                if(!Dash.IsDashing(Player) && !Player.HasBuff("yasuoq3w"))
+                if(!Player.HasBuff("yasuoq3w"))
                 {
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
                 if(qTarget.Distance(Player.Position) >= Player.AttackRange + 50)
                 AIO_Func.LCast(Q,qTarget,QD);
-                }
-                else if(Dash.IsDashing(Player))
-                {
-                var qTarget = TargetSelector.GetTarget(EQ.Range - 10, Q.DamageType, true);
-                EQ.Cast();
                 }
                 else
                 {

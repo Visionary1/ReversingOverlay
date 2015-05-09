@@ -122,16 +122,12 @@ namespace ALL_In_One.champions
             if (!sender.IsMe || Player.IsDead)
                 return;
 
-            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed))
+            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseQ || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseQ))
             {
                 if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.E).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
                 {
-                    if (AIO_Menu.Champion.Combo.UseQ || AIO_Menu.Champion.Harass.UseQ)
-                    {
-                        var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-
-                        AIO_Func.LCast(Q,Qtarget,QD,float.MaxValue);
-                    }
+                    var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+                    AIO_Func.LCast(Q,Qtarget,QD,float.MaxValue);
                 }
             }
 

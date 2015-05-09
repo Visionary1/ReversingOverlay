@@ -123,7 +123,7 @@ namespace ALL_In_One.champions
         var drawE = AIO_Menu.Champion.Drawings.Erange;
         var drawR = AIO_Menu.Champion.Drawings.Rrange;
         var drawWTimer = AIO_Menu.Champion.Drawings.getCircleValue("W Timer");
-        var drawETimer = AIO_Menu.Champion.Drawings.getCircleValue("P Timer");
+        var drawPTimer = AIO_Menu.Champion.Drawings.getCircleValue("P Timer");
         var drawRTimer = AIO_Menu.Champion.Drawings.getCircleValue("R Timer");
         var pos_temp = Drawing.WorldToScreen(Player.Position);
     

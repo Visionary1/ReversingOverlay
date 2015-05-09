@@ -61,10 +61,12 @@ namespace ALL_In_One
             return target.Health + (target.HPRegenRate/2) <= spell.GetDamage(target, stage);
         }
 
-        internal static void sendDebugMsg(string message, string tag = "[TeamProjects] ALL In One: ")
+        internal static void sendDebugMsg(string message, bool UseLSConsole = true, string tag = "[TeamProjects] ALL In One: ")
         {
             Console.WriteLine(tag + message);
-            LSConsole.WriteLine(tag + message);
+
+            if(UseLSConsole)
+                LSConsole.WriteLine(tag + message);
             
         }
 

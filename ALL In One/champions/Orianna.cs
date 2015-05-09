@@ -20,20 +20,23 @@ namespace ALL_In_One.champions
         {
             get
             {
-                var ball = ObjectManager.Get<Obj_AI_Hero>().FirstOrDefault(x => x.IsAlly && !x.IsMe && x.HasBuff("OrianaGhost"));
+                if (Player.HasBuff("orianaghostself", true))
+                    return Player.Position;
 
-                return ball != null ? ball.ServerPosition : Player.ServerPosition;
+                var ball = ObjectManager.Get<GameObject>().LastOrDefault(x => x.IsAlly && x.IsValid && x.IsVisible && x.Name == "TheDoomBall");
+
+                return ball != null ? ball.Position : SharpDX.Vector3.Zero;
             }
         }
 
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 825f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 245f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, 1095f);
-            R = new Spell(SpellSlot.R, 380f);
+            W = new Spell(SpellSlot.W, 225f, TargetSelector.DamageType.Magical) { Delay = 0f};
+            E = new Spell(SpellSlot.E, 1120f);
+            R = new Spell(SpellSlot.R, 380f) { Delay = 0.6f};
 
-            Q.SetSkillshot(0f, 130f, 1400f, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(0f, 130f, 1200f, false, SkillshotType.SkillshotCircle);
             E.SetSkillshot(0.25f, 80f, 1700f, true, SkillshotType.SkillshotLine);
 
             AIO_Menu.Champion.Combo.addUseQ();
@@ -103,8 +106,6 @@ namespace ALL_In_One.champions
             Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
 
             Q.UpdateSourcePosition(BallPosition);
-            W.UpdateSourcePosition(BallPosition, BallPosition);
-            R.UpdateSourcePosition(BallPosition, BallPosition);
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -128,6 +129,8 @@ namespace ALL_In_One.champions
 
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(BallPosition, R.Range, drawR.Color, 3);
+
+            Render.Circle.DrawCircle(BallPosition, 50, Color.LightSkyBlue, 3);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)

@@ -20,7 +20,7 @@ namespace ALL_In_One.champions
         static float Qps {get {var buff = AIO_Func.getBuffInstance(Player, "rivenpassiveaaboost"); return buff != null ? buff.Count : 0; } }
         static float getRBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "RivenFengShuiEngine"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static bool NextQCastAllowed {get {return Qps <= 2;}} //NextQCastAllowed 쓰는거 잠시 보류
-        
+        static bool Qmove;
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 260f + 37.5f, TargetSelector.DamageType.Physical);
@@ -28,7 +28,7 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E, 325f + Player.AttackRange, TargetSelector.DamageType.Physical);//그냥 접근기로 쓰게 넣었음
             R = new Spell(SpellSlot.R, 550f, TargetSelector.DamageType.Magical);
 
-            Q.SetSkillshot(0.25f, 112.5f, 2000f, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(0.25f, 250f, 2000f, false, SkillshotType.SkillshotCircle);
             E.SetSkillshot(0.25f, 150f, 2000f, false, SkillshotType.SkillshotCircle); //그냥 접근기로 쓰게 넣었음
             R.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 2200f, false, SkillshotType.SkillshotCone);
             
@@ -50,7 +50,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
-            AIO_Menu.Champion.Misc.addItem("Inteligent Q", true);
+            AIO_Menu.Champion.Misc.addItem("Inteligent Q", false);
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addErange();
@@ -65,6 +65,7 @@ namespace ALL_In_One.champions
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             AttackableUnit.OnDamage += OnDamage;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnPlayAnimation += OnPlayAnimation;
             Spellbook.OnCastSpell += OnCastSpell;
         }
 
@@ -111,6 +112,7 @@ namespace ALL_In_One.champions
             var drawE = AIO_Menu.Champion.Drawings.Erange;
             var drawR = AIO_Menu.Champion.Drawings.Rrange;
             var drawRTimer = AIO_Menu.Champion.Drawings.getCircleValue("R Timer");
+            var pos_temp = Drawing.WorldToScreen(Player.Position);
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
             if (W.IsReady() && drawW.Active)
@@ -119,7 +121,6 @@ namespace ALL_In_One.champions
                 Render.Circle.DrawCircle(Player.Position, E.Range - Player.AttackRange, drawE.Color);
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
-            var pos_temp = Drawing.WorldToScreen(Player.Position);
             if (drawRTimer.Active && getRBuffDuration > 0)
                 Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R: " + getRBuffDuration.ToString("0.00"));
         }
@@ -150,16 +151,57 @@ namespace ALL_In_One.champions
             if (sender == null || args.TargetNetworkId != sender.NetworkId)
             return;
             
+            var Sender = (Obj_AI_Base)sender;
+            
             if ((int) args.Type != 70)
             return;
             
             if(Qtimer > Utils.TickCount - 120)
             {
-            Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-            Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+                Qmove = false;
+                MotionCancle();
             }
         }
         
+        static void MotionCancle()
+        {
+            if(Qmove)
+            return;
+
+			/*if (Player.Distance(Sender.Position) < 250)
+			{
+				var SP = Player.ServerPosition.Extend(Sender.ServerPosition, 100);
+				Player.IssueOrder(GameObjectOrder.MoveTo, SP);
+				Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+			}
+			else*/
+			var CP = Player.ServerPosition.Extend(Game.CursorPos, 200);
+			Player.IssueOrder(GameObjectOrder.MoveTo, CP);
+			Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+			
+			Qmove = true;
+        }
+        static void OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args) //Code from yol riven
+        {
+            if (!sender.IsMe || (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None)) return;
+            var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
+            if (args.Animation.Contains("Spell1"))
+            {
+                Utility.DelayAction.Add(125 + Game.Ping/2, MotionCancle);
+            }
+            if (Qmove && args.Animation.Contains("Run") && qTarget != null)
+            {
+                Qmove = false;
+                Orbwalking.LastAATick = Utils.TickCount + Game.Ping/2;
+                Player.IssueOrder(GameObjectOrder.AttackUnit, qTarget);
+            }
+            if (Qmove && args.Animation.Contains("Idle") && qTarget != null)
+            {
+                Qmove = false;
+                Orbwalking.LastAATick = Utils.TickCount + Game.Ping/2;
+                Player.IssueOrder(GameObjectOrder.AttackUnit, qTarget);
+            }
+        }
         static void AA()
         {
             if(Qtimer < Utils.TickCount - 250)

@@ -88,26 +88,39 @@ namespace ALL_In_One
                     SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.ServerPosition.To2D()) / 2 ;
                     SharpDX.Vector2 castVec2 = Player.ServerPosition.To2D() +
                                                SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (spell.Range);
+                    
                     if (target.IsValidTarget(spell.Range))
                     {
-                        if(target.MoveSpeed*spell.Delay <= spell.Width*2/3)
+                        if(target.MoveSpeed*spell.Delay <= spell.Width/3)
                             spell.Cast(target.ServerPosition);
                         else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                         {
-                            if(target.MoveSpeed*spell.Delay <= spell.Width*4/3)
-                            spell.Cast(castVec);
-                            else
-                            spell.Cast(pred.CastPosition);
+                            if(target.MoveSpeed*spell.Delay <= spell.Width*2/3 && castVec.Distance(pred.CastPosition) <= spell.Width/3)
+                            {
+                                if(Player.Distance(castVec) <= spell.Range)
+                                spell.Cast(castVec);
+                            }
+                            else if(castVec.Distance(pred.CastPosition) > spell.Width/3)
+                            {
+                                if(Player.Distance(pred.CastPosition) <= spell.Range)
+                                spell.Cast(pred.CastPosition);
+                            }
                         }
                     }
                     else if (target.IsValidTarget(spell.Range + spell.Width/2)) //사거리 밖 대상에 대해서
                     {
                         if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2)
                         {
-                            if(Player.Distance(pred.CastPosition) <= spell.Range+spell.Width/2)
-                            spell.Cast(pred.CastPosition);
-                            else
-                            spell.Cast(castVec2);
+                            if(Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2 && target.MoveSpeed*spell.Delay > spell.Width/3)
+                            {
+                                if(Player.Distance(pred.CastPosition) <= spell.Range)
+                                spell.Cast(pred.CastPosition);
+                            }
+                            else if(Player.Distance(pred.UnitPosition) <= spell.Range && target.MoveSpeed*spell.Delay < spell.Width/2)
+                            {
+                                if(Player.Distance(castVec2) <= spell.Range)
+                                spell.Cast(castVec2);
+                            }
                         }
                     }
                 }
@@ -138,17 +151,17 @@ namespace ALL_In_One
             var M = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health).FirstOrDefault(m => isKillable(m,spell,0) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
             if(spell.IsReady() && M != null)
             {
-				if(spell.IsSkillshot)
-				{
-					if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우 위에 MinionOrderTypes.MaxHealth 없애서 기본값으로 바꿨음 막타잘치게 NotAlly
-					LCast(spell,M,50f,ALPHA);
-					else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
-					CCast(spell,M);
-					else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
-					spell.Cast(M);
-				}
-				else
-				spell.Cast(M);
+                if(spell.IsSkillshot)
+                {
+                    if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우 위에 MinionOrderTypes.MaxHealth 없애서 기본값으로 바꿨음 막타잘치게 NotAlly
+                    LCast(spell,M,50f,ALPHA);
+                    else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
+                    CCast(spell,M);
+                    else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+                    spell.Cast(M);
+                }
+                else
+                spell.Cast(M);
             }
         }
         
@@ -312,7 +325,7 @@ namespace ALL_In_One
             var target = TargetSelector.GetTarget(spell.Range, spell.DamageType, true); //
             bool HM = true;
             bool LM = true;
-            bool LHM = true;
+            bool LHM = false;
             if (Cost == 1f)
             {
                 HM = getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana;
@@ -417,12 +430,15 @@ namespace ALL_In_One
                     }
                 }
             }
-            else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
+            else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit && spell.Range > 0)
             {
                 var Mini = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.NotAlly);
-                if(Menu.Item("Lasthit.Use " + spell.Slot.ToString(), true).GetValue<bool>() && Mini.Count() > 0
-                && spell.IsReady() && LHM)
-                LH(spell,ALPHA);
+                if(Mini.Count() > 0)
+                {
+                    if(Menu.Item("Lasthit.Use " + spell.Slot.ToString(), true).GetValue<bool>()
+                    && spell.IsReady() && LHM)
+                    LH(spell,ALPHA);
+                }
             }
         }
         

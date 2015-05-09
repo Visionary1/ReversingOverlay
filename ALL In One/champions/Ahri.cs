@@ -135,7 +135,7 @@ namespace ALL_In_One.champions
                 foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
                 {
                     if (R.CanCast(target) && AIO_Func.isKillable(target, (Q.IsReady() ? Q.GetDamage(target) : 0) + (W.IsReady() ? W.GetDamage(target) : 0)
-					+ (E.IsReady() ? E.GetDamage(target) : 0) +(R.IsReady() ? R.GetDamage(target)*3 : 0)) && target.Distance(Player.ServerPosition) < 1000 && target.Distance(Game.CursorPos) < 600f)
+                    + (E.IsReady() ? E.GetDamage(target) : 0) +(R.IsReady() ? R.GetDamage(target)*3 : 0)) && target.Distance(Player.ServerPosition) < 1000 && target.Distance(Game.CursorPos) < 600f)
                         R.Cast(Game.CursorPos);
                     else if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target)*2) && target.Distance(Player.ServerPosition) < 900 && target.Distance(Game.CursorPos) < 600f)
                         R.Cast(Game.CursorPos);

@@ -189,9 +189,9 @@ namespace ALL_In_One.champions
                 return;
                 
             if(!sender.IsMe)
-			{
-				SharpDX.Vector2 castVec = Player.ServerPosition.To2D() +
-				SharpDX.Vector2.Normalize(args.Start.To2D() - Player.Position.To2D()) * (100f);
+            {
+                SharpDX.Vector2 castVec = Player.ServerPosition.To2D() +
+                SharpDX.Vector2.Normalize(args.Start.To2D() - Player.Position.To2D()) * (100f);
                 if (IsSkill(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady()
                 && Player.Distance(args.End) < 250 && AIO_Menu.Champion.Misc.getBoolValue("AutoW"))
                 W.Cast(castVec);
@@ -278,7 +278,7 @@ namespace ALL_In_One.champions
                 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
-				var Buff = AIO_Func.getBuffInstance(Player, "yasuodashscalar");
+                var Buff = AIO_Func.getBuffInstance(Player, "yasuodashscalar");
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
                 if(!ETarget.HasBuff("YasuoDashWrapper") && (float)Buff.Count > 1)
                 E.Cast(ETarget);
@@ -354,7 +354,8 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if(E.CanCast(target) && AIO_Func.isKillable(target, E) && !target.HasBuff("YasuoDashWrapper"))
+                var Buff = AIO_Func.getBuffInstance(Player, "yasuodashscalar");
+                if(E.CanCast(target) && AIO_Func.isKillable(target, E.GetDamage(target)*((float)Buff.Count*0.25f + 1f)) && !target.HasBuff("YasuoDashWrapper"))
                 E.Cast(target);
             }
         }
@@ -362,12 +363,12 @@ namespace ALL_In_One.champions
         static float getComboDamage(Obj_AI_Base enemy)
         {
             float damage = 0;
-
+            var Buff = AIO_Func.getBuffInstance(Player, "yasuodashscalar");
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
             
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage(enemy)*((float)Buff.Count*0.25f + 1f);
             
             if (R.IsReady())
                 damage += R.GetDamage(enemy);

@@ -8,12 +8,12 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class Tristana// By RL244
+    class Tristana// By RL244 TristanaQ tristanaecharge(target) tristanawslow(target)
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-
+        static float getQBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "TristanaQ"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static Spell Q, W, E, R;
         
 
@@ -36,12 +36,12 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW(false);
             AIO_Menu.Champion.Harass.addUseE();
-            AIO_Menu.Champion.Harass.addIfMana();
+            AIO_Menu.Champion.Harass.addIfMana(40);
 
-            AIO_Menu.Champion.Laneclear.addUseQ();
+            AIO_Menu.Champion.Laneclear.addUseQ(false);
             AIO_Menu.Champion.Laneclear.addUseW(false);
-            AIO_Menu.Champion.Laneclear.addUseE();
-            AIO_Menu.Champion.Laneclear.addIfMana();
+            AIO_Menu.Champion.Laneclear.addUseE(false);
+            AIO_Menu.Champion.Laneclear.addIfMana(40);
             
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW(false);
@@ -56,6 +56,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
 
             AIO_Menu.Champion.Drawings.addWrange();
+            AIO_Menu.Champion.Drawings.addItem("Q Timer", new Circle(true, Color.Red));
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
@@ -75,17 +76,7 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                    Combo();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    Harass();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-                {
-                    Laneclear();
-                    Jungleclear();
-                }
+                AIO_Func.SC(W);
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealW"))
@@ -108,9 +99,12 @@ namespace ALL_In_One.champions
                 return;
 
             var drawW = AIO_Menu.Champion.Drawings.Wrange;
-
+            var drawQTimer = AIO_Menu.Champion.Drawings.getCircleValue("Q Timer");
+            var pos_temp = Drawing.WorldToScreen(Player.Position);
             if (W.IsReady() && drawW.Active)
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
+            if (drawQTimer.Active && getQBuffDuration > 0)
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawQTimer.Color, "Q: " + getQBuffDuration.ToString("0.00"));
 
         }
 
@@ -122,7 +116,7 @@ namespace ALL_In_One.champions
 
             if (R.IsReady()
                 && Player.Distance(gapcloser.Sender.Position) <= R.Range)
-                R.Cast((SharpDX.Vector3)gapcloser.End);
+                R.Cast(gapcloser.Sender);
         }
 
         static void Orbwalking_OnAfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -150,72 +144,21 @@ namespace ALL_In_One.champions
                 R.Cast(Target);
             }
         }
-    
-        static void Combo()
-        {
-
-            if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-            {
-                var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-                AIO_Func.CCast(W,Wtarget);
-            }
-
-        }
-
-        static void Harass()
-        {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
-                return;
-
-            if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
-            {
-                var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-                AIO_Func.CCast(W,Wtarget);
-            }
-
-        }
-
-        static void Laneclear()
-        {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
-                return;
-        
-            var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
-
-            if (Minions.Count <= 0)
-                return;
-
-            if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
-            {
-                if (Minions.Any(x => x.IsValidTarget(W.Range)))
-                AIO_Func.CCast(W,Minions[0]);
-            }
-        }
-
-        static void Jungleclear()
-        {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
-                return;
-        
-            var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-            if (Mobs.Count <= 0)
-                return;
-            
-            if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady())
-            {
-                if (Mobs.Any(x=>x.IsValidTarget(W.Range)))
-                AIO_Func.CCast(W,Mobs[0]);
-            }
-
-        }
         
         static void KillstealW()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (W.CanCast(target) && AIO_Func.isKillable(target, W.GetDamage(target) + (float)Player.GetAutoAttackDamage(target, true)))
-                AIO_Func.CCast(W,target);
+				if(W.IsReady())
+				{
+					var Buff = AIO_Func.getBuffInstance(target, "tristanaecharge");
+					if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && W.CanCast(target) && R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("KillstealR") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, R.GetDamage(target) + W.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage(target, true)))
+					AIO_Func.CCast(W,target);
+					if (W.CanCast(target) && (float)Buff.Count > 0 && AIO_Func.isKillable(target, W.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage(target, true)))
+					AIO_Func.CCast(W,target);
+					else if (W.CanCast(target) && AIO_Func.isKillable(target, W.GetDamage(target) + (float)Player.GetAutoAttackDamage(target, true)))
+					AIO_Func.CCast(W,target);
+				}
             }
         }
 
@@ -223,7 +166,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (E.CanCast(target) && AIO_Func.isKillable(target, E))
+                if (E.CanCast(target) && AIO_Func.isKillable(target, E) && E.IsReady())
                 E.Cast(target);
             }
         }
@@ -232,8 +175,14 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && AIO_Func.isKillable(target, R))
-                    R.Cast(target);
+				if(R.IsReady())
+				{
+					var Buff = AIO_Func.getBuffInstance(target, "tristanaecharge");
+					if (R.CanCast(target) && (float)Buff.Count > 0 && AIO_Func.isKillable(target, R.GetDamage(target) + E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)))
+						R.Cast(target);
+					else if (R.CanCast(target) && AIO_Func.isKillable(target, R))
+						R.Cast(target);
+				}
             }
         }
         
@@ -241,15 +190,15 @@ namespace ALL_In_One.champions
         static float getComboDamage(Obj_AI_Base enemy)
         {
             float damage = 0;
-
+			var Buff = AIO_Func.getBuffInstance(enemy, "tristanaecharge");
             if (Q.IsReady())
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
 
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += ((float)Buff.Count > 0 ? W.GetDamage(enemy)*(((float)Buff.Count-1)*0.25f+1f) : W.GetDamage(enemy));
                 
             if (E.IsReady())
-                damage += E.GetDamage(enemy)*1.25f;
+                damage += ((float)Buff.Count > 0 ? E.GetDamage(enemy)*(((float)Buff.Count-1)*0.25f+1f) : E.GetDamage(enemy));
 
             if (R.IsReady())
                 damage += R.GetDamage(enemy);

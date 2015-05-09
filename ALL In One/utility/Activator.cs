@@ -284,6 +284,7 @@ namespace ALL_In_One.utility
                         if (AIO_Func.isKillable(t,dmg))
                         {
                             BS.Slot = smiteSlot;
+							if(smiteSlot.IsReady())
                             Player.Spellbook.CastSpell(smiteSlot, t);
                         }
                     }

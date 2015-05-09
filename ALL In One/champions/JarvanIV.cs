@@ -22,12 +22,12 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 770f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 525f, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, 325f, TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 830f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 650f, TargetSelector.DamageType.Physical);
 
-            Q.SetSkillshot(0.6f, 70f, float.MaxValue, false, SkillshotType.SkillshotLine);
-            E.SetSkillshot(0.5f, 75f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(0.25f, 70f, float.MaxValue, false, SkillshotType.SkillshotLine); //EQ는 1450f속도임(자르반 날아가는속도)
+            E.SetSkillshot(0.5f, 125f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             R.SetTargetted(0.25f, float.MaxValue);
             
             
@@ -141,7 +141,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-                if(AIO_Func.isKillable(Rtarget, (Q.IsReady() ? Q.GetDamage(Rtarget) : 0) + R.GetDamage(Rtarget)) && !Player.HasBuff("JarvanIVCataclysm")) //R.Instance.Name == "JarvanIVCataclysm"
+                if(AIO_Func.isKillable(Rtarget, (((AIO_Func.getHealthPercent(Player) > 15) ? Q.GetDamage(Rtarget) : (Q.IsReady() ? Q.GetDamage(Rtarget) : 0)) + R.GetDamage(Rtarget)) && !Player.HasBuff("JarvanIVCataclysm")) //R.Instance.Name == "JarvanIVCataclysm"
                 R.Cast(Rtarget);
             }
         }

@@ -141,7 +141,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-                if(AIO_Func.isKillable(Rtarget, (((AIO_Func.getHealthPercent(Player) > 15) ? Q.GetDamage(Rtarget) : (Q.IsReady() ? Q.GetDamage(Rtarget) : 0)) + R.GetDamage(Rtarget)) && !Player.HasBuff("JarvanIVCataclysm")) //R.Instance.Name == "JarvanIVCataclysm"
+                if(!Player.HasBuff("JarvanIVCataclysm") && AIO_Func.isKillable(Rtarget, (((AIO_Func.getHealthPercent(Player) > 15) ? Q.GetDamage(Rtarget) : (Q.IsReady() ? Q.GetDamage(Rtarget) : 0)) + R.GetDamage(Rtarget)))) //R.Instance.Name == "JarvanIVCataclysm"
                 R.Cast(Rtarget);
             }
         }

@@ -16,18 +16,7 @@ namespace ALL_In_One.champions
 
         static Spell Q, W, E, R;
 
-        static SharpDX.Vector3 BallPosition
-        {
-            get
-            {
-                if (Player.HasBuff("orianaghostself", true))
-                    return Player.Position;
-
-                var ball = ObjectManager.Get<GameObject>().LastOrDefault(x => x.IsAlly && x.IsValid && x.IsVisible && x.Name == "TheDoomBall");
-
-                return ball != null ? ball.Position : SharpDX.Vector3.Zero;
-            }
-        }
+        static SharpDX.Vector3 BallPosition;
 
         public static void Load()
         {
@@ -108,6 +97,17 @@ namespace ALL_In_One.champions
             Q.UpdateSourcePosition(BallPosition);
             W.UpdateSourcePosition(BallPosition, BallPosition);
             R.UpdateSourcePosition(BallPosition, BallPosition);
+
+            if (Player.HasBuff("orianaghostself", true))
+            {
+                BallPosition = ObjectManager.Player.Position;
+                return;
+            }
+
+            var ballowner = HeroManager.Allies.FirstOrDefault(x => x.IsAlly && !x.IsMe && x.HasBuff("orianaghost", true));
+
+            if (ballowner != null)
+                BallPosition = ballowner.Position;
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -152,8 +152,17 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            if (AIO_Menu.Champion.Misc.getBoolValue("Auto-E") && sender.IsEnemy && sender.Type == GameObjectType.obj_AI_Hero && args.Target.IsAlly && E.IsReady())
+            if (AIO_Menu.Champion.Misc.getBoolValue("Auto-E") && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.obj_AI_Hero && E.IsReady())
                 E.CastOnUnit((Obj_AI_Hero)args.Target);
+
+            if (sender.IsMe && args.SData.Name == Q.Instance.Name)
+            {
+                Utility.DelayAction.Add((int)(BallPosition.Distance(args.End) / 1.2 - 70 - Game.Ping), () => BallPosition = args.End);
+                BallPosition = SharpDX.Vector3.Zero;
+            }
+
+            if (sender.IsMe && args.SData.Name == E.Instance.Name)
+                BallPosition = SharpDX.Vector3.Zero;
         }
 
         static void Combo()

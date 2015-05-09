@@ -26,9 +26,9 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 260f + 37.5f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 250f + 37.5f, TargetSelector.DamageType.Magical){Delay = 0.25f};
+            W = new Spell(SpellSlot.W, 250f + 37.5f, TargetSelector.DamageType.Physical){Delay = 0.25f};
             E = new Spell(SpellSlot.E, 325f + Player.AttackRange, TargetSelector.DamageType.Physical);//그냥 접근기로 쓰게 넣었음
-            R = new Spell(SpellSlot.R, 1100f, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 1100f, TargetSelector.DamageType.Physical);
 			
 
             Q.SetSkillshot(0.25f, 250f, 2000f, false, SkillshotType.SkillshotCircle);

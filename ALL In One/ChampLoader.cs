@@ -293,6 +293,10 @@ namespace ALL_In_One
                     MadeBy(Developer.xcsoft);
                     champions.Shen.Load();
                     break;
+                case "Orianna":
+                    MadeBy(Developer.xcsoft);
+                    champions.Orianna.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

@@ -60,7 +60,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addRrange();
             AIO_Menu.Champion.Drawings.addItem("W Timer", new Circle(true, Color.Red));
             AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.LightGreen));
-			AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.LightGreen));  
+            AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.LightGreen));  
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
@@ -162,13 +162,13 @@ namespace ALL_In_One.champions
                     R.Cast(target);
             }
         }
-		
+        
         static float JarvanPDamage(Obj_AI_Base enemy) //Code Made By RL244. 
         {
             return (float)Damage.CalcDamage(Player,enemy, Damage.DamageType.Physical, 
             (float)(!enemy.HasBuff("jarvanivmartialcadencecheck") ? (enemy.MaxHealth - enemy.Health)*0.1d : 0));
         }
-		
+        
         static float getComboDamage(Obj_AI_Base enemy)
         {
             float damage = 0;
@@ -184,9 +184,9 @@ namespace ALL_In_One.champions
                 
             if (R.IsReady())
                 damage += R.GetDamage(enemy);
-				
-			if (!enemy.HasBuff("jarvanivmartialcadencecheck"))
-				damage += JarvanPDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, false);
+                
+            if (!enemy.HasBuff("jarvanivmartialcadencecheck"))
+                damage += JarvanPDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, false);
                 
             return damage;
         }

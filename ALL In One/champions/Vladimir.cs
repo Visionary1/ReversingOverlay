@@ -46,13 +46,13 @@ namespace ALL_In_One.champions
 
              AIO_Menu.Champion.Misc.addUseKillsteal();
              AIO_Menu.Champion.Misc.addUseAntiGapcloser();
-             AIO_Menu.Champion.Misc.addItem("Auto-E For Keep Statcks", true);
+             AIO_Menu.Champion.Misc.addItem("Auto-E For Keep Statcks", false);
 
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addWrange(false);
             AIO_Menu.Champion.Drawings.addErange();
             AIO_Menu.Champion.Drawings.addRrange(false);
-            AIO_Menu.Champion.Drawings.addItem("W TImer", new Circle(true, Color.GreenYellow));
+            AIO_Menu.Champion.Drawings.addItem("W Timer", new Circle(true, Color.GreenYellow));
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -107,16 +107,16 @@ namespace ALL_In_One.champions
             var drawWTimer = AIO_Menu.Champion.Drawings.getCircleValue("W Timer");
 
             if (Q.IsReady() && drawQ.Active)
-                Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+                Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color, 3);
 
             if (W.IsReady() && drawW.Active)
-                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
+                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color, 3);
 
             if (E.IsReady() && drawE.Active)
-                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color, 3);
 
             if (R.IsReady() && drawR.Active)
-                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color, 3);
 
             if (drawWTimer.Active && getWBuffDuration > 0)
             {

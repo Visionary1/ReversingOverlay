@@ -227,38 +227,37 @@ namespace ALL_In_One.utility
                 }
                 
                 #region RS
+				if(Menu.Item("OnAttack.RS").GetValue<bool>())
                 OnAttack.setRSmiteSlot(); //Red Smite
                 #endregion
                 #region BS
-                Killsteal.setBSmiteSlot();
-                
-                var ts = ObjectManager.Get<Obj_AI_Hero>().Where(f => !f.IsAlly && !f.IsDead && Player.Distance(f, false) <= Killsteal.smrange);
-                if (ts == null)
-                    return;
-
-                float dmg = Killsteal.BSDamage();
                 if(Menu.Item("Killsteal.BS").GetValue<bool>())
-                {
-                    foreach (var t in ts)
-                    {
-                        if (AIO_Func.isKillable(t,dmg))
-                        {
-                            if(Killsteal.smiteSlot.IsReady() && Killsteal.BS.Slot == Killsteal.smiteSlot)
-                            Player.Spellbook.CastSpell(Killsteal.smiteSlot, t);
-                            else
-                            return;
-                        }
-                    }
-                }
-                else
-                return;
+				{
+					Killsteal.setBSmiteSlot();
+					
+					var ts = ObjectManager.Get<Obj_AI_Hero>().Where(f => !f.IsAlly && !f.IsDead && Player.Distance(f, false) <= Killsteal.smrange);
+					if (ts == null)
+						return;
+
+					float dmg = Killsteal.BSDamage();
+					foreach (var t in ts)
+					{
+						if (AIO_Func.isKillable(t,dmg))
+						{
+							if(Killsteal.smiteSlot.IsReady() && Killsteal.BS.Slot == Killsteal.smiteSlot)
+							Player.Spellbook.CastSpell(Killsteal.smiteSlot, t);
+							else
+							return;
+						}
+					}
+				}
                 #endregion
                 
                 #region AA
-                var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true);
-                var itemone = AfterAttack.itemsList.FirstOrDefault(x => Items.CanUseItem((int)x.Id) && target.IsValidTarget(x.Range) && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>());
                 if (AIO_Func.AfterAttack() && AfterAttack.AIO)
                 {
+                var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true);
+                var itemone = AfterAttack.itemsList.FirstOrDefault(x => Items.CanUseItem((int)x.Id) && target.IsValidTarget(x.Range) && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>());
                     if(Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
                     Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                     {

@@ -22,10 +22,11 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 770f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 330f, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, 525f, TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 830f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 650f, TargetSelector.DamageType.Physical);
-            Q.SetSkillshot(0.25f, 80f, float.MaxValue, false, SkillshotType.SkillshotLine);
+
+            Q.SetSkillshot(0.6f, 70f, float.MaxValue, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.5f, 75f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             R.SetTargetted(0.25f, float.MaxValue);
             
@@ -128,6 +129,7 @@ namespace ALL_In_One.champions
                     if (AIO_Menu.Champion.Combo.UseQ || AIO_Menu.Champion.Harass.UseQ)
                     {
                         var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+
                         AIO_Func.LCast(Q,Qtarget,QD,float.MaxValue);
                     }
                 }
@@ -139,7 +141,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-                if(AIO_Func.isKillable(Rtarget, Q.GetDamage(Rtarget) + R.GetDamage(Rtarget)) && Player.HasBuff("JarvanIVCataclysm"))
+                if(AIO_Func.isKillable(Rtarget, (Q.IsReady() ? Q.GetDamage(Rtarget) : 0) + R.GetDamage(Rtarget)) && !Player.HasBuff("JarvanIVCataclysm")) //R.Instance.Name == "JarvanIVCataclysm"
                 R.Cast(Rtarget);
             }
         }
@@ -147,7 +149,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q) && Player.HasBuff("JarvanIVCataclysm"))
+                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
                     AIO_Func.LCast(Q,target,QD);
             }
         }
@@ -156,7 +158,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && AIO_Func.isKillable(target, R))
+                if (R.CanCast(target) && AIO_Func.isKillable(target, R) && !Player.HasBuff("JarvanIVCataclysm"))
                     R.Cast(target);
             }
         }

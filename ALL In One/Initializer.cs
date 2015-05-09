@@ -4,7 +4,6 @@ using System.Reflection;
 
 using LeagueSharp;
 using LeagueSharp.Common;
-using LSConsole = LeagueSharp.Console.Console;
 
 namespace ALL_In_One
 {
@@ -12,9 +11,6 @@ namespace ALL_In_One
     {
         internal static void initialize()
         {
-            LSConsole.Show();
-            LSConsole.Maximize();
-
             AIO_Menu.initialize();
 
             if (!ChampLoader.champSupportedCheck("ALL_In_One.champions."))
@@ -39,8 +35,8 @@ namespace ALL_In_One
 
             Drawing.OnDraw += Drawing_OnDraw;
             
-            LSConsole.WriteLine("[TeamProjects] ALL In One: " + ObjectManager.Player.ChampionName + " Loaded.");
-            LSConsole.WriteLine("[TeamProjects] ALL In One: Early Access.");
+            AIO_Func.sendDebugMsg(ObjectManager.Player.ChampionName + " Loaded.");
+            AIO_Func.sendDebugMsg("Early Access.");
 
         }
 

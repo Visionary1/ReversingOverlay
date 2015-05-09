@@ -63,7 +63,7 @@ namespace ALL_In_One.champions
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
 
-            LeagueSharp.Console.Console.WriteLine("Zed(Incomplete)");
+            AIO_Func.sendDebugMsg("Zed(Incomplete)");
         }
 
         static void Game_OnUpdate(EventArgs args)

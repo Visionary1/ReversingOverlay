@@ -10,7 +10,7 @@ namespace ALL_In_One.champions
 {
     class JarvanIV// By RL244
     {
-        static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } }
+        static Menu Menu { get { return AIO_Menu.MainMenu_Manual.SubMenu("Champion"); } }
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
@@ -19,10 +19,11 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 770f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 330f, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, 525f, TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 830f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 650f, TargetSelector.DamageType.Physical);
-            Q.SetSkillshot(0.25f, 80f, float.MaxValue, false, SkillshotType.SkillshotLine);
+
+            Q.SetSkillshot(0.6f, 70f, float.MaxValue, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.5f, 75f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             R.SetTargetted(0.25f, float.MaxValue);
             
@@ -72,9 +73,10 @@ namespace ALL_In_One.champions
             {
                 if(Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
                     AIO_Func.SC(Q,QD);
-                AIO_Func.SC(W);
-                AIO_Func.SC(E);
-                AIO_Func.SC(R);
+                    AIO_Func.SC(W);
+                    AIO_Func.SC(E);
+                    AIO_Func.SC(R);
+
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
             }
@@ -95,10 +97,13 @@ namespace ALL_In_One.champions
             var drawQ = AIO_Menu.Champion.Drawings.Qrange;
             var drawE = AIO_Menu.Champion.Drawings.Erange;
             var drawR = AIO_Menu.Champion.Drawings.Rrange;
+
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
@@ -115,6 +120,7 @@ namespace ALL_In_One.champions
                     if (AIO_Menu.Champion.Combo.UseQ || AIO_Menu.Champion.Harass.UseQ)
                     {
                         var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+
                         AIO_Func.LCast(Q,Qtarget,QD,float.MaxValue);
                     }
                 }
@@ -126,8 +132,9 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-                if(AIO_Func.isKillable(Rtarget, Q.GetDamage(Rtarget) + R.GetDamage(Rtarget)))
-                R.Cast(Rtarget);
+
+                if(AIO_Func.isKillable(Rtarget, (Q.IsReady() ? Q.GetDamage(Rtarget) : 0) + R.GetDamage(Rtarget)) && R.Instance.Name == "JarvanIVCataclysm")
+                    R.Cast(Rtarget);
             }
         }
         static void KillstealQ()
@@ -143,7 +150,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && AIO_Func.isKillable(target, R))
+                if (R.CanCast(target) && AIO_Func.isKillable(target, R) && R.Instance.Name == "JarvanIVCataclysm")
                     R.Cast(target);
             }
         }

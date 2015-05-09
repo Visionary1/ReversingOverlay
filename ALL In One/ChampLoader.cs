@@ -308,14 +308,14 @@ namespace ALL_In_One
         {
             try
             {
-               AIO_Func.sendDebugMsg(Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + "is supported.");
+               AIO_Func.sendDebugMsg(Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " is supported.");
                return true;
             }
             catch
             {
-                AIO_Func.sendDebugMsg(ObjectManager.Player.ChampionName + "is not supported."); //sendDebugMsg와 중복으로 제거함.
+                AIO_Func.sendDebugMsg(ObjectManager.Player.ChampionName + " is not supported."); //sendDebugMsg와 중복으로 제거함.
 
-                AIO_Menu.addItem("Sorry, " + ObjectManager.Player.ChampionName + "is not supported", null);
+                AIO_Menu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " is not supported", null);
                 return false;
             }
         }

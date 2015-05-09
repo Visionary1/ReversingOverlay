@@ -84,7 +84,7 @@ namespace ALL_In_One
             {
                 if(spell != null && target !=null)
                 {
-                    var pred = Prediction.GetPrediction(target, spell.Delay, spell.Width, spell.Speed);
+                    var pred = Prediction.GetPrediction(target, spell.Delay, spell.Width/2, spell.Speed);
                     SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.ServerPosition.To2D()) / 2 ;
                     SharpDX.Vector2 castVec2 = Player.ServerPosition.To2D() +
                                                SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (spell.Range);
@@ -120,7 +120,7 @@ namespace ALL_In_One
             {
                 if(spell != null && target !=null)
                 {
-                    var pred = Prediction.GetPrediction(target, spell.Delay, spell.Width, spell.Speed);
+                    var pred = Prediction.GetPrediction(target, spell.Delay, spell.Width/2, spell.Speed);
                     var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
                     var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
 

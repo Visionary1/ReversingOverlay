@@ -285,7 +285,7 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Olaf.Load();
                     break;
-                case "Diana": 
+                case "Diana":
                     MadeBy(Developer.RL244);
                     champions.Diana.Load();
                     break;
@@ -296,6 +296,10 @@ namespace ALL_In_One
                 case "Orianna":
                     MadeBy(Developer.xcsoft);
                     champions.Orianna.Load();
+                    break;
+                case "Sejuani":
+                    MadeBy(Developer.RL244);
+                    champions.Sejuani.Load();
                     break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");

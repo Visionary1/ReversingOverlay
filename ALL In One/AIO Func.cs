@@ -63,6 +63,7 @@ namespace ALL_In_One
         internal static void sendDebugMsg(string message, string tag = "[TeamProjects] ALL In One: ")
         {
             Console.WriteLine(tag + message);
+            Game.PrintChat(tag + message); //임시 롤백
         }
 
         internal static bool anyoneValidInRange(float range)

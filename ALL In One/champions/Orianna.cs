@@ -32,11 +32,11 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 825f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 225f, TargetSelector.DamageType.Magical) { Delay = 0f};
+            W = new Spell(SpellSlot.W, 225f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 1120f);
             R = new Spell(SpellSlot.R, 380f) { Delay = 0.6f};
 
-            Q.SetSkillshot(0f, 130f, 1200f, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(0f, 100f, 1200f, false, SkillshotType.SkillshotCircle);
             E.SetSkillshot(0.25f, 80f, 1700f, true, SkillshotType.SkillshotLine);
 
             AIO_Menu.Champion.Combo.addUseQ();
@@ -163,7 +163,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
-                if (AIO_Func.SelfAOE_Prediction.HitCount(W.Delay, W.Range, BallPosition) >= 1)
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range, true, BallPosition)))
                     W.Cast();
             }
 
@@ -191,7 +191,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
-                if (AIO_Func.SelfAOE_Prediction.HitCount(W.Delay, W.Range, BallPosition) >= 1)
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range, true, BallPosition)))
                     W.Cast();
             }
 

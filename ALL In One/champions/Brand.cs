@@ -12,7 +12,7 @@ using SharpDX;
 using Color = System.Drawing.Color;
 namespace ALL_In_One.champions
 {
-    class Brand // By RL244
+    class Brand // By RL244 brandpassive brandpassivesound 
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
@@ -227,21 +227,21 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
                 var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                if(PriorSpell.Q != SelectedPriorSpell || Qtarget.HasBuff("brandablaze"))
+                if((PriorSpell.Q != SelectedPriorSpell || Qtarget.HasBuff("brandablaze")) && Qtarget != null)
                     AIO_Func.LCast(Q,Qtarget,QD,0);
             }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                if(PriorSpell.E != SelectedPriorSpell || Etarget.HasBuff("brandablaze"))
+                if((PriorSpell.E != SelectedPriorSpell || Etarget.HasBuff("brandablaze")) && Etarget != null)
                     E.Cast(Etarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
                 var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-                if(PriorSpell.W != SelectedPriorSpell || Wtarget.HasBuff("brandablaze"))
+                if((PriorSpell.W != SelectedPriorSpell || Wtarget.HasBuff("brandablaze")) && Wtarget != null)
                     AIO_Func.CCast(W,Wtarget);
 
             }
@@ -266,18 +266,21 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
                 var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+                if(Qtarget != null)
                 AIO_Func.LCast(Q,Qtarget,QD,0);
             }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
                 var Etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed*E.Delay, TargetSelector.DamageType.Magical);
+                if(Etarget != null)
                 E.Cast(Etarget);
             }
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
                 var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+                if(Wtarget != null)
                 AIO_Func.CCast(W,Wtarget);
             }
         }

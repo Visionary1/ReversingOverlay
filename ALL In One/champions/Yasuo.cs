@@ -10,7 +10,7 @@ namespace ALL_In_One.champions
 {
     class Yasuo// By RL244 WIP
     {
-        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} //
+        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} // yasuodashscalar yasuopassivemovementshield yasuopassivemscharge
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, QQ, W, E, EQ, R;
@@ -29,7 +29,6 @@ namespace ALL_In_One.champions
             QQ.SetSkillshot(0.25f, 60f, 1200f, false, SkillshotType.SkillshotLine);
             W.SetSkillshot(0.25f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             E.SetTargetted(0.25f, float.MaxValue);
-            EQ.SetTargetted(0.25f, float.MaxValue);
             R.SetTargetted(0.4f, float.MaxValue);
             
             AIO_Menu.Champion.Combo.addUseQ();
@@ -37,7 +36,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseR();
 
             AIO_Menu.Champion.Harass.addUseQ();
-            AIO_Menu.Champion.Harass.addUseE(false);
+            AIO_Menu.Champion.Harass.addUseE();
 
             AIO_Menu.Champion.Lasthit.addUseQ();
             AIO_Menu.Champion.Lasthit.addUseE();
@@ -136,7 +135,7 @@ namespace ALL_In_One.champions
         if (Q.IsReady() && drawQ.Active)
         Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
         
-        if (EQ.IsReady() && drawEQ.Active && Player.HasBuff("yasuoq3w") && Dash.IsDashing(Player))
+        if (EQ.IsReady() && drawEQ.Active)
         Render.Circle.DrawCircle(Player.Position, EQ.Range, drawEQ.Color);
         
         if (W.IsReady() && drawW.Active)
@@ -148,7 +147,7 @@ namespace ALL_In_One.champions
         if (R.IsReady() && drawR.Active)
         Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         
-        if (QQ.IsReady() && drawQQr.Active && !Dash.IsDashing(Player) &&QQTarget != null)
+        if (QQ.IsReady() && drawQQr.Active && Player.HasBuff("yasuoq3w") &&QQTarget != null)
         Render.Circle.DrawCircle(Player.Position, QQ.Range - QQTarget.MoveSpeed*QQ.Delay, drawQQr.Color);
 
 
@@ -190,10 +189,12 @@ namespace ALL_In_One.champions
                 return;
                 
             if(!sender.IsMe)
-            {
+			{
+				SharpDX.Vector2 castVec = Player.ServerPosition.To2D() +
+				SharpDX.Vector2.Normalize(args.Start.To2D() - Player.Position.To2D()) * (100f);
                 if (IsSkill(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady()
                 && Player.Distance(args.End) < 250 && AIO_Menu.Champion.Misc.getBoolValue("AutoW"))
-                W.Cast(args.End);
+                W.Cast(castVec);
             }
             else
             {
@@ -277,8 +278,9 @@ namespace ALL_In_One.champions
                 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
+				var Buff = AIO_Func.getBuffInstance(Player, "yasuodashscalar");
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
-                if(!ETarget.HasBuff("YasuoDashWrapper"))
+                if(!ETarget.HasBuff("YasuoDashWrapper") && (float)Buff.Count > 1)
                 E.Cast(ETarget);
             }
 
@@ -295,8 +297,7 @@ namespace ALL_In_One.champions
                 if(AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
                 AIO_Func.LH(Q,float.MaxValue);
                 if(AIO_Menu.Champion.Lasthit.UseE && E.IsReady())
-                AIO_Func.LH(E,0f);
-
+                AIO_Func.LH(E);
         }
         
         static void Laneclear()

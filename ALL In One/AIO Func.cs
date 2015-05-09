@@ -102,7 +102,7 @@ namespace ALL_In_One
                     }
                     else if (target.IsValidTarget(spell.Range + spell.Width/2)) //사거리 밖 대상에 대해서
                     {
-                        if(Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2)
+                        if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2)
                         {
                             if(Player.Distance(pred.CastPosition) <= spell.Range+spell.Width/2)
                             spell.Cast(pred.CastPosition);
@@ -138,14 +138,17 @@ namespace ALL_In_One
             var M = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health).FirstOrDefault(m => isKillable(m,spell,0) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
             if(spell.IsReady() && M != null)
             {
-                if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우 위에 MinionOrderTypes.MaxHealth 없애서 기본값으로 바꿨음 막타잘치게 NotAlly
-                LCast(spell,M,50f,ALPHA);
-                else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
-                CCast(spell,M);
-                else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
-                spell.Cast(M);
-                else
-                spell.Cast(M);
+				if(spell.IsSkillshot)
+				{
+					if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우 위에 MinionOrderTypes.MaxHealth 없애서 기본값으로 바꿨음 막타잘치게 NotAlly
+					LCast(spell,M,50f,ALPHA);
+					else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
+					CCast(spell,M);
+					else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+					spell.Cast(M);
+				}
+				else
+				spell.Cast(M);
             }
         }
         

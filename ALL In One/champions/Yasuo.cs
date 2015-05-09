@@ -304,7 +304,7 @@ namespace ALL_In_One.champions
         {
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
-            var EM = MinionManager.GetMinions(Game.CursorPos, E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => !x.HasBuff("YasuoDashWrapper"));
+            var EM = MinionManager.GetMinions(Game.CursorPos, 150f, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => !x.HasBuff("YasuoDashWrapper") && x.Distance(Player.ServerPosition) <= E.Range);
             if (Minions.Count <= 0)
                 return;
                 
@@ -312,9 +312,9 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
                 if (Q.CanCast(Minions[0]))
-                AIO_Func.LCast(Q,Minions[0],QD);
+                AIO_Func.LH(Q,float.MaxValue); //AIO_Func.LCast(Q,Minions[0],QD);
             }
-			
+            
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
                 if (E.CanCast(EM))
@@ -328,7 +328,7 @@ namespace ALL_In_One.champions
         {
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-            var EM = MinionManager.GetMinions(Game.CursorPos, E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => !x.HasBuff("YasuoDashWrapper"));
+            var EM = MinionManager.GetMinions(Game.CursorPos, 150f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => !x.HasBuff("YasuoDashWrapper") && x.Distance(Player.ServerPosition) <= E.Range);
 
             if (Mobs.Count <= 0)
                 return;

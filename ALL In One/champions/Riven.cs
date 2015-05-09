@@ -10,7 +10,7 @@ using Color = System.Drawing.Color;
 namespace ALL_In_One.champions
 {
     class Riven// By RL244 rivenpassiveaaboost rivenpassive rivenwindslashready RivenFengShuiEngine RivenFeint riventricleavesoundone riventricleavesoundtwo
-       //리븐을 만드려면 멘탈이 강해야합니다. 굿럭 - 오토평캔 만들다 때려치운 xcsoft. By RL244 왕위를 계승하는 중입니다..soft시여..
+       //아 Q 짜증..
     {
         static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
@@ -19,7 +19,7 @@ namespace ALL_In_One.champions
         static int Qtimer = 0;
         static float Qps {get {var buff = AIO_Func.getBuffInstance(Player, "rivenpassiveaaboost"); return buff != null ? buff.Count : 0; } }
         static float getRBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "RivenFengShuiEngine"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static bool NextQCastAllowed {get {return Qps <= 1;}} //NextQCastAllowed 쓰는거 잠시 보류
+        static bool NextQCastAllowed {get {return Qps <= 2;}} //NextQCastAllowed 쓰는거 잠시 보류
         
         public static void Load()
         {
@@ -171,7 +171,7 @@ namespace ALL_In_One.champions
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
-            if(Qtimer < Utils.TickCount - 250)
+            if((Qtimer < Utils.TickCount - 250)) // && NextQCastAllowed
             AIO_Func.AALcJc(Q,0,0,0);
             if(!utility.Activator.AfterAttack.AIO)
             AA();

@@ -24,8 +24,8 @@ namespace ALL_In_One.utility
 		{
 			if (Player.IsDead)
 				return;
-			SetMove(!(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && SetCbMove) || !(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && SetHrMove));
-			SetAttack(!(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && SetCbAttack))
+			Orbwalker.SetMove(!(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && SetCbMove) || !(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && SetHrMove));
+			Orbwalker.SetAttack(!(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && SetCbAttack))
 		}
 	}
 }

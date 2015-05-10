@@ -21,7 +21,7 @@ namespace ALL_In_One.champions
 
         const int DefaultRange = 590;
 
-        static float GetQActiveRange { get { return DefaultRange + ((25 * Q.Level) + 50); } }
+        static float GetQActivErange { get { return DefaultRange + ((25 * Q.Level) + 50); } }
 
         static float WLastCastedTime;
 
@@ -58,10 +58,10 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addItem("Auto E On Immobile Targets", true);
             AIO_Menu.Champion.Misc.addItem("Switch to FISHBONES If Hit Enemy Number >=", new Slider(2, 2, 5));
 
-            AIO_Menu.Champion.Drawings.addQRange();
-            AIO_Menu.Champion.Drawings.addWRange();
-            AIO_Menu.Champion.Drawings.addERange();
-            AIO_Menu.Champion.Drawings.addRRange();
+            AIO_Menu.Champion.Drawings.addQrange();
+            AIO_Menu.Champion.Drawings.addWrange();
+            AIO_Menu.Champion.Drawings.addErange();
+            AIO_Menu.Champion.Drawings.addRrange();
             AIO_Menu.Champion.Drawings.addItem("Passive Timer", new Circle(true , Color.SpringGreen));
 
             //AIO_Menu.Champion.Drawings.addDamageIndicator();
@@ -107,14 +107,14 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = AIO_Menu.Champion.Drawings.QRange;
-            var drawW = AIO_Menu.Champion.Drawings.WRange;
-            var drawE = AIO_Menu.Champion.Drawings.ERange;
-            var drawR = AIO_Menu.Champion.Drawings.RRange;
+            var drawQ = AIO_Menu.Champion.Drawings.Qrange;
+            var drawW = AIO_Menu.Champion.Drawings.Wrange;
+            var drawE = AIO_Menu.Champion.Drawings.Erange;
+            var drawR = AIO_Menu.Champion.Drawings.Rrange;
             var drawP = AIO_Menu.Champion.Drawings.getCircleValue("Passive Timer");
 
             if (drawQ.Active && !QisActive)
-                Render.Circle.DrawCircle(Player.Position, GetQActiveRange, drawQ.Color);
+                Render.Circle.DrawCircle(Player.Position, GetQActivErange, drawQ.Color);
 
             if (drawW.Active && W.IsReady())
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
@@ -225,7 +225,7 @@ namespace ALL_In_One.champions
         static void Combo()
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
-                QSwitchForUnit(TargetSelector.GetTarget(GetQActiveRange + 30, Q.DamageType));
+                QSwitchForUnit(TargetSelector.GetTarget(GetQActivErange + 30, Q.DamageType));
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
@@ -266,7 +266,7 @@ namespace ALL_In_One.champions
             }
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
-                QSwitchForUnit(TargetSelector.GetTarget(GetQActiveRange + 30, TargetSelector.DamageType.Physical, true));
+                QSwitchForUnit(TargetSelector.GetTarget(GetQActivErange + 30, TargetSelector.DamageType.Physical, true));
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
                 W.CastOnBestTarget();
@@ -274,7 +274,7 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
-            var Minions = MinionManager.GetMinions(Player.ServerPosition, GetQActiveRange, MinionTypes.All, MinionTeam.Enemy);
+            var Minions = MinionManager.GetMinions(Player.ServerPosition, GetQActivErange, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
             {
@@ -302,7 +302,7 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            var Mobs = MinionManager.GetMinions(Player.ServerPosition, GetQActiveRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var Mobs = MinionManager.GetMinions(Player.ServerPosition, GetQActivErange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
             {

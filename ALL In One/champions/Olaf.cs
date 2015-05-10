@@ -8,23 +8,23 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class Renekton// By RL244
+    class Olaf// By RL244
     {
-        static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
+        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-        static float ED = 50f;
-        
+        static float QD {get{return Menu.Item("Misc.Qtg").GetValue<Slider>().Value; }}
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 225f, TargetSelector.DamageType.Physical){Delay = 0.25f};
-            W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E, 450f, TargetSelector.DamageType.Physical);
-            R = new Spell(SpellSlot.R, 175f + 32.5f, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 1000f, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, Player.AttackRange, TargetSelector.DamageType.Physical);
+            E = new Spell(SpellSlot.E, 325f, TargetSelector.DamageType.True);
+            R = new Spell(SpellSlot.R, Player.AttackRange, TargetSelector.DamageType.Physical);
 
-            E.SetSkillshot(0.25f, 75f, 1400f, false, SkillshotType.SkillshotCircle);
-            
+            Q.SetSkillshot(0.25f, 105f, 1600f, false, SkillshotType.SkillshotCircle);
+            E.SetTargetted(0.25f, float.MaxValue);
+                 
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
@@ -33,27 +33,31 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE();
-            
-            AIO_Menu.Champion.Laneclear.addUseQ();
-            AIO_Menu.Champion.Laneclear.addUseW();
-            AIO_Menu.Champion.Laneclear.addUseE();
+            AIO_Menu.Champion.Harass.addIfMana();
 
+            AIO_Menu.Champion.Laneclear.addUseQ(false);
+            AIO_Menu.Champion.Laneclear.addUseW(false);
+            AIO_Menu.Champion.Laneclear.addUseE(false);
+            AIO_Menu.Champion.Laneclear.addIfMana();
+            
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addUseE();
+            AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
+            AIO_Menu.Champion.Misc.addItem("KillstealE", true);
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(50, 0, 150));
+
+
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addErange();
-            AIO_Menu.Champion.Drawings.addRrange();
-
-        
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -63,20 +67,18 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
-                AIO_Func.SC(Q,0,0,0);
-                AIO_Func.SC(E,ED,float.MaxValue,0);
-                AIO_Func.SC(R,0,0,0);
+                AIO_Func.SC(Q);
+                AIO_Func.SC(W);
+                AIO_Func.SC(E);
+                AIO_Func.SC(R);
+                if(AIO_Func.UnitIsImmobileUntil(Player) > 0.5 && AIO_Menu.Champion.Combo.UseR && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && R.IsReady())
+                R.Cast();
             }
 
-            #region Killsteal
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
                 KillstealQ();
-            #endregion
-            #region AfterAttack
-            AIO_Func.AASkill(W);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
+            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
+                KillstealE();
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -86,54 +88,46 @@ namespace ALL_In_One.champions
 
             var drawQ = AIO_Menu.Champion.Drawings.Qrange;
             var drawE = AIO_Menu.Champion.Drawings.Erange;
-            var drawR = AIO_Menu.Champion.Drawings.Rrange;
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
-            if (R.IsReady() && drawR.Active)
-                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
         
-        static void AA()
+        static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            AIO_Func.AACb(W);
-        }
-        
-        static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
-        {
-            var Target = (Obj_AI_Base)target;
-            if (!unit.IsMe || Target == null)
+            if (!sender.IsMe || Player.IsDead) // 
                 return;
-            AIO_Func.AALcJc(W);
-            if(!utility.Activator.AfterAttack.AIO)
-            AA();
         }
-
+        
         static void KillstealQ()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
-                    Q.Cast();
+                AIO_Func.CCast(Q,target);
             }
         }
-
+        
+        static void KillstealE()
+        {
+            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
+            {
+                if (E.CanCast(target) && AIO_Func.isKillable(target, E))
+                E.Cast(target);
+            }
+        }
+        
+        
         static float getComboDamage(Obj_AI_Base enemy)
         {
             float damage = 0;
 
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
-            
-            if (W.IsReady())
-                damage += W.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, false);
-            
+                
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
-                
-            if (R.IsReady())
-                damage += R.GetDamage(enemy);
                 
             return damage;
         }

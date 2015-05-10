@@ -53,9 +53,9 @@ namespace ALL_In_One.utility
             addPotions();
 
             Game.OnUpdate += OnUpdate.Game_OnUpdate;
-            Game.OnUpdate += OnAttack.Game_OnUpdate;
-            Game.OnUpdate += Killsteal.Game_OnUpdate;
-            Game.OnUpdate += AfterAttack.Game_OnUpdate;
+            //Game.OnUpdate += OnAttack.Game_OnUpdate;
+            //Game.OnUpdate += Killsteal.Game_OnUpdate;
+            //Game.OnUpdate += AfterAttack.Game_OnUpdate;
             Orbwalking.BeforeAttack += BeforeAttack.Orbwalking_BeforeAttack;
             Orbwalking.AfterAttack += AfterAttack.Orbwalking_AfterAttack;
             Orbwalking.OnAttack += OnAttack.Orbwalking_OnAttack;
@@ -165,6 +165,8 @@ namespace ALL_In_One.utility
 
                 Menu.SubMenu("OnUpdate").AddItem(new MenuItem("OnUpdate.Use " + itemid.ToString(), "Use " + itemName)).SetValue(true);
             }
+            
+            internal static float pastTime = 0; //버프 체크시 랙 덜걸리도록..
 
             internal static void Game_OnUpdate(EventArgs args)
             {
@@ -198,19 +200,87 @@ namespace ALL_In_One.utility
                 
                 if(Menu.Item("Misc.BF").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) // 개발 편의를 위해 추가한 버프 체크기.
                 {
-                    var Target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
-                    if(Target == null)
-                    return;
-                    foreach (var buff in Player.Buffs)
+                    if(Environment.TickCount - pastTime > 500) //랙 줄이려고 추가함
+                    pastTime = Environment.TickCount;
+                    if(Environment.TickCount - pastTime > 499)
                     {
-                        AIO_Func.sendDebugMsg("PLAYER : "+buff.Name);
-                    }
-                    
-                    foreach (var buff in Target.Buffs)
-                    {
-                        AIO_Func.sendDebugMsg("TARGET : "+buff.Name);
+                        var Target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
+                        if(Target == null)
+                        {
+                            foreach (var buff in Player.Buffs)
+                            {
+                                AIO_Func.sendDebugMsg("PLAYER : "+buff.Name);
+                            }
+                        }
+                        else
+                        {
+                            foreach (var buff in Player.Buffs)
+                            {
+                                AIO_Func.sendDebugMsg("PLAYER : "+buff.Name);
+                            }
+                            foreach (var buff in Target.Buffs)
+                            {
+                                AIO_Func.sendDebugMsg("TARGET : "+buff.Name);
+                            }
+                        }
                     }
                 }
+                
+                #region RS
+                if(Menu.Item("OnAttack.RS").GetValue<bool>())
+                OnAttack.setRSmiteSlot(); //Red Smite
+                #endregion
+                #region BS
+                if(Menu.Item("Killsteal.BS").GetValue<bool>())
+                {
+                    Killsteal.setBSmiteSlot();
+                    
+                    var ts = ObjectManager.Get<Obj_AI_Hero>().Where(f => !f.IsAlly && !f.IsDead && Player.Distance(f, false) <= Killsteal.smrange);
+                    if (ts == null)
+                        return;
+
+                    float dmg = Killsteal.BSDamage();
+                    foreach (var t in ts)
+                    {
+                        if (AIO_Func.isKillable(t,dmg))
+                        {
+                            if(Killsteal.smiteSlot.IsReady() && Killsteal.BS.Slot == Killsteal.smiteSlot)
+                            Player.Spellbook.CastSpell(Killsteal.smiteSlot, t);
+                            else
+                            return;
+                        }
+                    }
+                }
+                #endregion
+                
+                #region AA
+                if (AIO_Func.AfterAttack() && AfterAttack.AIO)
+                {
+                var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true);
+                var itemone = AfterAttack.itemsList.FirstOrDefault(x => Items.CanUseItem((int)x.Id) && target.IsValidTarget(x.Range) && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>());
+                    if(Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
+                    Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                    {
+                        if(Menu.Item("AfterAttack.SF").GetValue<bool>())
+                        {
+                            if(AfterAttack.SkillCasted)
+                            {
+                            if (itemone.isTargeted)
+                                Items.UseItem(itemone.Id, (Obj_AI_Hero)target);
+                            else
+                                Items.UseItem(itemone.Id);
+                            }                            
+                        }
+                        else
+                        {
+                            if (itemone.isTargeted)
+                                Items.UseItem(itemone.Id, (Obj_AI_Hero)target);
+                            else
+                                Items.UseItem(itemone.Id);
+                        }
+                    }
+                }
+                #endregion
             }
         }
         
@@ -219,10 +289,6 @@ namespace ALL_In_One.utility
             internal static Spell RS;
             internal static SpellSlot smiteSlot = SpellSlot.Unknown;
             internal static float smrange = 575f; //500f + player.width + target width. 대충 575f.. 정글몹에겐 700f 정도
-            internal static void Game_OnUpdate(EventArgs args)
-            {
-                setRSmiteSlot();
-            }
             internal static void setRSmiteSlot()
             {
                 foreach (var spell in Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "s5_summonersmiteduel", StringComparison.CurrentCultureIgnoreCase))) // Red Smite
@@ -242,9 +308,10 @@ namespace ALL_In_One.utility
                         
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Menu.Item("OnAttack.RS").GetValue<bool>())
                 {
-                    RS.Slot = smiteSlot;
-                    if(smiteSlot.IsReady())
+                    if(smiteSlot.IsReady() && RS.Slot == smiteSlot)
                     Player.Spellbook.CastSpell(smiteSlot, Target);
+                    else
+                    return;
                 }
             }
         }
@@ -254,27 +321,6 @@ namespace ALL_In_One.utility
             internal static Spell BS;
             internal static SpellSlot smiteSlot = SpellSlot.Unknown;
             internal static float smrange = 575f; //500f + player.width + target width. 대충 575f.. 정글몹에겐 700f 정도
-            internal static void Game_OnUpdate(EventArgs args)
-            {
-                setBSmiteSlot();
-                
-                var ts = ObjectManager.Get<Obj_AI_Hero>().Where(f => !f.IsAlly && !f.IsDead && Player.Distance(f, false) <= smrange);
-                if (ts == null)
-                    return;
-
-                float dmg = BSDamage();
-                if(Menu.Item("Killsteal.BS").GetValue<bool>())
-                {
-                    foreach (var t in ts)
-                    {
-                        if (AIO_Func.isKillable(t,dmg))
-                        {
-                            BS.Slot = smiteSlot;
-                            Player.Spellbook.CastSpell(smiteSlot, t);
-                        }
-                    }
-                }
-            }
             
             internal static float BSDamage()
             {
@@ -336,35 +382,6 @@ namespace ALL_In_One.utility
                 Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use " + itemid.ToString(), "Use " + itemName)).SetValue(true);
             }
             
-            internal static void Game_OnUpdate(EventArgs args)
-            {
-                var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true);
-                var itemone = AfterAttack.itemsList.FirstOrDefault(x => Items.CanUseItem((int)x.Id) && target.IsValidTarget(x.Range) && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>());
-                if (AIO_Func.AfterAttack() && AIO)
-                {
-                    if(Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
-                    Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    {
-                        if(Menu.Item("AfterAttack.SF").GetValue<bool>())
-                        {
-                            if(SkillCasted)
-                            {
-                            if (itemone.isTargeted)
-                                Items.UseItem(itemone.Id, (Obj_AI_Hero)target);
-                            else
-                                Items.UseItem(itemone.Id);
-                            }                            
-                        }
-                        else
-                        {
-                            if (itemone.isTargeted)
-                                Items.UseItem(itemone.Id, (Obj_AI_Hero)target);
-                            else
-                                Items.UseItem(itemone.Id);
-                        }
-                    }
-                }
-            }
 
             internal static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
             {
@@ -379,8 +396,8 @@ namespace ALL_In_One.utility
                     var Mobs = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Neutral);
                     if((Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
                     Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && !AIO ||
-                    Menu.Item("Misc.Jc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count >= 1 ||
-                    Menu.Item("Misc.Lc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Minions.Count >= 1)
+                    Menu.Item("Misc.Jc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count > 0 ||
+                    Menu.Item("Misc.Lc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Minions.Count > 0)
                     {
                         if(Menu.Item("AfterAttack.SF").GetValue<bool>())
                         {

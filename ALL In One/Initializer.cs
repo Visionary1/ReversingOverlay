@@ -4,7 +4,6 @@ using System.Reflection;
 
 using LeagueSharp;
 using LeagueSharp.Common;
-using LSConsole = LeagueSharp.Console.Console;
 
 namespace ALL_In_One
 {
@@ -12,9 +11,6 @@ namespace ALL_In_One
     {
         internal static void initialize()
         {
-            LSConsole.Show();
-            LSConsole.Maximize();
-
             AIO_Menu.initialize();
 
             if (!ChampLoader.champSupportedCheck("ALL_In_One.champions."))
@@ -28,8 +24,8 @@ namespace ALL_In_One
             ChampLoader.Load(ObjectManager.Player.ChampionName);
             utility.Activator.Load();
 
-            AIO_Menu.MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("BLANK", string.Empty));
-            AIO_Menu.MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("txt", "--PUBLIC OPTIONS--"));
+            AIO_Menu.Champion.Drawings.addItem(" ", null, false);
+            AIO_Menu.Champion.Drawings.addItem("--PUBLIC OPTIONS--", null, false);
 
             AIO_Menu.Champion.Drawings.addItem("Auto-Attack Real Range", new Circle(true, Color.Silver), false);
             AIO_Menu.Champion.Drawings.addItem("Auto-Attack Target", new Circle(true, Color.Red), false);
@@ -39,8 +35,8 @@ namespace ALL_In_One
 
             Drawing.OnDraw += Drawing_OnDraw;
             
-            LSConsole.WriteLine("[TeamProjects] ALL In One: " + ObjectManager.Player.ChampionName + " Loaded.");
-            LSConsole.WriteLine("[TeamProjects] ALL In One: Early Access.");
+            AIO_Func.sendDebugMsg(ObjectManager.Player.ChampionName + " Loaded.");
+            AIO_Func.sendDebugMsg("Early Access.");
 
         }
 

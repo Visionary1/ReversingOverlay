@@ -34,7 +34,7 @@ namespace ALL_In_One.champions
             Q.SetTargetted(0.25f, 3000f);
 
             AIO_Menu.Champion.Combo.addUseQ();
-            Menu.SubMenu("Combo").AddItem(new MenuItem("CbUseQD", "Q Distance", true).SetValue(new Slider(150, 0, 600)));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.QD", "Q Distance")).SetValue(new Slider(150, 0, 600));
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
@@ -51,12 +51,12 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
-            AIO_Menu.Champion.Misc.addItem("Made By Rl244", true);
+
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             
-            AIO_Menu.Champion.Drawings.addQRange();
-            AIO_Menu.Champion.Drawings.addRRange();
+            AIO_Menu.Champion.Drawings.addQrange();
+            AIO_Menu.Champion.Drawings.addRrange();
             AIO_Menu.Champion.Drawings.addItem("Q Timer", new Circle(true, Color.Blue));
             AIO_Menu.Champion.Drawings.addItem("W Timer", new Circle(true, Color.Black));
             AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.Red));
@@ -103,8 +103,8 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = AIO_Menu.Champion.Drawings.QRange;
-            var drawR = AIO_Menu.Champion.Drawings.RRange;
+            var drawQ = AIO_Menu.Champion.Drawings.Qrange;
+            var drawR = AIO_Menu.Champion.Drawings.Rrange;
             var drawQTimer = AIO_Menu.Champion.Drawings.getCircleValue("Q Timer");
             var drawWTimer = AIO_Menu.Champion.Drawings.getCircleValue("W Timer");
             var drawETimer = AIO_Menu.Champion.Drawings.getCircleValue("E Timer");
@@ -163,7 +163,7 @@ namespace ALL_In_One.champions
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !AIO_Menu.Champion.Combo.UseW || !AIO_Menu.Champion.Harass.UseW ||
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && !(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
             return;
-            if (IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && Player.Distance(args.End) < 110)
+            if (IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady() && Player.Distance(args.End) < 110)
             W.Cast();
         }
 
@@ -199,7 +199,7 @@ namespace ALL_In_One.champions
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady()) 
             {
-                var qd = Menu.Item("CbUseQD", true).GetValue<Slider>().Value;
+                var qd = Menu.Item("Combo.QD").GetValue<Slider>().Value;
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
                 var fqTarget = TargetSelector.GetTarget(Q.Range * 2, Q.DamageType);
     //                var fminion = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => t.Distance(fqTarget.Position)).

@@ -48,10 +48,10 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addUseKillsteal();
 
-            AIO_Menu.Champion.Drawings.addQRange();
-            AIO_Menu.Champion.Drawings.addWRange();
-            AIO_Menu.Champion.Drawings.addERange();
-            AIO_Menu.Champion.Drawings.addRRange();
+            AIO_Menu.Champion.Drawings.addQrange();
+            AIO_Menu.Champion.Drawings.addWrange();
+            AIO_Menu.Champion.Drawings.addErange();
+            AIO_Menu.Champion.Drawings.addRrange();
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -91,10 +91,10 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = AIO_Menu.Champion.Drawings.QRange;
-            var drawW = AIO_Menu.Champion.Drawings.WRange;
-            var drawE = AIO_Menu.Champion.Drawings.ERange;
-            var drawR = AIO_Menu.Champion.Drawings.RRange;
+            var drawQ = AIO_Menu.Champion.Drawings.Qrange;
+            var drawW = AIO_Menu.Champion.Drawings.Wrange;
+            var drawE = AIO_Menu.Champion.Drawings.Erange;
+            var drawR = AIO_Menu.Champion.Drawings.Rrange;
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
@@ -114,8 +114,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && !Q.IsReady() && !W.IsReady() && !E.IsReady())
             {
                 if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)) && R.Instance.Name == "KatarinaR")
-                    R.Cast();
-                else
                     R.Cast();
             }
 
@@ -139,6 +137,9 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
+            if (R.Instance.Name != "KatarinaR")
+                return;
+
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
                 Q.CastOnBestTarget();
 
@@ -240,7 +241,7 @@ namespace ALL_In_One.champions
                 if (W.CanCast(target) && AIO_Func.isKillable(target, W))
                     W.Cast();
 
-                if (E.CanCast(target) && AIO_Func.isKillable(target, E.GetDamage(target) + Q.GetDamage(target) + W.GetDamage(target)))
+                if (E.CanCast(target) && AIO_Func.isKillable(target, E.GetDamage(target) + (Q.IsReady() ? Q.GetDamage(target) : 0) + (W.IsReady() ? W.GetDamage(target) : 0)))
                     E.Cast(target);
 
                 if (R.CanCast(target) && AIO_Func.isKillable(target, R))
@@ -253,7 +254,7 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage(enemy) + Q.GetDamage(enemy, 1);
 
             if (W.IsReady())
                 damage += W.GetDamage(enemy);
@@ -261,8 +262,8 @@ namespace ALL_In_One.champions
             if (E.IsReady())
                 damage += E.GetDamage(enemy);
 
-            if (R.IsReady())
-                damage += R.GetDamage(enemy) * 5;
+            if (!Player.IsDead && R.Instance.State != SpellState.Cooldown)
+                damage += R.GetDamage(enemy, 1);
 
             return damage;
         }

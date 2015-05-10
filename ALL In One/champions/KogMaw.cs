@@ -18,18 +18,16 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static int UltST {get{var buff = AIO_Func.getBuffInstance(Player, "kogmawlivingartillery"); return buff != null ? buff.Count : 0;} }
-        static int UST = 1;
-        static float QD = 50; 
-        static float ED = 50; 
-
-
+        static int UST {get{return Menu.Item("Misc.Rst").GetValue<Slider>().Value; }}
+        static float ED {get{return Menu.Item("Misc.Etg").GetValue<Slider>().Value; }}
+        static float QD {get{return Menu.Item("Misc.Qtg").GetValue<Slider>().Value; }}
 
         static Spell Q, W, E, R;
 
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 1000f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W);
+            W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 1280f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 1200f, TargetSelector.DamageType.Magical);
 
@@ -65,9 +63,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
-            AIO_Menu.Champion.Misc.addItem("Made By Rl244", true);
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional QRange")).SetValue(new Slider(50, 0, 250));
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Etg", "Additional ERange")).SetValue(new Slider(50, 0, 250));
+
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Qrange")).SetValue(new Slider(50, 0, 250));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Etg", "Additional Erange")).SetValue(new Slider(50, 0, 250));
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Rst", "R Max Stacks")).SetValue(new Slider(1, 0, 10));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
@@ -75,11 +73,11 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
 
-            AIO_Menu.Champion.Drawings.addQRange();
+            AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addItem("Q Safe Range", new Circle(true, Color.Blue));
             AIO_Menu.Champion.Drawings.addItem("E Safe Range", new Circle(true, Color.Red));
-            AIO_Menu.Champion.Drawings.addERange(false);
-            AIO_Menu.Champion.Drawings.addRRange();
+            AIO_Menu.Champion.Drawings.addErange(false);
+            AIO_Menu.Champion.Drawings.addRrange();
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -97,9 +95,6 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(30))
             {
             R.Range = 900f +R.Level*300f;
-            QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
-            ED = Menu.Item("Misc.Etg").GetValue<Slider>().Value; 
-            UST = Menu.Item("Misc.Rst").GetValue<Slider>().Value; //유저가 선택한 스택
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 
@@ -135,11 +130,11 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = AIO_Menu.Champion.Drawings.QRange;
+            var drawQ = AIO_Menu.Champion.Drawings.Qrange;
             var drawQr = AIO_Menu.Champion.Drawings.getCircleValue("Q Safe Range");
-            var drawE = AIO_Menu.Champion.Drawings.ERange;
+            var drawE = AIO_Menu.Champion.Drawings.Erange;
             var drawEr = AIO_Menu.Champion.Drawings.getCircleValue("E Safe Range");
-            var drawR = AIO_Menu.Champion.Drawings.RRange;
+            var drawR = AIO_Menu.Champion.Drawings.Rrange;
             var etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed * E.Delay, TargetSelector.DamageType.Magical);
 
             if (Q.IsReady() && drawQ.Active)

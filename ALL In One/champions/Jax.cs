@@ -51,8 +51,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addUseKillsteal();
-            AIO_Menu.Champion.Drawings.addQRange();
-            AIO_Menu.Champion.Drawings.addERange();
+            AIO_Menu.Champion.Drawings.addQrange();
+            AIO_Menu.Champion.Drawings.addErange();
             AIO_Menu.Champion.Drawings.addItem("Q Timer", new Circle(true, Color.LightGreen));
 
             
@@ -103,8 +103,8 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-        var drawQ = AIO_Menu.Champion.Drawings.QRange;
-        var drawE = AIO_Menu.Champion.Drawings.ERange;
+        var drawQ = AIO_Menu.Champion.Drawings.Qrange;
+        var drawE = AIO_Menu.Champion.Drawings.Erange;
         var drawQTimer = AIO_Menu.Champion.Drawings.getCircleValue("Q Timer");
     
         if (Q.IsReady() && drawQ.Active)

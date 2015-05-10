@@ -25,7 +25,7 @@ namespace ALL_In_One.champions
             Q = new Spell(SpellSlot.Q, 600f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 300f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 590f, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 625f, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 625f, TargetSelector.DamageType.Magical) { MinHitChance = HitChance.VeryHigh };
 
             Q.SetTargetted(0.25f, float.MaxValue);
             R.SetSkillshot(0.389f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
@@ -34,6 +34,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW(false);
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
+            AIO_Menu.Champion.Combo.addItem("R Min Targets", new Slider(2, 1, 5));
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseE();
@@ -44,15 +45,15 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseE();
 
-             AIO_Menu.Champion.Misc.addUseKillsteal();
-             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
-             AIO_Menu.Champion.Misc.addItem("Auto-E For Keep Statcks", true);
+            AIO_Menu.Champion.Misc.addUseKillsteal();
+            AIO_Menu.Champion.Misc.addUseAntiGapcloser();
+            AIO_Menu.Champion.Misc.addItem("Auto-E For Keep Stacks", false);
 
-            AIO_Menu.Champion.Drawings.addQRange();
-            AIO_Menu.Champion.Drawings.addWRange(false);
-            AIO_Menu.Champion.Drawings.addERange();
-            AIO_Menu.Champion.Drawings.addRRange(false);
-            AIO_Menu.Champion.Drawings.addItem("W TImer", new Circle(true, Color.GreenYellow));
+            AIO_Menu.Champion.Drawings.addQrange();
+            AIO_Menu.Champion.Drawings.addWrange(false);
+            AIO_Menu.Champion.Drawings.addErange();
+            AIO_Menu.Champion.Drawings.addRrange(false);
+            AIO_Menu.Champion.Drawings.addItem("W Timer", new Circle(true, Color.GreenYellow));
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -100,23 +101,23 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            var drawQ = AIO_Menu.Champion.Drawings.QRange;
-            var drawW = AIO_Menu.Champion.Drawings.WRange;
-            var drawE = AIO_Menu.Champion.Drawings.ERange;
-            var drawR = AIO_Menu.Champion.Drawings.RRange;
+            var drawQ = AIO_Menu.Champion.Drawings.Qrange;
+            var drawW = AIO_Menu.Champion.Drawings.Wrange;
+            var drawE = AIO_Menu.Champion.Drawings.Erange;
+            var drawR = AIO_Menu.Champion.Drawings.Rrange;
             var drawWTimer = AIO_Menu.Champion.Drawings.getCircleValue("W Timer");
 
             if (Q.IsReady() && drawQ.Active)
-                Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+                Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color, 3);
 
             if (W.IsReady() && drawW.Active)
-                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
+                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color, 3);
 
             if (E.IsReady() && drawE.Active)
-                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color, 3);
 
             if (R.IsReady() && drawR.Active)
-                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color, 3);
 
             if (drawWTimer.Active && getWBuffDuration > 0)
             {
@@ -152,12 +153,7 @@ namespace ALL_In_One.champions
             }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
-            {
-                var rTarget = HeroManager.Enemies.FirstOrDefault(x=> R.GetPrediction(x, true).Hitchance >= HitChance.High);
-
-                if(rTarget != null)
-                    R.Cast(rTarget, false, true);
-            }
+                R.CastIfWillHit(R.GetTarget(), AIO_Menu.Champion.Combo.getSliderValue("R Min Targets").Value);
         }
 
         static void Harass()

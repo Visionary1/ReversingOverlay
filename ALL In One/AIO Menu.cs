@@ -30,24 +30,26 @@ namespace ALL_In_One
 
         internal static void addItem(string DisplayName, object Value, bool ChampUniq = false)
         {
-            MainMenu_Manual.AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq)).SetValue(Value);
-        }
+            if(Value == null)
+            {
+                MainMenu_Manual.AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq));
+                return;
+            }
 
-        internal static void addItem(string Name, string DisplayName, object Value, bool ChampUniq = false)
-        {
-            MainMenu_Manual.AddItem(new MenuItem(Name, DisplayName, ChampUniq)).SetValue(Value);
+            MainMenu_Manual.AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq)).SetValue(Value);
         }
 
         internal class Champion
         {
             internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
             {
-                MainMenu_Manual.SubMenu("Champion").AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq)).SetValue(Value);
-            }
+                if (Value == null)
+                {
+                    MainMenu_Manual.AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq));
+                    return;
+                }
 
-            internal static void addItem(string Name, string DisplayName, object Value, bool ChampUniq = true)
-            {
-                MainMenu_Manual.SubMenu("Champion").AddItem(new MenuItem(Name, DisplayName, ChampUniq)).SetValue(Value);
+                MainMenu_Manual.SubMenu("Champion").AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq)).SetValue(Value);
             }
 
             internal static void addOrbwalker()
@@ -64,6 +66,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("Combo." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("Combo." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -147,6 +155,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("Harass." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("Harass." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -230,6 +244,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Lasthit").AddItem(new MenuItem("Lasthit." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Lasthit").AddItem(new MenuItem("Lasthit." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -313,6 +333,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("Laneclear." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("Laneclear." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -396,6 +422,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -479,6 +511,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("Misc." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("Misc." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -587,6 +625,12 @@ namespace ALL_In_One
             {
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("Drawings." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("Drawings." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
@@ -605,27 +649,27 @@ namespace ALL_In_One
                     return MainMenu_Manual.Item("Drawings." + DisplayName, ChampUniq).GetValue<Circle>();
                 }
 
-                internal static void addQRange(bool Enabled = true)
+                internal static void addQrange(bool Enabled = true)
                 {
                     addItem("Q Range", new Circle(Enabled, System.Drawing.Color.FromArgb(200, System.Drawing.Color.SpringGreen)));
                 }
 
-                internal static void addWRange(bool Enabled = true)
+                internal static void addWrange(bool Enabled = true)
                 {
                     addItem("W Range", new Circle(Enabled, System.Drawing.Color.FromArgb(200, System.Drawing.Color.SpringGreen)));
                 }
 
-                internal static void addERange(bool Enabled = true)
+                internal static void addErange(bool Enabled = true)
                 {
                     addItem("E Range", new Circle(Enabled, System.Drawing.Color.FromArgb(200, System.Drawing.Color.SpringGreen)));
                 }
 
-                internal static void addRRange(bool Enabled = true)
+                internal static void addRrange(bool Enabled = true)
                 {
                     addItem("R Range", new Circle(Enabled, System.Drawing.Color.FromArgb(200, System.Drawing.Color.SpringGreen)));
                 }
 
-                internal static Circle QRange
+                internal static Circle Qrange
                 {
                     get
                     {
@@ -633,7 +677,7 @@ namespace ALL_In_One
                     }
                 }
 
-                internal static Circle WRange
+                internal static Circle Wrange
                 {
                     get
                     {
@@ -641,7 +685,7 @@ namespace ALL_In_One
                     }
                 }
 
-                internal static Circle ERange
+                internal static Circle Erange
                 {
                     get
                     {
@@ -649,7 +693,7 @@ namespace ALL_In_One
                     }
                 }
 
-                internal static Circle RRange
+                internal static Circle Rrange
                 {
                     get
                     {
@@ -683,19 +727,6 @@ namespace ALL_In_One
                         DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
                     };
                 }
-            }
-        }
-
-        internal class Activator
-        {
-            internal static void addItem(string DisplayName, object Value, bool ChampUniq = false)
-            {
-                MainMenu_Manual.SubMenu("Activator").AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq)).SetValue(Value);
-            }
-
-            internal static void addItem(string Name, string DisplayName, object Value, bool ChampUniq = false)
-            {
-                MainMenu_Manual.SubMenu("Activator").AddItem(new MenuItem(Name, DisplayName, ChampUniq)).SetValue(Value);
             }
         }
     }

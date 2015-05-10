@@ -55,16 +55,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>C:\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="LeagueSharp.Console">
-      <HintPath>C:\LeagueSharp\System\LeagueSharp.Console.dll</HintPath>
+      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -78,6 +75,7 @@
   <ItemGroup>
     <Compile Include="AIO Menu.cs" />
     <Compile Include="champions\Aatrox.cs" />
+    <Compile Include="champions\Ahri.cs" />
     <Compile Include="champions\_Akali.cs" />
     <Compile Include="champions\_Alistar.cs" />
     <Compile Include="champions\Amumu.cs" />
@@ -92,9 +90,9 @@
     <Compile Include="champions\Caitlyn.cs" />
     <Compile Include="champions\Cassiopeia.cs" />
     <Compile Include="champions\Chogath.cs" />
-    <Compile Include="champions\_Corki.cs" />
+    <Compile Include="champions\Corki.cs" />
     <Compile Include="champions\Darius.cs" />
-    <Compile Include="champions\_Diana.cs" />
+    <Compile Include="champions\Diana.cs" />
     <Compile Include="champions\_Draven.cs" />
     <Compile Include="champions\DrMundo.cs" />
     <Compile Include="champions\_Elise.cs" />
@@ -122,7 +120,7 @@
     <Compile Include="champions\Karthus.cs" />
     <Compile Include="champions\Kassadin.cs" />
     <Compile Include="champions\Katarina.cs" />
-    <Compile Include="champions\_Kayle.cs" />
+    <Compile Include="champions\Kayle.cs" />
     <Compile Include="champions\_Kennen.cs" />
     <Compile Include="champions\KhaZix.cs" />
     <Compile Include="champions\KogMaw.cs" />
@@ -147,8 +145,8 @@
     <Compile Include="champions\_Nidalee.cs" />
     <Compile Include="champions\_Nocturne.cs" />
     <Compile Include="champions\Nunu.cs" />
-    <Compile Include="champions\_Olaf.cs" />
-    <Compile Include="champions\_Orianna.cs" />
+    <Compile Include="champions\Olaf.cs" />
+    <Compile Include="champions\Orianna.cs" />
     <Compile Include="champions\_Pantheon.cs" />
     <Compile Include="champions\_Poppy.cs" />
     <Compile Include="champions\_Quinn.cs" />
@@ -159,16 +157,16 @@
     <Compile Include="champions\Riven.cs" />
     <Compile Include="champions\_Rumble.cs" />
     <Compile Include="champions\Ryze.cs" />
-    <Compile Include="champions\_Sejuani.cs" />
+    <Compile Include="champions\Sejuani.cs" />
     <Compile Include="champions\_Shaco.cs" />
-    <Compile Include="champions\_Shen.cs" />
+    <Compile Include="champions\Shen.cs" />
     <Compile Include="champions\Shyvana.cs" />
     <Compile Include="champions\_Singed.cs" />
     <Compile Include="champions\Sion.cs" />
     <Compile Include="champions\Sivir.cs" />
     <Compile Include="champions\_Skarner.cs" />
     <Compile Include="champions\_Sona.cs" />
-    <Compile Include="champions\_Soraka.cs" />
+    <Compile Include="champions\Soraka.cs" />
     <Compile Include="champions\_Swain.cs" />
     <Compile Include="champions\Syndra.cs" />
     <Compile Include="champions\Talon.cs" />
@@ -183,7 +181,7 @@
     <Compile Include="champions\_Udyr.cs" />
     <Compile Include="champions\Urgot.cs" />
     <Compile Include="champions\_Varus.cs" />
-    <Compile Include="champions\_Vayne.cs" />
+    <Compile Include="champions\Vayne.cs" />
     <Compile Include="champions\Veigar.cs" />
     <Compile Include="champions\_VelKoz.cs" />
     <Compile Include="champions\Vi.cs" />
@@ -212,7 +210,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="champions\_Ahri.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

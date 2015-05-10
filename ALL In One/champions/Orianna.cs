@@ -23,10 +23,9 @@ namespace ALL_In_One.champions
             Q = new Spell(SpellSlot.Q, 825f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W, 225f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 1120f);
-            R = new Spell(SpellSlot.R, 380f) { Delay = 0.6f};
+            R = new Spell(SpellSlot.R, 380f) { Delay = 0.25f};
 
             Q.SetSkillshot(0f, 100f, 1200f, false, SkillshotType.SkillshotCircle);
-            E.SetSkillshot(0.25f, 80f, 1700f, true, SkillshotType.SkillshotLine);
 
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
@@ -167,21 +166,22 @@ namespace ALL_In_One.champions
 
         static void Combo()
         {
+            if (E.IsReady() && Player.Distance(BallPosition) >= 500)
+                E.CastOnUnit(Player);
+
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
-            {
                 Q.CastOnBestTarget(0f, false, true);
-            }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
-                if (HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range, true, BallPosition)))
+                if (AIO_Func.SelfAOE_Prediction.HitCount(0f, W.Range, BallPosition) >= 1)
                     W.Cast();
             }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 if (AIO_Func.CollisionCheck(BallPosition, Player, 70f))
-                    E.Cast(Player);
+                    E.CastOnUnit(Player);
             }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
@@ -196,21 +196,22 @@ namespace ALL_In_One.champions
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
                 return;
 
+            if (E.IsReady() && Player.Distance(BallPosition) >= 500)
+                E.CastOnUnit(Player);
+
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
-            {
                 Q.CastOnBestTarget(0f, false, true);
-            }
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
-                if (HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range, true, BallPosition)))
+                if (AIO_Func.SelfAOE_Prediction.HitCount(0f, W.Range, BallPosition) >= 1)
                     W.Cast();
             }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
                 if (AIO_Func.CollisionCheck(BallPosition, Player, 70f))
-                    E.Cast(Player);
+                    E.CastOnUnit(Player);
             }
         }
 
@@ -274,7 +275,7 @@ namespace ALL_In_One.champions
                 if (W.CanCast(target) && AIO_Func.isKillable(target, W))
                     W.Cast(target);
 
-                if (R.CanCast(target) && AIO_Func.isKillable(target, R))
+                if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target) + (Q.IsReady() ? Q.GetDamage(target) : 0)))
                     R.Cast(target);
             }
         }

@@ -576,7 +576,7 @@ namespace ALL_In_One
             {
                 byte hitcount = 0;
 
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(range, false)))
                 {
                     var pred = Prediction.GetPrediction(enemy, delay);
 
@@ -591,7 +591,7 @@ namespace ALL_In_One
             {
                 byte hitcount = 0;
 
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(range, false, sourcePosition)))
                 {
                     var pred = Prediction.GetPrediction(enemy, delay);
 

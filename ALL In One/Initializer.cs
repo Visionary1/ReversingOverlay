@@ -23,6 +23,7 @@ namespace ALL_In_One
 
             ChampLoader.Load(ObjectManager.Player.ChampionName);
             utility.Activator.Load();
+            utility.SetOrb.Load();
 
             AIO_Menu.Champion.Drawings.addItem(" ", null, false);
             AIO_Menu.Champion.Drawings.addItem("--PUBLIC OPTIONS--", null, false);

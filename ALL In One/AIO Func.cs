@@ -63,6 +63,7 @@ namespace ALL_In_One
         internal static void sendDebugMsg(string message, string tag = "[TeamProjects] ALL In One: ")
         {
             Console.WriteLine(tag + message);
+            Game.PrintChat(tag + message); //임시 롤백
         }
 
         internal static bool anyoneValidInRange(float range)
@@ -253,7 +254,7 @@ namespace ALL_In_One
         
         internal static void AACb(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
         { // 아주 편하게 평캔 Cb, Hrs를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
-            var target = TargetSelector.GetTarget(Player.AttackRange + 50,TargetSelector.DamageType.Physical, true); //
+            var target = TargetSelector.GetTarget(Player.AttackRange + 150,TargetSelector.DamageType.Physical, true); //
             bool HM = true;
             bool LM = true;
             bool LHM = true;

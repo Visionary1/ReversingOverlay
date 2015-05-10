@@ -10,7 +10,7 @@ namespace ALL_In_One.champions
 {
     class Ezreal// By RL244
     {
-        static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } }
+        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;

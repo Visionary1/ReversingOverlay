@@ -15,6 +15,7 @@ namespace ALL_In_One.champions
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
         static float QD = 25f;
+        static bool RA {get{return Menu.Item("Combo.Use R").GetValue<KeyBind>().Active; }}
         
         public static void Load()
         {
@@ -30,7 +31,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
-            AIO_Menu.Champion.Combo.addUseR();
+            //AIO_Menu.Champion.Combo.addUseR(); 아래의 토글로 대체
+            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.Use R", "Use R")).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Toggle, true));
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
@@ -130,7 +132,7 @@ namespace ALL_In_One.champions
         
         static void Combo()
         {            
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
+            if (RA && R.IsReady())
             {
                 foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
                 {

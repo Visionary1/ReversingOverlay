@@ -112,21 +112,15 @@ namespace ALL_In_One.champions
     
         if (W.IsReady() && drawW.Active)
         Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
-    
         if (E.IsReady() && drawE.Active)
         Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
-        
         if (R.IsReady() && drawR.Active)
         Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
-        
         var pos_temp = Drawing.WorldToScreen(Player.Position);
-        
         if (drawQTimer.Active && getQBuffDuration > 0)
         Drawing.DrawText(pos_temp[0], pos_temp[1], drawQTimer.Color, "Q: " + getQBuffDuration.ToString("0.00"));
-        
         if (drawETimer.Active && getEBuffDuration > 0)
         Drawing.DrawText(pos_temp[0], pos_temp[1], drawETimer.Color, "E: " + getEBuffDuration.ToString("0.00"));
-        
         if (drawRTimer.Active && getRBuffDuration > 0)
         Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R: " + getRBuffDuration.ToString("0.00"));
         }

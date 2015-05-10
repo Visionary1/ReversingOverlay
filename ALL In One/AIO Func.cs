@@ -550,7 +550,7 @@ namespace ALL_In_One
             input.CollisionObjects[0] = CollisionableObjects.Heroes;
             input.CollisionObjects[1] = CollisionableObjects.YasuoWall;
 
-            return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Where(x => x.NetworkId != x.NetworkId).Any();
+            return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Where(x => x.NetworkId != source.NetworkId).Any();
         }
 
         internal static bool CollisionCheck(SharpDX.Vector3 from, Obj_AI_Hero target, float width)
@@ -563,7 +563,20 @@ namespace ALL_In_One
 
             input.CollisionObjects[0] = CollisionableObjects.Heroes;
 
-            return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Where(x => x.NetworkId != x.NetworkId).Any();
+            return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Where(x => x.NetworkId != ObjectManager.Player.NetworkId).Any();
+        }
+
+        internal static bool YasuoWallCheck(Obj_AI_Hero source, Obj_AI_Hero target, float width)
+        {
+            var input = new PredictionInput
+            {
+                Radius = width,
+                Unit = source
+            };
+
+            input.CollisionObjects[0] = CollisionableObjects.YasuoWall;
+
+            return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Any();
         }
 
         internal static int CountEnemyMinionsInRange(this SharpDX.Vector3 point, float range)

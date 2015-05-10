@@ -29,7 +29,7 @@ namespace ALL_In_One.champions
             W = new Spell(SpellSlot.W, 250f + 37.5f, TargetSelector.DamageType.Physical){Delay = 0.25f};
             E = new Spell(SpellSlot.E, 325f + Player.AttackRange, TargetSelector.DamageType.Physical);//그냥 접근기로 쓰게 넣었음
             R = new Spell(SpellSlot.R, 1100f, TargetSelector.DamageType.Physical);
-			
+            
 
             Q.SetSkillshot(0.25f, 250f, 2000f, false, SkillshotType.SkillshotCircle);
             E.SetSkillshot(0.25f, 150f, 2000f, false, SkillshotType.SkillshotCircle); //그냥 접근기로 쓰게 넣었음
@@ -174,28 +174,28 @@ namespace ALL_In_One.champions
             return;
             var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
             var M = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth);
-			var Target = (qTarget != null ? qTarget : M[0]);
-			
-			if (Player.Distance(Target.Position) < 250)
-			{
-				var SP = Player.ServerPosition.Extend(Target.ServerPosition, 150);
-				Player.IssueOrder(GameObjectOrder.MoveTo, SP);
-				Orbwalking.ResetAutoAttackTimer();
-			}
-			else
-			{
-				var CP = Player.ServerPosition.Extend(Game.CursorPos, 200);
-				Player.IssueOrder(GameObjectOrder.MoveTo, CP);
-				Orbwalking.ResetAutoAttackTimer();
-			}
-			Qmove = true;
+            var Target = (qTarget != null ? qTarget : M[0]);
+            
+            if (Player.Distance(Target.Position) < 250)
+            {
+                var SP = Player.ServerPosition.Extend(Target.ServerPosition, 150);
+                Player.IssueOrder(GameObjectOrder.MoveTo, SP);
+                Orbwalking.ResetAutoAttackTimer();
+            }
+            else
+            {
+                var CP = Player.ServerPosition.Extend(Game.CursorPos, 200);
+                Player.IssueOrder(GameObjectOrder.MoveTo, CP);
+                Orbwalking.ResetAutoAttackTimer();
+            }
+            Qmove = true;
         }
         static void OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args) 
         {
             if (!sender.IsMe || (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None)) return;
             var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
             var M = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth);
-			var Target = (qTarget != null ? qTarget : M[0]);
+            var Target = (qTarget != null ? qTarget : M[0]);
             if (args.Animation.Contains("Spell1"))
             {
                 Utility.DelayAction.Add(125 + Game.Ping/2, MotionCancle);
@@ -269,20 +269,20 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) >= RD).OrderByDescending(x => x.Health))
             {
                 if (R.CanCast(target) && AIO_Func.isKillable(target, R) && E.IsReady())
-				{
-					E.Cast(target.ServerPosition);
-					if(!Player.HasBuff("rivenwindslashready"))
-					R.Cast();
-					else
+                {
+                    E.Cast(target.ServerPosition);
+                    if(!Player.HasBuff("rivenwindslashready"))
+                    R.Cast();
+                    else
                     R.Cast(target);
-				}
+                }
                 else if (R.CanCast(target) && AIO_Func.isKillable(target, R))
-				{
-					if(!Player.HasBuff("rivenwindslashready"))
-					R.Cast();
-					else
+                {
+                    if(!Player.HasBuff("rivenwindslashready"))
+                    R.Cast();
+                    else
                     R.Cast(target);
-				}
+                }
             }
         }
 

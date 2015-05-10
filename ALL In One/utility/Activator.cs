@@ -227,30 +227,30 @@ namespace ALL_In_One.utility
                 }
                 
                 #region RS
-				if(Menu.Item("OnAttack.RS").GetValue<bool>())
+                if(Menu.Item("OnAttack.RS").GetValue<bool>())
                 OnAttack.setRSmiteSlot(); //Red Smite
                 #endregion
                 #region BS
                 if(Menu.Item("Killsteal.BS").GetValue<bool>())
-				{
-					Killsteal.setBSmiteSlot();
-					
-					var ts = ObjectManager.Get<Obj_AI_Hero>().Where(f => !f.IsAlly && !f.IsDead && Player.Distance(f, false) <= Killsteal.smrange);
-					if (ts == null)
-						return;
+                {
+                    Killsteal.setBSmiteSlot();
+                    
+                    var ts = ObjectManager.Get<Obj_AI_Hero>().Where(f => !f.IsAlly && !f.IsDead && Player.Distance(f, false) <= Killsteal.smrange);
+                    if (ts == null)
+                        return;
 
-					float dmg = Killsteal.BSDamage();
-					foreach (var t in ts)
-					{
-						if (AIO_Func.isKillable(t,dmg))
-						{
-							if(Killsteal.smiteSlot.IsReady() && Killsteal.BS.Slot == Killsteal.smiteSlot)
-							Player.Spellbook.CastSpell(Killsteal.smiteSlot, t);
-							else
-							return;
-						}
-					}
-				}
+                    float dmg = Killsteal.BSDamage();
+                    foreach (var t in ts)
+                    {
+                        if (AIO_Func.isKillable(t,dmg))
+                        {
+                            if(Killsteal.smiteSlot.IsReady() && Killsteal.BS.Slot == Killsteal.smiteSlot)
+                            Player.Spellbook.CastSpell(Killsteal.smiteSlot, t);
+                            else
+                            return;
+                        }
+                    }
+                }
                 #endregion
                 
                 #region AA

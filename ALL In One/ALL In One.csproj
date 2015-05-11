@@ -200,6 +200,7 @@
     <Compile Include="champions\Zyra.cs" />
     <Compile Include="ChampLoader.cs" />
     <Compile Include="utility\Activator.cs" />
+    <Compile Include="utility\SetOrb.cs" />
     <Compile Include="common\Damage.cs" />
     <Compile Include="AIO Func.cs" />
     <Compile Include="champions\__BASE.cs" />

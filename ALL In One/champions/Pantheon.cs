@@ -66,17 +66,17 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(35))
             {
                 AIO_Func.SC(Q);
-				if(Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
+                if(Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
                 AIO_Func.SC(W);
-				else if(AIO_Menu.Champion.Combo.UseW && W.IsReady())
-				{
-					foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
-					{
-						if (target != null && W.CanCast(target) && (target.Distance(Player.ServerPosition) > 400 || AIO_Func.getHealthPercent(Player) < 50 && Player.HasBuff("pantheonpassiveshield")))
-							W.Cast(target);
-					}
-				}
-				if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && (AIO_Menu.Champion.Combo.UseQ && !Q.IsReady() || !AIO_Menu.Champion.Combo.UseQ) || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && (AIO_Menu.Champion.Harass.UseQ && !Q.IsReady() || !AIO_Menu.Champion.Harass.UseQ) || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && (AIO_Menu.Champion.Jungleclear.UseQ && !Q.IsReady() || !AIO_Menu.Champion.Jungleclear.UseQ) && (AIO_Menu.Champion.Jungleclear.UseW && !W.IsReady() || !AIO_Menu.Champion.Jungleclear.UseW))
+                else if(AIO_Menu.Champion.Combo.UseW && W.IsReady())
+                {
+                    foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
+                    {
+                        if (target != null && W.CanCast(target) && (target.Distance(Player.ServerPosition) > 400 || AIO_Func.getHealthPercent(Player) < 50 && Player.HasBuff("pantheonpassiveshield")))
+                            W.Cast(target);
+                    }
+                }
+                if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && (AIO_Menu.Champion.Combo.UseQ && !Q.IsReady() || !AIO_Menu.Champion.Combo.UseQ) || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && (AIO_Menu.Champion.Harass.UseQ && !Q.IsReady() || !AIO_Menu.Champion.Harass.UseQ) || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && (AIO_Menu.Champion.Jungleclear.UseQ && !Q.IsReady() || !AIO_Menu.Champion.Jungleclear.UseQ) && (AIO_Menu.Champion.Jungleclear.UseW && !W.IsReady() || !AIO_Menu.Champion.Jungleclear.UseW))
                 AIO_Func.SC(E);
             }
 
@@ -117,7 +117,7 @@ namespace ALL_In_One.champions
 
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
-				
+                
             if (W.IsReady())
                 damage += W.GetDamage(enemy);
             

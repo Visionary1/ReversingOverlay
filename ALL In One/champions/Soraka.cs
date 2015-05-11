@@ -34,7 +34,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Laneclear.addUseQ(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
-			
+            
             AIO_Menu.Champion.Lasthit.addUseQ(false);
             AIO_Menu.Champion.Lasthit.addIfMana();
             

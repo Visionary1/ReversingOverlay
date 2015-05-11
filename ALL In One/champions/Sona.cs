@@ -67,15 +67,15 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(35))
             {
                 AIO_Func.SC(Q);
-				AIO_Func.Heal(W);
+                AIO_Func.Heal(W);
                 if(AIO_Func.EnemyCount(R.Range - 10) >= RM && R.IsReady() && AIO_Menu.Champion.Combo.UseR)
-				{
-					foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
-					{
-						if (R.CanCast(target))
-							R.CastIfWillHit(target,RM);
-					}
-				}
+                {
+                    foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
+                    {
+                        if (R.CanCast(target))
+                            R.CastIfWillHit(target,RM);
+                    }
+                }
             }
 
             #region Killsteal
@@ -130,7 +130,7 @@ namespace ALL_In_One.champions
                     Q.Cast();
             }
         }
-		
+        
         static void KillstealR()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))

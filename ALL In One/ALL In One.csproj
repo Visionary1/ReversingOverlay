@@ -202,6 +202,7 @@
     <Compile Include="utility\Activator.cs" />
     <Compile Include="utility\SetOrb.cs" />
     <Compile Include="common\Damage.cs" />
+    <Compile Include="common\Orbwalking.cs" />
     <Compile Include="AIO Func.cs" />
     <Compile Include="champions\__BASE.cs" />
     <Compile Include="DamageIndicator.cs" />

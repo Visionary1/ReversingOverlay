@@ -24,7 +24,7 @@ namespace ALL_In_One.champions
         {
             Q = new Spell(SpellSlot.Q, 925f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E);
+            E = new Spell(SpellSlot.E, 175f, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R, 450f, TargetSelector.DamageType.Magical);
 
             
@@ -56,6 +56,7 @@ namespace ALL_In_One.champions
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(50, 0, 250));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
+            AIO_Menu.Champion.Misc.addItem("Direct E Usage", false);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
 
@@ -81,6 +82,8 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
+				if (AIO_Menu.Champion.Misc.getBoolValue("Direct E Usage"))
+				AIO_Func.SC(E);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 

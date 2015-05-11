@@ -27,7 +27,7 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 1000f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 630f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 1280f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 1200f, TargetSelector.DamageType.Magical);
 
@@ -95,6 +95,8 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(30))
             {
             R.Range = 900f +R.Level*300f;
+			W.Range = 610f +W.Level*20f;
+				AIO_Func.SC(W);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 
@@ -167,7 +169,6 @@ namespace ALL_In_One.champions
         
         static void AA()
         {
-            AIO_Func.AACb(W);
             AIO_Func.AACb(Q,QD,0f);
         }
         

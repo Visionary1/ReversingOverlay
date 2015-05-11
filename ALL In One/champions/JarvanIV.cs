@@ -162,7 +162,7 @@ namespace ALL_In_One.champions
         static float JarvanPDamage(Obj_AI_Base enemy) //Code Made By RL244. 
         {
             return (float)Damage.CalcDamage(Player,enemy, Damage.DamageType.Physical, 
-            (float)(!enemy.HasBuff("jarvanivmartialcadencecheck") ? (enemy.MaxHealth - enemy.Health)*0.1d : 0));
+            (float)(!enemy.HasBuff("jarvanivmartialcadencecheck") ? (enemy.Health)*0.1d : 0));
         }
         
         static float getComboDamage(Obj_AI_Base enemy)

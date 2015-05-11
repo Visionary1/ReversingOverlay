@@ -89,7 +89,7 @@ namespace ALL_In_One
                     
                     if (target.IsValidTarget(spell.Range))
                     {
-                        if(target.MoveSpeed*spell.Delay <= spell.Width/3)
+                        if(target.MoveSpeed*spell.Delay <= spell.Width/2)
                             spell.Cast(target.ServerPosition);
                         else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                         {
@@ -109,12 +109,12 @@ namespace ALL_In_One
                     {
                         if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2)
                         {
-                            if(Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2 && target.MoveSpeed*spell.Delay > spell.Width/3)
+                            if(Player.Distance(pred.UnitPosition) <= spell.Range && target.MoveSpeed*spell.Delay > spell.Width/2)
                             {
                                 if(Player.Distance(pred.CastPosition) <= spell.Range)
                                 spell.Cast(pred.CastPosition);
                             }
-                            else if(Player.Distance(pred.UnitPosition) <= spell.Range && target.MoveSpeed*spell.Delay < spell.Width/2)
+                            else if(Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2 && target.MoveSpeed*spell.Delay <= spell.Width/2)
                             {
                                 if(Player.Distance(castVec2) <= spell.Range)
                                 spell.Cast(castVec2);

@@ -135,7 +135,7 @@ namespace ALL_In_One.champions
             if (!sender.IsMe)
             return;
             if (args.SData.Name == "RivenTriCleave")
-            Qtimer = Utils.TickCount;
+            Qtimer = Utils.GameTimeTickCount;
         }
         
         static void OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
@@ -161,7 +161,7 @@ namespace ALL_In_One.champions
             if ((int) args.Type != 70)
             return;
             
-            if(Qtimer > Utils.TickCount - 120)
+            if(Qtimer > Utils.GameTimeTickCount - 120)
             {
                 Qmove = false;
                 MotionCancle();
@@ -203,19 +203,19 @@ namespace ALL_In_One.champions
             if (Qmove && args.Animation.Contains("Run") && Target != null)
             {
                 Qmove = false;
-                Orbwalking.LastAATick = Utils.TickCount + Game.Ping/2;
+                Orbwalking.LastAATick = Utils.GameTimeTickCount + Game.Ping/2;
                 Player.IssueOrder(GameObjectOrder.AttackUnit, qTarget);
             }
             if (Qmove && args.Animation.Contains("Idle") && Target != null)
             {
                 Qmove = false;
-                Orbwalking.LastAATick = Utils.TickCount + Game.Ping/2;
+                Orbwalking.LastAATick = Utils.GameTimeTickCount + Game.Ping/2;
                 Player.IssueOrder(GameObjectOrder.AttackUnit, qTarget);
             }
         }
         static void AA()
         {
-            if(Qtimer < Utils.TickCount - 150)
+            if(Qtimer < Utils.GameTimeTickCount - 150)
             AIO_Func.AACb(Q,0,0,0);
         }
         
@@ -224,7 +224,7 @@ namespace ALL_In_One.champions
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
-            if(Qtimer < Utils.TickCount - 150) // && NextQCastAllowed
+            if(Qtimer < Utils.GameTimeTickCount - 150) // && NextQCastAllowed
             AIO_Func.AALcJc(Q,0,0,0);
             if(!utility.Activator.AfterAttack.AIO)
             AA();
@@ -249,7 +249,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Inteligent Q"))
             {
                 var qTarget = TargetSelector.GetTarget(Q.Range+40, Q.DamageType, true);
-                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 90 || Qtimer < Utils.TickCount - 1200))
+                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 90 || Qtimer < Utils.GameTimeTickCount - 1200))
                 Q.Cast(qTarget.ServerPosition);
             }
         }
@@ -259,7 +259,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Inteligent Q"))
             {
                 var qTarget = TargetSelector.GetTarget(Q.Range+40, Q.DamageType, true);
-                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 90 || Qtimer < Utils.TickCount - 1200))
+                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 90 || Qtimer < Utils.GameTimeTickCount - 1200))
                 Q.Cast(qTarget.ServerPosition);
             }
         }

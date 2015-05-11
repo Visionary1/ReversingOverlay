@@ -101,7 +101,7 @@
     <Compile Include="champions\Fiddlesticks.cs" />
     <Compile Include="champions\Fiora.cs" />
     <Compile Include="champions\_Fizz.cs" />
-    <Compile Include="champions\_Galio.cs" />
+    <Compile Include="champions\Galio.cs" />
     <Compile Include="champions\Gangplank.cs" />
     <Compile Include="champions\Garen.cs" />
     <Compile Include="champions\_Gnar.cs" />
@@ -143,7 +143,7 @@
     <Compile Include="champions\Nasus.cs" />
     <Compile Include="champions\Nautilus.cs" />
     <Compile Include="champions\_Nidalee.cs" />
-    <Compile Include="champions\_Nocturne.cs" />
+    <Compile Include="champions\Nocturne.cs" />
     <Compile Include="champions\Nunu.cs" />
     <Compile Include="champions\Olaf.cs" />
     <Compile Include="champions\Orianna.cs" />
@@ -165,7 +165,7 @@
     <Compile Include="champions\Sion.cs" />
     <Compile Include="champions\Sivir.cs" />
     <Compile Include="champions\_Skarner.cs" />
-    <Compile Include="champions\_Sona.cs" />
+    <Compile Include="champions\Sona.cs" />
     <Compile Include="champions\Soraka.cs" />
     <Compile Include="champions\_Swain.cs" />
     <Compile Include="champions\Syndra.cs" />

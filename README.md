@@ -2,7 +2,7 @@
 ![](https://cdn.joduska.me/forum/public/style_emoticons/default/cat_lazy.gif)
 ####● ALL In One: ==72==/124(58.0%) Champions supported.
 |Champion|Supported|
-|-|
+|-|-|
 |Aatrox|✔|
 |Ahri|✔|
 |Akali|　|

@@ -95,8 +95,8 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(30))
             {
             R.Range = 900f +R.Level*300f;
-			W.Range = 610f +W.Level*20f;
-				AIO_Func.SC(W);
+            W.Range = 610f +W.Level*20f;
+                AIO_Func.SC(W);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 

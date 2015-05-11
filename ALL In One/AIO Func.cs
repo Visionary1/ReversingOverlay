@@ -89,32 +89,34 @@ namespace ALL_In_One
                     
                     if (target.IsValidTarget(spell.Range))
                     {
-                        if(target.MoveSpeed*spell.Delay <= spell.Width/2)
+                        if(target.MoveSpeed*(spell.Delay+Player.ServerPosition.Distance(target.ServerPosition)/spell.Speed) <= spell.Width/2)
+                            spell.Cast(target.ServerPosition);
+                        else if(target.ServerPosition.Distance(pred.UnitPosition) <= spell.Width/2)
                             spell.Cast(target.ServerPosition);
                         else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                         {
-                            if(target.MoveSpeed*spell.Delay <= spell.Width*2/3 && castVec.Distance(pred.UnitPosition) <= spell.Width/2 && castVec.Distance(Player.ServerPosition) <= spell.Range)
+                            if(target.MoveSpeed*(spell.Delay+Player.ServerPosition.Distance(target.ServerPosition)/spell.Speed) <= spell.Width*2/3 && castVec.Distance(pred.UnitPosition) <= spell.Width/2 && castVec.Distance(Player.ServerPosition) <= spell.Range)
                             {
                                 spell.Cast(castVec);
                             }
-                            else if(castVec.Distance(pred.UnitPosition) > spell.Width/2 && Player.Distance(pred.UnitPosition) <= spell.Range)
+                            else if(castVec.Distance(pred.UnitPosition) > spell.Width/2 && Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range)
                             {
                                 spell.Cast(pred.UnitPosition);
                             }
-							else
+                            else
                                 spell.Cast(pred.CastPosition); // <- 별로 좋은 선택은 아니지만.. 
                         }
                     }
                     else if (target.IsValidTarget(spell.Range + spell.Width/2)) //사거리 밖 대상에 대해서
                     {
-                        if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2)
+                        if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2)
                         {
-                            if(Player.Distance(pred.UnitPosition) <= spell.Range)
+                            if(Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range)
                             {
-                                if(Player.Distance(pred.CastPosition) <= spell.Range)
+                                if(Player.ServerPosition.Distance(pred.CastPosition) <= spell.Range)
                                 spell.Cast(pred.CastPosition);
                             }
-                            else if(Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2 && target.MoveSpeed*spell.Delay <= spell.Width/2)
+                            else if(Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2 && target.MoveSpeed*(spell.Delay+Player.ServerPosition.Distance(target.ServerPosition)/spell.Speed) <= spell.Width/2)
                             {
                                 if(Player.Distance(castVec2) <= spell.Range)
                                 spell.Cast(castVec2);
@@ -430,11 +432,11 @@ namespace ALL_In_One
             }
             else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit && spell.Range > 0)
             {
-                var Mini = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.NotAlly);
-                if(Mini.Count() > 0)
+                if(Menu.Item("Lasthit.Use " + spell.Slot.ToString(), true).GetValue<bool>()
+                && spell.IsReady() && LHM)
                 {
-                    if(Menu.Item("Lasthit.Use " + spell.Slot.ToString(), true).GetValue<bool>()
-                    && spell.IsReady() && LHM)
+                    var Mini = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.NotAlly);
+                    if(Mini.Count() > 0)
                     LH(spell,ALPHA);
                 }
             }

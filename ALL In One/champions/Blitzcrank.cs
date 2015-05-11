@@ -82,8 +82,8 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
-				if (AIO_Menu.Champion.Misc.getBoolValue("Direct E Usage"))
-				AIO_Func.SC(E);
+                if (AIO_Menu.Champion.Misc.getBoolValue("Direct E Usage"))
+                AIO_Func.SC(E);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 

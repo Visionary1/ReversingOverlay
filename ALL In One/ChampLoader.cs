@@ -301,6 +301,22 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Sejuani.Load();
                     break;
+                case "Galio":
+                    MadeBy(Developer.RL244);
+                    champions.Galio.Load();
+                    break;
+                case "Nocturne":
+                    MadeBy(Developer.RL244);
+                    champions.Nocturne.Load();
+                    break;
+                case "Sona":
+                    MadeBy(Developer.RL244);
+                    champions.Sona.Load();
+                    break;
+                case "Pantheon":
+                    MadeBy(Developer.RL244);
+                    champions.Pantheon.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

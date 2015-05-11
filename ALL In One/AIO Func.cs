@@ -93,23 +93,23 @@ namespace ALL_In_One
                             spell.Cast(target.ServerPosition);
                         else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                         {
-                            if(target.MoveSpeed*spell.Delay <= spell.Width*2/3 && castVec.Distance(pred.CastPosition) <= spell.Width/3)
+                            if(target.MoveSpeed*spell.Delay <= spell.Width*2/3 && castVec.Distance(pred.UnitPosition) <= spell.Width/2 && castVec.Distance(Player.ServerPosition) <= spell.Range)
                             {
-                                if(Player.Distance(castVec) <= spell.Range)
                                 spell.Cast(castVec);
                             }
-                            else if(castVec.Distance(pred.CastPosition) > spell.Width/3)
+                            else if(castVec.Distance(pred.UnitPosition) > spell.Width/2 && Player.Distance(pred.UnitPosition) <= spell.Range)
                             {
-                                if(Player.Distance(pred.CastPosition) <= spell.Range)
-                                spell.Cast(pred.CastPosition);
+                                spell.Cast(pred.UnitPosition);
                             }
+							else
+                                spell.Cast(pred.CastPosition); // <- 별로 좋은 선택은 아니지만.. 
                         }
                     }
                     else if (target.IsValidTarget(spell.Range + spell.Width/2)) //사거리 밖 대상에 대해서
                     {
                         if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && Player.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2)
                         {
-                            if(Player.Distance(pred.UnitPosition) <= spell.Range && target.MoveSpeed*spell.Delay > spell.Width/2)
+                            if(Player.Distance(pred.UnitPosition) <= spell.Range)
                             {
                                 if(Player.Distance(pred.CastPosition) <= spell.Range)
                                 spell.Cast(pred.CastPosition);

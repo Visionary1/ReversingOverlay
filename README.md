@@ -1,7 +1,7 @@
 # L# TeamProjects (XC-Squad)
 ![](https://cdn.joduska.me/forum/public/style_emoticons/default/cat_lazy.gif)
-####● ALL In One: ==72==/124(58.0%) Champions supported.
-|Champion|Supported|
+####● ALL In One: 72/124(58.0%) Champions supported.
+<!--|Champion|Supported|
 |-|-|
 |Aatrox|✔|
 |Ahri|✔|
@@ -125,4 +125,4 @@
 |Ziggs|　|
 |Zilean|　|
 |Zyra|✔|
-|Ekko|![](https://cdn.joduska.me/forum/public/style_emoticons/default/kappa.png)|
+|Ekko|![](https://cdn.joduska.me/forum/public/style_emoticons/default/kappa.png)|-->

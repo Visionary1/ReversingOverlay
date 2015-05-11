@@ -147,7 +147,7 @@
     <Compile Include="champions\Nunu.cs" />
     <Compile Include="champions\Olaf.cs" />
     <Compile Include="champions\Orianna.cs" />
-    <Compile Include="champions\_Pantheon.cs" />
+    <Compile Include="champions\Pantheon.cs" />
     <Compile Include="champions\_Poppy.cs" />
     <Compile Include="champions\_Quinn.cs" />
     <Compile Include="champions\_Rammus.cs" />

@@ -1,6 +1,6 @@
 # L# TeamProjects (XC-Squad)
 ![](https://cdn.joduska.me/forum/public/style_emoticons/default/cat_lazy.gif)
-####● ALL In One: 76/124(61.3%) Champions supported.
+##● ALL In One: 76/124(61.3%) Champions supported.
 <!--|Champion|Supported|
 |-|-|
 |Aatrox|✔|
@@ -111,7 +111,7 @@
 |Veigar|✔|
 |Vel'Koz|　|
 |Vi|✔|
-|Viktor|WIP|
+|Viktor|✔|
 |Vladimir|✔|
 |Volibear|✔|
 |Warwick|✔|

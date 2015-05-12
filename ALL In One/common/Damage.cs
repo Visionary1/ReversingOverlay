@@ -100,6 +100,22 @@ namespace ALL_In_One
             AttackPassives.Add(p);
             #endregion
             
+            #region Viktor // By Rl244
+            p = new PassiveDamage
+            {
+                ChampionName = "Viktor",
+                IsActive = (source, target) => (source.HasBuff("viktorpowertransferreturn")),
+                GetDamage =
+                    (source, target) =>
+                        (float)
+                            source.CalcDamage(
+                                target, DamageType.Magical,
+                                new float[] { 20/25/30/35/40/45/50/55/60/70/80/90/110/130/150/170/190/210 }[source.Level - 1]
+                                +(float)0.5d * source.FlatMagicDamageMod),
+            };
+            AttackPassives.Add(p);
+            #endregion
+            
             #region Pantheon // By Rl244
             p = new PassiveDamage
             {

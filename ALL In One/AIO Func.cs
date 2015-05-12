@@ -133,7 +133,7 @@ namespace ALL_In_One
             {
                 if(spell != null && target !=null)
                 {
-                    var pred = Prediction.GetPrediction(target, spell.Delay, spell.Width, spell.Speed); //spell.Width/2
+                    var pred = Prediction.GetPrediction(target, spell.Delay, spell.Width/2, spell.Speed); //spell.Width/2
                     var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
                     //var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
                     var minioncol = collision.Count(x => (HeroOnly == false ? x.IsMinion : (x is Obj_AI_Hero)));
@@ -145,7 +145,45 @@ namespace ALL_In_One
                 }
             }
         }
-
+        
+        internal static void AtoB(Spell spell, Obj_AI_Base T, float Drag = 700f) //Coded By RL244 AtoB Drag 기본값 700f는 빅토르를 위한 것임.
+        {
+            if(T != null)
+            {
+                var T2 = TargetSelector.GetTarget(spell.Range + Drag,spell.DamageType, true);
+                var pred = Prediction.GetPrediction(T, spell.Delay, spell.Width/2, spell.Speed);
+                var T2pred = Prediction.GetPrediction(T2, spell.Delay, spell.Width/2, spell.Speed);
+                SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + T.ServerPosition.To2D()) / 2 ;
+                SharpDX.Vector2 castVec2 = Player.ServerPosition.To2D() +
+                                           SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (spell.Range);
+                SharpDX.Vector2 castVec3 = T.ServerPosition.To2D() -
+                                           SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (40f);
+                if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+                {
+                    if(T.Distance(Player.ServerPosition) >= spell.Range)
+                    {
+                        if(CanHit(spell,T,Drag) && (T2 == null || !CanHit(spell,T2,Drag)))
+                        spell.Cast(castVec2,pred.UnitPosition.To2D());
+                    }
+                    else
+					{
+                        if(T2 == null || !CanHit(spell,T2,Drag))
+                        spell.Cast(castVec3,T.ServerPosition.To2D());
+						else if(T2 != null && CanHit(spell,T2,Drag) && T2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+						{
+							SharpDX.Vector2 castVec4 = T.ServerPosition.To2D() -
+													   SharpDX.Vector2.Normalize(T2pred.UnitPosition.To2D() - T.ServerPosition.To2D()) * (40f);
+							spell.Cast(castVec4,pred.UnitPosition.To2D());
+						}
+					}
+                }
+            }
+        }
+		
+		internal static bool CanHit(Spell spell, Obj_AI_Base T, float Drag = 0f)
+		{
+			return T.IsValidTarget(spell.Range + Drag - ((T.Distance(Player.ServerPosition)-spell.Range)/spell.Speed+spell.Delay)*T.MoveSpeed);
+		}
         
         internal static void LH(Spell spell, float ALPHA = 0f) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
         {
@@ -557,7 +595,7 @@ namespace ALL_In_One
             input.CollisionObjects[0] = CollisionableObjects.Heroes;
             input.CollisionObjects[1] = CollisionableObjects.YasuoWall;
 
-            return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Where(x => x.NetworkId != source.NetworkId).Any();
+            return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Where(x => x.NetworkId != source.NetworkId && x.NetworkId != target.NetworkId).Any(); // && x.NetworkId != target.NetworkId가 없을 경우 절대로 스킬을 쓰지 않기 때문에 추가.
         }
 
         internal static bool CollisionCheck(SharpDX.Vector3 from, Obj_AI_Hero target, float width)
@@ -570,7 +608,7 @@ namespace ALL_In_One
 
             input.CollisionObjects[0] = CollisionableObjects.Heroes;
 
-            return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Where(x => x.NetworkId != ObjectManager.Player.NetworkId).Any();
+            return Collision.GetCollision(new List<SharpDX.Vector3> { target.ServerPosition }, input).Where(x => x.NetworkId != Player.NetworkId  && x.NetworkId != target.NetworkId).Any(); // && x.NetworkId != target.NetworkId가 없을 경우 절대로 스킬을 쓰지 않기 때문에 추가.
         }
 
         internal static bool YasuoWallCheck(Obj_AI_Hero source, Obj_AI_Hero target, float width)

@@ -158,7 +158,7 @@ namespace ALL_In_One
                     champions.Syndra.Load();
                     break;
                 case "Viktor":
-                    MadeBy(Developer.RL244);// Work In Progress
+                    MadeBy(Developer.RL244);
                     champions.Viktor.Load();
                     break;
                 case "Janna":

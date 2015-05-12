@@ -12,26 +12,29 @@ using Color = System.Drawing.Color;
 
 namespace ALL_In_One.champions
 {
-    class Viktor// By RL244 WIP
+    class Viktor// By RL244 드디어 빅토르 완성!! VictorPowerTransfer viktorpowertransferreturn (<- 이게 Q강화) viktoreaug viktorqeaug viktorqweaug viktorqbuff
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-
+        static bool Q2 { get { return (Player.HasBuff("viktorqaug", true) || Player.HasBuff("viktorqwaug", true) || Player.HasBuff("viktorqeaug", true) || Player.HasBuff("viktorqweaug", true)); } }
+        static bool W2 { get { return (Player.HasBuff("viktorwaug", true) || Player.HasBuff("viktorweaug", true) || Player.HasBuff("viktorqwaug", true) || Player.HasBuff("viktorqweaug", true)); } }
+        static bool E2 { get { return (Player.HasBuff("viktoreaug", true) || Player.HasBuff("viktorweaug", true) || Player.HasBuff("viktorqeaug", true) || Player.HasBuff("viktorqweaug", true)); } }
+        static bool R2 { get { return Player.HasBuff("viktorqweaug", true); } }
         static Spell Q, W, E, R;
-
+		static float RDelay = 0f;
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 700f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 700f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, 550f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 700f, TargetSelector.DamageType.Magical);
             
             
-            Q.SetTargetted(0.25f, 1400f);
+            Q.SetTargetted(0.25f, 2000f);
             W.SetSkillshot(1.5f, 200f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            E.SetSkillshot(0.25f, 90f, 1200f, false, SkillshotType.SkillshotLine);
-            R.SetSkillshot(0.25f, 250f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            E.SetSkillshot(0.25f, 250f, 1200f, false, SkillshotType.SkillshotLine); // 550f + 700f
+            R.SetSkillshot(0.25f, 325f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
@@ -47,18 +50,16 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Lasthit.addIfMana();
 
             AIO_Menu.Champion.Laneclear.addUseQ();
-            AIO_Menu.Champion.Laneclear.addUseW(false);
-            AIO_Menu.Champion.Laneclear.addUseE();
+            AIO_Menu.Champion.Laneclear.addUseE(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
             
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW(false);
-            AIO_Menu.Champion.Jungleclear.addUseE();
+            AIO_Menu.Champion.Jungleclear.addUseE(false);
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
-
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Etg", "Additional Erange")).SetValue(new Slider(50, 0, 250));
+            //Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Etg", "Additional Erange")).SetValue(new Slider(50, 0, 250));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
@@ -76,6 +77,7 @@ namespace ALL_In_One.champions
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
+            Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -96,7 +98,7 @@ namespace ALL_In_One.champions
                         Harass();
                         break;
                     case Orbwalking.OrbwalkingMode.LastHit:
-                        Orbwalker.SetAttack(!AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady());
+                        Orbwalker.SetAttack(!AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady() || Player.HasBuff("viktorpowertransferreturn"));
                         Lasthit();
                         break;
                     case Orbwalking.OrbwalkingMode.LaneClear:
@@ -109,7 +111,7 @@ namespace ALL_In_One.champions
                         break;
                 }
             }
-
+				Storm();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
                 KillstealQ();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
@@ -128,7 +130,7 @@ namespace ALL_In_One.champions
             var drawE = AIO_Menu.Champion.Drawings.Erange;
             var drawEr = AIO_Menu.Champion.Drawings.getCircleValue("E Safe Range");
             var drawR = AIO_Menu.Champion.Drawings.Rrange;
-            var etarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed * E.Delay, TargetSelector.DamageType.Magical);
+            var etarget = TargetSelector.GetTarget(E.Range + 700f + Player.MoveSpeed * E.Delay, TargetSelector.DamageType.Magical);
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
@@ -137,7 +139,7 @@ namespace ALL_In_One.champions
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
 
             if (E.IsReady() && drawEr.Active && etarget != null)
-                Render.Circle.DrawCircle(Player.Position, E.Range - etarget.MoveSpeed*E.Delay, drawEr.Color);
+                Render.Circle.DrawCircle(Player.Position, E.Range + 700f - ((etarget.Distance(Player.ServerPosition)-E.Range)/E.Speed+E.Delay)*etarget.MoveSpeed, drawEr.Color);
         
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
@@ -153,9 +155,30 @@ namespace ALL_In_One.champions
 
             if (E.IsReady()
                 && Player.Distance(gapcloser.Sender.Position) <= E.Range)
-                E.Cast((Vector3)gapcloser.End);
+                AIO_Func.AtoB(E,gapcloser.Sender);
         }
+		
+        static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
+        {
+            if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
+                return;
 
+            if (R.CanCast(sender) && R.Instance.Name == "ViktorChaosStorm")
+                AIO_Func.CCast(R,sender);
+        }
+		
+		static void Storm()
+		{
+			if(R.Instance.Name != "ViktorChaosStorm" && Environment.TickCount - RDelay > 0)
+			{
+				var T = TargetSelector.GetTarget(R.Range*3/2, R.DamageType);
+				if(T != null)
+				{
+					R.Cast(T);
+					RDelay = Environment.TickCount + 2000f;
+				}
+			}
+		}
         
         static void Combo()
         {
@@ -163,25 +186,28 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
                 var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+                if(Qtarget != null)
                 Q.Cast(Qtarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-                var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
+                var Etarget = TargetSelector.GetTarget(E.Range + 700f, TargetSelector.DamageType.Magical);
+                if(Etarget != null)
+                AIO_Func.AtoB(E,Etarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
                 var Wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
+                if(Wtarget != null)
                 AIO_Func.CCast(W,Wtarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                if(AIO_Func.isKillable(Rtarget, R))
+                if(R.Instance.Name == "ViktorChaosStorm" && AIO_Func.isKillable(Rtarget, R.GetDamage(Rtarget)+R.Width/Rtarget.MoveSpeed*R.GetDamage(Rtarget,1)*3+(E.IsReady() ? (E2 ? E.GetDamage(Rtarget,1) : E.GetDamage(Rtarget)) : 0) + (Q.IsReady() ? Q.GetDamage(Rtarget) : 0)) && Rtarget != null)
                 AIO_Func.CCast(R,Rtarget);
             }
         }
@@ -194,19 +220,22 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
                 var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+                if(Qtarget != null)
                 Q.Cast(Qtarget);
             }
             
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
                 var Wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
+                if(Wtarget != null)
                 AIO_Func.CCast(W,Wtarget);
             }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
-                var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
+                var Etarget = TargetSelector.GetTarget(E.Range + 700f, TargetSelector.DamageType.Magical);
+                if(Etarget != null)
+                AIO_Func.AtoB(E,Etarget);
             }
         }
 
@@ -231,9 +260,9 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
-                var _m = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.E))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / E.Speed), (int)(E.Delay * 1000 + Game.Ping / 2)) > 0);            
+                var _m = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => (E2 ? AIO_Func.isKillable(m,Q,1) : AIO_Func.isKillable(m,Q,0)) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / E.Speed), (int)(E.Delay * 1000 + Game.Ping / 2)) > 0);            
                 if (_m != null)
-                AIO_Func.LCast(E,_m,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.AtoB(E,_m);
             }
             
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
@@ -261,7 +290,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
             {
                 if (Mobs.Any(x=>x.IsValidTarget(E.Range)))
-                AIO_Func.LCast(E,Mobs[0],Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.AtoB(E,Mobs[0]);
             }
 
         }
@@ -279,7 +308,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (target.IsValidTarget(R.Range) && AIO_Func.isKillable(target, R.GetDamage(target,0)+R.Width/target.MoveSpeed*2*R.GetDamage(target,1)))
+                if (target.IsValidTarget(R.Range) && AIO_Func.isKillable(target, R.GetDamage(target)+R.Width/target.MoveSpeed*R.GetDamage(target,1)))
                 R.Cast(target.ServerPosition);
             }
         }
@@ -289,7 +318,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (E.CanCast(target) && AIO_Func.isKillable(target, E))
-                AIO_Func.LCast(E,target,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.AtoB(E,target);
             }
         }
         
@@ -299,18 +328,15 @@ namespace ALL_In_One.champions
 
             if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
-                
-            if (W.IsReady())
-                damage += W.GetDamage(enemy);
-                
+                                
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += (E2 ? E.GetDamage(enemy,1) : E.GetDamage(enemy));
 
             if (R.IsReady())
                 damage += R.GetDamage(enemy)+R.Width/enemy.MoveSpeed*2*R.GetDamage(enemy,1);
 
-            if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+            if(Player.HasBuff("viktorpowertransferreturn"))
+                damage += (float)Player.GetAutoAttackDamage(enemy, true); //어짜피 여기에 빅토르 Q 증강뎀 들어감.
             return damage;
         }
     }

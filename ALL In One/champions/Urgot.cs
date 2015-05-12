@@ -177,8 +177,8 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var rTarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
-
-                if (rTarget != null && rTarget.CountEnemiesInRange(700) <= Player.CountAlliesInRange(700) && Player.HealthPercent > 80)
+                var turret = ObjectManager.Get<Obj_AI_Turret>().OrderBy(t => t.Distance(rTarget.ServerPosition)).First(t => t.IsEnemy);
+                if (rTarget != null && turret.Distance(rTarget.ServerPosition) >= 825 && rTarget.CountEnemiesInRange(700) <= Player.CountAlliesInRange(700) && Player.HealthPercent > 80)
                 {
                     R.CastOnUnit(rTarget);
                 }

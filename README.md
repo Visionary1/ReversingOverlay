@@ -104,7 +104,7 @@ It's a Early Access. And still a Work In Progress. (A little lacking performance
 |Tristana|✔|
 |Tryndamere|　|
 |Twisted Fate|　|
-|Twitch|　|
+|Twitch|✔|
 |Udyr|　|
 |Urgot|✔|
 |Varus|　|

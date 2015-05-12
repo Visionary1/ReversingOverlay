@@ -21,7 +21,7 @@ namespace ALL_In_One.champions
         {
             Q = new Spell(SpellSlot.Q, 925f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 650f);
-            E = new Spell(SpellSlot.E, 650f, TargetSelector.DamageType.Magical);//lulufaeriburn
+            E = new Spell(SpellSlot.E, 650f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 900f);
 
             Q.SetSkillshot(0.25f, 60f, 1450f, false, SkillshotType.SkillshotLine);
@@ -51,7 +51,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseInterrupter();
 
             AIO_Menu.Champion.Drawings.addQrange();
-            AIO_Menu.Champion.Drawings.addQrange();
+            AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addErange();
             AIO_Menu.Champion.Drawings.addRrange();
 
@@ -133,34 +133,13 @@ namespace ALL_In_One.champions
         static void Combo()
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
-            {
-                var faeritarget = HeroManager.Enemies.FirstOrDefault(x => AIO_Func.getBuffInstance(Player, "lulufaeriburn", Player) != null);
-
-                if (faeritarget != null)
-                {
-                    Q.UpdateSourcePosition(faeritarget.ServerPosition, faeritarget.ServerPosition);
-
-                    Q.Cast(faeritarget);
-                }
-                else
-                {
-                    Q.UpdateSourcePosition();
-
-                    var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-
-                    Q.Cast(qTarget);
-                }
-            }
+                Q.CastOnBestTarget();
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-            {
                 W.CastOnBestTarget();
-            }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
-            {
                 E.CastOnBestTarget();
-            }
         }
 
         static void Harass()
@@ -169,29 +148,10 @@ namespace ALL_In_One.champions
                 return;
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
-            {
-                var faeritarget = HeroManager.Enemies.FirstOrDefault(x => AIO_Func.getBuffInstance(Player, "lulufaeriburn", Player) != null);
-
-                if (faeritarget != null)
-                {
-                    Q.UpdateSourcePosition(faeritarget.ServerPosition, faeritarget.ServerPosition);
-
-                    Q.Cast(faeritarget);
-                }
-                else
-                {
-                    Q.UpdateSourcePosition(Player.ServerPosition, Player.ServerPosition);
-
-                    var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-
-                    Q.Cast(qTarget);
-                }
-            }
+                Q.CastOnBestTarget();
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
-            {
                 E.CastOnBestTarget();
-            }
         }
 
         static void Laneclear()

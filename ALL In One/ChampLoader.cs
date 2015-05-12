@@ -317,6 +317,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Pantheon.Load();
                     break;
+                case "Twitch":
+                    MadeBy(Developer.xcsoft);
+                    champions.Twitch.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

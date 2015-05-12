@@ -127,15 +127,16 @@ namespace ALL_In_One
             }
         }
         
-        internal static void LCast(Spell spell, Obj_AI_Base target, float alpha = 50f, float colmini = float.MaxValue) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
+        internal static void LCast(Spell spell, Obj_AI_Base target, float alpha = 50f, float colmini = float.MaxValue, bool HeroOnly = false) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
         {                            //        AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue); <- 이런식으로 사용.
             if(spell.Type == SkillshotType.SkillshotLine)
             {
                 if(spell != null && target !=null)
                 {
-                    var pred = Prediction.GetPrediction(target, spell.Delay, spell.Width/2, spell.Speed);
+                    var pred = Prediction.GetPrediction(target, spell.Delay, spell.Width, spell.Speed); //spell.Width/2
                     var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
-                    var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
+                    //var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
+                    var minioncol = collision.Count(x => (HeroOnly == false ? x.IsMinion : (x is Obj_AI_Hero)));
 
                     if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                     {

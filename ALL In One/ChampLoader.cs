@@ -309,10 +309,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Nocturne.Load();
                     break;
-                case "Sona":
+                /*case "Sona":
                     MadeBy(Developer.RL244);
                     champions.Sona.Load();
-                    break;
+                    break;*/
                 case "Pantheon":
                     MadeBy(Developer.RL244);
                     champions.Pantheon.Load();

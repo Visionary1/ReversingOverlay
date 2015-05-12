@@ -18,7 +18,7 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-        static float QD = 50; 
+        static float QD {get{return Menu.Item("Misc.Qtg").GetValue<Slider>().Value; }}
 
         public static void Load()
         {
@@ -57,7 +57,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
 
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(50, 0, 250));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(25, 0, 150));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Misc.addItem("W on stuned target", true);
@@ -83,12 +83,8 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
                 
-
-
-
             if (Orbwalking.CanMove(10))
             {
-            QD = Menu.Item("Misc.Qtg").GetValue<Slider>().Value; 
                 switch (Orbwalker.ActiveMode)
                 {
                     case Orbwalking.OrbwalkingMode.Combo:
@@ -289,7 +285,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
-                    AIO_Func.LCast(Q,target,QD,1f);
+                    AIO_Func.LCast(Q,target,0,1f);
             }
         }
         

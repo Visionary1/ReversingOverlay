@@ -37,12 +37,12 @@ namespace ALL_In_One.champions
             R.SetSkillshot(0.5f, 140f, 1700f, false, SkillshotType.SkillshotLine);
 
             AIO_Menu.Champion.Combo.addUseQ();
-            AIO_Menu.Champion.Combo.addUseW();
+            AIO_Menu.Champion.Combo.addUseW(false);
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
 
             AIO_Menu.Champion.Harass.addUseQ();
-            AIO_Menu.Champion.Harass.addUseW();
+            AIO_Menu.Champion.Harass.addUseW(false);
             AIO_Menu.Champion.Harass.addIfMana();
 
             AIO_Menu.Champion.Laneclear.addUseQ();
@@ -64,7 +64,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addRrange();
             AIO_Menu.Champion.Drawings.addItem("Passive Timer", new Circle(true , Color.SpringGreen));
 
-            //AIO_Menu.Champion.Drawings.addDamageIndicator();
+            AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -207,16 +207,6 @@ namespace ALL_In_One.champions
             }
         }
 
-        static float GetComboDamage(Obj_AI_Base enemy)
-        {
-            float damage = 0;
-
-            if (R.IsReady())
-                damage += R.GetDamage(enemy);
-
-            return damage;
-        }
-
         static Obj_AI_Base E_GetBestTarget()
         {
             return HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.HasBuffOfType(BuffType.SpellImmunity) && E.GetPrediction(x).Hitchance >= HitChance.VeryHigh && !x.IsFacing(Player) && x.IsMoving).OrderBy(x => x.Distance(Player, false)).FirstOrDefault();
@@ -245,13 +235,13 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && WLastCastedTime + 0.5 < Game.ClockTime)
             {
-                var rTarget = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(R.Range) && !x.IsValidTarget(DefaultRange) && !Player.HasBuffOfType(BuffType.SpellShield) && !Player.HasBuffOfType(BuffType.Invulnerability) && R.GetPrediction(x).Hitchance >= HitChance.High && Utility.GetAlliesInRange(x, 800).Where(ally => !ally.IsMe).Count() <= 1);
+                var rTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsValidTarget(DefaultRange) && !Player.HasBuffOfType(BuffType.SpellShield) && !Player.HasBuffOfType(BuffType.Invulnerability) && R.GetPrediction(x).Hitchance >= HitChance.High && Utility.GetAlliesInRange(x, 800).Where(ally => !ally.IsMe && ally.IsAlly).Count() <= 1).OrderBy(x => x.Distance(Player, false)).FirstOrDefault();
 
                 var distance = Player.Distance(rTarget.ServerPosition);
                 var predhealth = HealthPrediction.GetHealthPrediction(rTarget, (int)(R.Delay + distance / R.Speed) * 1000) + (rTarget.HPRegenRate/2);
 
-                if (predhealth <= (distance < 1500 ? R.GetDamage(rTarget, 2) : R.GetDamage(rTarget, 1)) && !AIO_Func.CollisionCheck(Player, rTarget, R.Width))
-                    R.Cast(rTarget); //R 최대 데미지는 1500범위에서. 그리고 공식 커먼의 징크스 궁 데미지 계산이 잘못되었으니 올인원 자체 데미지 계산사용.(stage 0 최소데미지, stage 1 최대, stage 2 거리비례)
+                if (predhealth <= (distance < 1500 ? R.GetDamage(rTarget,2)*Math.Min((1 + Player.Distance(rTarget.ServerPosition)/ 15 * 0.09f),10) + R.GetDamage(rTarget,3) : R.GetDamage(rTarget, 1)) && !AIO_Func.CollisionCheck(Player, rTarget, R.Width))
+                    R.Cast(rTarget); //R 최대 데미지는 1500범위에서. 그리고 공식 커먼의 징크스 궁 데미지 계산이 잘못되었으니 올인원 자체 데미지 계산사용.
             }
         }
 
@@ -329,6 +319,15 @@ namespace ALL_In_One.champions
             if (W.CanCast(Mobs[0]) && AIO_Menu.Champion.Jungleclear.UseW)
                 W.Cast(Mobs[0]);
         }
+        
+        static float getComboDamage(Obj_AI_Base enemy)
+        {
+            float damage = 0;
 
+            if (R.IsReady())
+                damage += R.GetDamage(enemy,2)*Math.Min((1 + Player.Distance(enemy.ServerPosition)/ 15 * 0.09f),10) + R.GetDamage(enemy,3);
+
+            return damage;
+        }
     }
 }

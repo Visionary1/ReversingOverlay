@@ -165,6 +165,10 @@ namespace ALL_In_One
             }
         }
         
+        internal static float PredHealth(Obj_AI_Base Target, Spell spell)
+        {
+            return HealthPrediction.GetHealthPrediction(Target, (int)(Player.Distance(Target, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2));
+        }
 
         internal static void MotionCancel()
         {

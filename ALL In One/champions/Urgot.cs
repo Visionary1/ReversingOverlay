@@ -79,20 +79,28 @@ namespace ALL_In_One.champions
             {
                 AIO_Func.SC(E);
 
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                    Combo();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    Harass();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                switch (Orbwalker.ActiveMode)
                 {
-                    Laneclear();
-                    Jungleclear();
-                }
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
-                {
-                    Lasthit();
+                    case Orbwalking.OrbwalkingMode.Combo:
+                        Orbwalker.SetAttack(true);
+                        Combo();
+                        break;
+                    case Orbwalking.OrbwalkingMode.Mixed:
+                        Orbwalker.SetAttack(true);
+                        Harass();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LastHit:
+                        Orbwalker.SetAttack(!AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady());
+                        Lasthit();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LaneClear:
+                        Orbwalker.SetAttack(true);
+                        Laneclear();
+                        Jungleclear();
+                        break;
+                    case Orbwalking.OrbwalkingMode.None:
+                        Orbwalker.SetAttack(true);
+                        break;
                 }
             }
 
@@ -111,7 +119,6 @@ namespace ALL_In_One.champions
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
-
 
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
@@ -213,8 +220,8 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
             {
-                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(x => x.HasBuff("urgotcorrosivedebuff") && AIO_Func.isKillable(x,Q,0)).FirstOrDefault();
-                var qTarget = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault(x => AIO_Func.isKillable(x,Q,0));
+                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(x => x.HasBuff("urgotcorrosivedebuff") && AIO_Func.isKillable(x,Q,0) && AIO_Func.PredHealth(x,Q) > 0).FirstOrDefault();
+                var qTarget = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault(x => AIO_Func.isKillable(x,Q,0) && AIO_Func.PredHealth(x,Q) > 0);
                 if(Q2t != null)
                 {
                     Q2.Cast(Q2t);
@@ -246,7 +253,7 @@ namespace ALL_In_One.champions
                 }
                 else
                 {
-                    var qTarget = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => AIO_Func.isKillable(x,Q,0));
+                    var qTarget = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => AIO_Func.isKillable(x,Q,0) && AIO_Func.PredHealth(x,Q) > 0);
 
                     if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                         Q.Cast(qTarget);

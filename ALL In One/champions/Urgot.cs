@@ -42,6 +42,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Lasthit.addIfMana(20);
             
             AIO_Menu.Champion.Laneclear.addUseQ();
+            AIO_Menu.Champion.Laneclear.addUseE(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
@@ -77,6 +78,7 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(10))
             {
                 AIO_Func.SC(E);
+
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 
@@ -211,11 +213,11 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
             {
-                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(x => x.HasBuff("urgotcorrosivedebuff") && AIO_Func.isKillable(x,Q,0));
+                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(x => x.HasBuff("urgotcorrosivedebuff") && AIO_Func.isKillable(x,Q,0)).FirstOrDefault();
                 var qTarget = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault(x => AIO_Func.isKillable(x,Q,0));
                 if(Q2t != null)
                 {
-                    Q2.Cast();
+                    Q2.Cast(Q2t);
                 }
                 else if(qTarget != null)
                 {
@@ -237,10 +239,10 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
-                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
-                if(Q2t != null && Q2t[0].HasBuff("urgotcorrosivedebuff"))
+                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.HasBuff("urgotcorrosivedebuff"));
+                if(Q2t != null)
                 {
-                    Q2.Cast();
+                    Q2.Cast(Q2t);
                 }
                 else
                 {
@@ -267,7 +269,7 @@ namespace ALL_In_One.champions
                 var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.HasBuff("urgotcorrosivedebuff"));
                 if(Q2t != null)
                 {
-                    Q2.Cast();
+                    Q2.Cast(Q2t);
                 }
                 else
                 {

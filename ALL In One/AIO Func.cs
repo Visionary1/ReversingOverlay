@@ -93,7 +93,7 @@ namespace ALL_In_One
                             spell.Cast(target.ServerPosition);
                         else if(target.ServerPosition.Distance(pred.UnitPosition) <= spell.Width/2)
                             spell.Cast(target.ServerPosition);
-                        else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+                        else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && pred.UnitPosition.Distance(target.ServerPosition) < Math.Max(spell.Width,300f))
                         {
                             if(target.MoveSpeed*(spell.Delay+Player.ServerPosition.Distance(target.ServerPosition)/spell.Speed) <= spell.Width*2/3 && castVec.Distance(pred.UnitPosition) <= spell.Width/2 && castVec.Distance(Player.ServerPosition) <= spell.Range)
                             {
@@ -109,7 +109,7 @@ namespace ALL_In_One
                     }
                     else if (target.IsValidTarget(spell.Range + spell.Width/2)) //사거리 밖 대상에 대해서
                     {
-                        if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2)
+                        if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range+spell.Width/2 && pred.UnitPosition.Distance(target.ServerPosition) < Math.Max(spell.Width,300f))
                         {
                             if(Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range)
                             {

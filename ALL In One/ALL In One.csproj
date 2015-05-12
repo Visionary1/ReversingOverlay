@@ -177,7 +177,7 @@
     <Compile Include="champions\Trundle.cs" />
     <Compile Include="champions\_Tryndamere.cs" />
     <Compile Include="champions\_TwistedFate.cs" />
-    <Compile Include="champions\_Twitch.cs" />
+    <Compile Include="champions\Twitch.cs" />
     <Compile Include="champions\_Udyr.cs" />
     <Compile Include="champions\Urgot.cs" />
     <Compile Include="champions\_Varus.cs" />

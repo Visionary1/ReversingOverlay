@@ -535,6 +535,11 @@ namespace ALL_In_One
                     return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<StringList>();
                 }
 
+                internal static KeyBind getKeyBIndValue(string DisplayName, bool ChampUniq = true)
+                {
+                    return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<KeyBind>();
+                }
+
                 internal static void addUseAntiGapcloser(bool Enabled = true)
                 {
                     addItem("Use Anti-Gapcloser", Enabled);

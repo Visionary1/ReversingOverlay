@@ -18,10 +18,10 @@ namespace ALL_In_One.champions
         
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, Player.AttackRange + 32.5f, TargetSelector.DamageType.Physical);
+            Q = new Spell(SpellSlot.Q, Orbwalking.GetRealAutoAttackRange(Player) + 32.5f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W, 400f, TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 425f, TargetSelector.DamageType.Magical){Delay = 0.25f};
-            R = new Spell(SpellSlot.R, Player.AttackRange + 32.5f, TargetSelector.DamageType.Physical);
+            R = new Spell(SpellSlot.R, Orbwalking.GetRealAutoAttackRange(Player) + 32.5f, TargetSelector.DamageType.Physical);
 
             W.SetTargetted(0.25f, float.MaxValue);
             

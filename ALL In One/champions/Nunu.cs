@@ -118,7 +118,7 @@ namespace ALL_In_One.champions
         {
             float smdmg = setSmiteDamage();
             setSmiteSlot();
-            foreach (var target in MinionManager.GetMinions(Player.AttackRange/2+200f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).OrderByDescending(x => x.Health).Where(x => x.Name.ToLower().Contains("Dragon") || x.Name.ToLower().Contains("Baron")))
+            foreach (var target in MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player)/2+200f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).OrderByDescending(x => x.Health).Where(x => x.Name.ToLower().Contains("Dragon") || x.Name.ToLower().Contains("Baron")))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q.GetDamage(target) + smdmg) && Q.IsReady() && smite.IsReady())
                     Q.Cast(target);

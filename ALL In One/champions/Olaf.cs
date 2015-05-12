@@ -18,9 +18,9 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 1000f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, Player.AttackRange, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, Orbwalking.GetRealAutoAttackRange(Player), TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 325f, TargetSelector.DamageType.True);
-            R = new Spell(SpellSlot.R, Player.AttackRange, TargetSelector.DamageType.Physical);
+            R = new Spell(SpellSlot.R, Orbwalking.GetRealAutoAttackRange(Player), TargetSelector.DamageType.Physical);
 
             Q.SetSkillshot(0.25f, 105f, 1600f, false, SkillshotType.SkillshotCircle);
             E.SetTargetted(0.25f, float.MaxValue);

@@ -135,7 +135,7 @@ namespace ALL_In_One.champions
                 return;
 
             if (E.IsReady()
-            && Player.Distance(gapcloser.Sender.Position) <= Player.AttackRange)
+            && Player.Distance(gapcloser.Sender.Position) <= Orbwalking.GetRealAutoAttackRange(Player))
                 E.Cast();
         }
 
@@ -145,7 +145,7 @@ namespace ALL_In_One.champions
                 return;
 
             if (E.IsReady()
-            && Player.Distance(sender.Position) <= Player.AttackRange)
+            && Player.Distance(sender.Position) <= Orbwalking.GetRealAutoAttackRange(Player))
                 E.Cast();
                 
             if (R.IsReady()
@@ -181,7 +181,7 @@ namespace ALL_In_One.champions
             
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
-                if (HeroManager.Enemies.Any(x => x.IsValidTarget(Player.AttackRange)))
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player))))
                 W.Cast();
             }
 

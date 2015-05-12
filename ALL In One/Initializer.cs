@@ -51,7 +51,7 @@ namespace ALL_In_One
 
             if (drawMinionLastHit.Active || drawMinionNearKill.Active)
             {
-                foreach (var minion in MinionManager.GetMinions(ObjectManager.Player.Position, ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius + 300))
+                foreach (var minion in MinionManager.GetMinions(ObjectManager.Player.Position, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 300))
                 {
                     if (drawMinionLastHit.Active && ObjectManager.Player.GetAutoAttackDamage(minion, true) >= minion.Health)
                         Render.Circle.DrawCircle(minion.Position, minion.BoundingRadius, drawMinionLastHit.Color, 3);

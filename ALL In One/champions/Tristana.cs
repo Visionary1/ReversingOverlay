@@ -71,8 +71,8 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
                 
-            E.Range = Player.AttackRange;
-            R.Range = Player.AttackRange;
+            E.Range = Orbwalking.GetRealAutoAttackRange(Player);
+            R.Range = Orbwalking.GetRealAutoAttackRange(Player);
 
             if (Orbwalking.CanMove(10))
             {
@@ -134,7 +134,7 @@ namespace ALL_In_One.champions
         
         static void AA()
         {
-            var Target = TargetSelector.GetTarget(Player.AttackRange, E.DamageType);
+            var Target = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(Player), E.DamageType);
             AIO_Func.AACb(Q);
             AIO_Func.AACb(E);
             if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseR ||

@@ -27,7 +27,7 @@ namespace ALL_In_One.champions
         {
             Q = new Spell(SpellSlot.Q, 260f + 37.5f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W, 250f + 37.5f, TargetSelector.DamageType.Physical){Delay = 0.25f};
-            E = new Spell(SpellSlot.E, 325f + Player.AttackRange, TargetSelector.DamageType.Physical);//그냥 접근기로 쓰게 넣었음
+            E = new Spell(SpellSlot.E, 325f + Orbwalking.GetRealAutoAttackRange(Player), TargetSelector.DamageType.Physical);//그냥 접근기로 쓰게 넣었음
             R = new Spell(SpellSlot.R, 1100f, TargetSelector.DamageType.Physical);
             
 
@@ -123,7 +123,7 @@ namespace ALL_In_One.champions
             if (W.IsReady() && drawW.Active)
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
             if (E.IsReady() && drawE.Active)
-                Render.Circle.DrawCircle(Player.Position, E.Range - Player.AttackRange, drawE.Color);
+                Render.Circle.DrawCircle(Player.Position, E.Range - Orbwalking.GetRealAutoAttackRange(Player), drawE.Color);
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
             if (drawRTimer.Active && getRBuffDuration > 0)
@@ -249,7 +249,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Inteligent Q"))
             {
                 var qTarget = TargetSelector.GetTarget(Q.Range+40, Q.DamageType, true);
-                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 90 || Qtimer < Utils.GameTimeTickCount - 1200))
+                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Orbwalking.GetRealAutoAttackRange(Player) + 90 || Qtimer < Utils.GameTimeTickCount - 1200))
                 Q.Cast(qTarget.ServerPosition);
             }
         }
@@ -259,7 +259,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Inteligent Q"))
             {
                 var qTarget = TargetSelector.GetTarget(Q.Range+40, Q.DamageType, true);
-                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Player.AttackRange + 90 || Qtimer < Utils.GameTimeTickCount - 1200))
+                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) > Orbwalking.GetRealAutoAttackRange(Player) + 90 || Qtimer < Utils.GameTimeTickCount - 1200))
                 Q.Cast(qTarget.ServerPosition);
             }
         }

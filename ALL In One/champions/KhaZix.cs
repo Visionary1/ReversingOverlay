@@ -131,7 +131,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
                 var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                if(Qtarget.Distance(Player.ServerPosition) > Player.AttackRange + 50)
+                if(Qtarget.Distance(Player.ServerPosition) > Orbwalking.GetRealAutoAttackRange(Player) + 50)
                 Q.Cast(Qtarget);
             }
             
@@ -162,7 +162,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
                 var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                if(Qtarget.Distance(Player.ServerPosition) > Player.AttackRange + 50)
+                if(Qtarget.Distance(Player.ServerPosition) > Orbwalking.GetRealAutoAttackRange(Player) + 50)
                 Q.Cast(Qtarget);
             }
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())

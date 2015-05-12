@@ -232,7 +232,7 @@ namespace ALL_In_One.champions
                 if(!Player.HasBuff("yasuoq3w"))
                 {
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
-                if(qTarget.Distance(Player.Position) >= Player.AttackRange + 50)
+                if(qTarget.Distance(Player.Position) >= Orbwalking.GetRealAutoAttackRange(Player) + 50)
                 AIO_Func.LCast(Q,qTarget,QD);
                 }
                 else
@@ -266,7 +266,7 @@ namespace ALL_In_One.champions
                 if(!Player.HasBuff("yasuoq3w"))
                 {
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
-                if(qTarget.Distance(Player.Position) >= Player.AttackRange + 50)
+                if(qTarget.Distance(Player.Position) >= Orbwalking.GetRealAutoAttackRange(Player) + 50)
                 AIO_Func.LCast(Q,qTarget,QD);
                 }
                 else

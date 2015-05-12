@@ -175,7 +175,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
-                if (ETarget.Distance(Player.ServerPosition) >= Player.AttackRange + 40)
+                if (ETarget.Distance(Player.ServerPosition) >= Orbwalking.GetRealAutoAttackRange(Player) + 40)
                 E.Cast(ETarget);
             }
             
@@ -198,7 +198,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
-                if (ETarget.Distance(Player.ServerPosition) >= Player.AttackRange + 40)
+                if (ETarget.Distance(Player.ServerPosition) >= Orbwalking.GetRealAutoAttackRange(Player) + 40)
                 E.Cast(ETarget);
             }
 

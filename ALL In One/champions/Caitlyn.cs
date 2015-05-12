@@ -278,7 +278,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && Player.Distance(target.Position) > Player.AttackRange * 3 / 2 && AIO_Func.isKillable(target, R))
+                if (R.CanCast(target) && Player.Distance(target.Position) > Orbwalking.GetRealAutoAttackRange(Player) * 3 / 2 && AIO_Func.isKillable(target, R))
                 R.Cast(target);
             }
         }

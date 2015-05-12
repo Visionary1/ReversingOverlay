@@ -261,13 +261,13 @@ namespace ALL_In_One.champions
 
         public static bool IsSafePosition(Vector3 position) // cradits to Asuna & ijabba
         {
-            if (position.UnderTurret(true) && !ObjectManager.Player.UnderTurret(true))
+            if (position.UnderTurret(true) && !Player.UnderTurret(true))
             {
                 return false;
             }
-            var allies = position.CountAlliesInRange(ObjectManager.Player.AttackRange);
-            var enemies = position.CountEnemiesInRange(ObjectManager.Player.AttackRange);
-            var lhEnemies = GetLhEnemiesNearPosition(position, ObjectManager.Player.AttackRange).Count();
+            var allies = position.CountAlliesInRange(Orbwalking.GetRealAutoAttackRange(Player));
+            var enemies = position.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(Player));
+            var lhEnemies = GetLhEnemiesNearPosition(position, Orbwalking.GetRealAutoAttackRange(Player)).Count();
 
             if (enemies == 1) 
             {

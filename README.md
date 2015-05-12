@@ -58,7 +58,7 @@ It's a Early Access. And still a Work In Progress. (A little lacking performance
 |Leona|　|
 |Lissandra|　|
 |Lucian|　|
-|Lulu|✔|
+|Lulu|✔(Incomplete)|
 |Lux|　|
 |Malphite|　|
 |Malzahar|　|
@@ -122,7 +122,7 @@ It's a Early Access. And still a Work In Progress. (A little lacking performance
 |Yasuo|WIP|
 |Yorick|✔|
 |Zac|　|
-|Zed|✔|
+|Zed|✔(Incomplete)|
 |Ziggs|　|
 |Zilean|　|
 |Zyra|✔|

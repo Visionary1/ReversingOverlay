@@ -54,6 +54,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
+            AIO_Menu.Champion.Misc.addUseInterrupter(false);
 
             AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addItem("Q Timer", new Circle(true, Color.Red));
@@ -63,6 +64,7 @@ namespace ALL_In_One.champions
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Orbwalking.AfterAttack += Orbwalking_OnAfterAttack;
+            Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             //Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
@@ -114,9 +116,17 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
-            if (R.IsReady()
-                && Player.Distance(gapcloser.Sender.Position) <= R.Range)
+            if (R.CanCast(gapcloser.Sender))
                 R.Cast(gapcloser.Sender);
+        }
+		
+        static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
+        {
+            if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
+                return;
+
+            if (R.CanCast(sender))
+                R.Cast(sender);
         }
 
         static void Orbwalking_OnAfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -152,6 +162,8 @@ namespace ALL_In_One.champions
                 if(W.IsReady())
                 {
                     var Buff = AIO_Func.getBuffInstance(target, "tristanaecharge");
+					if((float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)))
+					return;
                     if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && W.CanCast(target) && R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("KillstealR") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, R.GetDamage(target) + W.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage(target, true)))
                     AIO_Func.CCast(W,target);
                     if (W.CanCast(target) && (float)Buff.Count > 0 && AIO_Func.isKillable(target, W.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage(target, true)))
@@ -178,6 +190,8 @@ namespace ALL_In_One.champions
                 if(R.IsReady())
                 {
                     var Buff = AIO_Func.getBuffInstance(target, "tristanaecharge");
+					if((float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)))
+					return;
                     if (R.CanCast(target) && (float)Buff.Count > 0 && AIO_Func.isKillable(target, R.GetDamage(target) + E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)))
                         R.Cast(target);
                     else if (R.CanCast(target) && AIO_Func.isKillable(target, R))

@@ -150,7 +150,7 @@ namespace ALL_In_One
         {
             if(T != null)
             {
-                var T2 = TargetSelector.GetTarget(spell.Range + Drag,spell.DamageType, true);
+                var T2 = HeroManager.Enemies.Where(x => x != T && CanHit(spell,x,Drag)).FirstOrDefault();
                 var pred = Prediction.GetPrediction(T, spell.Delay, spell.Width/2, spell.Speed);
                 var T2pred = Prediction.GetPrediction(T2, spell.Delay, spell.Width/2, spell.Speed);
                 SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + T.ServerPosition.To2D()) / 2 ;
@@ -162,8 +162,12 @@ namespace ALL_In_One
                 {
                     if(T.Distance(Player.ServerPosition) >= spell.Range)
                     {
-                        if(CanHit(spell,T,Drag) && (T2 == null || !CanHit(spell,T2,Drag)))
+                        if(CanHit(spell,T,Drag) && T2 == null && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                         spell.Cast(castVec2,pred.UnitPosition.To2D());
+						else //if(CanHit(spell,T,Drag) && T2 != null && T2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
+						{
+                        spell.Cast(castVec2,T.ServerPosition.To2D());//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
+						}
                     }
                     else
 					{
@@ -173,7 +177,7 @@ namespace ALL_In_One
 						{
 							SharpDX.Vector2 castVec4 = T.ServerPosition.To2D() -
 													   SharpDX.Vector2.Normalize(T2pred.UnitPosition.To2D() - T.ServerPosition.To2D()) * (40f);
-							spell.Cast(castVec4,pred.UnitPosition.To2D());
+							spell.Cast(castVec4,T2pred.UnitPosition.To2D());
 						}
 					}
                 }

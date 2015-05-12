@@ -2008,10 +2008,10 @@ namespace ALL_In_One
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                Math.Min((new double[] { 25, 35, 45 }[level] +
-                                new double[] { 25, 30, 35 }[level] / 100 * (target.MaxHealth - target.Health) + 
-                                0.1 * source.FlatPhysicalDamageMod) * (1 + source.Distance(target.ServerPosition)/ 15 * 0.09d),
-                                new double[] { 250, 350, 450 }[level] +
+                                Math.Min((new double[] { 25, 30, 35 }[level] / 100 * (target.MaxHealth - target.Health) + //잃은 체력
+                                (new double[] { 25, 35, 45 }[level] + 0.1 * source.FlatPhysicalDamageMod) // 깡뎀+계수
+                                * (1 + source.Distance(target.ServerPosition)/ 15 * 0.09d)), //깡뎀+계수 거리비례 뎀증
+                                new double[] { 250, 350, 450 }[level] + //최대 사거리일 경우 데미지
                                 new double[] { 25, 30, 35 }[level] / 100 * (target.MaxHealth - target.Health) +
                                 1 * source.FlatPhysicalDamageMod)
                     },

@@ -89,10 +89,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Talon.Load();
                     break;
-                case "Azir": 
+                /*case "Azir": 
                     MadeBy(Developer.RL244); // Work In Progress
                     champions.Azir.Load();
-                    break;
+                    break;*/
                 case "Gangplank":
                     MadeBy(Developer.RL244);
                     champions.Gangplank.Load();
@@ -133,10 +133,10 @@ namespace ALL_In_One
                     MadeBy(Developer.xcsoft);
                     champions.Karthus.Load();
                     break;
-                case "Karma":
+                /*case "Karma":
                     MadeBy(Developer.RL244);// Work In Progress
                     champions.Karma.Load();
-                    break;
+                    break;*/
                 case "Jax":
                     MadeBy(Developer.RL244);
                     champions.Jax.Load();
@@ -149,14 +149,14 @@ namespace ALL_In_One
                     MadeBy(Developer.xcsoft);
                     champions.Amumu.Load();
                     break;
-                case "Yasuo":
+                /*case "Yasuo":
                     MadeBy(Developer.RL244);
                     champions.Yasuo.Load();
-                    break;
-                case "Syndra":
+                    break;*/
+                /*case "Syndra":
                     MadeBy(Developer.RL244);// Work In Progress
                     champions.Syndra.Load();
-                    break;
+                    break;*/
                 case "Viktor":
                     MadeBy(Developer.RL244);
                     champions.Viktor.Load();
@@ -217,10 +217,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Yorick.Load();
                     break;
-                case "Renekton": 
+                /*case "Renekton": 
                     MadeBy(Developer.RL244); // Work In Progress
                     champions.Renekton.Load();
-                    break;
+                    break;*/
                 case "Rengar":
                     MadeBy(Developer.RL244);
                     champions.Rengar.Load();
@@ -257,10 +257,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Volibear.Load();
                     break;
-                case "Riven": 
+                /*case "Riven": 
                     MadeBy(Developer.RL244);
                     champions.Riven.Load();
-                    break;
+                    break;*/
                 case "Ahri": 
                     MadeBy(Developer.RL244);
                     champions.Ahri.Load();

@@ -23,7 +23,7 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E, 1000f, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R);
 
-            E.SetSkillshot(0.25f, 75f, 1400f, false, SkillshotType.SkillshotLine);
+            E.SetSkillshot(0.25f, 75f, 1400f, true, SkillshotType.SkillshotLine);
             
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
@@ -62,7 +62,7 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(10))
             {
                 AIO_Func.SC(W,0,0,0);
-                AIO_Func.SC(E,ED,float.MaxValue,0);
+                AIO_Func.SC(E,ED,0,0);
             }
 
             #region Killsteal

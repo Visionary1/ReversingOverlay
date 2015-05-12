@@ -1,6 +1,7 @@
 # L# TeamProjects (XC-Squad)
 ![](https://cdn.joduska.me/forum/public/style_emoticons/default/cat_lazy.gif)
-##● ALL In One: 76/124(61.3%) Champions supported.
+###● ALL In One: 76/124(61.3%) Champions supported.
+It's a Early Access. And still a Work In Progress.
 |Champion|Supported|
 |:-----|:-----:|
 |Aatrox|✔|

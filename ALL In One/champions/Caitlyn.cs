@@ -27,13 +27,13 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E, 950, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 2000, TargetSelector.DamageType.Physical);
             
-            Q.SetSkillshot(1.0f, 85f, 2000f, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.625f, 90f, 2200f, false, SkillshotType.SkillshotLine);
             W.SetSkillshot(0.625f, 67.5f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            E.SetSkillshot(0.75f, 80f, 1600f, true, SkillshotType.SkillshotLine);
+            E.SetSkillshot(0.125f, 80f, 2000f, true, SkillshotType.SkillshotLine);
             R.SetTargetted(1.35f, 3200f);
             
             AIO_Menu.Champion.Combo.addUseQ();
-            AIO_Menu.Champion.Combo.addUseW(false);
+            AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE(false);
 
             AIO_Menu.Champion.Harass.addUseQ();
@@ -172,12 +172,13 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
-                AIO_Func.LCast(E,Etarget,50,0);
+                AIO_Func.LCast(E,Etarget,0,0);
             }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
                 var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+                if(AIO_Func.UnitIsImmobileUntil(Wtarget) >= W.Delay - 0.5)
                 AIO_Func.CCast(W,Wtarget);
             }
         }
@@ -225,7 +226,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
                 var Farmloc = Q.GetLineFarmLocation(Minions);
-                if (Farmloc.MinionsHit >= 6)
+                if (Farmloc.MinionsHit >= 5)
                     Q.Cast(Farmloc.Position);
             }
         }
@@ -243,7 +244,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
                 var Farmloc = Q.GetLineFarmLocation(Mobs);
-                if (Farmloc.MinionsHit >= 6)
+                if (Farmloc.MinionsHit >= 2)
                     Q.Cast(Farmloc.Position);
             }
             
@@ -260,7 +261,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
-                AIO_Func.LCast(Q,target,QD);
+                AIO_Func.LCast(Q,target,0);
             }
         }
                 
@@ -269,7 +270,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (E.CanCast(target) && AIO_Func.isKillable(target, E))
-                AIO_Func.LCast(E,target,50,0);
+                AIO_Func.LCast(E,target,0,0);
             }
         }        
         

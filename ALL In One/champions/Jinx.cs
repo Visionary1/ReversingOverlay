@@ -23,7 +23,7 @@ namespace ALL_In_One.champions
 
         static float GetQActivErange { get { return DefaultRange + ((25 * Q.Level) + 50); } }
 
-        static float WLastCastedTime;
+        static float WLastCastedTime = 0f;
 
         public static void Load()
         {

@@ -145,7 +145,7 @@ namespace ALL_In_One
 
             #region Caitlyn
 
-            p = new PassiveDamage
+            p = new PassiveDamage //케틀    
             {
                 ChampionName = "Caitlyn",
                 IsActive = (source, target) => (source.HasBuff("CaitlynHeadshotReady")),
@@ -154,7 +154,8 @@ namespace ALL_In_One
                         ((float)
                             source.CalcDamage(
                                 target, DamageType.Physical,
-                                1.5d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
+                                (target is Obj_AI_Minion ? 2.5d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) :
+                                1.5d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)))),
             };
             AttackPassives.Add(p);
 

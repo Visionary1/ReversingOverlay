@@ -266,7 +266,7 @@ namespace ALL_In_One.champions
         
         static void KillstealR()
         {
-            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
+            foreach (var target in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) > 1000f).OrderByDescending(x => x.Health))
             {
                 if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))+3f) >= target.Health + target.HPRegenRate
                     && target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 2)

@@ -151,7 +151,7 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            if (AIO_Menu.Champion.Misc.getBoolValue("Auto-E") && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.obj_AI_Hero && E.IsReady())
+            if (AIO_Menu.Champion.Misc.getBoolValue("Auto-E") && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.obj_AI_Hero && sender.Type == GameObjectType.obj_AI_Hero && E.IsReady())
                 E.CastOnUnit((Obj_AI_Hero)args.Target);
 
             if (sender.IsMe && args.SData.Name == Q.Instance.Name)

@@ -61,16 +61,23 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                Combo();
-
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                Harass();
-
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (Orbwalking.CanMove(100))
             {
-                Laneclear();
-                Jungleclear();
+                switch (Orbwalker.ActiveMode)
+                {
+                    case Orbwalking.OrbwalkingMode.Combo:
+                        Combo();
+                        break;
+                    case Orbwalking.OrbwalkingMode.Mixed:
+                        Harass();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LaneClear:
+                        Laneclear();
+                        Jungleclear();
+                        break;
+                    case Orbwalking.OrbwalkingMode.None:
+                        break;
+                }
             }
 
             if (AIO_Menu.Champion.Misc.getKeyBIndValue("Stealth Recall").Active)

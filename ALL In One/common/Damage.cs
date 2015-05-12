@@ -84,7 +84,7 @@ namespace ALL_In_One
 
             #region PassiveDamages
 
-            #region Diana
+            #region Diana // By Rl244
             p = new PassiveDamage
             {
                 ChampionName = "Diana",
@@ -100,7 +100,7 @@ namespace ALL_In_One
             AttackPassives.Add(p);
             #endregion
             
-            #region Pantheon
+            #region Pantheon // By Rl244
             p = new PassiveDamage
             {
                 ChampionName = "Pantheon",
@@ -145,7 +145,7 @@ namespace ALL_In_One
 
             #region Caitlyn
 
-            p = new PassiveDamage //케틀    
+            p = new PassiveDamage // By Rl244
             {
                 ChampionName = "Caitlyn",
                 IsActive = (source, target) => (source.HasBuff("CaitlynHeadshotReady")),
@@ -154,8 +154,8 @@ namespace ALL_In_One
                         ((float)
                             source.CalcDamage(
                                 target, DamageType.Physical,
-                                (target is Obj_AI_Minion ? 2.5d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) :
-                                1.5d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)))),
+                                (target is Obj_AI_Minion ? 1.5d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod) :
+                                0.5d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)))),
             };
             AttackPassives.Add(p);
 
@@ -206,7 +206,7 @@ namespace ALL_In_One
 
             #endregion
             
-            #region JarvanIV
+            #region JarvanIV // By Rl244
             
             p = new PassiveDamage
             {
@@ -1978,7 +1978,7 @@ namespace ALL_In_One
                             (source, target, level) =>
                                 new double[] { 80, 135, 190, 245, 300 }[level] + 1 * source.FlatMagicDamageMod
                     },
-                    //R - Min
+                    //R - Min // By Rl244
                     new DamageSpell
                     {
                         Slot = SpellSlot.R,
@@ -2063,7 +2063,7 @@ namespace ALL_In_One
                                 new double[] { 75, 150, 225, 300 }[source.Spellbook.GetSpell(SpellSlot.R).Level - 1] +
                                 1.2 * source.FlatMagicDamageMod
                     },
-                    //E - mantra
+                    //E - mantra // By Rl244
                     new DamageSpell
                     {
                         Slot = SpellSlot.E,

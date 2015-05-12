@@ -37,10 +37,10 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana(40);
-			
+            
             AIO_Menu.Champion.Lasthit.addUseQ();
             AIO_Menu.Champion.Lasthit.addIfMana(20);
-			
+            
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addIfMana();
 
@@ -156,8 +156,12 @@ namespace ALL_In_One.champions
                 {
                    var qTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
 
-                   if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-                       Q.Cast(qTarget);
+                    if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+                    {
+                        Q.Cast(qTarget);
+                        if(W.IsReady() && AIO_Menu.Champion.Combo.UseW)
+                            W.Cast();
+                    }    
                 }
             }
 
@@ -165,7 +169,7 @@ namespace ALL_In_One.champions
             {
                 var rTarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
 
-                if (rTarget != null && rTarget.CountEnemiesInRange(700) < Player.CountAlliesInRange(700) && Player.HealthPercent > 80)
+                if (rTarget != null && rTarget.CountEnemiesInRange(700) <= Player.CountAlliesInRange(700) && Player.HealthPercent > 80)
                 {
                     R.CastOnUnit(rTarget);
                 }
@@ -194,7 +198,7 @@ namespace ALL_In_One.champions
                 }
             }
         }
-		
+        
         static void Lasthit()
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Lasthit.IfMana))
@@ -205,23 +209,22 @@ namespace ALL_In_One.champions
             if (Minions.Count <= 0)
                 return;
 
-            if (AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady() && !Player.IsWindingUp)
+            if (AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
             {
-				var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(x => x.HasBuff("urgotcorrosivedebuff"));
+                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(x => x.HasBuff("urgotcorrosivedebuff") && AIO_Func.isKillable(x,Q,0));
+                var qTarget = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault(x => AIO_Func.isKillable(x,Q,0));
                 if(Q2t != null)
                 {
-                    AIO_Func.LH(Q2);
+                    Q2.Cast();
                 }
-                else
+                else if(qTarget != null)
                 {
-					var qTarget = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth);
-
-                    if (qTarget != null)
-                        AIO_Func.LH(Q,0f);
+                    if (Q.GetPrediction(qTarget).Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+                        Q.Cast(qTarget);
                 }
             }
         }
-		
+        
         static void Laneclear()
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
@@ -232,19 +235,19 @@ namespace ALL_In_One.champions
             if (Minions.Count <= 0)
                 return;
 
-            if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady() && !Player.IsWindingUp)
+            if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
-				var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.HasBuff("urgotcorrosivedebuff"));
-                if(Q2t != null)
+                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
+                if(Q2t != null && Q2t[0].HasBuff("urgotcorrosivedebuff"))
                 {
-                    Q2.Cast(Q2t);
+                    Q2.Cast();
                 }
                 else
                 {
-					var qTarget = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
+                    var qTarget = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => AIO_Func.isKillable(x,Q,0));
 
-                    if (qTarget != null)
-                        AIO_Func.LCast(Q,qTarget[0],0f,0f);
+                    if (qTarget != null && Q.GetPrediction(qTarget).Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+                        Q.Cast(qTarget);
                 }
             }
         }
@@ -261,17 +264,17 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
-				var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.HasBuff("urgotcorrosivedebuff"));
+                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.HasBuff("urgotcorrosivedebuff"));
                 if(Q2t != null)
                 {
-                    Q2.Cast(Q2t);
+                    Q2.Cast();
                 }
                 else
                 {
-					var qTarget = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+                    var qTarget = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
-                    if (qTarget != null)
-                        AIO_Func.LCast(Q,qTarget[0],0f,0f);
+                    if (qTarget != null && Q.GetPrediction(qTarget[0]).Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+                        Q.Cast(qTarget[0]);
                 }
             }
 

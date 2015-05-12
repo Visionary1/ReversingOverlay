@@ -250,8 +250,8 @@ namespace ALL_In_One.champions
                 var distance = Player.Distance(rTarget.ServerPosition);
                 var predhealth = HealthPrediction.GetHealthPrediction(rTarget, (int)(R.Delay + distance / R.Speed) * 1000) + (rTarget.HPRegenRate/2);
 
-                if (predhealth <= (distance < 1200 ? R.GetDamage(rTarget) : R.GetDamage(rTarget, 1)) && !AIO_Func.CollisionCheck(Player, rTarget, R.Width))
-                    R.Cast(rTarget);
+                if (predhealth <= (distance < 1500 ? R.GetDamage(rTarget, 2) : R.GetDamage(rTarget, 1)) && !AIO_Func.CollisionCheck(Player, rTarget, R.Width))
+                    R.Cast(rTarget); //R 최대 데미지는 1500범위에서. 그리고 공식 커먼의 징크스 궁 데미지 계산이 잘못되었으니 올인원 자체 데미지 계산사용.(stage 0 최소데미지, stage 1 최대, stage 2 거리비례)
             }
         }
 

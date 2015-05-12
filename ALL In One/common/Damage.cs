@@ -1986,7 +1986,7 @@ namespace ALL_In_One
                             (source, target, level) =>
                                 new double[] { 25, 35, 45 }[level] +
                                 new double[] { 25, 30, 35 }[level] / 100 * (target.MaxHealth - target.Health) + 
-								0.1 * source.FlatPhysicalDamageMod
+                                0.1 * source.FlatPhysicalDamageMod
                     },
                     //R - Max
                     new DamageSpell
@@ -2010,7 +2010,7 @@ namespace ALL_In_One
                             (source, target, level) =>
                                 Math.Min((new double[] { 25, 35, 45 }[level] +
                                 new double[] { 25, 30, 35 }[level] / 100 * (target.MaxHealth - target.Health) + 
-								0.1 * source.FlatPhysicalDamageMod) * (1 + source.Distance(target.ServerPosition)/ 15 * 0.09d),
+                                0.1 * source.FlatPhysicalDamageMod) * (1 + source.Distance(target.ServerPosition)/ 15 * 0.09d),
                                 new double[] { 250, 350, 450 }[level] +
                                 new double[] { 25, 30, 35 }[level] / 100 * (target.MaxHealth - target.Health) +
                                 1 * source.FlatPhysicalDamageMod)

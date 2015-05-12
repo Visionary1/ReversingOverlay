@@ -1,6 +1,6 @@
 # L# TeamProjects (XC-Squad)
 ![](https://cdn.joduska.me/forum/public/style_emoticons/default/cat_lazy.gif)
-####● ALL In One: 72/124(58.0%) Champions supported.
+####● ALL In One: 76/124(61.3%) Champions supported.
 <!--|Champion|Supported|
 |-|-|
 |Aatrox|✔|
@@ -11,7 +11,7 @@
 |Anivia|　|
 |Annie|✔|
 |Ashe|　|
-|Azir|✔|
+|Azir|WIP|
 |Bard|　|
 |Blitzcrank|✔|
 |Brand|✔|
@@ -44,7 +44,7 @@
 |Jayce|　|
 |Jinx|✔|
 |Kalista|✔|
-|Karma|✔|
+|Karma|WIP|
 |Karthus|✔|
 |Kassadin|　|
 |Katarina|✔|
@@ -111,14 +111,14 @@
 |Veigar|✔|
 |Vel'Koz|　|
 |Vi|✔|
-|Viktor|✔|
+|Viktor|WIP|
 |Vladimir|✔|
 |Volibear|✔|
 |Warwick|✔|
 |Wukong|✔|
 |Xerath|　|
 |Xin Zhao|✔|
-|Yasuo|✔|
+|Yasuo|WIP|
 |Yorick|✔|
 |Zac|　|
 |Zed|✔|

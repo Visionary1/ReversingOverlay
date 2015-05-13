@@ -1,4 +1,4 @@
-정# L# TeamProjects (XC-Squad)
+#L# TeamProjects (XC-Squad)
 ###● ALL In One: 76/124(61.3%) Champions supported.
 It's a Early Development Build. So it's still a Work In Progress. (A little lacking performance)
 

@@ -201,9 +201,9 @@ namespace ALL_In_One
                     MadeBy(Developer.xcsoft); //(Incomplete)
                     champions.Zed.Load();
                     break;
-                case "KhaZix":
+                case "Khazix":
                     MadeBy(Developer.RL244);
-                    champions.KhaZix.Load();
+                    champions.Khazix.Load();
                     break;
                 case "Shyvana":
                     MadeBy(Developer.RL244);

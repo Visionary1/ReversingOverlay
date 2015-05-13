@@ -11,7 +11,6 @@ namespace ALL_In_One.champions
 {
     class MasterYi
     {
-        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} // 마스터이.cs update.
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         
@@ -119,10 +118,9 @@ namespace ALL_In_One.champions
             if (!sender.IsMe || Player.IsDead)
                 return;
 
-            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-            && args.Target.Type != GameObjectType.obj_AI_Minion)
+            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && args.Target.Type != GameObjectType.obj_AI_Minion)
             {
-                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
+                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(1000)))
                 {
                     if (AIO_Menu.Champion.Combo.UseW || AIO_Menu.Champion.Harass.UseW)
                     {

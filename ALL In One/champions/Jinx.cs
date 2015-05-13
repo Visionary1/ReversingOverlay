@@ -21,7 +21,7 @@ namespace ALL_In_One.champions
 
         const int DefaultRange = 590;
 
-        static float GetQActivErange { get { return DefaultRange + ((25 * Q.Level) + 50); } }
+        static float GetQActiveRange { get { return DefaultRange + ((25 * Q.Level) + 50); } }
 
         static float WLastCastedTime = 0f;
 
@@ -114,7 +114,7 @@ namespace ALL_In_One.champions
             var drawP = AIO_Menu.Champion.Drawings.getCircleValue("Passive Timer");
 
             if (drawQ.Active && !QisActive)
-                Render.Circle.DrawCircle(Player.Position, GetQActivErange, drawQ.Color);
+                Render.Circle.DrawCircle(Player.Position, GetQActiveRange, drawQ.Color);
 
             if (drawW.Active && W.IsReady())
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
@@ -168,7 +168,7 @@ namespace ALL_In_One.champions
                 return;
             }
 
-            if (AIO_Func.SelfAOE_Prediction.HitCount(0.25f, 200, Unit.Position) >= AIO_Menu.Champion.Misc.getSliderValue("Switch to FISHBONES If Hit Enemy Number >=").Value)
+            if (AIO_Func.SelfAOE_Prediction.HitCount(0.25f, 200f, Unit.Position) >= AIO_Menu.Champion.Misc.getSliderValue("Switch to FISHBONES If Hit Enemy Number >=").Value)
             {
                 QSwitch(true);
                 return;
@@ -186,7 +186,7 @@ namespace ALL_In_One.champions
             if (!Q.IsReady())
                 return;
 
-            if (QisActive && Player.IsWindingUp)
+            if (Player.IsWindingUp)
                 return;
 
             if (activate && !QisActive)
@@ -203,7 +203,7 @@ namespace ALL_In_One.champions
             foreach (Obj_AI_Hero target in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range)))
             {
                 if (E.CanCast(target) && AIO_Func.UnitIsImmobileUntil(target) >= E.Delay - 0.5)
-                    E.Cast(target);
+                    E.Cast(target, false, true);
             }
         }
 
@@ -215,7 +215,7 @@ namespace ALL_In_One.champions
         static void Combo()
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
-                QSwitchForUnit(TargetSelector.GetTarget(GetQActivErange + 30, Q.DamageType));
+                QSwitchForUnit(TargetSelector.GetTarget(GetQActiveRange + 30, Q.DamageType));
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
@@ -230,7 +230,7 @@ namespace ALL_In_One.champions
                 var Etarget = E_GetBestTarget();
 
                 if (Etarget != null)
-                    E.Cast(Etarget);
+                    E.Cast(Etarget,false,true);
             }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && WLastCastedTime + 0.5 < Game.ClockTime)
@@ -255,7 +255,7 @@ namespace ALL_In_One.champions
             }
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
-                QSwitchForUnit(TargetSelector.GetTarget(GetQActivErange + 30, TargetSelector.DamageType.Physical, true));
+                QSwitchForUnit(TargetSelector.GetTarget(GetQActiveRange + 30, TargetSelector.DamageType.Physical, true));
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
                 W.CastOnBestTarget();
@@ -263,7 +263,7 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
-            var Minions = MinionManager.GetMinions(Player.ServerPosition, GetQActivErange, MinionTypes.All, MinionTeam.Enemy);
+            var Minions = MinionManager.GetMinions(Player.ServerPosition, GetQActiveRange, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
             {
@@ -291,7 +291,7 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            var Mobs = MinionManager.GetMinions(Player.ServerPosition, GetQActivErange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var Mobs = MinionManager.GetMinions(Player.ServerPosition, GetQActiveRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
             {

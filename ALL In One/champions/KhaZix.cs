@@ -128,17 +128,17 @@ namespace ALL_In_One.champions
 
         static void Combo()
         {
-            if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
-            {
-                var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                if(Qtarget.Distance(Player.ServerPosition) > Orbwalking.GetRealAutoAttackRange(Player) + 50)
-                Q.Cast(Qtarget);
-            }
-            
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
                 var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+				if(Wtarget != null)
                 AIO_Func.LCast(W,Wtarget,WD,0f);
+            }
+            if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
+            {
+                var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+                if(Qtarget.Distance(Player.ServerPosition) > Orbwalking.GetRealAutoAttackRange(Player) + 50 && Qtarget != null)
+                Q.Cast(Qtarget);
             }
             
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
@@ -159,16 +159,19 @@ namespace ALL_In_One.champions
         {
             if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
                 return;
-            if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
-            {
-                var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                if(Qtarget.Distance(Player.ServerPosition) > Orbwalking.GetRealAutoAttackRange(Player) + 50)
-                Q.Cast(Qtarget);
-            }
+				
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
                 var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+				if(Wtarget != null)
                 AIO_Func.LCast(W,Wtarget,WD,0f);
+            }
+			
+            if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
+            {
+                var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+                if(Qtarget.Distance(Player.ServerPosition) > Orbwalking.GetRealAutoAttackRange(Player) + 50 && Qtarget != null)
+                Q.Cast(Qtarget);
             }
             
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())

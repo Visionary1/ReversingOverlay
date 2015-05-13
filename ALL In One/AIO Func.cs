@@ -57,7 +57,7 @@ namespace ALL_In_One
 
         internal static bool isKillable(Obj_AI_Base target, Spell spell, int stage = 0)
         {
-            return target.Health + (target.HPRegenRate/2) <= spell.GetDamage(target, stage);
+            return target.Health + (target.HPRegenRate/2) <= spell.GetDamage2(target, stage);
         }
 
         internal static void sendDebugMsg(string message, string tag = "[TeamProjects] ALL In One: ")

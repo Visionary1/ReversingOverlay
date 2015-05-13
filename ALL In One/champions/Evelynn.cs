@@ -263,13 +263,13 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy) * 2;
+                damage += Q.GetDamage2(enemy) * 2;
 
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
                 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
                 
             return damage;
         }

@@ -53,10 +53,10 @@ namespace ALL_In_One
             {
                 foreach (var minion in MinionManager.GetMinions(ObjectManager.Player.Position, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 300))
                 {
-                    if (drawMinionLastHit.Active && ObjectManager.Player.GetAutoAttackDamage(minion, true) >= minion.Health)
+                    if (drawMinionLastHit.Active && ObjectManager.Player.GetAutoAttackDamage2(minion, true) >= minion.Health)
                         Render.Circle.DrawCircle(minion.Position, minion.BoundingRadius, drawMinionLastHit.Color, 3);
                     else
-                        if (drawMinionNearKill.Active && ObjectManager.Player.GetAutoAttackDamage(minion, true) * 2 >= minion.Health)
+                        if (drawMinionNearKill.Active && ObjectManager.Player.GetAutoAttackDamage2(minion, true) * 2 >= minion.Health)
                         Render.Circle.DrawCircle(minion.Position, minion.BoundingRadius, drawMinionNearKill.Color, 3);
                 }
             }

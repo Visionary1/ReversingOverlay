@@ -91,8 +91,8 @@ namespace ALL_In_One.champions
             #endregion
 
             #region E harass with lasthit for anytime
-            var Minion = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy).Where(x => x.Health <= E.GetDamage(x)).OrderBy(x => x.Health).FirstOrDefault();
-            var Target = HeroManager.Enemies.Where(x => E.CanCast(x) && E.GetDamage(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)).OrderByDescending(x => E.GetDamage(x)).FirstOrDefault();
+            var Minion = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy).Where(x => x.Health <= E.GetDamage2(x)).OrderBy(x => x.Health).FirstOrDefault();
+            var Target = HeroManager.Enemies.Where(x => E.CanCast(x) && E.GetDamage2(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)).OrderByDescending(x => E.GetDamage2(x)).FirstOrDefault();
 
             if (E.CanCast(Minion) && E.CanCast(Target))
                 E.Cast();
@@ -141,7 +141,7 @@ namespace ALL_In_One.champions
             if (!Menu.Item("lasthitassist", true).GetValue<bool>())
                 return;
 
-            if (E.CanCast((Obj_AI_Base)minion) && minion.Health <= E.GetDamage((Obj_AI_Base)minion))
+            if (E.CanCast((Obj_AI_Base)minion) && minion.Health <= E.GetDamage2((Obj_AI_Base)minion))
                 E.Cast();
         }
 
@@ -157,9 +157,9 @@ namespace ALL_In_One.champions
 
             if (Menu.Item("comboUseE", true).GetValue<Boolean>() && E.IsReady())
             {
-                var eTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && E.GetDamage(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)).OrderByDescending(x => E.GetDamage(x)).FirstOrDefault();
+                var eTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && E.GetDamage2(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)).OrderByDescending(x => E.GetDamage2(x)).FirstOrDefault();
 
-                if (eTarget != null && eTarget.Health <= E.GetDamage(eTarget))
+                if (eTarget != null && eTarget.Health <= E.GetDamage2(eTarget))
                     E.Cast();
             }
         }
@@ -190,13 +190,13 @@ namespace ALL_In_One.champions
 
             if (Menu.Item("laneclearUseQ", true).GetValue<bool>() && Q.IsReady())
             {
-                foreach (var minion in Minions.Where(x => x.Health <= Q.GetDamage(x)))
+                foreach (var minion in Minions.Where(x => x.Health <= Q.GetDamage2(x)))
                 {
                     var killcount = 0;
 
                     foreach (var colminion in AIO_Func.getCollisionMinions(Player, Player.ServerPosition.Extend(minion.ServerPosition, Q.Range), Q.Delay, Q.Width, Q.Speed))
                     {
-                        if (colminion.Health <= Q.GetDamage(colminion))
+                        if (colminion.Health <= Q.GetDamage2(colminion))
                             killcount++;
                         else
                             break;
@@ -214,7 +214,7 @@ namespace ALL_In_One.champions
             {
                 var minionkillcount = 0;
 
-                foreach (var Minion in Minions.Where(x => E.CanCast(x) && x.Health <= E.GetDamage(x))){minionkillcount++;}
+                foreach (var Minion in Minions.Where(x => E.CanCast(x) && x.Health <= E.GetDamage2(x))){minionkillcount++;}
 
                 if (minionkillcount >= Menu.Item("laneclearEnum", true).GetValue<Slider>().Value)
                     E.Cast();
@@ -236,7 +236,7 @@ namespace ALL_In_One.champions
 
             if (Menu.Item("jungleclearUseE", true).GetValue<bool>() && E.CanCast(Mobs[0]))
             {
-                if (Mobs[0].Health + (Mobs[0].HPRegenRate/2) <= E.GetDamage(Mobs[0]))
+                if (Mobs[0].Health + (Mobs[0].HPRegenRate/2) <= E.GetDamage2(Mobs[0]))
                     E.Cast();
             }
         }
@@ -246,7 +246,7 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
 
             return damage;
         }
@@ -261,12 +261,12 @@ namespace ALL_In_One.champions
 
         static void Mobsteal()
         {
-            var Mob = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.Health + (x.HPRegenRate / 2) <= E.GetDamage(x));
+            var Mob = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.Health + (x.HPRegenRate / 2) <= E.GetDamage2(x));
 
             if (E.CanCast(Mob))
                 E.Cast();
 
-            var Minion = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.Health <= E.GetDamage(x) && (x.SkinName.ToLower().Contains("siege") || x.SkinName.ToLower().Contains("super")));
+            var Minion = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.Health <= E.GetDamage2(x) && (x.SkinName.ToLower().Contains("siege") || x.SkinName.ToLower().Contains("super")));
 
             if (E.CanCast(Minion))
                 E.Cast();

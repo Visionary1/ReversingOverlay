@@ -157,7 +157,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-                if(AIO_Func.isKillable(Rtarget, R.GetDamage(Rtarget)-Rtarget.HPRegenRate) || AIO_Func.getHealthPercent(Player) < 50)
+                if(AIO_Func.isKillable(Rtarget, R.GetDamage2(Rtarget)-Rtarget.HPRegenRate) || AIO_Func.getHealthPercent(Player) < 50)
                 R.Cast(Rtarget);
             }
         }
@@ -192,7 +192,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                    if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target) - target.HPRegenRate*2))
+                    if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage2(target) - target.HPRegenRate*2))
                     AIO_Func.CCast(R,target);
             }
         }
@@ -202,10 +202,10 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
 
             return damage;
         }

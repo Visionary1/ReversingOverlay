@@ -254,7 +254,7 @@ namespace ALL_In_One.champions
                 else
                 {
                     var buff = AIO_Func.getBuffInstance(target, "dariushemo");
-                    if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target)*(1 + (float)buff.Count / 5) - 10))
+                    if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage2(target)*(1 + (float)buff.Count / 5) - 10))
                     R.Cast(target);
                 }
             }
@@ -265,18 +265,18 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
 
             if (W.IsReady())
-                damage += W.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, true);
+                damage += W.GetDamage2(enemy) + (float)Player.GetAutoAttackDamage2(enemy, true);
 
             if (E.IsReady())
-                damage += (float)Player.GetAutoAttackDamage(enemy, true)*2;
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true)*2;
                 
             if (R.IsReady())
             {
                 var buff = AIO_Func.getBuffInstance(enemy, "dariushemo");
-                damage += R.GetDamage(enemy)*(1 + (float)buff.Count / 5) - 10;
+                damage += R.GetDamage2(enemy)*(1 + (float)buff.Count / 5) - 10;
             }
                 
             return damage;

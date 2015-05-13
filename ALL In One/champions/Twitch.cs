@@ -164,7 +164,7 @@ namespace ALL_In_One.champions
             {
                 if (target != null)
                 {
-                    if (E.CanCast(target) && (target.Health + (target.HPRegenRate / 2)) <= E.GetDamage(target))
+                    if (E.CanCast(target) && (target.Health + (target.HPRegenRate / 2)) <= E.GetDamage2(target))
                     {
                         E.Cast();
                         break;
@@ -175,7 +175,7 @@ namespace ALL_In_One.champions
 
         static float GetComboDamage(Obj_AI_Base enemy)
         {
-            return E.IsReady() ? E.GetDamage(enemy) : 0;
+            return E.IsReady() ? E.GetDamage2(enemy) : 0;
         }
 
         static void Combo()
@@ -280,7 +280,7 @@ namespace ALL_In_One.champions
                         }
                     }
 
-                    if (Minion.Health <= E.GetDamage(Minion))
+                    if (Minion.Health <= E.GetDamage2(Minion))
                         killcount++;
                 }
 
@@ -316,7 +316,7 @@ namespace ALL_In_One.champions
                     }
                 }
 
-                if ((Mobs[0].Health + Mobs[0].HPRegenRate) <= E.GetDamage(Mobs[0]))
+                if ((Mobs[0].Health + Mobs[0].HPRegenRate) <= E.GetDamage2(Mobs[0]))
                     E.Cast();
             }
         }

@@ -285,16 +285,16 @@ namespace ALL_In_One.champions
 
             //Q스펠이 준비상태일때 적 챔프에게 Q스펠 시전했을경우 입혀지는 데미지 추가. 이하동문
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
 
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
 
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
 
             return damage;
         }

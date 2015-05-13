@@ -232,16 +232,16 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
+                damage += Q.GetDamage2(enemy) + (float)Player.GetAutoAttackDamage2(enemy, true) * 1.1f;
             
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
 
             if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
 
             if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true) * 1.1f;
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true) * 1.1f;
 
             if (E.IsReady())
                 damage = damage *(1 + 0.03f * E.Level);

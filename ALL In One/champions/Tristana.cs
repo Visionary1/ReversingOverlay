@@ -163,7 +163,7 @@ namespace ALL_In_One.champions
             AIO_Func.AACb(E);
             if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseR ||
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseR && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana)
-            && R.IsReady() && Target.Health + Target.HPRegenRate <= R.GetDamage(Target)+ (float)Player.GetAutoAttackDamage(Target, true))
+            && R.IsReady() && Target.Health + Target.HPRegenRate <= R.GetDamage2(Target)+ (float)Player.GetAutoAttackDamage2(Target, true))
             { // 평-R-평 => Kill
                 R.Cast(Target);
             }
@@ -176,12 +176,12 @@ namespace ALL_In_One.champions
                 if(W.IsReady() && target != null)
                 {
                     var Buff = (target.HasBuff("tristanaecharge") ? AIO_Func.getBuffInstance(target, "tristanaecharge") : null);
-                    bool EK = (target.HasBuff("tristanaecharge") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)) || !target.HasBuff("tristanaecharge"));
-                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Buff != null && !EK && target.HasBuff("tristanaecharge") && W.CanCast(target) && R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("KillstealR") && target.HasBuff("tristanaecharge") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, R.GetDamage(target) + W.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage(target, true)))
+                    bool EK = (target.HasBuff("tristanaecharge") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f)) || !target.HasBuff("tristanaecharge"));
+                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Buff != null && !EK && target.HasBuff("tristanaecharge") && W.CanCast(target) && R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("KillstealR") && target.HasBuff("tristanaecharge") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage2(target, true)))
                     AIO_Func.CCast(W,target);
-                    if (W.CanCast(target) && target.HasBuff("tristanaecharge") && Buff != null && !EK && (float)Buff.Count > 0 && AIO_Func.isKillable(target, W.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage(target, true)))
+                    if (W.CanCast(target) && target.HasBuff("tristanaecharge") && Buff != null && !EK && (float)Buff.Count > 0 && AIO_Func.isKillable(target, W.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage2(target, true)))
                     AIO_Func.CCast(W,target);
-                    else if (W.CanCast(target) && !EK && AIO_Func.isKillable(target, W.GetDamage(target) + (float)Player.GetAutoAttackDamage(target, true)))
+                    else if (W.CanCast(target) && !EK && AIO_Func.isKillable(target, W.GetDamage2(target) + (float)Player.GetAutoAttackDamage2(target, true)))
                     AIO_Func.CCast(W,target);
                 }
             }
@@ -203,8 +203,8 @@ namespace ALL_In_One.champions
                 if(R.IsReady() && target != null)
                 {
                     var Buff = (target.HasBuff("tristanaecharge") ? AIO_Func.getBuffInstance(target, "tristanaecharge") : null);
-                    bool EK = (target.HasBuff("tristanaecharge") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)) || !target.HasBuff("tristanaecharge"));
-                    if (R.CanCast(target) && Buff != null && (float)Buff.Count > 0 && target.HasBuff("tristanaecharge") && AIO_Func.isKillable(target, R.GetDamage(target) + E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)) && !EK)
+                    bool EK = (target.HasBuff("tristanaecharge") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f)) || !target.HasBuff("tristanaecharge"));
+                    if (R.CanCast(target) && Buff != null && (float)Buff.Count > 0 && target.HasBuff("tristanaecharge") && AIO_Func.isKillable(target, R.GetDamage2(target) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f)) && !EK)
                         R.Cast(target);
                     else if (R.CanCast(target) && AIO_Func.isKillable(target, R) && !EK)
                         R.Cast(target);
@@ -218,19 +218,19 @@ namespace ALL_In_One.champions
             float damage = 0;
             var Buff = AIO_Func.getBuffInstance(enemy, "tristanaecharge");
             if (Q.IsReady())
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
 
             if (W.IsReady())
-                damage += W.GetDamage(enemy);//((float)Buff.Count > 0 && enemy.HasBuff("tristanaecharge") ? W.GetDamage(enemy)*(((float)Buff.Count-1)*0.25f+1f) : W.GetDamage(enemy));
+                damage += W.GetDamage2(enemy);//((float)Buff.Count > 0 && enemy.HasBuff("tristanaecharge") ? W.GetDamage2(enemy)*(((float)Buff.Count-1)*0.25f+1f) : W.GetDamage2(enemy));
                 
             if (E.IsReady())
-                damage += E.GetDamage(enemy);//((float)Buff.Count > 0 && enemy.HasBuff("tristanaecharge") ? E.GetDamage(enemy)*(((float)Buff.Count-1)*0.25f+1f) : E.GetDamage(enemy));
+                damage += E.GetDamage2(enemy);//((float)Buff.Count > 0 && enemy.HasBuff("tristanaecharge") ? E.GetDamage2(enemy)*(((float)Buff.Count-1)*0.25f+1f) : E.GetDamage2(enemy));
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
                 
             if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
             return damage;
         }
     }

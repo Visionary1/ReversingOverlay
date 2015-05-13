@@ -120,9 +120,9 @@ namespace ALL_In_One.champions
             setSmiteSlot();
             foreach (var target in MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player)/2+200f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).OrderByDescending(x => x.Health).Where(x => x.Name.ToLower().Contains("Dragon") || x.Name.ToLower().Contains("Baron")))
             {
-                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q.GetDamage(target) + smdmg) && Q.IsReady() && smite.IsReady())
+                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q.GetDamage2(target) + smdmg) && Q.IsReady() && smite.IsReady())
                     Q.Cast(target);
-                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q.GetDamage(target)) && Q.IsReady())
+                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q.GetDamage2(target)) && Q.IsReady())
                     Q.Cast(target);
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, smdmg) && smite.IsReady())
                     smite.Cast(target);
@@ -163,11 +163,11 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
             if (E.IsReady())
-                damage += E.GetDamage(enemy);            
+                damage += E.GetDamage2(enemy);            
             if (R.IsReady())
-                damage += R.GetDamage(enemy)/5*2;
+                damage += R.GetDamage2(enemy)/5*2;
                 
             return damage;
         }

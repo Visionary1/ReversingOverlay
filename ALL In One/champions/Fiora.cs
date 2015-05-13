@@ -178,7 +178,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady()
             && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && !E.IsReady()
             && HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range))
-            && AIO_Func.isKillable(rtarget,R.GetDamage(rtarget) + Q.GetDamage(rtarget)*2))
+            && AIO_Func.isKillable(rtarget,R.GetDamage2(rtarget) + Q.GetDamage2(rtarget)*2))
             R.Cast(rtarget);
             }
         }
@@ -252,19 +252,19 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy) * 2;
+                damage += Q.GetDamage2(enemy) * 2;
                 
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
                                 
             if (E.IsReady())
-                damage += (float)Player.GetAutoAttackDamage(enemy, true) * 2;
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true) * 2;
                 
             if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
 
             if (!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
                 
             return damage;
         }

@@ -139,7 +139,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-                if(AIO_Func.isKillable(Rtarget, E.GetDamage(Rtarget)+R.GetDamage(Rtarget)-Rtarget.HPRegenRate) && E.IsReady())
+                if(AIO_Func.isKillable(Rtarget, E.GetDamage2(Rtarget)+R.GetDamage2(Rtarget)-Rtarget.HPRegenRate) && E.IsReady())
                 R.Cast(Rtarget);
             }
         }
@@ -200,7 +200,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                    if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target) - target.HPRegenRate*2))
+                    if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage2(target) - target.HPRegenRate*2))
                     R.Cast(target);
             }
         }
@@ -210,16 +210,16 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
             
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
             
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
                 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
 
             return damage;
         }

@@ -203,7 +203,7 @@ namespace ALL_In_One.champions
             {
                 var rTarget = TargetSelector.GetTarget(R.Range+(R.Width/2), R.DamageType);
 
-                if (R.CanCast(rTarget) && rTarget.Health <= getComboDamage(rTarget) + (Q.GetDamage(rTarget) * 2) && stunisReady)
+                if (R.CanCast(rTarget) && rTarget.Health <= getComboDamage(rTarget) + (Q.GetDamage2(rTarget) * 2) && stunisReady)
                     R.Cast(rTarget, false, true);
             }
         }
@@ -291,13 +291,13 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
 
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
 
             return damage;
         }

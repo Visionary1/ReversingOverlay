@@ -207,7 +207,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                if(R.Instance.Name == "ViktorChaosStorm" && AIO_Func.isKillable(Rtarget, R.GetDamage(Rtarget)+R.Width/Rtarget.MoveSpeed*R.GetDamage(Rtarget,1)*3+(E.IsReady() ? (E2 ? E.GetDamage(Rtarget,1) : E.GetDamage(Rtarget)) : 0) + (Q.IsReady() ? Q.GetDamage(Rtarget) : 0)) && Rtarget != null)
+                if(R.Instance.Name == "ViktorChaosStorm" && AIO_Func.isKillable(Rtarget, R.GetDamage2(Rtarget)+R.Width/Rtarget.MoveSpeed*R.GetDamage2(Rtarget,1)*3+(E.IsReady() ? (E2 ? E.GetDamage2(Rtarget,1) : E.GetDamage2(Rtarget)) : 0) + (Q.IsReady() ? Q.GetDamage2(Rtarget) : 0)) && Rtarget != null)
                 AIO_Func.CCast(R,Rtarget);
             }
         }
@@ -308,7 +308,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (target.IsValidTarget(R.Range) && AIO_Func.isKillable(target, R.GetDamage(target)+R.Width/target.MoveSpeed*R.GetDamage(target,1)))
+                if (target.IsValidTarget(R.Range) && AIO_Func.isKillable(target, R.GetDamage2(target)+R.Width/target.MoveSpeed*R.GetDamage2(target,1)))
                 R.Cast(target.ServerPosition);
             }
         }
@@ -327,16 +327,16 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
                                 
             if (E.IsReady())
-                damage += (E2 ? E.GetDamage(enemy,1) : E.GetDamage(enemy));
+                damage += (E2 ? E.GetDamage2(enemy,1) : E.GetDamage2(enemy));
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy)+R.Width/enemy.MoveSpeed*2*R.GetDamage(enemy,1);
+                damage += R.GetDamage2(enemy)+R.Width/enemy.MoveSpeed*2*R.GetDamage2(enemy,1);
 
             if(Player.HasBuff("viktorpowertransferreturn"))
-                damage += (float)Player.GetAutoAttackDamage(enemy, true); //어짜피 여기에 빅토르 Q 증강뎀 들어감.
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true); //어짜피 여기에 빅토르 Q 증강뎀 들어감.
             return damage;
         }
     }

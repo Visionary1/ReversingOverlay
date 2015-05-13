@@ -124,10 +124,10 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
                 
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
                 
             return damage;
         }

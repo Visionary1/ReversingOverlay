@@ -188,7 +188,7 @@ namespace ALL_In_One.champions
                 if (E.CanCast(target) && AIO_Func.isKillable(target, E))
                     E.Cast(target);
 
-                if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target) * 4))
+                if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage2(target) * 4))
                     CastR1();
             }
         }
@@ -198,13 +198,13 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
 
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy) * 4;
+                damage += R.GetDamage2(enemy) * 4;
 
             return damage;
         }

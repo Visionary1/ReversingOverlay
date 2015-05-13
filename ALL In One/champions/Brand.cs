@@ -250,7 +250,7 @@ namespace ALL_In_One.champions
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
             
-                if(Rtarget.Health + Rtarget.HPRegenRate <= R.GetDamage(Rtarget)*2)
+                if(Rtarget.Health + Rtarget.HPRegenRate <= R.GetDamage2(Rtarget)*2)
                 { 
                     if (HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
                     R.Cast(Rtarget);
@@ -380,19 +380,19 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
 
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
                 
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy) * 2;
+                damage += R.GetDamage2(enemy) * 2;
                 
             if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
             return damage;
         }
     }

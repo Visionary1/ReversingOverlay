@@ -275,7 +275,7 @@ namespace ALL_In_One.champions
                 if (W.CanCast(target) && AIO_Func.isKillable(target, W))
                     W.Cast(target);
 
-                if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target) + (Q.IsReady() ? Q.GetDamage(target) : 0)))
+                if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage2(target) + (Q.IsReady() ? Q.GetDamage2(target) : 0)))
                     R.Cast(target);
             }
         }
@@ -285,16 +285,16 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy) * 2;
+                damage += Q.GetDamage2(enemy) * 2;
 
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
 
             if(!Player.IsWindingUp)
-            damage += (float)Player.GetAutoAttackDamage(Player) * 2;
+            damage += (float)Player.GetAutoAttackDamage2(Player) * 2;
 
             return damage;
         }

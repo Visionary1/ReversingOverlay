@@ -137,7 +137,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-                if(!Player.HasBuff("JarvanIVCataclysm") && AIO_Func.isKillable(Rtarget, (((AIO_Func.getManaPercent(Player) > 15) ? Q.GetDamage(Rtarget) : (Q.IsReady() ? Q.GetDamage(Rtarget) : 0)) + R.GetDamage(Rtarget)))) //R.Instance.Name == "JarvanIVCataclysm"
+                if(!Player.HasBuff("JarvanIVCataclysm") && AIO_Func.isKillable(Rtarget, (((AIO_Func.getManaPercent(Player) > 15) ? Q.GetDamage2(Rtarget) : (Q.IsReady() ? Q.GetDamage2(Rtarget) : 0)) + R.GetDamage2(Rtarget)))) //R.Instance.Name == "JarvanIVCataclysm"
                 R.Cast(Rtarget);
             }
         }
@@ -170,19 +170,19 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
             
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
             
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
                 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
                 
             if (!enemy.HasBuff("jarvanivmartialcadencecheck"))
-                damage += JarvanPDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, false);
+                damage += JarvanPDamage(enemy) + (float)Player.GetAutoAttackDamage2(enemy, false);
                 
             return damage;
         }

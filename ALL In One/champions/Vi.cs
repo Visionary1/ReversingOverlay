@@ -193,7 +193,7 @@ namespace ALL_In_One.champions
             {
                 var rTarget = TargetSelector.GetTarget(R.Range, R.DamageType);
 
-                if (R.CanCast(rTarget) && rTarget.Health <= getComboDamage(rTarget) + (Q.GetDamage(rTarget) * 2))
+                if (R.CanCast(rTarget) && rTarget.Health <= getComboDamage(rTarget) + (Q.GetDamage2(rTarget) * 2))
                     R.Cast(rTarget);
             }
         }
@@ -271,19 +271,19 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
 
             if(getWBuffStacks(enemy) == 2)
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
 
             if (E.IsReady())
-                damage += (E.GetDamage(enemy) * E.Instance.Ammo) + ((float)Player.GetAutoAttackDamage(enemy, false) * E.Instance.Ammo);
+                damage += (E.GetDamage2(enemy) * E.Instance.Ammo) + ((float)Player.GetAutoAttackDamage2(enemy, false) * E.Instance.Ammo);
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
 
             if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
 
             return damage;
         }

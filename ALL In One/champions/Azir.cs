@@ -243,21 +243,21 @@ namespace ALL_In_One.champions
 
             if (Q.IsReady())
                 {
-                damage += Q.GetDamage(enemy);
-                damage += W.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
+                damage += W.GetDamage2(enemy);
                 }
 
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
 
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
                 
             if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true) + W.GetDamage(enemy);;
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true) + W.GetDamage2(enemy);;
             return damage;
         }
     }

@@ -96,7 +96,7 @@ namespace ALL_In_One.champions
             {
                 ChampionName = "Diana",
                 IsActive = (source, target) => (source.HasBuff("DianaPassiveMarker") && source.HasBuff("dianaarcready")),
-                GetDamage =
+                GetDamage2 =
                     (source, target) =>
                         (float)
                             source.CalcDamage(
@@ -222,11 +222,11 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health)) // Advanced Kill Combo by rl244
             {
-                if (R.CanCast(target) && Player.HasBuff("DianaOrbs") && Player.HasBuff("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage(target) + DianaPDamage(target) + W.GetDamage(target) +(float)Player.GetAutoAttackDamage(target, false)))
+                if (R.CanCast(target) && Player.HasBuff("DianaOrbs") && Player.HasBuff("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage2(target) + DianaPDamage(target) + W.GetDamage2(target) +(float)Player.GetAutoAttackDamage2(target, false)))
                 R.Cast(target);
-                else if (R.CanCast(target) && Player.HasBuff("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage(target) + DianaPDamage(target) + (float)Player.GetAutoAttackDamage(target, false)))
+                else if (R.CanCast(target) && Player.HasBuff("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage2(target) + DianaPDamage(target) + (float)Player.GetAutoAttackDamage2(target, false)))
                 R.Cast(target);
-                else if (R.CanCast(target) && Player.HasBuff("DianaOrbs") && AIO_Func.isKillable(target, R.GetDamage(target) + W.GetDamage(target) + (float)Player.GetAutoAttackDamage(target, false)))
+                else if (R.CanCast(target) && Player.HasBuff("DianaOrbs") && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target) + (float)Player.GetAutoAttackDamage2(target, false)))
                 R.Cast(target);
                 else if (R.CanCast(target) && AIO_Func.isKillable(target, R))
                 R.Cast(target);
@@ -245,11 +245,11 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
             if (W.IsReady())
-                damage += W.GetDamage(enemy)*2;
+                damage += W.GetDamage2(enemy)*2;
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
             if (Player.HasBuff("dianaarcready"))
                 damage += DianaPDamage(enemy);
             return damage;

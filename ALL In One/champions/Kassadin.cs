@@ -187,9 +187,9 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && Q.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target) + Q.GetDamage(target)))
+                if (R.CanCast(target) && Q.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage2(target) + Q.GetDamage2(target)))
                     AIO_Func.CCast(R,target);
-                else if (R.CanCast(target) && W.IsReady() && AIO_Func.isKillable(target, R.GetDamage(target) + W.GetDamage(target)))
+                else if (R.CanCast(target) && W.IsReady() && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target)))
                     AIO_Func.CCast(R,target);
                 else if (R.CanCast(target) && AIO_Func.isKillable(target, R))
                     AIO_Func.CCast(R,target);
@@ -201,16 +201,16 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
             
             if (W.IsReady())
-                damage += W.GetDamage(enemy) +(float)Player.GetAutoAttackDamage(enemy, true);
+                damage += W.GetDamage2(enemy) +(float)Player.GetAutoAttackDamage2(enemy, true);
             
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
                 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
 
             return damage;
         }

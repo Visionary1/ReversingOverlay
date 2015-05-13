@@ -426,10 +426,10 @@ namespace ALL_In_One.utility
             float idamage = 0;
                 
             if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
-                idamage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat) + (float)Player.GetAutoAttackDamage(enemy, true); //평-티아멧-평
+                idamage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat) + (float)Player.GetAutoAttackDamage2(enemy, true); //평-티아멧-평
             
             if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
-                idamage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra) + (float)Player.GetAutoAttackDamage(enemy, true); //평-히드라-평
+                idamage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra) + (float)Player.GetAutoAttackDamage2(enemy, true); //평-히드라-평
 
             return idamage;
         }

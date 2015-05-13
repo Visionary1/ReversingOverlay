@@ -170,7 +170,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
             {
-                var qTarget = Minions.FirstOrDefault(x => x.IsValidTarget(Q.Range) && HealthPrediction.GetHealthPrediction((Obj_AI_Base)x, (int)(Q.Delay*1000)) <= Q.GetDamage(x, 1));
+                var qTarget = Minions.FirstOrDefault(x => x.IsValidTarget(Q.Range) && HealthPrediction.GetHealthPrediction((Obj_AI_Base)x, (int)(Q.Delay*1000)) <= Q.GetDamage2(x, 1));
 
                 if (qTarget != null)
                     Q.Cast(qTarget);
@@ -248,13 +248,13 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
 
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
 
             return damage;
         }

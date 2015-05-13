@@ -268,16 +268,16 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) > 1000f).OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))+3f) >= target.Health + target.HPRegenRate
+                if (R.CanCast(target) && R.GetDamage2(target)*((R.Width/(target.MoveSpeed*0.8f))+3f) >= target.Health + target.HPRegenRate
                     && target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 2)
                     R.Cast(target.ServerPosition);
-                else if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))+2f) >= target.Health + target.HPRegenRate
+                else if (R.CanCast(target) && R.GetDamage2(target)*((R.Width/(target.MoveSpeed*0.8f))+2f) >= target.Health + target.HPRegenRate
                     && target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 1)
                     R.Cast(target.ServerPosition);
-                else if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))+1f) >= target.Health + target.HPRegenRate
+                else if (R.CanCast(target) && R.GetDamage2(target)*((R.Width/(target.MoveSpeed*0.8f))+1f) >= target.Health + target.HPRegenRate
                     && target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() > 0)
                     R.Cast(target.ServerPosition);
-                else if (R.CanCast(target) && R.GetDamage(target)*((R.Width/(target.MoveSpeed*0.8f))) >= target.Health + target.HPRegenRate
+                else if (R.CanCast(target) && R.GetDamage2(target)*((R.Width/(target.MoveSpeed*0.8f))) >= target.Health + target.HPRegenRate
                     && target.Distance(Player.ServerPosition) > 1200f && HeroManager.Allies.Where(x => x.Distance(target.ServerPosition) <= 500).Count() == 0)
                     R.Cast(target.ServerPosition);
             }
@@ -288,13 +288,13 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
 
             if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
-                damage += R.GetDamage(enemy)*((R.Width/(enemy.MoveSpeed*0.8f))+1f);
+                damage += R.GetDamage2(enemy)*((R.Width/(enemy.MoveSpeed*0.8f))+1f);
 
             if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
 
             return damage;
         }

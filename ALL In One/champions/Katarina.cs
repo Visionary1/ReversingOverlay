@@ -241,7 +241,7 @@ namespace ALL_In_One.champions
                 if (W.CanCast(target) && AIO_Func.isKillable(target, W))
                     W.Cast();
 
-                if (E.CanCast(target) && AIO_Func.isKillable(target, E.GetDamage(target) + (Q.IsReady() ? Q.GetDamage(target) : 0) + (W.IsReady() ? W.GetDamage(target) : 0)))
+                if (E.CanCast(target) && AIO_Func.isKillable(target, E.GetDamage2(target) + (Q.IsReady() ? Q.GetDamage2(target) : 0) + (W.IsReady() ? W.GetDamage2(target) : 0)))
                     E.Cast(target);
 
                 if (R.CanCast(target) && AIO_Func.isKillable(target, R))
@@ -254,16 +254,16 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy) + Q.GetDamage(enemy, 1);
+                damage += Q.GetDamage2(enemy) + Q.GetDamage2(enemy, 1);
 
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
 
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
 
             if (!Player.IsDead && R.Instance.State != SpellState.Cooldown)
-                damage += R.GetDamage(enemy, 1);
+                damage += R.GetDamage2(enemy, 1);
 
             return damage;
         }

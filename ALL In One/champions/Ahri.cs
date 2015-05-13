@@ -136,10 +136,10 @@ namespace ALL_In_One.champions
             {
                 foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
                 {
-                    if (R.CanCast(target) && AIO_Func.isKillable(target, (Q.IsReady() ? Q.GetDamage(target) : 0) + (W.IsReady() ? W.GetDamage(target) : 0)
-                    + (E.IsReady() ? E.GetDamage(target) : 0) +(R.IsReady() ? R.GetDamage(target)*3 : 0)) && target.Distance(Player.ServerPosition) < 1000 && target.Distance(Game.CursorPos) < 600f)
+                    if (R.CanCast(target) && AIO_Func.isKillable(target, (Q.IsReady() ? Q.GetDamage2(target) : 0) + (W.IsReady() ? W.GetDamage2(target) : 0)
+                    + (E.IsReady() ? E.GetDamage2(target) : 0) +(R.IsReady() ? R.GetDamage2(target)*3 : 0)) && target.Distance(Player.ServerPosition) < 1000 && target.Distance(Game.CursorPos) < 600f)
                         R.Cast(Game.CursorPos);
-                    else if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target)*2) && target.Distance(Player.ServerPosition) < 900 && target.Distance(Game.CursorPos) < 600f)
+                    else if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage2(target)*2) && target.Distance(Player.ServerPosition) < 900 && target.Distance(Game.CursorPos) < 600f)
                         R.Cast(Game.CursorPos);
                 }
             }
@@ -159,16 +159,16 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy) + Q.GetDamage(enemy,1);
+                damage += Q.GetDamage2(enemy) + Q.GetDamage2(enemy,1);
             
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
             
             if (E.IsReady())
-                damage += E.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, false);
+                damage += E.GetDamage2(enemy) + (float)Player.GetAutoAttackDamage2(enemy, false);
                 
             if (R.IsReady())
-                damage += R.GetDamage(enemy)*2;
+                damage += R.GetDamage2(enemy)*2;
                 
             return damage;
         }

@@ -44,6 +44,10 @@ namespace ALL_In_One
 
     public static class Damage
     {
+		public static float GetDamage2(this Spell spell, Obj_AI_Base target, int stage = 0)
+		{
+			return (float) ObjectManager.Player.GetSpellDamage(target, spell.Slot, stage);
+		}
         public enum DamageItems
         {
             Hexgun,
@@ -5377,7 +5381,7 @@ namespace ALL_In_One
             return 1d;
         }
 
-        public static double GetAutoAttackDamage(this Obj_AI_Base source,
+        public static double GetAutoAttackDamage2(this Obj_AI_Base source, //add
             Obj_AI_Base target,
             bool includePassive = false)
         {
@@ -5500,7 +5504,7 @@ namespace ALL_In_One
                 return new DamageSpell
                 {
                     DamageType = DamageType.Physical,
-                    CalculatedDamage = GetAutoAttackDamage(source, target, true),
+                    CalculatedDamage = GetAutoAttackDamage2(source, target, true),
                 };
             }
 

@@ -619,7 +619,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                                 InAutoAttackRange(minion) &&
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
-                                Player.GetAutoAttackDamage(minion));
+                                Player.GetAutoAttackDamage2(minion));
             }
 
             public virtual AttackableUnit GetTarget()
@@ -661,7 +661,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                                 FireOnNonKillableMinion(minion);
                             }
 
-                            if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
+                            if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage2(minion, true))
                             {
                                 return minion;
                             }
@@ -734,7 +734,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >= 2 * Player.GetAutoAttackDamage(_prevMinion) ||
+                            if (predHealth >= 2 * Player.GetAutoAttackDamage2(_prevMinion) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
                                 return _prevMinion;
@@ -748,7 +748,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
                             where
-                                predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
+                                predHealth >= 2 * Player.GetAutoAttackDamage2(minion) ||
                                 Math.Abs(predHealth - minion.Health) < float.Epsilon
                             select minion).MaxOrDefault(m => m.Health);
 

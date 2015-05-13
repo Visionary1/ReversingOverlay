@@ -357,7 +357,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 var Buff = AIO_Func.getBuffInstance(Player, "yasuodashscalar");
-                if(E.CanCast(target) && AIO_Func.isKillable(target, E.GetDamage(target)*((float)Buff.Count*0.25f + 1f)) && !target.HasBuff("YasuoDashWrapper"))
+                if(E.CanCast(target) && AIO_Func.isKillable(target, E.GetDamage2(target)*((float)Buff.Count*0.25f + 1f)) && !target.HasBuff("YasuoDashWrapper"))
                 E.Cast(target);
             }
         }
@@ -367,16 +367,16 @@ namespace ALL_In_One.champions
             float damage = 0;
             var Buff = AIO_Func.getBuffInstance(Player, "yasuodashscalar");
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy);
+                damage += Q.GetDamage2(enemy);
             
             if (E.IsReady())
-                damage += E.GetDamage(enemy)*((float)Buff.Count*0.25f + 1f);
+                damage += E.GetDamage2(enemy)*((float)Buff.Count*0.25f + 1f);
             
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
 
             if(!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage(enemy, true);
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
                 
             return damage;
         }

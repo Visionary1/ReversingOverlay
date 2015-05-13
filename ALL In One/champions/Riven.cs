@@ -291,16 +291,16 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage(enemy)*3 + (float)Player.GetAutoAttackDamage(enemy, false)*4;
+                damage += Q.GetDamage2(enemy)*3 + (float)Player.GetAutoAttackDamage2(enemy, false)*4;
             
             if (W.IsReady())
-                damage += W.GetDamage(enemy);
+                damage += W.GetDamage2(enemy);
             
             if (E.IsReady())
-                damage += E.GetDamage(enemy);
+                damage += E.GetDamage2(enemy);
                 
             if (R.IsReady())
-                damage += R.GetDamage(enemy);
+                damage += R.GetDamage2(enemy);
             return damage;
         }
     }

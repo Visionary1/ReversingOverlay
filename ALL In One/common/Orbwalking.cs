@@ -51,6 +51,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
 
         public enum OrbwalkingMode
         {
+            Flee,
             LastHit,
             Mixed,
             LaneClear,
@@ -72,10 +73,10 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         //Spells that are not attacks even if they have the "attack" word in their name.
         private static readonly string[] NoAttacks =
         {
-            "jarvanivcataclysmattack", "monkeykingdoubleattack",
+            "monkeykingdoubleattack",
             "shyvanadoubleattack", "shyvanadoubleattackdragon", "zyragraspingplantattack", "zyragraspingplantattack2",
             "zyragraspingplantattackfire", "zyragraspingplantattack2fire", "viktorpowertransfer"
-        };
+        }; // "jarvanivcataclysmattack" is auto attack. Edited by RL244
 
         //Spells that are attacks even if they dont have the "attack" word in their name.
         private static readonly string[] Attacks =
@@ -508,6 +509,9 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
 
                 /*Load the menu*/
                 _config.AddItem(
+                    new MenuItem("Flee", "Flee").SetShared().SetValue(new KeyBind('A', KeyBindType.Press)));
+
+                _config.AddItem(
                     new MenuItem("LastHit", "Last hit").SetShared().SetValue(new KeyBind('X', KeyBindType.Press)));
 
                 _config.AddItem(new MenuItem("Farm", "Mixed").SetShared().SetValue(new KeyBind('C', KeyBindType.Press)));
@@ -561,6 +565,11 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                     if (_config.Item("LastHit").GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.LastHit;
+                    }
+                    
+                    if (_config.Item("Flee").GetValue<KeyBind>().Active) // Added by RL244
+                    {
+                        return OrbwalkingMode.Flee;
                     }
 
                     return OrbwalkingMode.None;

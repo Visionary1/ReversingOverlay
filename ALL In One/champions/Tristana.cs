@@ -8,15 +8,13 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class Tristana// By RL244 TristanaQ tristanaecharge(target) tristanawslow(target)
+    class Tristana// By RL244 TristanaQ tristanaecharge(target) tristanawslow(target) tristanavomanykills tristanaechargesound(<- E 폭발시간)
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static float getQBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "TristanaQ"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static Spell Q, W, E, R;
-        
-
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q);
@@ -58,6 +56,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addItem("Q Timer", new Circle(true, Color.Red));
+            AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.Red));
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
@@ -78,7 +77,11 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
-                AIO_Func.SC(W);
+                foreach (var target in HeroManager.Enemies.Where(x => AIO_Func.CanHit(W,x,0)&& (float)AIO_Func.getBuffInstance(x, "tristanaecharge").Count > 2 && x.HasBuff("tristanaecharge")))
+                {
+                    if(target != null && W.IsReady())
+                    AIO_Func.SC(W);
+                }
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealW"))
@@ -102,12 +105,23 @@ namespace ALL_In_One.champions
 
             var drawW = AIO_Menu.Champion.Drawings.Wrange;
             var drawQTimer = AIO_Menu.Champion.Drawings.getCircleValue("Q Timer");
+            var drawETimer = AIO_Menu.Champion.Drawings.getCircleValue("E Timer");
             var pos_temp = Drawing.WorldToScreen(Player.Position);
             if (W.IsReady() && drawW.Active)
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
             if (drawQTimer.Active && getQBuffDuration > 0)
                 Drawing.DrawText(pos_temp[0], pos_temp[1], drawQTimer.Color, "Q: " + getQBuffDuration.ToString("0.00"));
-
+            foreach (var target in HeroManager.Enemies.Where(x => x.HasBuff("tristanaechargesound")))
+            {
+                if(target != null)
+                {
+                    float getENuffDuration = (target.HasBuff("tristanaechargesound") ? AIO_Func.getBuffInstance(target, "tristanaechargesound").EndTime - Game.ClockTime : 0);
+                    var pos_temp2 = Drawing.WorldToScreen(target.Position);
+                    
+                    if (drawETimer.Active && getENuffDuration > 0)
+                        Drawing.DrawText(pos_temp[0], pos_temp2[1], drawETimer.Color, "E: " + getENuffDuration.ToString("0.00"));
+                }
+            }
         }
 
         
@@ -119,7 +133,7 @@ namespace ALL_In_One.champions
             if (R.CanCast(gapcloser.Sender))
                 R.Cast(gapcloser.Sender);
         }
-		
+        
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
         {
             if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
@@ -159,16 +173,15 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if(W.IsReady())
+                if(W.IsReady() && target != null)
                 {
-                    var Buff = AIO_Func.getBuffInstance(target, "tristanaecharge");
-					if((float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)))
-					return;
-                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && W.CanCast(target) && R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("KillstealR") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, R.GetDamage(target) + W.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage(target, true)))
+                    var Buff = (target.HasBuff("tristanaecharge") ? AIO_Func.getBuffInstance(target, "tristanaecharge") : null);
+                    bool EK = (target.HasBuff("tristanaecharge") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)) || !target.HasBuff("tristanaecharge"));
+                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Buff != null && !EK && target.HasBuff("tristanaecharge") && W.CanCast(target) && R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("KillstealR") && target.HasBuff("tristanaecharge") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, R.GetDamage(target) + W.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage(target, true)))
                     AIO_Func.CCast(W,target);
-                    if (W.CanCast(target) && (float)Buff.Count > 0 && AIO_Func.isKillable(target, W.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage(target, true)))
+                    if (W.CanCast(target) && target.HasBuff("tristanaecharge") && Buff != null && !EK && (float)Buff.Count > 0 && AIO_Func.isKillable(target, W.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage(target, true)))
                     AIO_Func.CCast(W,target);
-                    else if (W.CanCast(target) && AIO_Func.isKillable(target, W.GetDamage(target) + (float)Player.GetAutoAttackDamage(target, true)))
+                    else if (W.CanCast(target) && !EK && AIO_Func.isKillable(target, W.GetDamage(target) + (float)Player.GetAutoAttackDamage(target, true)))
                     AIO_Func.CCast(W,target);
                 }
             }
@@ -178,7 +191,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (E.CanCast(target) && AIO_Func.isKillable(target, E) && E.IsReady())
+                if (E.CanCast(target) && AIO_Func.isKillable(target, E) && E.IsReady() && target != null)
                 E.Cast(target);
             }
         }
@@ -187,14 +200,13 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if(R.IsReady())
+                if(R.IsReady() && target != null)
                 {
-                    var Buff = AIO_Func.getBuffInstance(target, "tristanaecharge");
-					if((float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)))
-					return;
-                    if (R.CanCast(target) && (float)Buff.Count > 0 && AIO_Func.isKillable(target, R.GetDamage(target) + E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)))
+                    var Buff = (target.HasBuff("tristanaecharge") ? AIO_Func.getBuffInstance(target, "tristanaecharge") : null);
+                    bool EK = (target.HasBuff("tristanaecharge") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)) || !target.HasBuff("tristanaecharge"));
+                    if (R.CanCast(target) && Buff != null && (float)Buff.Count > 0 && target.HasBuff("tristanaecharge") && AIO_Func.isKillable(target, R.GetDamage(target) + E.GetDamage(target)*(((float)Buff.Count-1)*0.25f+1f)) && !EK)
                         R.Cast(target);
-                    else if (R.CanCast(target) && AIO_Func.isKillable(target, R))
+                    else if (R.CanCast(target) && AIO_Func.isKillable(target, R) && !EK)
                         R.Cast(target);
                 }
             }
@@ -209,10 +221,10 @@ namespace ALL_In_One.champions
                 damage += (float)Player.GetAutoAttackDamage(enemy, true);
 
             if (W.IsReady())
-                damage += ((float)Buff.Count > 0 ? W.GetDamage(enemy)*(((float)Buff.Count-1)*0.25f+1f) : W.GetDamage(enemy));
+                damage += W.GetDamage(enemy);//((float)Buff.Count > 0 && enemy.HasBuff("tristanaecharge") ? W.GetDamage(enemy)*(((float)Buff.Count-1)*0.25f+1f) : W.GetDamage(enemy));
                 
             if (E.IsReady())
-                damage += ((float)Buff.Count > 0 ? E.GetDamage(enemy)*(((float)Buff.Count-1)*0.25f+1f) : E.GetDamage(enemy));
+                damage += E.GetDamage(enemy);//((float)Buff.Count > 0 && enemy.HasBuff("tristanaecharge") ? E.GetDamage(enemy)*(((float)Buff.Count-1)*0.25f+1f) : E.GetDamage(enemy));
 
             if (R.IsReady())
                 damage += R.GetDamage(enemy);

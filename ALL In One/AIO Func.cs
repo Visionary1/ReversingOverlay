@@ -164,30 +164,30 @@ namespace ALL_In_One
                     {
                         if(CanHit(spell,T,Drag) && T2 == null && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                         spell.Cast(castVec2,pred.UnitPosition.To2D());
-						else //if(CanHit(spell,T,Drag) && T2 != null && T2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
-						{
+                        else //if(CanHit(spell,T,Drag) && T2 != null && T2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
+                        {
                         spell.Cast(castVec2,T.ServerPosition.To2D());//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
-						}
+                        }
                     }
                     else
-					{
+                    {
                         if(T2 == null || !CanHit(spell,T2,Drag))
                         spell.Cast(castVec3,T.ServerPosition.To2D());
-						else if(T2 != null && CanHit(spell,T2,Drag) && T2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-						{
-							SharpDX.Vector2 castVec4 = T.ServerPosition.To2D() -
-													   SharpDX.Vector2.Normalize(T2pred.UnitPosition.To2D() - T.ServerPosition.To2D()) * (40f);
-							spell.Cast(castVec4,T2pred.UnitPosition.To2D());
-						}
-					}
+                        else if(T2 != null && CanHit(spell,T2,Drag) && T2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+                        {
+                            SharpDX.Vector2 castVec4 = T.ServerPosition.To2D() -
+                                                       SharpDX.Vector2.Normalize(T2pred.UnitPosition.To2D() - T.ServerPosition.To2D()) * (40f);
+                            spell.Cast(castVec4,T2pred.UnitPosition.To2D());
+                        }
+                    }
                 }
             }
         }
-		
-		internal static bool CanHit(Spell spell, Obj_AI_Base T, float Drag = 0f)
-		{
-			return T.IsValidTarget(spell.Range + Drag - ((T.Distance(Player.ServerPosition)-spell.Range)/spell.Speed+spell.Delay)*T.MoveSpeed);
-		}
+        
+        internal static bool CanHit(Spell spell, Obj_AI_Base T, float Drag = 0f)
+        {
+            return T.IsValidTarget(spell.Range + Drag - ((T.Distance(Player.ServerPosition)-spell.Range)/spell.Speed+spell.Delay)*T.MoveSpeed);
+        }
         
         internal static void LH(Spell spell, float ALPHA = 0f) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
         {

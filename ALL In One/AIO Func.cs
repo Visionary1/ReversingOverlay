@@ -271,7 +271,7 @@ namespace ALL_In_One
                         else
                         {
                             spell.Cast();
-                            Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+                            Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer2);
                         }
                     }
                 }
@@ -294,7 +294,7 @@ namespace ALL_In_One
                         else
                         {
                             spell.Cast();
-                            Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+                            Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer2);
                         }
                     }
                 }
@@ -338,7 +338,7 @@ namespace ALL_In_One
                     else
                     {
                         spell.Cast();
-                        Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+                        Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer2);
                     }
                 }
             }
@@ -361,7 +361,7 @@ namespace ALL_In_One
                     else
                     {
                         spell.Cast();
-                        Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer);
+                        Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer2);
                     }
                 }
             }

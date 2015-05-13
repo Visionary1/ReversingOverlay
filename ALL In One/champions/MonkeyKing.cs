@@ -134,7 +134,7 @@ namespace ALL_In_One.champions
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe && (args.SData.Name == Q.Instance.SData.Name || args.SData.Name == E.Instance.SData.Name))
-                Orbwalking.ResetAutoAttackTimer();
+                Orbwalking.ResetAutoAttackTimer2();
         }
 
         static void CastR1()

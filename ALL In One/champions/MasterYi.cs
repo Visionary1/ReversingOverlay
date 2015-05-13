@@ -124,7 +124,7 @@ namespace ALL_In_One.champions
                 {
                     if (AIO_Menu.Champion.Combo.UseW || AIO_Menu.Champion.Harass.UseW)
                     {
-                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer2);
                         Utility.DelayAction.Add(50, Wcancel);
                     }
                 }
@@ -132,7 +132,7 @@ namespace ALL_In_One.champions
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo &&
                 args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name)
                 {
-                    Orbwalking.ResetAutoAttackTimer();
+                    Orbwalking.ResetAutoAttackTimer2();
 
                     if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
                         E.Cast();

@@ -181,7 +181,7 @@ namespace ALL_In_One.champions
                 if (getBuffDuration > 1.95 && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                 {
                     W.Cast();
-                    Orbwalking.ResetAutoAttackTimer();
+                    Orbwalking.ResetAutoAttackTimer2();
                 }
             }*/
         }

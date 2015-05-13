@@ -180,13 +180,13 @@ namespace ALL_In_One.champions
             {
                 var SP = Player.ServerPosition.Extend(Target.ServerPosition, 150);
                 Player.IssueOrder(GameObjectOrder.MoveTo, SP);
-                Orbwalking.ResetAutoAttackTimer();
+                Orbwalking.ResetAutoAttackTimer2();
             }
             else
             {
                 var CP = Player.ServerPosition.Extend(Game.CursorPos, 200);
                 Player.IssueOrder(GameObjectOrder.MoveTo, CP);
-                Orbwalking.ResetAutoAttackTimer();
+                Orbwalking.ResetAutoAttackTimer2();
             }
             Qmove = true;
         }

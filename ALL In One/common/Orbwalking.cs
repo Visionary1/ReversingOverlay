@@ -376,7 +376,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         /// <summary>
         ///     Resets the Auto-Attack timer.
         /// </summary>
-        public static void ResetAutoAttackTimer()
+        public static void ResetAutoAttackTimer2()
         {
             LastAATick = 0;
         }
@@ -385,7 +385,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         {
             if (spellbook.Owner.IsValid && spellbook.Owner.IsMe && args.DestroyMissile && args.StopAnimation)
             {
-                ResetAutoAttackTimer();
+                ResetAutoAttackTimer2();
             }
         }
 
@@ -406,7 +406,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
 
                 if (IsAutoAttackReset(spellName) && unit.IsMe)
                 {
-                    Utility.DelayAction.Add(250, ResetAutoAttackTimer);
+                    Utility.DelayAction.Add(250, ResetAutoAttackTimer2);
                 }
 
                 if (!IsAutoAttack(spellName))

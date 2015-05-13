@@ -90,7 +90,7 @@ namespace ALL_In_One.champions
                         Harass();
                         break;
                     case Orbwalking.OrbwalkingMode.LastHit:
-                        Orbwalker.SetAttack(!AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady());
+                        Orbwalker.SetAttack(AIO_Func.getManaPercent(Player) <= AIO_Menu.Champion.Lasthit.IfMana || !AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady());
                         Lasthit();
                         break;
                     case Orbwalking.OrbwalkingMode.LaneClear:

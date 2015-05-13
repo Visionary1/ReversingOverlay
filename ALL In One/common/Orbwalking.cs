@@ -245,7 +245,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         /// </summary>
         public static bool CanAttack()
         {
-            return Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackDelay * 1200 + 45 && Attack; //임의수정
+            return Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackDelay * 1000 + 35 && Attack; //임의수정
         }
 
         /// <summary>
@@ -263,7 +263,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 return true;
             }
              
-            return NoCancelChamps.Contains(Player.ChampionName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1200 + extraWindup); // 임의수정
+            return NoCancelChamps.Contains(Player.ChampionName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup); // 임의수정
         }
 
         public static void SetMovementDelay(int delay)
@@ -430,7 +430,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                         
                         //Trigger it for ranged until the missiles catch normal attacks again!
                         Utility.DelayAction.Add(
-                            (int)(unit.AttackCastDelay * 1200 + 40), () => FireAfterAttack(unit, _lastTarget)); // 임의수정
+                            (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget)); // 임의수정
                     }
                 }
 

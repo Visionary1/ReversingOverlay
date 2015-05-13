@@ -1,4 +1,4 @@
-# L# TeamProjects (XC-Squad)
+정# L# TeamProjects (XC-Squad)
 ###● ALL In One: 76/124(61.3%) Champions supported.
 It's a Early Development Build. So it's still a Work In Progress. (A little lacking performance)
 
@@ -93,10 +93,10 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Sion|✔|
 |Sivir|✔|
 |Skarner|　|
-|Sona|✔|
+|Sona|WIP|
 |Soraka|✔|
 |Swain|　|
-|Syndra|✔|
+|Syndra|WIP|
 |Talon|✔|
 |Taric|　|
 |Teemo|✔|

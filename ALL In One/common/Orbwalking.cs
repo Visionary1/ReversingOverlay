@@ -245,7 +245,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         /// </summary>
         public static bool CanAttack()
         {
-            return Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackDelay * 1000 + 35 && Attack; //임의수정
+            return Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackDelay * 1000 + 35; //임의수정
         }
 
         /// <summary>
@@ -348,7 +348,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         {
             try
             {
-                if (target.IsValidTarget() && CanAttack())
+                if (target.IsValidTarget() && CanAttack() && Attack) // 임의수
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);

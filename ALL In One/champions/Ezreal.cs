@@ -13,8 +13,9 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-        static float QD = 0f;
-        
+        static float QD {get{return Menu.Item("Misc.Qtg").GetValue<Slider>().Value; }}
+        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} // 확실히 필요함. 특히 논타겟 챔프 타겟 선정 범위 사용자가 설정하게 하기 위해서도.
+		
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 1150f, TargetSelector.DamageType.Physical);
@@ -49,6 +50,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(0, 0, 250));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealW", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);

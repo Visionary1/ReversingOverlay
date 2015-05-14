@@ -37,12 +37,12 @@ namespace ALL_In_One.champions
             R.SetSkillshot(0.5f, 140f, 1700f, false, SkillshotType.SkillshotLine);
 
             AIO_Menu.Champion.Combo.addUseQ();
-            AIO_Menu.Champion.Combo.addUseW(false);
+            AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
-            AIO_Menu.Champion.Combo.addUseR();
+            //AIO_Menu.Champion.Combo.addUseR(false);
 
             AIO_Menu.Champion.Harass.addUseQ();
-            AIO_Menu.Champion.Harass.addUseW(false);
+            AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addIfMana();
 
             AIO_Menu.Champion.Laneclear.addUseQ();
@@ -53,7 +53,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
-            AIO_Menu.Champion.Misc.addHitchanceSelector(HitChance.VeryHigh);
+            AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addItem("Auto E On Immobile Targets", true);
             AIO_Menu.Champion.Misc.addItem("Switch to FISHBONES If Hit Enemy Number >=", new Slider(2, 2, 5));
@@ -78,6 +78,7 @@ namespace ALL_In_One.champions
                 return;
 
             W.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
+            E.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
             R.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
 
             if(Orbwalking.CanMove(100))
@@ -233,15 +234,15 @@ namespace ALL_In_One.champions
                     E.Cast(Etarget,false,true);
             }
 
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && WLastCastedTime + 0.5 < Game.ClockTime)
-            {
-                foreach (var RT in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsValidTarget(DefaultRange) && !Player.HasBuffOfType(BuffType.SpellShield) && !Player.HasBuffOfType(BuffType.Invulnerability) && Utility.GetAlliesInRange(x, 500).Where(ally => !ally.IsMe && ally.IsAlly).Count() <= 1))
-                {//이전 식대로는 징크스가 절대 궁을 안써서 식을 좀 바꿈.
-                    AIO_Func.PredHealth(RT,R);
-                    if (RT != null && AIO_Func.PredHealth(RT,R) + RT.HPRegenRate <= (R.GetDamage2(RT,3) + R.GetDamage2(RT,2)*Math.Min((1 + Player.Distance(RT.ServerPosition)/ 15 * 0.09f),10))) //  && !AIO_Func.CollisionCheck(Player, RT, R.Width)
-                        AIO_Func.LCast(R,RT,50f,0f,true); //R 최대 데미지는 1500범위에서. 그리고 공식 커먼의 징크스 궁 데미지 계산이 잘못되었으니 올인원 자체 데미지 계산사용.
-                }
-            }
+            //if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && WLastCastedTime + 0.5 < Game.ClockTime)
+            //{
+            //    foreach (var RT in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsValidTarget(DefaultRange) && !Player.HasBuffOfType(BuffType.SpellShield) && !Player.HasBuffOfType(BuffType.Invulnerability) && Utility.GetAlliesInRange(x, 500).Where(ally => !ally.IsMe && ally.IsAlly).Count() <= 1))
+            //    {//이전 식대로는 징크스가 절대 궁을 안써서 식을 좀 바꿈.
+            //        AIO_Func.PredHealth(RT,R);
+            //        if (RT != null && AIO_Func.PredHealth(RT,R) + RT.HPRegenRate <= (R.GetDamage2(RT,3) + R.GetDamage2(RT,2)*Math.Min((1 + Player.Distance(RT.ServerPosition)/ 15 * 0.09f),10))) //  && !AIO_Func.CollisionCheck(Player, RT, R.Width)
+            //            AIO_Func.LCast(R,RT,50f,0f,true); //R 최대 데미지는 1500범위에서. 그리고 공식 커먼의 징크스 궁 데미지 계산이 잘못되었으니 올인원 자체 데미지 계산사용.
+            //    }
+            //}
         }
 
         static void Harass()

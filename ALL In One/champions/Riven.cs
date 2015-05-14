@@ -33,7 +33,7 @@ namespace ALL_In_One.champions
 
             Q.SetSkillshot(0.25f, 250f, 2000f, false, SkillshotType.SkillshotCircle);
             E.SetSkillshot(0.25f, 150f, 2000f, false, SkillshotType.SkillshotCircle); //그냥 접근기로 쓰게 넣었음
-            R.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 2200f, false, SkillshotType.SkillshotCone);
+            R.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 1600f, false, SkillshotType.SkillshotCone); //리븐너프
             
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();

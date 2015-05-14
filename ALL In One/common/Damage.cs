@@ -113,8 +113,8 @@ namespace ALL_In_One
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Physical,
-                                ((0.23d+0.01d*(source.Spellbook.GetSpell(SpellSlot.Q).Level - 1))
-								* (from buff in source.Buffs where buff.DisplayName == "FrostShot" select buff.Count).FirstOrDefault()
+                                ((0.15d+0.05d*(source.Spellbook.GetSpell(SpellSlot.Q).Level - 1))
+								//* (from buff in source.Buffs where buff.DisplayName == "FrostShot" select buff.Count).FirstOrDefault()
 								* (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
             };
             AttackPassives.Add(p);
@@ -599,7 +599,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 30, 55, 80, 105, 130 }[level] + 0.3 * source.FlatMagicDamageMod +
+                                new double[] { 30, 55, 80, 105, 130 }[level] + 0.4 * source.FlatMagicDamageMod +
                                 0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                     },
                     //R
@@ -3115,7 +3115,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 12, 19, 26, 33, 40 }[level] + 0.11 * source.FlatMagicDamageMod
+                                new double[] { 8, 16, 24, 32, 40 }[level] + 0.11 * source.FlatMagicDamageMod
                     },
                     //R
                     new DamageSpell
@@ -3334,7 +3334,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 60, 105, 150, 195, 240 }[level] + 0.75 * source.FlatPhysicalDamageMod
+                                new double[] { 50, 100, 150, 200, 250 }[level] + 0.75 * source.FlatPhysicalDamageMod
                     },
                     //E
                     new DamageSpell

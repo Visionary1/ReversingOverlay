@@ -91,8 +91,8 @@ namespace ALL_In_One
                     {
                         if(target.MoveSpeed*(spell.Delay+Player.ServerPosition.Distance(target.ServerPosition)/spell.Speed) <= spell.Width*2/5)
                             spell.Cast(target.ServerPosition);
-                        else if(target.ServerPosition.Distance(pred.UnitPosition) <= spell.Width*2/5)
-                            spell.Cast(target.ServerPosition);
+                        //else if(target.ServerPosition.Distance(pred.UnitPosition) <= spell.Width*2/5)
+                        //    spell.Cast(target.ServerPosition);  <- 이거 왜넣었지..? 필요없는부분.
                         else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && pred.UnitPosition.Distance(target.ServerPosition) < Math.Max(spell.Width,300f))
                         {
                             if(target.MoveSpeed*(spell.Delay+Player.ServerPosition.Distance(target.ServerPosition)/spell.Speed) <= spell.Width*3/5 && castVec.Distance(pred.UnitPosition) <= spell.Width*2/5 && castVec.Distance(Player.ServerPosition) <= spell.Range)

@@ -39,7 +39,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
-            //AIO_Menu.Champion.Combo.addUseR(false);
+            AIO_Menu.Champion.Combo.addUseR();
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
@@ -234,15 +234,15 @@ namespace ALL_In_One.champions
                     E.Cast(Etarget,false,true);
             }
 
-            //if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && WLastCastedTime + 0.5 < Game.ClockTime)
-            //{
-            //    foreach (var RT in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsValidTarget(DefaultRange) && !Player.HasBuffOfType(BuffType.SpellShield) && !Player.HasBuffOfType(BuffType.Invulnerability) && Utility.GetAlliesInRange(x, 500).Where(ally => !ally.IsMe && ally.IsAlly).Count() <= 1))
-            //    {//이전 식대로는 징크스가 절대 궁을 안써서 식을 좀 바꿈.
-            //        AIO_Func.PredHealth(RT,R);
-            //        if (RT != null && AIO_Func.PredHealth(RT,R) + RT.HPRegenRate <= (R.GetDamage2(RT,3) + R.GetDamage2(RT,2)*Math.Min((1 + Player.Distance(RT.ServerPosition)/ 15 * 0.09f),10))) //  && !AIO_Func.CollisionCheck(Player, RT, R.Width)
-            //            AIO_Func.LCast(R,RT,50f,0f,true); //R 최대 데미지는 1500범위에서. 그리고 공식 커먼의 징크스 궁 데미지 계산이 잘못되었으니 올인원 자체 데미지 계산사용.
-            //    }
-            //}
+            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && WLastCastedTime + 0.5 < Game.ClockTime)
+            {
+                foreach (var RT in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsValidTarget(DefaultRange) && !Player.HasBuffOfType(BuffType.SpellShield) && !Player.HasBuffOfType(BuffType.Invulnerability) && Utility.GetAlliesInRange(x, 500).Where(ally => !ally.IsMe && ally.IsAlly).Count() <= 1))
+                {//이전 식대로는 징크스가 절대 궁을 안써서 식을 좀 바꿈.
+                    AIO_Func.PredHealth(RT,R);
+                    if (RT != null && AIO_Func.PredHealth(RT,R) + RT.HPRegenRate <= (Player.Distance(RT.ServerPosition) < 1500 ? R.GetDamage2(RT,4) : R.GetDamage2(RT,1)) && !AIO_Func.CollisionCheck(Player, RT, R.Width)) //  && !AIO_Func.CollisionCheck(Player, RT, R.Width)
+                        AIO_Func.LCast(R,RT,50f,0f,true); //R 최대 데미지는 1500범위에서. 그리고 공식 커먼의 징크스 궁 데미지 계산이 잘못되었으니 올인원 자체 데미지 계산사용.
+                }
+            }
         }
 
         static void Harass()
@@ -325,7 +325,7 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (R.IsReady())
-                damage += R.GetDamage2(enemy,3) + R.GetDamage2(enemy,2)*Math.Min((1 + Player.Distance(enemy.ServerPosition)/ 15f * 0.09f),10);
+                damage += R.GetDamage2(enemy,4);
 
             return damage;
         }

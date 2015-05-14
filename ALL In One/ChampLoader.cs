@@ -321,6 +321,10 @@ namespace ALL_In_One
                     MadeBy(Developer.xcsoft);
                     champions.Twitch.Load();
                     break;
+                /*case "Ashe": 리메이크 전 애쉬로 일단 미리 테스트했음. 치명타 패시브 추가했고 Q 데미지 등은 리메이크 된 애쉬를 직접 플레이해보며 추가할것임.
+                    MadeBy(Developer.RL244);
+                    champions.Ashe.Load();
+                    break;*/
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

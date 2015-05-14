@@ -88,6 +88,38 @@ namespace ALL_In_One
 
             #region PassiveDamages
 
+            #region Ashe // By Rl244 FlatCritChanceMod FlatCritDamageMod 리메이크 애쉬 패시브 미리 추
+            p = new PassiveDamage
+            {
+                ChampionName = "Ashe",
+                IsActive = (source, target) => (target.IsValidTarget(source.AttackRange + 100f)),
+                GetDamage =
+                    (source, target) =>
+                        (float)
+                            source.CalcDamage(
+                                target, DamageType.Physical,
+                                (float)(0.1d + source.FlatCritChanceMod) * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
+            };
+            AttackPassives.Add(p);
+            #endregion
+			
+            #region Ashe // By Rl244 FlatCritChanceMod FlatCritDamageMod 리메이크 애쉬 패시브 미리 추
+            p = new PassiveDamage
+            {
+                ChampionName = "Ashe",
+                IsActive = (source, target) => (source.HasBuff("FrostShot")), //리메이크 직후 버프 이름 바꾸겠음.
+                GetDamage =
+                    (source, target) =>
+                        (float)
+                            source.CalcDamage(
+                                target, DamageType.Physical,
+                                ((0.23d+0.01d*(source.Spellbook.GetSpell(SpellSlot.Q).Level - 1))
+								* (from buff in source.Buffs where buff.DisplayName == "FrostShot" select buff.Count).FirstOrDefault()
+								* (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
+            };
+            AttackPassives.Add(p);
+            #endregion
+			
             #region Diana // By Rl244
             p = new PassiveDamage
             {

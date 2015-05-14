@@ -1,5 +1,5 @@
 #L# TeamProjects (XC-Squad)
-###● ALL In One: 76/124(61.3%) Champions supported.
+###● ALL In One: 77/124(62.1%) Champions supported.
 It's a Early Development Build. So it's still a Work In Progress. (A little lacking performance)
 
 |Champion|Supported|
@@ -11,7 +11,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Amumu|✔|
 |Anivia|　|
 |Annie|✔|
-|Ashe|　|
+|Ashe|WIP|
 |Azir|WIP|
 |Bard|　|
 |Blitzcrank|✔|

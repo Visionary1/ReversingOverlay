@@ -49,8 +49,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
 
             AIO_Menu.Champion.Drawings.addQrange();
-            AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.Blue));
-            AIO_Menu.Champion.Drawings.addItem("P Timer", new Circle(true, Color.LightGreen));
+            AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.SpringGreen));
+            AIO_Menu.Champion.Drawings.addItem("P Timer", new Circle(true, Color.SpringGreen));
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -132,7 +132,7 @@ namespace ALL_In_One.champions
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo &&
                 args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name)
                 {
-                    Orbwalking.ResetAutoAttackTimer2();
+                    Utility.DelayAction.Add(250, Orbwalking.ResetAutoAttackTimer2);
 
                     if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
                         E.Cast();
@@ -143,7 +143,9 @@ namespace ALL_In_One.champions
 
         static void AA()
         {
-            AIO_Func.AACb(W);
+            if (HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
+                AIO_Func.AACb(W);
+
             AIO_Func.AACb(R);
         }
         
@@ -153,6 +155,7 @@ namespace ALL_In_One.champions
 
             if (!unit.IsMe || Target == null)
                 return;
+
             if(!utility.Activator.AfterAttack.AIO)
             AA();
         }

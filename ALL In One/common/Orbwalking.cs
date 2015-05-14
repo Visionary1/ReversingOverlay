@@ -258,11 +258,11 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
             {
                 return false;
             }*/
-               
+               /* 타 커먼에서 미사일 런치드 무시한것처럼 하면 과연 평캔현상이 사라지려나
             if (_missileLaunched)
             {
                 return true;
-            }
+            }*/
              
             return NoCancelChamps.Contains(Player.ChampionName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup); // 임의수정
         }

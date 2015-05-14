@@ -11,7 +11,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Amumu|✔|
 |Anivia|　|
 |Annie|✔|
-|Ashe|WIP|
+|Ashe|✔|
 |Azir|WIP|
 |Bard|　|
 |Blitzcrank|✔|

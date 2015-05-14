@@ -44,10 +44,10 @@ namespace ALL_In_One
 
     public static class Damage
     {
-		public static float GetDamage2(this Spell spell, Obj_AI_Base target, int stage = 0)
-		{
-			return (float) ObjectManager.Player.GetSpellDamage(target, spell.Slot, stage);
-		}
+        public static float GetDamage2(this Spell spell, Obj_AI_Base target, int stage = 0)
+        {
+            return (float) ObjectManager.Player.GetSpellDamage(target, spell.Slot, stage);
+        }
         public enum DamageItems
         {
             Hexgun,
@@ -92,7 +92,7 @@ namespace ALL_In_One
             p = new PassiveDamage
             {
                 ChampionName = "Ashe",
-                IsActive = (source, target) => (target.IsValidTarget(source.AttackRange + 100f)),
+                IsActive = (source, target) => (target.HasBuff("ashepassiveslow")), 
                 GetDamage =
                     (source, target) =>
                         (float)
@@ -102,24 +102,23 @@ namespace ALL_In_One
             };
             AttackPassives.Add(p);
             #endregion
-			
+            
             #region Ashe // By Rl244 FlatCritChanceMod FlatCritDamageMod 리메이크 애쉬 패시브 미리 추
             p = new PassiveDamage
             {
                 ChampionName = "Ashe",
-                IsActive = (source, target) => (source.HasBuff("FrostShot")), //리메이크 직후 버프 이름 바꾸겠음.
+                IsActive = (source, target) => (source.HasBuff("asheqattack")), //리메이크 직후 버프 이름 바꾸겠음.
                 GetDamage =
                     (source, target) =>
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Physical,
-                                ((0.15d+0.05d*(source.Spellbook.GetSpell(SpellSlot.Q).Level - 1))
-								//* (from buff in source.Buffs where buff.DisplayName == "FrostShot" select buff.Count).FirstOrDefault()
-								* (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
+                                (0.15d+0.05d*(source.Spellbook.GetSpell(SpellSlot.Q).Level - 1))
+                                * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
             };
             AttackPassives.Add(p);
             #endregion
-			
+            
             #region Diana // By Rl244
             p = new PassiveDamage
             {

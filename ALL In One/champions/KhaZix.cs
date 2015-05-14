@@ -66,8 +66,8 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
-				AIO_Func.SC(W,WD,0f);
-				//AIO_Func.SC(E);
+                AIO_Func.SC(W,WD,0f);
+                //AIO_Func.SC(E);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 
@@ -133,7 +133,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
-				if(AIO_Func.isKillable(Etarget,getComboDamage(Etarget)*1.5f))
+                if(AIO_Func.isKillable(Etarget,getComboDamage(Etarget)*1.5f))
                 AIO_Func.CCast(E,Etarget);
             }
 

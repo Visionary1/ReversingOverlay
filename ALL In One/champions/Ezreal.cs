@@ -15,7 +15,7 @@ namespace ALL_In_One.champions
         static Spell Q, W, E, R;
         static float QD {get{return Menu.Item("Misc.Qtg").GetValue<Slider>().Value; }}
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} // 확실히 필요함. 특히 논타겟 챔프 타겟 선정 범위 사용자가 설정하게 하기 위해서도.
-		
+        
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 1150f, TargetSelector.DamageType.Physical);

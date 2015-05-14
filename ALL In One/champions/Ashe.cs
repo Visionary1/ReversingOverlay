@@ -43,13 +43,13 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(0, 0, 250));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Wtg", "Additional Range")).SetValue(new Slider(0, 0, 250));
             AIO_Menu.Champion.Misc.addItem("KillstealW", true);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter(false);
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addWrange();
-            AIO_Menu.Champion.Drawings.addItem("Q Timer", new Circle(true, Color.LightGreen));
+            AIO_Menu.Champion.Drawings.addItem("Q Timer", new Circle(true, Color.LightPink));
 
         
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
@@ -102,7 +102,7 @@ namespace ALL_In_One.champions
             if (drawQTimer.Active && getQBuffDuration > 0)
                 Drawing.DrawText(pos_temp[0], pos_temp[1], drawQTimer.Color, "Q Buff : " + getQBuffDuration.ToString("0.00"));
         }
-		
+        
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
@@ -120,7 +120,7 @@ namespace ALL_In_One.champions
             if (R.CanCast(sender))
                 AIO_Func.LCast(R,sender,0f,0f);
         }
-		
+        
         static void AA()
         {
             AIO_Func.AACb(W);

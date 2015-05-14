@@ -22,7 +22,7 @@ namespace ALL_In_One.champions
         static bool E2 { get { return (Player.HasBuff("viktoreaug", true) || Player.HasBuff("viktorweaug", true) || Player.HasBuff("viktorqeaug", true) || Player.HasBuff("viktorqweaug", true)); } }
         static bool R2 { get { return Player.HasBuff("viktorqweaug", true); } }
         static Spell Q, W, E, R;
-		static float RDelay = 0f;
+        static float RDelay = 0f;
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 700f, TargetSelector.DamageType.Magical);
@@ -111,7 +111,7 @@ namespace ALL_In_One.champions
                         break;
                 }
             }
-				Storm();
+                Storm();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
                 KillstealQ();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
@@ -157,7 +157,7 @@ namespace ALL_In_One.champions
                 && Player.Distance(gapcloser.Sender.Position) <= E.Range)
                 AIO_Func.AtoB(E,gapcloser.Sender);
         }
-		
+        
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
         {
             if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
@@ -166,19 +166,19 @@ namespace ALL_In_One.champions
             if (R.CanCast(sender) && R.Instance.Name == "ViktorChaosStorm")
                 AIO_Func.CCast(R,sender);
         }
-		
-		static void Storm()
-		{
-			if(R.Instance.Name != "ViktorChaosStorm" && Environment.TickCount - RDelay > 0)
-			{
-				var T = TargetSelector.GetTarget(R.Range*3/2, R.DamageType);
-				if(T != null)
-				{
-					R.Cast(T);
-					RDelay = Environment.TickCount + 2000f;
-				}
-			}
-		}
+        
+        static void Storm()
+        {
+            if(R.Instance.Name != "ViktorChaosStorm" && Environment.TickCount - RDelay > 0)
+            {
+                var T = TargetSelector.GetTarget(R.Range*3/2, R.DamageType);
+                if(T != null)
+                {
+                    R.Cast(T);
+                    RDelay = Environment.TickCount + 2000f;
+                }
+            }
+        }
         
         static void Combo()
         {

@@ -169,12 +169,14 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
                 var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                AIO_Func.CCast(Q,Qtarget);
+
+                if (Qtarget != null)
+                    Q.Cast(Qtarget, false, true);
             }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-                var Etarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && IsPoisoned(x) && TargetSelector.IsInvulnerable(x, E.DamageType)).OrderByDescending(x=> E.GetDamage(x)).FirstOrDefault();
+                var Etarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && IsPoisoned(x) && !TargetSelector.IsInvulnerable(x, E.DamageType)).OrderByDescending(x=> E.GetDamage(x)).FirstOrDefault();
 
                 if(Etarget != null)
                     E.CastOnUnit(Etarget);
@@ -183,7 +185,9 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
                 var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-                AIO_Func.CCast(W,Wtarget);
+
+                if (Wtarget != null)
+                    W.Cast(Wtarget, false, true);
             }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
@@ -205,13 +209,15 @@ namespace ALL_In_One.champions
         
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-                var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(Q,Qtarget);
+                var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+
+                if (Qtarget != null)
+                    Q.Cast(Qtarget, false, true);
             }
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
-                var Etarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && IsPoisoned(x) && TargetSelector.IsInvulnerable(x, E.DamageType)).OrderByDescending(x => E.GetDamage(x)).FirstOrDefault();
+                var Etarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && IsPoisoned(x) && !TargetSelector.IsInvulnerable(x, E.DamageType)).OrderByDescending(x => E.GetDamage(x)).FirstOrDefault();
 
                 if (Etarget != null)
                     E.CastOnUnit(Etarget);
@@ -220,7 +226,9 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
                 var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-                AIO_Func.CCast(W,Wtarget);
+
+                if (Wtarget != null)
+                    W.Cast(Wtarget, false, true);
             }
         }
 

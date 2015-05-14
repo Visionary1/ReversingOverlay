@@ -262,7 +262,7 @@ namespace ALL_In_One.champions
             if (E.IsReady())
                 damage += E.GetDamage2(enemy);
 
-            if (!Player.IsDead && R.Instance.State != SpellState.Cooldown)
+            if (!Player.IsDead && R.Instance.State != SpellState.Cooldown && R.Instance.State == SpellState.NotLearned)
                 damage += R.GetDamage2(enemy, 1);
 
             return damage;

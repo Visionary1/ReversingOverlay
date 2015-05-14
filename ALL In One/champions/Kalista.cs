@@ -91,10 +91,10 @@ namespace ALL_In_One.champions
             #endregion
 
             #region E harass with lasthit for anytime
-            var Minion = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy).Where(x => x.Health <= E.GetDamage2(x)).OrderBy(x => x.Health).FirstOrDefault();
-            var Target = HeroManager.Enemies.Where(x => E.CanCast(x) && E.GetDamage2(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)).OrderByDescending(x => E.GetDamage2(x)).FirstOrDefault();
+            var Minion = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy).Any(x => E.IsKillable(x));
+            var Target = HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range) && E.GetDamage(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield));
 
-            if (E.CanCast(Minion) && E.CanCast(Target))
+            if (Minion && Target)
                 E.Cast();
             #endregion
         }
@@ -110,21 +110,21 @@ namespace ALL_In_One.champions
             var drawR = Menu.Item("drawR", true).GetValue<Circle>();
 
             if (Q.IsReady() && drawQ.Active)
-                Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+                Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color, 3);
 
             if (W.IsReady() && drawW.Active)
-                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
+                Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color, 3);
 
             if (E.IsReady() && drawE.Active)
-                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+                Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color, 3);
 
             if (R.IsReady() && drawR.Active)
-                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color, 3);
         }
 
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsMe && args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.E).Name)
+            if (sender.IsMe && args.SData.Name == E.Instance.Name)
                     Utility.DelayAction.Add(250, Orbwalking.ResetAutoAttackTimer2);
 
             if (Menu.Item("soulboundsaver", true).GetValue<bool>() && sender.Type == GameObjectType.obj_AI_Hero && sender.IsEnemy && R.IsReady())
@@ -141,7 +141,7 @@ namespace ALL_In_One.champions
             if (!Menu.Item("lasthitassist", true).GetValue<bool>())
                 return;
 
-            if (E.CanCast((Obj_AI_Base)minion) && minion.Health <= E.GetDamage2((Obj_AI_Base)minion))
+            if (E.CanCast((Obj_AI_Base)minion) && E.IsKillable((Obj_AI_Base)minion))
                 E.Cast();
         }
 
@@ -157,9 +157,7 @@ namespace ALL_In_One.champions
 
             if (Menu.Item("comboUseE", true).GetValue<Boolean>() && E.IsReady())
             {
-                var eTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && E.GetDamage2(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)).OrderByDescending(x => E.GetDamage2(x)).FirstOrDefault();
-
-                if (eTarget != null && eTarget.Health <= E.GetDamage2(eTarget))
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range) && E.IsKillable(x) && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)))
                     E.Cast();
             }
         }
@@ -190,13 +188,13 @@ namespace ALL_In_One.champions
 
             if (Menu.Item("laneclearUseQ", true).GetValue<bool>() && Q.IsReady())
             {
-                foreach (var minion in Minions.Where(x => x.Health <= Q.GetDamage2(x)))
+                foreach (var minion in Minions.Where(x => Q.IsKillable(x)))
                 {
                     var killcount = 0;
 
                     foreach (var colminion in AIO_Func.getCollisionMinions(Player, Player.ServerPosition.Extend(minion.ServerPosition, Q.Range), Q.Delay, Q.Width, Q.Speed))
                     {
-                        if (colminion.Health <= Q.GetDamage2(colminion))
+                        if (Q.IsKillable(colminion))
                             killcount++;
                         else
                             break;
@@ -214,7 +212,7 @@ namespace ALL_In_One.champions
             {
                 var minionkillcount = 0;
 
-                foreach (var Minion in Minions.Where(x => E.CanCast(x) && x.Health <= E.GetDamage2(x))){minionkillcount++;}
+                foreach (var Minion in Minions.Where(x => x.IsValidTarget(E.Range) && E.IsKillable(x))){minionkillcount++;}
 
                 if (minionkillcount >= Menu.Item("laneclearEnum", true).GetValue<Slider>().Value)
                     E.Cast();
@@ -226,17 +224,22 @@ namespace ALL_In_One.champions
             if (!(AIO_Func.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
-            var Mobs = MinionManager.GetMinions(Player.ServerPosition, Orbwalking.GetRealAutoAttackRange(Player) + 100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var Mobs = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
                 return;
 
-            if (Menu.Item("jungleclearUseQ", true).GetValue<bool>() && Q.CanCast(Mobs[0]))
-                Q.Cast(Mobs[0]);
-
-            if (Menu.Item("jungleclearUseE", true).GetValue<bool>() && E.CanCast(Mobs[0]))
+            if (Menu.Item("jungleclearUseQ", true).GetValue<bool>() && Q.IsReady())
             {
-                if (Mobs[0].Health + (Mobs[0].HPRegenRate/2) <= E.GetDamage2(Mobs[0]))
+                var qTarget = Mobs.FirstOrDefault(x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HitChance.Medium);
+
+                if(qTarget != null)
+                    Q.Cast(qTarget);
+            }
+
+            if (Menu.Item("jungleclearUseE", true).GetValue<bool>() && E.IsReady())
+            {
+                if (Mobs.Any(x => x.IsValidTarget(E.Range) && E.IsKillable(x)))
                     E.Cast();
             }
         }
@@ -246,29 +249,31 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (E.IsReady())
-                damage += E.GetDamage2(enemy);
+                damage += E.GetDamage(enemy);
 
             return damage;
         }
 
         static void Killsteal()
         {
-            var target = HeroManager.Enemies.FirstOrDefault(x => !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield) && x.IsValidTarget(E.Range) && E.IsKillable(x));
+            if (!E.IsReady())
+                return;
 
-            if (E.CanCast(target))
+            var target = HeroManager.Enemies.FirstOrDefault(x => !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield) && x.IsValidTarget(E.Range) && AIO_Func.isKillable(x, E));
+
+            if (target != null)
                 E.Cast();
         }
 
         static void Mobsteal()
         {
-            var Mob = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.Health + (x.HPRegenRate / 2) <= E.GetDamage2(x));
+            if (!E.IsReady())
+                return;
 
-            if (E.CanCast(Mob))
+            if (MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).Any(x => E.IsKillable(x)))
                 E.Cast();
 
-            var Minion = MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.Health <= E.GetDamage2(x) && (x.SkinName.ToLower().Contains("siege") || x.SkinName.ToLower().Contains("super")));
-
-            if (E.CanCast(Minion))
+            if (MinionManager.GetMinions(Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).Any(x => E.IsKillable(x) && (x.SkinName.ToLower().Contains("siege") || x.SkinName.ToLower().Contains("super"))))
                 E.Cast();
         }
     }

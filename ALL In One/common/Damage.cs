@@ -2073,17 +2073,17 @@ namespace ALL_In_One
                                 new double[] { 25, 30, 35 }[level] / 100 * (target.MaxHealth - target.Health) //잃은 체력
                     },
                     //R - 거리비례 Coded by RL244
-                    /*new DamageSpell
+                    new DamageSpell
                     {
                         Slot = SpellSlot.R,
-                        Stage = 2,
+                        Stage = 4,
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
                                 (new double[] { 25, 30, 35 }[level] / 100 * (target.MaxHealth - target.Health) + //잃은 체력
-                                (new double[] { 25, 35, 45 }[level] + 0.1 * source.FlatPhysicalDamageMod) // 깡뎀+계수
-                                * Math.Min((1 + source.Distance(target.ServerPosition)/ 15 * 0.09d),10)), //깡뎀+계수 거리비례 뎀증
-                    },*/
+                                ((new double[] { 25, 35, 45 }[level] + 0.1 * source.FlatPhysicalDamageMod) // 깡뎀+계수
+                                * Math.Min((1 + source.Distance(target.ServerPosition)/ 15 * 0.09d),10))), //깡뎀+계수 거리비례 뎀증
+                    },
                 });
 
             Spells.Add(

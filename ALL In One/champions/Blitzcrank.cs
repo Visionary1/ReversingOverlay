@@ -53,7 +53,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
 
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(50, 0, 250));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(0, 0, 250));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Misc.addItem("Direct E Usage", false);

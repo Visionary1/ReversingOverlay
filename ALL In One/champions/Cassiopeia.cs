@@ -174,7 +174,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-                var Etarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && IsPoisoned(x)).OrderByDescending(x=> E.GetDamage(x)).FirstOrDefault();
+                var Etarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && IsPoisoned(x) && !TargetSelector.IsInvulnerable(x, E.DamageType)).OrderByDescending(x=> E.GetDamage(x)).FirstOrDefault();
 
                 if(Etarget != null)
                     E.CastOnUnit(Etarget);
@@ -211,7 +211,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
-                var Etarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && IsPoisoned(x)).OrderByDescending(x => E.GetDamage(x)).FirstOrDefault();
+                var Etarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && IsPoisoned(x) && !TargetSelector.IsInvulnerable(x, E.DamageType)).OrderByDescending(x => E.GetDamage(x)).FirstOrDefault();
 
                 if (Etarget != null)
                     E.CastOnUnit(Etarget);

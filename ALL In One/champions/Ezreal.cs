@@ -10,7 +10,6 @@ namespace ALL_In_One.champions
 {
     class Ezreal// By RL244
     {
-        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
@@ -104,12 +103,16 @@ namespace ALL_In_One.champions
             var drawW = AIO_Menu.Champion.Drawings.Wrange;
             var drawE = AIO_Menu.Champion.Drawings.Erange;
             var drawR = AIO_Menu.Champion.Drawings.Rrange;
+
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+
             if (W.IsReady() && drawW.Active)
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
+
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
@@ -122,15 +125,18 @@ namespace ALL_In_One.champions
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
+
             if (!unit.IsMe || Target == null)
                 return;
+
             AIO_Func.AALcJc(Q);
+
             if(!utility.Activator.AfterAttack.AIO)
             AA();
         }
         
         static void Combo()
-        {            
+        {
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))

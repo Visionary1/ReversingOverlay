@@ -236,12 +236,24 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && WLastCastedTime + 0.5 < Game.ClockTime)
             {
-                foreach (var RT in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsValidTarget(DefaultRange) && !Player.HasBuffOfType(BuffType.SpellShield) && !Player.HasBuffOfType(BuffType.Invulnerability) && Utility.GetAlliesInRange(x, 500).Where(ally => !ally.IsMe && ally.IsAlly).Count() <= 1))
-                {//이전 식대로는 징크스가 절대 궁을 안써서 식을 좀 바꿈.
-                    AIO_Func.PredHealth(RT,R);
-                    if (RT != null && AIO_Func.PredHealth(RT,R) + RT.HPRegenRate <= (Player.Distance(RT.ServerPosition) < 1500 ? R.GetDamage2(RT,4) : R.GetDamage2(RT,1)) && !AIO_Func.CollisionCheck(Player, RT, R.Width)) //  && !AIO_Func.CollisionCheck(Player, RT, R.Width)
-                        AIO_Func.LCast(R,RT,50f,0f,true); //R 최대 데미지는 1500범위에서. 그리고 공식 커먼의 징크스 궁 데미지 계산이 잘못되었으니 올인원 자체 데미지 계산사용.
-                }
+				if(AIO_Func.getHealthPercent(Player) > 20)
+				{
+					foreach (var RT in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsValidTarget(DefaultRange) && !Player.HasBuffOfType(BuffType.SpellShield) && !Player.HasBuffOfType(BuffType.Invulnerability) && Utility.GetAlliesInRange(x, 500).Where(ally => !ally.IsMe && ally.IsAlly).Count() <= 1))
+					{//이전 식대로는 징크스가 절대 궁을 안써서 식을 좀 바꿈.
+						AIO_Func.PredHealth(RT,R);
+						if (RT != null && AIO_Func.PredHealth(RT,R) + RT.HPRegenRate <= (Player.Distance(RT.ServerPosition) < 1500 ? R.GetDamage2(RT,4) : R.GetDamage2(RT,1)) && !AIO_Func.CollisionCheck(Player, RT, R.Width))
+							AIO_Func.LCast(R,RT,50f,0f,true); //R 최대 데미지는 1500범위에서. 그리고 공식 커먼의 징크스 궁 데미지 계산이 잘못되었으니 올인원 자체 데미지 계산사용.
+					}
+				}
+				else //현재 체력이 20퍼 미만일 경우 평타 사거리 내에도 궁을 쓰도록.
+				{
+					foreach (var RT in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !Player.HasBuffOfType(BuffType.SpellShield) && !Player.HasBuffOfType(BuffType.Invulnerability) && Utility.GetAlliesInRange(x, 500).Where(ally => !ally.IsMe && ally.IsAlly).Count() <= 1))
+					{//이전 식대로는 징크스가 절대 궁을 안써서 식을 좀 바꿈.
+						AIO_Func.PredHealth(RT,R);
+						if (RT != null && AIO_Func.PredHealth(RT,R) + RT.HPRegenRate <= (Player.Distance(RT.ServerPosition) < 1500 ? R.GetDamage2(RT,4) : R.GetDamage2(RT,1)) && !AIO_Func.CollisionCheck(Player, RT, R.Width))
+							AIO_Func.LCast(R,RT,50f,0f,true); //R 최대 데미지는 1500범위에서. 그리고 공식 커먼의 징크스 궁 데미지 계산이 잘못되었으니 올인원 자체 데미지 계산사용.
+					}
+				}
             }
         }
 

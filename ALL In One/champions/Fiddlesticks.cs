@@ -13,14 +13,15 @@ namespace ALL_In_One.champions
         static Menu Menu { get { return AIO_Menu.MainMenu_Manual; } }
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
+
         static Spell Q, W, E, R;
         
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 575f, TargetSelector.DamageType.Physical);
-            W = new Spell(SpellSlot.W, 575f, TargetSelector.DamageType.Physical);
+            Q = new Spell(SpellSlot.Q, 575f, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 575f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 750f, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 800f, TargetSelector.DamageType.Physical);
+            R = new Spell(SpellSlot.R, 800f, TargetSelector.DamageType.Magical);
             Q.SetTargetted(0.25f, float.MaxValue);
             W.SetTargetted(0.25f, float.MaxValue);
             E.SetTargetted(0.25f, 1200f);
@@ -50,10 +51,11 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
+
+            AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addErange();
             AIO_Menu.Champion.Drawings.addRrange();
-
         
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -86,13 +88,20 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
+            var drawQ = AIO_Menu.Champion.Drawings.Qrange;
             var drawW = AIO_Menu.Champion.Drawings.Wrange;
             var drawE = AIO_Menu.Champion.Drawings.Erange;
             var drawR = AIO_Menu.Champion.Drawings.Rrange;
+
+            if (Q.IsReady() && drawQ.Active)
+                Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+
             if (W.IsReady() && drawW.Active)
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
+
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
@@ -102,8 +111,8 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
-            if (Q.IsReady() && Player.Distance(gapcloser.Sender.Position) <= Q.Range)
-                Q.Cast(gapcloser.Sender);
+            if (Q.CanCast(gapcloser.Sender))
+                Q.CastOnUnit(gapcloser.Sender);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -111,11 +120,11 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
                 return;
 
-            if (E.IsReady()    && Player.Distance(sender.Position) <= E.Range)
-                E.Cast(sender);
-                
-            if (Q.IsReady()    && Player.Distance(sender.Position) <= Q.Range)
-                Q.Cast(sender);
+            if (Q.CanCast(sender))
+                Q.CastOnUnit(sender);
+            else if (E.CanCast(sender))
+                    E.CastOnUnit(sender);
+            
         }
         static void KillstealE()
         {

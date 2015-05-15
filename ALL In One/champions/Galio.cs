@@ -114,13 +114,13 @@ namespace ALL_In_One.champions
             var STarget = (Obj_AI_Hero) args.Target;
             if (!sender.IsMe || Player.IsDead) // 갈리오 W 로직 미완성
                 return;
-            if (args.Target.IsMe && !sender.IsAlly && W.IsReady() && AIO_Func.getHealthPercent(Player) < 80 //args.Target.IsMe && AIO_Menu.Champion.Misc.getBoolValue("R Myself Only")
+            if (args.Target.IsMe && !sender.IsAlly && W.IsReady() && Player.HealthPercent < 80 //args.Target.IsMe && AIO_Menu.Champion.Misc.getBoolValue("R Myself Only")
                 && Player.Distance(args.End) < 150 && AIO_Menu.Champion.Combo.UseW)
                 W.Cast(Player);
-            if (!sender.IsAlly && W.IsReady() && AIO_Func.getHealthPercent(Player) < 80 && Player.Distance(args.End) < 150 &&
+            if (!sender.IsAlly && W.IsReady() && Player.HealthPercent < 80 && Player.Distance(args.End) < 150 &&
                 Sender.Distance(Player.ServerPosition) <= 1000f && AIO_Menu.Champion.Combo.UseW)
                 W.Cast(Player);
-            if (!sender.IsAlly && W.IsReady() && AIO_Func.getHealthPercent(Player) < 80 &&
+            if (!sender.IsAlly && W.IsReady() && Player.HealthPercent < 80 &&
                 Sender.Distance(Player.ServerPosition) <= 700f && AIO_Menu.Champion.Combo.UseW)
                 W.Cast(Player);
         }

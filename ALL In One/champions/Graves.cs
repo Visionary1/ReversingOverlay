@@ -134,7 +134,7 @@ namespace ALL_In_One.champions
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if (AIO_Menu.Champion.Combo.UseQ && Q.CanCast(Target) && !Player.IsDashing() && !(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+                if (AIO_Menu.Champion.Combo.UseQ && Q.CanCast(Target) && !Player.IsDashing() && !(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
                     Q.Cast(Target);
             }
         }
@@ -187,7 +187,7 @@ namespace ALL_In_One.champions
         static void Harass()
         {
            
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
                 return;
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
@@ -203,7 +203,7 @@ namespace ALL_In_One.champions
         static void Laneclear()
         {
 
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -224,7 +224,7 @@ namespace ALL_In_One.champions
         static void Jungleclear()
         {
             
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
 
@@ -282,7 +282,7 @@ namespace ALL_In_One.champions
         {
             return
                 HeroManager.Enemies.Where(
-                    hero => hero.IsValidTarget(range, true, position) && AIO_Func.getHealthPercent(hero) <= 15).ToList();
+                    hero => hero.IsValidTarget(range, true, position) && hero.HealthPercent <= 15).ToList();
         }
 
 

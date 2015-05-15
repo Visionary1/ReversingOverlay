@@ -72,7 +72,7 @@ namespace ALL_In_One.champions
                 {
                     foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
                     {
-                        if (target != null && W.CanCast(target) && (target.Distance(Player.ServerPosition) > 400 || AIO_Func.getHealthPercent(Player) < 50 && Player.HasBuff("pantheonpassiveshield")))
+                        if (target != null && W.CanCast(target) && (target.Distance(Player.ServerPosition) > 400 || Player.HealthPercent < 50 && Player.HasBuff("pantheonpassiveshield")))
                             W.Cast(target);
                     }
                 }

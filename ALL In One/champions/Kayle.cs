@@ -131,13 +131,13 @@ namespace ALL_In_One.champions
             var STarget = (Obj_AI_Hero) args.Target;
             if (!sender.IsMe || Player.IsDead) // 
                 return;
-            if (args.Target.IsMe && !sender.IsAlly && R.IsReady() && AIO_Func.getHealthPercent(Player) < 25 //args.Target.IsMe && AIO_Menu.Champion.Misc.getBoolValue("R Myself Only")
+            if (args.Target.IsMe && !sender.IsAlly && R.IsReady() && Player.HealthPercent < 25 //args.Target.IsMe && AIO_Menu.Champion.Misc.getBoolValue("R Myself Only")
                 && Player.Distance(args.End) < 150 && AIO_Menu.Champion.Combo.UseR)
                 R.Cast(Player);
-            if (!sender.IsAlly && R.IsReady() && AIO_Func.getHealthPercent(Player) < 25 && Player.Distance(args.End) < 150 &&
+            if (!sender.IsAlly && R.IsReady() && Player.HealthPercent < 25 && Player.Distance(args.End) < 150 &&
                 Sender.Distance(Player.ServerPosition) <= 1000f && AIO_Menu.Champion.Combo.UseR)
                 R.Cast(Player);
-            if (!sender.IsAlly && R.IsReady() && AIO_Func.getHealthPercent(Player) < 15 &&
+            if (!sender.IsAlly && R.IsReady() && Player.HealthPercent < 15 &&
                 Sender.Distance(Player.ServerPosition) <= 700f && AIO_Menu.Champion.Combo.UseR)
                 R.Cast(Player);
         }

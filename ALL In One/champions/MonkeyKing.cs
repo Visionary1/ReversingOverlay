@@ -78,14 +78,10 @@ namespace ALL_In_One.champions
                         break;
                 }
             }
+
             #region Killsteal
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
-            #endregion
-            #region AfterAttack
-            AIO_Func.AASkill(Q); // 액티베이터에서 아이템 - 스킬 중 선으로 쓸 것을 선택할수 있도록 Q스킬이 AA용 스킬임을 인식시킴. 이걸 해야 평q히드라평 콤보가 가능. 기본은 평히드라평q
-            if(AIO_Func.AfterAttack()) // 지금은 딱히 필요없을수도 있지만.. 암튼 무기연성
-            AA();
             #endregion
 
             Orbwalker.SetAttack(!Player.HasBuff("MonkeyKingSpinToWin", true));
@@ -127,14 +123,14 @@ namespace ALL_In_One.champions
 
             AIO_Func.AALcJc(Q); //정글 클리어 or 라인 클리어 Q 사용 설정시 Q로 평캔.
 
-            if(!utility.Activator.AfterAttack.AIO) //무기연성 방식이 아닐 경우.
+             //무기연성 방식이 아닐 경우.
             AA();
         }
 
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe && (args.SData.Name == Q.Instance.SData.Name || args.SData.Name == E.Instance.SData.Name))
-                Orbwalking.ResetAutoAttackTimer2();
+                Orbwalking.ResetAutoAttackTimer();
         }
 
         static void CastR1()
@@ -157,7 +153,7 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
                 return;
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
@@ -166,7 +162,7 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

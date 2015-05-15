@@ -111,9 +111,9 @@ namespace ALL_In_One.champions
         
         static void WWW()
         {
-            if(Player.HasBuff("attroxwlife") && AIO_Func.getHealthPercent(Player) > 50)
+            if(Player.HasBuff("attroxwlife") && Player.HealthPercent > 50)
             W.Cast();
-            if(Player.HasBuff("aatroxwpower") && AIO_Func.getHealthPercent(Player) < 50)
+            if(Player.HasBuff("aatroxwpower") && Player.HealthPercent < 50)
             W.Cast();
         }
         

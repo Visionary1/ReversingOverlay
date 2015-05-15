@@ -109,13 +109,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
                 KillstealE();
             #endregion
-            
-            #region AfterAttack
-            AIO_Func.AASkill(Q);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
-            
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -220,7 +213,7 @@ namespace ALL_In_One.champions
                 return;
 
             AIO_Func.AALcJc(Q,QD);
-            if(!utility.Activator.AfterAttack.AIO)
+            
             AA();
         }
         

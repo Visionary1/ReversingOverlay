@@ -158,7 +158,7 @@ namespace ALL_In_One.champions
         }
         static void Harass()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
                 return;
 
             if (AIO_Menu.Champion.Harass.UseR && R.IsReady())
@@ -172,7 +172,7 @@ namespace ALL_In_One.champions
         }
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(R.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
@@ -191,7 +191,7 @@ namespace ALL_In_One.champions
         
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(R.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

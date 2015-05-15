@@ -236,7 +236,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && WLastCastedTime + 0.5 < Game.ClockTime)
             {
-				if(AIO_Func.getHealthPercent(Player) > 20)
+				if(Player.HealthPercent > 20)
 				{
 					foreach (var RT in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsValidTarget(DefaultRange) && !Player.HasBuffOfType(BuffType.SpellShield) && !Player.HasBuffOfType(BuffType.Invulnerability) && Utility.GetAlliesInRange(x, 500).Where(ally => !ally.IsMe && ally.IsAlly).Count() <= 1))
 					{//이전 식대로는 징크스가 절대 궁을 안써서 식을 좀 바꿈.
@@ -259,7 +259,7 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
             {
                 if (AIO_Menu.Champion.Harass.UseQ)
                     QSwitch(false);
@@ -284,7 +284,7 @@ namespace ALL_In_One.champions
                 return;
             }
 
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
             {
                 if (AIO_Menu.Champion.Laneclear.UseQ)
                     QSwitch(false);
@@ -312,7 +312,7 @@ namespace ALL_In_One.champions
                 return;
             }
 
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
             {
                 if (AIO_Menu.Champion.Jungleclear.UseQ)
                     QSwitch(false);

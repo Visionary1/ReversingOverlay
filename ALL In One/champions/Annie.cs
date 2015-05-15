@@ -105,7 +105,7 @@ namespace ALL_In_One.champions
                 }
                 else
                 {
-                    if (AIO_Func.getManaPercent(Player) >= 90)
+                    if (Player.ManaPercent >= 90)
                         W.Cast(Game.CursorPos);
                     else
                         E.Cast();
@@ -210,7 +210,7 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
-            if (!(AIO_Func.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercent > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
@@ -226,7 +226,7 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercent > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(625f, MinionTypes.All, MinionTeam.Enemy);
@@ -246,7 +246,7 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercent > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player) + 100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

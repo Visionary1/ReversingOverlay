@@ -122,11 +122,11 @@ namespace ALL_In_One.champions
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe && args.SData.Name == E.Instance.Name)
-                    Utility.DelayAction.Add(250, Orbwalking.ResetAutoAttackTimer2);
+                    Utility.DelayAction.Add(250, Orbwalking.ResetAutoAttackTimer);
 
             if (Menu.Item("soulboundsaver", true).GetValue<bool>() && sender.Type == GameObjectType.obj_AI_Hero && sender.IsEnemy && R.IsReady())
             {
-                var soulbound = HeroManager.Allies.FirstOrDefault(hero => hero.HasBuff("kalistacoopstrikeally", true) && args.Target.NetworkId == hero.NetworkId && AIO_Func.getHealthPercent(hero) <= 20);
+                var soulbound = HeroManager.Allies.FirstOrDefault(hero => hero.HasBuff("kalistacoopstrikeally", true) && args.Target.NetworkId == hero.NetworkId && hero.HealthPercent <= 20);
 
                 if (soulbound != null)
                     R.Cast();
@@ -161,7 +161,7 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
-            if (!(AIO_Func.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercent > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("harassUseQ", true).GetValue<bool>())
@@ -175,7 +175,7 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercent > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -218,7 +218,7 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercent > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

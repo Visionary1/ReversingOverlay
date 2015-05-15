@@ -88,11 +88,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
             #endregion
-            #region AfterAttack
-            AIO_Func.AASkill(Q);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -121,7 +116,7 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
-            if (AIO_Func.getHealthPercent(Player) <= 50&& R.IsReady()
+            if (Player.HealthPercent <= 50&& R.IsReady()
             && Player.Distance(gapcloser.Sender.Position) <= R.Range)
                 R.Cast();
         }
@@ -156,7 +151,7 @@ namespace ALL_In_One.champions
                 return;
             AIO_Func.AALcJc(Q);
             AIO_Func.AALcJc(W);
-            if(!utility.Activator.AfterAttack.AIO)
+            
             AA();
         }
 
@@ -177,14 +172,14 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
                 return;
 
         }
         
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -198,7 +193,7 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

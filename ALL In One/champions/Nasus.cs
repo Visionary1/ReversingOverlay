@@ -87,11 +87,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
                 KillstealE();
             #endregion
-            #region AfterAttack
-            AIO_Func.AASkill(Q);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -133,7 +128,7 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || Target == null)
                 return;
             AIO_Func.AALcJc(Q);
-            if(!utility.Activator.AfterAttack.AIO)
+            
             AA();
         }
 
@@ -152,14 +147,14 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-                if(AIO_Func.getHealthPercent(Player) < 30)
+                if(Player.HealthPercent < 30)
                 R.Cast();
             }
         }
         
         static void Lasthit()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Lasthit.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana))
                 return;
 
             if (AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
@@ -168,7 +163,7 @@ namespace ALL_In_One.champions
         
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -181,7 +176,7 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

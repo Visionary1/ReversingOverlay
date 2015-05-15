@@ -100,11 +100,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
             #endregion
-            #region AfterAttack
-            AIO_Func.AASkill(Q);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -180,13 +175,13 @@ namespace ALL_In_One.champions
             {
                 var SP = Player.ServerPosition.Extend(Target.ServerPosition, 150);
                 Player.IssueOrder(GameObjectOrder.MoveTo, SP);
-                Orbwalking.ResetAutoAttackTimer2();
+                Orbwalking.ResetAutoAttackTimer();
             }
             else
             {
                 var CP = Player.ServerPosition.Extend(Game.CursorPos, 200);
                 Player.IssueOrder(GameObjectOrder.MoveTo, CP);
-                Orbwalking.ResetAutoAttackTimer2();
+                Orbwalking.ResetAutoAttackTimer();
             }
             Qmove = true;
         }
@@ -226,7 +221,7 @@ namespace ALL_In_One.champions
                 return;
             if(Qtimer < Utils.GameTimeTickCount - 150) // && NextQCastAllowed
             AIO_Func.AALcJc(Q,0,0,0);
-            if(!utility.Activator.AfterAttack.AIO)
+            
             AA();
         }
         

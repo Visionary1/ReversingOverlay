@@ -88,12 +88,6 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Misc.UseKillsteal)
                 Killsteal();
-                
-            #region AfterAttack
-            AIO_Func.AASkill(W);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -129,7 +123,7 @@ namespace ALL_In_One.champions
 
             if(Minions.Count > 3 || Mobs.Count > 0)
             AIO_Func.AALcJc(W);
-            if(!utility.Activator.AfterAttack.AIO)
+            
             AA();
         }
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -181,7 +175,7 @@ namespace ALL_In_One.champions
                 if (getBuffDuration > 1.95 && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
                 {
                     W.Cast();
-                    Orbwalking.ResetAutoAttackTimer2();
+                    Orbwalking.ResetAutoAttackTimer();
                 }
             }*/
         }
@@ -189,7 +183,7 @@ namespace ALL_In_One.champions
         static void Harass()
         {
 
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
                 return;
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
@@ -203,7 +197,7 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -223,7 +217,7 @@ namespace ALL_In_One.champions
         static void Jungleclear()
         {
       
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
             

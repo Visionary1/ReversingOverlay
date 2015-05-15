@@ -24,8 +24,6 @@ namespace ALL_In_One.utility
             AIO_Menu.addSubMenu("Activator", "AIO: Activator");
 
             Menu.AddSubMenu(new Menu("Auto-Potion", "AutoPotion"));
-            //Menu.AddSubMenu(new Menu("Auto-Spell", "AutoSpell"));
-            //Menu.AddSubMenu(new Menu("Activator: ComboMode", "ComboMode"));
             Menu.AddSubMenu(new Menu("BeforeAttack", "BeforeAttack"));
             Menu.AddSubMenu(new Menu("AfterAttack", "AfterAttack"));
             Menu.AddSubMenu(new Menu("OnAttack", "OnAttack"));
@@ -36,26 +34,20 @@ namespace ALL_In_One.utility
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifHealthPercent", "if Health Percent <")).SetValue(new Slider(55, 0, 100));
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.Use Mana Potion", "Use Mana Potion")).SetValue(true);
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(55,0,100));
+
             Menu.SubMenu("OnAttack").AddItem(new MenuItem("OnAttack.RS", "Use Red Smite")).SetValue(true);
-            Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.SF", "Skill First")).SetValue(false);
-            Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.AIO", "Use SpellWeaving AACancel")).SetValue(false);
+
             Menu.SubMenu("Killsteal").AddItem(new MenuItem("Killsteal.BS", "Blue Smite")).SetValue(true);
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.BF", "Debug Mode-Check Buff(In Combo mode)")).SetValue(false);
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Cb", "On Combo")).SetValue(true); // Use Item on X mode
+
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Cb", "On Combo")).SetValue(true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Hr", "On Harass")).SetValue(true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Lc", "On LaneClear")).SetValue(false);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Jc", "On JungleClear")).SetValue(true);
-
-            //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Heal", "Use Heal")).SetValue(true);
-            //Menu.SubMenu("AutoSpell").AddItem(new MenuItem("AutoSpell.Use Ignite", "Use Ignite")).SetValue(true);
 
             additems();
             addPotions();
 
             Game.OnUpdate += OnUpdate.Game_OnUpdate;
-            //Game.OnUpdate += OnAttack.Game_OnUpdate;
-            //Game.OnUpdate += Killsteal.Game_OnUpdate;
-            //Game.OnUpdate += AfterAttack.Game_OnUpdate;
             Orbwalking.BeforeAttack += BeforeAttack.Orbwalking_BeforeAttack;
             Orbwalking.AfterAttack += AfterAttack.Orbwalking_AfterAttack;
             Orbwalking.OnAttack += OnAttack.Orbwalking_OnAttack;
@@ -157,17 +149,6 @@ namespace ALL_In_One.utility
 
         internal class OnUpdate
         {
-            internal static List<item> itemsList = new List<item>();
-
-            internal static void additem(string itemName, int itemid, float itemRange, bool itemisTargeted = false)
-            {
-                itemsList.Add(new item { Name = itemName, Id = itemid, Range = itemRange, isTargeted = itemisTargeted });
-
-                Menu.SubMenu("OnUpdate").AddItem(new MenuItem("OnUpdate.Use " + itemid.ToString(), "Use " + itemName)).SetValue(true);
-            }
-            
-            internal static float pastTime = 0; //버프 체크시 랙 덜걸리도록..
-
             internal static void Game_OnUpdate(EventArgs args)
             {
                 if (Player.IsDead)
@@ -177,7 +158,7 @@ namespace ALL_In_One.utility
                 {
                     if (Menu.Item("AutoPotion.Use Health Potion").GetValue<bool>())
                     {
-                        if (AIO_Func.getHealthPercent(Player) <= Menu.Item("AutoPotion.ifHealthPercent").GetValue<Slider>().Value)
+                        if (Player.HealthPercent <= Menu.Item("AutoPotion.ifHealthPercent").GetValue<Slider>().Value)
                         {
                             var healthSlot = GetPotionSlot(PotionType.Health);
 
@@ -188,7 +169,7 @@ namespace ALL_In_One.utility
 
                     if (Menu.Item("AutoPotion.Use Mana Potion").GetValue<bool>())
                     {
-                        if (AIO_Func.getManaPercent(Player) <= Menu.Item("AutoPotion.ifManaPercent").GetValue<Slider>().Value)
+                        if (Player.ManaPercent <= Menu.Item("AutoPotion.ifManaPercent").GetValue<Slider>().Value)
                         {
                             var manaSlot = GetPotionSlot(PotionType.Mana);
 
@@ -197,35 +178,7 @@ namespace ALL_In_One.utility
                         }
                     }
                 }
-                
-                if(Menu.Item("Misc.BF").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) // 개발 편의를 위해 추가한 버프 체크기.
-                {
-                    if(Environment.TickCount - pastTime > 500) //랙 줄이려고 추가함
-                    pastTime = Environment.TickCount;
-                    if(Environment.TickCount - pastTime > 499)
-                    {
-                        var Target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
-                        if(Target == null)
-                        {
-                            foreach (var buff in Player.Buffs)
-                            {
-                                AIO_Func.sendDebugMsg("PLAYER : "+buff.Name);
-                            }
-                        }
-                        else
-                        {
-                            foreach (var buff in Player.Buffs)
-                            {
-                                AIO_Func.sendDebugMsg("PLAYER : "+buff.Name);
-                            }
-                            foreach (var buff in Target.Buffs)
-                            {
-                                AIO_Func.sendDebugMsg("TARGET : "+buff.Name);
-                            }
-                        }
-                    }
-                }
-                
+
                 #region RS
                 if(Menu.Item("OnAttack.RS").GetValue<bool>())
                 OnAttack.setRSmiteSlot(); //Red Smite
@@ -248,35 +201,6 @@ namespace ALL_In_One.utility
                             Player.Spellbook.CastSpell(Killsteal.smiteSlot, t);
                             else
                             return;
-                        }
-                    }
-                }
-                #endregion
-                
-                #region AA
-                if (AIO_Func.AfterAttack() && AfterAttack.AIO)
-                {
-                var target = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(Player) + 50,TargetSelector.DamageType.Physical, true);
-                var itemone = AfterAttack.itemsList.FirstOrDefault(x => Items.CanUseItem((int)x.Id) && target.IsValidTarget(x.Range) && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>());
-                    if(Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
-                    Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    {
-                        if(Menu.Item("AfterAttack.SF").GetValue<bool>())
-                        {
-                            if(AfterAttack.SkillCasted)
-                            {
-                            if (itemone.isTargeted)
-                                Items.UseItem(itemone.Id, (Obj_AI_Hero)target);
-                            else
-                                Items.UseItem(itemone.Id);
-                            }                            
-                        }
-                        else
-                        {
-                            if (itemone.isTargeted)
-                                Items.UseItem(itemone.Id, (Obj_AI_Hero)target);
-                            else
-                                Items.UseItem(itemone.Id);
                         }
                     }
                 }
@@ -372,9 +296,8 @@ namespace ALL_In_One.utility
         internal class AfterAttack
         {
             internal static List<item> itemsList = new List<item>();
-            internal static bool ALLCancelItemsAreCasted { get { return Menu.Item("AfterAttack.SF").GetValue<bool>() || !utility.Activator.AfterAttack.itemsList.Any(x => Items.CanUseItem((int)x.Id) && !x.isTargeted && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()); } }
-            internal static bool AIO { get { return Menu.Item("AfterAttack.AIO").GetValue<bool>(); } }
-            internal static bool SkillCasted = true; // 기본값이 false였으나 true로 바꾼 이유는. 아직 SF를 설정하지 않은 챔프가 해당 기능 켤 경우 아이템을 안쓰기때문. 어짜피 SF 쓰는 챔프는 AASkill(spell)만 게임 온 업데이트에 넣으면 알아서 true false 바꿔줌. 마이를 제외한 대부분 챔프는 스킬을 먼저 쓰는게 더 유리함 참고.
+            internal static bool ALLCancelItemsAreCasted { get { return !utility.Activator.AfterAttack.itemsList.Any(x => Items.CanUseItem((int)x.Id) && !x.isTargeted && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()); } }
+            
             internal static void additem(string itemName, int itemid, float itemRange, bool itemisTargeted = false)
             {
                 itemsList.Add(new item { Name = itemName, Id = itemid, Range = itemRange, isTargeted = itemisTargeted });
@@ -395,27 +318,14 @@ namespace ALL_In_One.utility
                     var Minions = MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player), MinionTypes.All, MinionTeam.Enemy);
                     var Mobs = MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player), MinionTypes.All, MinionTeam.Neutral);
                     if((Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
-                    Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && !AIO ||
+                    Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) &&
                     Menu.Item("Misc.Jc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count > 0 ||
                     Menu.Item("Misc.Lc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Minions.Count > 0)
                     {
-                        if(Menu.Item("AfterAttack.SF").GetValue<bool>())
-                        {
-                            if(SkillCasted)
-                            {
-                            if (itemone.isTargeted)
-                                Items.UseItem(itemone.Id, (Obj_AI_Hero)target);
-                            else
-                                Items.UseItem(itemone.Id);
-                            }
-                        }
+                        if (itemone.isTargeted)
+                            Items.UseItem(itemone.Id, (Obj_AI_Base)target);
                         else
-                        {
-                            if (itemone.isTargeted)
-                                Items.UseItem(itemone.Id, (Obj_AI_Base)target);
-                            else
-                                Items.UseItem(itemone.Id);
-                        }
+                            Items.UseItem(itemone.Id);
                     }
                 }
             }

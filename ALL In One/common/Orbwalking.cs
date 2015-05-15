@@ -29,10 +29,9 @@ using Color = System.Drawing.Color;
 
 using LeagueSharp;
 using LeagueSharp.Common;
-
 #endregion
 
-namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
+namespace ALL_In_One
 {
     /// <summary>
     ///     This class offers everything related to auto-attacks and orbwalking.
@@ -51,11 +50,11 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
 
         public enum OrbwalkingMode
         {
-            Flee,
             LastHit,
             Mixed,
             LaneClear,
             Combo,
+            Flee,
             None
         }
 
@@ -73,10 +72,10 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         //Spells that are not attacks even if they have the "attack" word in their name.
         private static readonly string[] NoAttacks =
         {
-            "monkeykingdoubleattack",
+            "jarvanivcataclysmattack", "monkeykingdoubleattack",
             "shyvanadoubleattack", "shyvanadoubleattackdragon", "zyragraspingplantattack", "zyragraspingplantattack2",
             "zyragraspingplantattackfire", "zyragraspingplantattack2fire", "viktorpowertransfer"
-        }; // "jarvanivcataclysmattack" is auto attack. Edited by RL244
+        };
 
         //Spells that are attacks even if they dont have the "attack" word in their name.
         private static readonly string[] Attacks =
@@ -229,7 +228,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
             var myRange = GetRealAutoAttackRange(target);
             return
                 Vector2.DistanceSquared(
-                    (target is Obj_AI_Base) ? ((Obj_AI_Base) target).ServerPosition.To2D() : target.Position.To2D(),
+                    (target is Obj_AI_Base) ? ((Obj_AI_Base)target).ServerPosition.To2D() : target.Position.To2D(),
                     Player.ServerPosition.To2D()) <= myRange * myRange;
         }
 
@@ -246,7 +245,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         /// </summary>
         public static bool CanAttack()
         {
-            return Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackDelay * 1000 + 35; //임의수정
+            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
         }
 
         /// <summary>
@@ -254,17 +253,17 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         /// </summary>
         public static bool CanMove(float extraWindup)
         {
-            /*if (!Move)
+            if (!Move)
             {
                 return false;
-            }*/
-               /* 타 커먼에서 미사일 런치드 무시한것처럼 하면 과연 평캔현상이 사라지려나
+            }
+
             if (_missileLaunched)
             {
                 return true;
-            }*/
-             
-            return NoCancelChamps.Contains(Player.ChampionName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup); // 임의수정
+            }
+
+            return NoCancelChamps.Contains(Player.ChampionName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
         }
 
         public static void SetMovementDelay(int delay)
@@ -349,20 +348,25 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         {
             try
             {
-                if (target.IsValidTarget() && CanAttack() && Attack) // 임의수
+                if (target.IsValidTarget() && CanAttack())
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);
 
                     if (!DisableNextAttack)
                     {
+                        if (!NoCancelChamps.Contains(Player.ChampionName))
+                        {
+                            LastAATick = Utils.GameTimeTickCount + Game.Ping + 70 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
+                            _missileLaunched = false;
+                        }
                         Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                         _lastTarget = target;
                         return;
                     }
                 }
 
-                if (CanMove(extraWindup) && Move)
+                if (CanMove(extraWindup))
                 {
                     MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
                 }
@@ -376,7 +380,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         /// <summary>
         ///     Resets the Auto-Attack timer.
         /// </summary>
-        public static void ResetAutoAttackTimer2()
+        public static void ResetAutoAttackTimer()
         {
             LastAATick = 0;
         }
@@ -385,14 +389,14 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         {
             if (spellbook.Owner.IsValid && spellbook.Owner.IsMe && args.DestroyMissile && args.StopAnimation)
             {
-                ResetAutoAttackTimer2();
+                ResetAutoAttackTimer();
             }
         }
 
         private static void MissileClient_OnCreate(GameObject sender, EventArgs args)
         {
             var missile = sender as MissileClient;
-            if (missile != null && missile.SpellCaster.IsMe && IsAutoAttack(missile.SData.Name) && Player.Distance(missile.Position) > 50) //임의 수정
+            if (missile != null && missile.SpellCaster.IsMe && IsAutoAttack(missile.SData.Name))
             {
                 _missileLaunched = true;
             }
@@ -406,7 +410,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
 
                 if (IsAutoAttackReset(spellName) && unit.IsMe)
                 {
-                    Utility.DelayAction.Add(250, ResetAutoAttackTimer2);
+                    Utility.DelayAction.Add(250, ResetAutoAttackTimer);
                 }
 
                 if (!IsAutoAttack(spellName))
@@ -428,10 +432,10 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                             FireOnTargetSwitch(target);
                             _lastTarget = target;
                         }
-                        
+
                         //Trigger it for ranged until the missiles catch normal attacks again!
                         Utility.DelayAction.Add(
-                            (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget)); // 임의수정
+                            (int)(unit.AttackCastDelay * 1000 + 40), () => FireAfterAttack(unit, _lastTarget));
                     }
                 }
 
@@ -480,47 +484,47 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 /* Drawings submenu */
                 var drawings = new Menu("Drawings", "drawings");
                 drawings.AddItem(
-                    new MenuItem("AACircle", "AACircle").SetShared()
+                    new MenuItem("AACircle", "AACircle")
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
                 drawings.AddItem(
-                    new MenuItem("AACircle2", "Enemy AA circle").SetShared()
+                    new MenuItem("AACircle2", "Enemy AA circle")
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
                 drawings.AddItem(
-                    new MenuItem("HoldZone", "HoldZone").SetShared()
-                        .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
+                    new MenuItem("HoldZone", "HoldZone")
+                        .SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 255))));
                 _config.AddSubMenu(drawings);
 
                 /* Misc options */
                 var misc = new Menu("Misc", "Misc");
                 misc.AddItem(
-                    new MenuItem("HoldPosRadius", "Hold Position Radius").SetShared().SetValue(new Slider(50, 0, 250)));
-                misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetShared().SetValue(true));
+                    new MenuItem("HoldPosRadius", "Hold Position Radius").SetValue(new Slider(50, 0, 250)));
+                misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetValue(true));
                 _config.AddSubMenu(misc);
 
 
                 /* Delay sliders */
                 _config.AddItem(
-                    new MenuItem("ExtraWindup", "Extra windup time").SetShared().SetValue(new Slider(80, 0, 200)));
-                _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(0, 0, 200)));
+                    new MenuItem("ExtraWindup", "Extra windup time").SetValue(new Slider(80, 0, 200)));
+                _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetValue(new Slider(0, 0, 200)));
                 _config.AddItem(
-                    new MenuItem("MovementDelay", "Movement delay").SetShared().SetValue(new Slider(30, 0, 250)))
+                    new MenuItem("MovementDelay", "Movement delay").SetValue(new Slider(0, 0, 250)))
                     .ValueChanged += (sender, args) => SetMovementDelay(args.GetNewValue<Slider>().Value);
 
 
                 /*Load the menu*/
                 _config.AddItem(
-                    new MenuItem("Flee", "Flee").SetShared().SetValue(new KeyBind('A', KeyBindType.Press)));
+                   new MenuItem("Flee", "Flee").SetValue(new KeyBind('A', KeyBindType.Press)));
 
                 _config.AddItem(
-                    new MenuItem("LastHit", "Last hit").SetShared().SetValue(new KeyBind('X', KeyBindType.Press)));
+                    new MenuItem("LastHit", "Last hit").SetValue(new KeyBind('X', KeyBindType.Press)));
 
-                _config.AddItem(new MenuItem("Farm", "Mixed").SetShared().SetValue(new KeyBind('C', KeyBindType.Press)));
-
-                _config.AddItem(
-                    new MenuItem("LaneClear", "LaneClear").SetShared().SetValue(new KeyBind('V', KeyBindType.Press)));
+                _config.AddItem(new MenuItem("Farm", "Mixed").SetValue(new KeyBind('C', KeyBindType.Press)));
 
                 _config.AddItem(
-                    new MenuItem("Orbwalk", "Combo").SetShared().SetValue(new KeyBind(32, KeyBindType.Press)));
+                    new MenuItem("LaneClear", "LaneClear").SetValue(new KeyBind('V', KeyBindType.Press)));
+
+                _config.AddItem(
+                    new MenuItem("Orbwalk", "Combo").SetValue(new KeyBind(32, KeyBindType.Press)));
 
                 _delay = _config.Item("MovementDelay").GetValue<Slider>().Value;
                 Player = ObjectManager.Player;
@@ -566,7 +570,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                     {
                         return OrbwalkingMode.LastHit;
                     }
-                    
+
                     if (_config.Item("Flee").GetValue<KeyBind>().Active) // Added by RL244
                     {
                         return OrbwalkingMode.Flee;
@@ -618,8 +622,8 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                                 minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) &&
                                 HealthPrediction.LaneClearHealthPrediction(
-                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
-                                Player.GetAutoAttackDamage2(minion));
+                                    minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
+                                Player.GetAutoAttackDamage(minion));
             }
 
             public virtual AttackableUnit GetTarget()
@@ -650,8 +654,8 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                                     (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod))
                         )
                     {
-                        var t = (int) (Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 * (int) Player.Distance(minion, false) / (int) GetMyProjectileSpeed();
+                        var t = (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
+                                1000 * (int)Player.Distance(minion, false) / (int)GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
                         if (minion.Team != GameObjectTeam.Neutral && MinionManager.IsMinion(minion, true))
@@ -661,7 +665,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                                 FireOnNonKillableMinion(minion);
                             }
 
-                            if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage2(minion, true))
+                            if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
                             {
                                 return minion;
                             }
@@ -733,8 +737,8 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                         if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
-                                _prevMinion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >= 2 * Player.GetAutoAttackDamage2(_prevMinion) ||
+                                _prevMinion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
+                            if (predHealth >= 2 * Player.GetAutoAttackDamage(_prevMinion) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
                                 return _prevMinion;
@@ -742,19 +746,19 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                         }
 
                         result = (from minion in
-                            ObjectManager.Get<Obj_AI_Minion>()
-                                .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
-                            let predHealth =
-                                HealthPrediction.LaneClearHealthPrediction(
-                                    minion, (int) ((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
-                            where
-                                predHealth >= 2 * Player.GetAutoAttackDamage2(minion) ||
-                                Math.Abs(predHealth - minion.Health) < float.Epsilon
-                            select minion).MaxOrDefault(m => m.Health);
+                                      ObjectManager.Get<Obj_AI_Minion>()
+                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
+                                  let predHealth =
+                                      HealthPrediction.LaneClearHealthPrediction(
+                                          minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
+                                  where
+                                      predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
+                                      Math.Abs(predHealth - minion.Health) < float.Epsilon
+                                  select minion).MaxOrDefault(m => m.Health);
 
                         if (result != null)
                         {
-                            _prevMinion = (Obj_AI_Minion) result;
+                            _prevMinion = (Obj_AI_Minion)result;
                         }
                     }
                 }

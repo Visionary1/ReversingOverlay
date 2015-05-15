@@ -155,7 +155,7 @@ namespace ALL_In_One.champions
             if (W.IsReady() && !HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
                 W.Cast();
 
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
             {
                 if (W.IsReady() && W.Instance.ToggleState == 2)
                     W.Cast();
@@ -186,7 +186,7 @@ namespace ALL_In_One.champions
             if (W.IsReady() && !Minions.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
                 W.Cast();
 
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
             {
                 if (W.IsReady() && W.Instance.ToggleState == 2)
                     W.Cast();
@@ -217,7 +217,7 @@ namespace ALL_In_One.champions
             if (W.IsReady() && !Mobs.Any(x => x.IsValidTarget(W.Range)) && W.Instance.ToggleState == 2)
                 W.Cast();
 
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
             {
                 if (W.IsReady() && W.Instance.ToggleState == 2)
                     W.Cast();

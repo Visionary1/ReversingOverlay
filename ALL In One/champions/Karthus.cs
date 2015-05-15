@@ -79,7 +79,7 @@ namespace ALL_In_One.champions
                         Harass();
                         break;
                     case Orbwalking.OrbwalkingMode.LastHit:
-                        Orbwalker.SetAttack(AIO_Func.getManaPercent(Player) <= AIO_Menu.Champion.Lasthit.IfMana || !AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady());
+                        Orbwalker.SetAttack(Player.ManaPercent <= AIO_Menu.Champion.Lasthit.IfMana || !AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady());
                         Lasthit();
                         break;
                     case Orbwalking.OrbwalkingMode.LaneClear:
@@ -137,7 +137,7 @@ namespace ALL_In_One.champions
             if (E.IsReady() && !AIO_Func.anyoneValidInRange(E.Range) && E.Instance.ToggleState == 2)
                 E.Cast();
 
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
             {
                 if (E.IsReady() && E.Instance.ToggleState == 2)
                     E.Cast();
@@ -160,7 +160,7 @@ namespace ALL_In_One.champions
 
         static void Lasthit()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Lasthit.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana))
                 return;
 
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -184,7 +184,7 @@ namespace ALL_In_One.champions
             if (E.IsReady() && !Minions.Any(x => x.IsValidTarget(E.Range)) && E.Instance.ToggleState == 2)
                 E.Cast();
 
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
             {
                 if (E.IsReady() && E.Instance.ToggleState == 2)
                     E.Cast();
@@ -217,7 +217,7 @@ namespace ALL_In_One.champions
             if (E.IsReady() && !Mobs.Any(x => x.IsValidTarget(E.Range)) && E.Instance.ToggleState == 2)
                 E.Cast();
 
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
             {
                 if (E.IsReady() && E.Instance.ToggleState == 2)
                     E.Cast();

@@ -89,7 +89,7 @@ namespace ALL_In_One.champions
         
         static void AutoR()
         {
-            if(AIO_Func.getHealthPercent(Player) < 20 && R.IsReady())
+            if(Player.HealthPercent < 20 && R.IsReady())
             R.Cast();
         }
         

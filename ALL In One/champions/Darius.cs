@@ -10,12 +10,10 @@ namespace ALL_In_One.champions
 {
     class Darius// By RL244
     {
-        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} //
+        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-
-        
 
         public static void Load()
         {
@@ -44,7 +42,6 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Laneclear.addUseW();
             AIO_Menu.Champion.Laneclear.addIfMana();
 
-
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addIfMana();
@@ -62,7 +59,6 @@ namespace ALL_In_One.champions
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             
@@ -94,13 +90,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
             #endregion
-            
-            #region AfterAttack
-            AIO_Func.AASkill(W);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
-            
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -114,20 +103,17 @@ namespace ALL_In_One.champions
         var drawEr = AIO_Menu.Champion.Drawings.getCircleValue("E Safe Range");
         var eTarget = TargetSelector.GetTarget(E.Range + Player.MoveSpeed * E.Delay, TargetSelector.DamageType.Magical);
 
-    
         if (Q.IsReady() && drawQ.Active)
-        Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
+            Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
     
         if (E.IsReady() && drawE.Active)
-        Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+            Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
         
         if (R.IsReady() && drawR.Active)
-        Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+            Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         
         if (E.IsReady() && drawEr.Active && eTarget != null)
-        Render.Circle.DrawCircle(Player.Position, E.Range - eTarget.MoveSpeed*E.Delay, drawEr.Color);
-
-
+            Render.Circle.DrawCircle(Player.Position, E.Range - eTarget.MoveSpeed*E.Delay, drawEr.Color);
         }
         
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -135,19 +121,9 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
                 return;
 
-            if (E.IsReady()
-            && Player.Distance(sender.Position) <= E.Range)
-                E.Cast(sender.Position);
+            if (E.IsReady() && Player.Distance(sender.Position) <= E.Range) E.Cast(sender.Position);
         }
 
-        static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (!sender.IsMe || Player.IsDead)
-                return;
-                
-
-        }
-        
         static void AA() // 챔피언 대상 평캔 ( 빼낸 이유는 AA방식 두개로 할시 두번 적어야 해서 단순화하기 위함.
         {
             AIO_Func.AACb(W);
@@ -162,8 +138,7 @@ namespace ALL_In_One.champions
                 return;
 
             AIO_Func.AALcJc(W);
-            
-            if(!utility.Activator.AfterAttack.AIO)
+
             AA();
         }
         
@@ -184,13 +159,11 @@ namespace ALL_In_One.champions
                 if (ETarget.Distance(Player.Position) >= ED)
                 E.Cast(ETarget);
             }
-
-                
         }
 
         static void Harass()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
                 return;
                 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
@@ -213,7 +186,7 @@ namespace ALL_In_One.champions
         
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -226,7 +199,7 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

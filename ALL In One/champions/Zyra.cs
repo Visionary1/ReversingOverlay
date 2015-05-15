@@ -16,10 +16,9 @@ namespace ALL_In_One.champions
     class Zyra// By RL244
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
-        static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R, P;
-        static float ED = 50f; 
+        static float ED { get { return AIO_Menu.Champion.Misc.getSliderValue("Additional Erange").Value; } }
 
         public static void Load()
         {
@@ -39,7 +38,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
-            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.Rt", "R min target counts")).SetValue(new Slider(2, 0, 5));
+            AIO_Menu.Champion.Combo.addItem("R Min Targets", new Slider(2, 0, 5));
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
@@ -58,7 +57,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
 
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Etg", "Additional Erange")).SetValue(new Slider(50, 0, 250));
+            AIO_Menu.Champion.Misc.addItem("Additional Erange", new Slider(50,0,250));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
@@ -80,17 +79,14 @@ namespace ALL_In_One.champions
 
         static void Game_OnUpdate(EventArgs args)
         {
-            if (!ZyraDead() && Player.IsDead)
+            if (!ZyraDead && Player.IsDead)
                 return;
                 
-            if (ZyraDead())
+            if (ZyraDead)
                 CastP();
-                
 
             if (Orbwalking.CanMove(35))
             {
-            ED = Menu.Item("Misc.Etg").GetValue<Slider>().Value; 
-
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 
@@ -104,17 +100,12 @@ namespace ALL_In_One.champions
                 }
             }
 
-            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
-                KillstealQ();
-            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
-                KillstealR();
-            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
-                KillstealE();
+            Killsteal();
         }
 
         static void Drawing_OnDraw(EventArgs args)
         {
-            if (!ZyraDead() && Player.IsDead)
+            if (!ZyraDead && Player.IsDead)
                 return;
 
             var drawQ = AIO_Menu.Champion.Drawings.Qrange;
@@ -140,12 +131,15 @@ namespace ALL_In_One.champions
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
         
-        static bool ZyraDead()
+        static bool ZyraDead
         {
-            return ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name ==
-                   ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Name ||
-                   ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name ==
-                   ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Name;
+            get
+            {
+                return  ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name ==
+                        ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Name ||
+                        ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name ==
+                        ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Name;
+            }
         }
 
         
@@ -154,69 +148,49 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
-            if (E.IsReady()
-                && Player.Distance(gapcloser.Sender.Position) <= E.Range)
-                E.Cast((Vector3)gapcloser.End);
+            if (E.CanCast(gapcloser.Sender))
+                E.Cast(gapcloser.Sender);
         }
-
         
         static void Combo()
         {
 
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
-            {
-                var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                AIO_Func.CCast(Q,Qtarget);
-            }
+                AIO_Func.CCast(Q, Q.GetTarget());
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
-            {
-                var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.LCast(E,Etarget,ED,float.MaxValue);
-            }
+                AIO_Func.LCast(E, E.GetTarget(), ED, float.MaxValue);
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && (Q.IsReady() || E.IsReady()))
-            {
-                var Wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(W,Wtarget);
-            }
+                AIO_Func.CCast(W, E.GetTarget());
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-                var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                var rt = Menu.Item("Combo.Rt").GetValue<Slider>().Value;
-                if(AIO_Func.getHealthPercent(Player) < 50 && AIO_Func.isKillable(Rtarget, getComboDamage(Rtarget)*2/3) || AIO_Func.ECTarget(Rtarget,R.Width,0,100) >= rt)
-                AIO_Func.CCast(R,Rtarget);
+                var Rtarget = R.GetTarget();
+
+                if (Player.HealthPercent < 50 && AIO_Func.isKillable(Rtarget, getComboDamage(Rtarget) * 2 / 3) || AIO_Func.ECTarget(Rtarget, R.Width, 0, 100) >= AIO_Menu.Champion.Combo.getSliderValue("R Min Targets").Value)
+                    AIO_Func.CCast(R, Rtarget);
             }
         }
 
         static void Harass()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
                 return;
         
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
-            {
-                var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(Q,Qtarget);
-            }
+                AIO_Func.CCast(Q, Q.GetTarget());
             
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady() && (Q.IsReady() || E.IsReady()))
-            {
-                var Wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(W,Wtarget);
-            }
+                AIO_Func.CCast(W, W.GetTarget());
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
-            {
-                var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.LCast(E,Etarget,ED,float.MaxValue);
-            }
+                AIO_Func.LCast(E, E.GetTarget(), ED, float.MaxValue);
         }
 
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
         
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -227,27 +201,29 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
             {
                 var _m = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.E))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / E.Speed), (int)(E.Delay * 1000 + Game.Ping / 2)) > 0);            
+                
                 if (_m != null)
-                AIO_Func.LCast(E,_m,ED,float.MaxValue);
+                    AIO_Func.LCast(E,_m,ED,float.MaxValue);
             }
 
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady() && (Q.IsReady() || E.IsReady()))
             {
                 if (Minions.Any(x => x.IsValidTarget(W.Range)))
-                AIO_Func.CCast(W,Minions[0]);
+                    AIO_Func.CCast(W,Minions[0]);
             }
             
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
                 var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / Q.Speed), (int)(Q.Delay * 1000 + Game.Ping / 2)) > 0);            
+                
                 if (_m != null)
-                AIO_Func.CCast(Q,_m);
+                    AIO_Func.CCast(Q,_m);
             }
         }
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
         
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
@@ -258,47 +234,35 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
                 if (Q.CanCast(Mobs.FirstOrDefault()))
-                AIO_Func.CCast(Q,Mobs.FirstOrDefault());
+                    AIO_Func.CCast(Q,Mobs.FirstOrDefault());
             }
 
             if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady() && (Q.IsReady() || E.IsReady()))
             {
                 if (Mobs.Any(x => x.IsValidTarget(W.Range)))
-                AIO_Func.CCast(W,Mobs[0]);
+                    AIO_Func.CCast(W,Mobs[0]);
             }
             
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
             {
                 if (Mobs.Any(x=>x.IsValidTarget(E.Range)))
-                AIO_Func.LCast(E,Mobs[0],ED,float.MaxValue);
+                    AIO_Func.LCast(E,Mobs[0],ED,float.MaxValue);
             }
 
         }
 
-        static void KillstealQ()
+        static void Killsteal()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
-                AIO_Func.CCast(Q,target);
-            }
-        }
-        
-        static void KillstealR()
-        {
-            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
-            {
-                if (target.IsValidTarget(R.Range) && AIO_Func.isKillable(target, R))
-                AIO_Func.CCast(R,target);
-            }
-        }
-        
-        static void KillstealE()
-        {
-            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
-            {
-                if (E.CanCast(target) && AIO_Func.isKillable(target, E))
-                AIO_Func.LCast(E,target,ED,float.MaxValue);
+                if (Q.CanCast(target) && AIO_Func.isKillable(target, Q) && AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
+                    AIO_Func.CCast(Q,target);
+
+                if (R.CanCast(target) && AIO_Func.isKillable(target, R) && AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
+                    AIO_Func.CCast(R, target);
+
+                if (E.CanCast(target) && AIO_Func.isKillable(target, E) && AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
+                    AIO_Func.LCast(E, target, ED, float.MaxValue);
             }
         }
         
@@ -307,6 +271,7 @@ namespace ALL_In_One.champions
             if(P.IsReady())
             {
                 var Ptarget = TargetSelector.GetTarget(P.Range, TargetSelector.DamageType.True);
+
                 AIO_Func.LCast(P,Ptarget,200f,float.MaxValue);
             }
         }
@@ -325,11 +290,12 @@ namespace ALL_In_One.champions
             if (R.IsReady())
                 damage += R.GetDamage2(enemy);
                 
-            if (ZyraDead() && P.IsReady())
+            if (ZyraDead && P.IsReady())
                 damage += P.GetDamage2(enemy);
                 
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage2(enemy, true);
+
             return damage;
         }
     }

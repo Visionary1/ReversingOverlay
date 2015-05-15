@@ -93,12 +93,6 @@ namespace ALL_In_One.champions
             if (Menu.Item("miscKs", true).GetValue<bool>())
                 Killsteal();
             #endregion
-            
-            #region AfterAttack
-            AIO_Func.AASkill(E);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -155,15 +149,15 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || !Orbwalking.CanMove(10) || !E.IsReady() || Target == null)
                 return;
 
-            if(!utility.Activator.AfterAttack.AIO)
+            
             AA();
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                if (Menu.Item("LcUseE", true).GetValue<bool>() && AIO_Func.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value)
+                if (Menu.Item("LcUseE", true).GetValue<bool>() && Player.ManaPercent > Menu.Item("LcMana", true).GetValue<Slider>().Value)
                     E.Cast();
 
-                if (Menu.Item("JcUseE", true).GetValue<bool>() && AIO_Func.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value) // <- 이렇게 하면 JcUseE, LcUseE 둘중에 하나만 켜도 정글 라인 안가리고 항상 E를 쓰는 문제가 발생함. 분리하려면 제가한것처럼 AALaneclear AAJunglecelar 등으로 분리해야..
+                if (Menu.Item("JcUseE", true).GetValue<bool>() && Player.ManaPercent > Menu.Item("JcMana", true).GetValue<Slider>().Value) // <- 이렇게 하면 JcUseE, LcUseE 둘중에 하나만 켜도 정글 라인 안가리고 항상 E를 쓰는 문제가 발생함. 분리하려면 제가한것처럼 AALaneclear AAJunglecelar 등으로 분리해야..
                     E.Cast();
             }
         }
@@ -200,7 +194,7 @@ namespace ALL_In_One.champions
 
         static void Harass()
         {
-            if (!(AIO_Func.getManaPercent(Player) > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercent > Menu.Item("HrsMana", true).GetValue<Slider>().Value))
                 return;
 
             if (Menu.Item("HrsUseQ", true).GetValue<bool>() && Q.IsReady())
@@ -225,7 +219,7 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > Menu.Item("LcMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercent > Menu.Item("LcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
@@ -239,7 +233,7 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > Menu.Item("JcMana", true).GetValue<Slider>().Value))
+            if (!(Player.ManaPercent > Menu.Item("JcMana", true).GetValue<Slider>().Value))
                 return;
 
             var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

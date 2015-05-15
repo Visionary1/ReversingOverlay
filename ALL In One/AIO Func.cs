@@ -10,20 +10,8 @@ namespace ALL_In_One
     static class AIO_Func
     {
         internal static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
-        static float SWDuration { get { var buff = AIO_Func.getBuffInstance(ObjectManager.Player, "MasterySpellWeaving"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static Obj_AI_Hero Player { get { return ObjectManager.Player; } } // Player 많이 쓰는데 괜히 ObjectManager.Player라고 하는거 너무길어요~~.
-        static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } } // 이거 지우면 평캔 관련 다날라갑니다. 절대 지우기 ㄴ
-
-        
-        internal static float getHealthPercent(Obj_AI_Base unit)
-        {
-            return unit.Health / unit.MaxHealth * 100;
-        }
-
-        internal static float getManaPercent(Obj_AI_Base unit)
-        {
-            return unit.Mana / unit.MaxMana * 100;
-        }
+        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
+        static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
 
         internal static List<Obj_AI_Base> getCollisionMinions(Obj_AI_Hero source, SharpDX.Vector3 targetPos, float predDelay, float predWidth, float predSpeed)
         {
@@ -52,7 +40,7 @@ namespace ALL_In_One
 
         internal static bool isKillable(Obj_AI_Base target, float damage)
         {
-            return target.Health + target.HPRegenRate <= damage;
+            return target.Health + (target.HPRegenRate / 2) <= damage;
         }
 
         internal static bool isKillable(Obj_AI_Base target, Spell spell, int stage = 0)
@@ -216,19 +204,6 @@ namespace ALL_In_One
             Game.Say("/d");
         }
         
-        internal static bool AfterAttack()
-        {
-            return SWDuration > 4.85 && utility.Activator.AfterAttack.AIO;
-        }
-        
-        internal static void AASkill(Spell spell)
-        {
-            if(spell.IsReady())
-            utility.Activator.AfterAttack.SkillCasted = false;
-            else
-            utility.Activator.AfterAttack.SkillCasted = true;
-        }
-        
         internal static void AALcJc(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
         {// 아주 편하게 평캔 Lc, Jc를 구현할수 있습니다(그것도 분리해서!!). 그냥 AIO_Func.AALcJc(Q); 이렇게 쓰세요. 선형 스킬일 경우 세부 설정을 원할 경우 AIO_Func.AALcJc(E,ED,0f); 이런식으로 쓰세요.
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
@@ -240,9 +215,9 @@ namespace ALL_In_One
                 bool LHM = true;
                 if (Cost == 1f)
                 {
-                    HM = getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana;
-                    LM = getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana;
-                    LHM = getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana;
+                    HM = Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana;
+                    LM = Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana;
+                    LHM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
                 }
                 else
                 {
@@ -269,7 +244,7 @@ namespace ALL_In_One
                         else
                         {
                             spell.Cast();
-                            Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer2);
+                            Orbwalking.ResetAutoAttackTimer();
                         }
                     }
                 }
@@ -292,7 +267,7 @@ namespace ALL_In_One
                         else
                         {
                             spell.Cast();
-                            Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer2);
+                            Orbwalking.ResetAutoAttackTimer();
                         }
                     }
                 }
@@ -307,9 +282,9 @@ namespace ALL_In_One
             bool LHM = true;
             if (Cost == 1f)
             {
-                HM = getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana;
-                LM = getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana;
-                LHM = getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana;
+                HM = Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana;
+                LM = Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana;
+                LHM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
             }
             else
             {
@@ -336,7 +311,7 @@ namespace ALL_In_One
                     else
                     {
                         spell.Cast();
-                        Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer2);
+                        Orbwalking.ResetAutoAttackTimer();
                     }
                 }
             }
@@ -359,23 +334,23 @@ namespace ALL_In_One
                     else
                     {
                         spell.Cast();
-                        Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer2);
+                        Orbwalking.ResetAutoAttackTimer();
                     }
                 }
             }
         }
         
-        internal static void SC(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //
-        { // 
-            var target = TargetSelector.GetTarget(spell.Range, spell.DamageType, true); //
+        internal static void SC(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f)
+        {
+            var target = TargetSelector.GetTarget(spell.Range, spell.DamageType, true);
             bool HM = true;
             bool LM = true;
             bool LHM = false;
             if (Cost == 1f)
             {
-                HM = getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana;
-                LM = getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana;
-                LHM = getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana;
+                HM = Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana;
+                LM = Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana;
+                LHM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
             }
             else
             {
@@ -499,9 +474,9 @@ namespace ALL_In_One
             bool LHM = true;
             if (Cost == 1f)
             {
-                HM = getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana;
-                LM = getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana;
-                LHM = getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana;
+                HM = Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana;
+                LM = Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana;
+                LHM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
             }
             else
             {
@@ -548,10 +523,10 @@ namespace ALL_In_One
         {
             bool M = true;
             if (Cost == 1f)
-            M = getManaPercent(Player) > Mana;
+            M = Player.ManaPercent > Mana;
             else
             M = true;
-            foreach (var Ally in HeroManager.Allies.Where(x => x.Distance(Player.ServerPosition) <= spell.Range && getHealthPercent(x) < Max && (Player.ChampionName == "Soraka" ? x!=Player : x!=null))) //소라카는 자신을 힐 못하니까!
+            foreach (var Ally in HeroManager.Allies.Where(x => x.Distance(Player.ServerPosition) <= spell.Range && x.HealthPercent < Max && (Player.ChampionName == "Soraka" ? x != Player : x != null))) //소라카는 자신을 힐 못하니까!
             {
                 if (spell.IsReady() && M && Ally != null)
                     spell.Cast(Ally);
@@ -565,12 +540,12 @@ namespace ALL_In_One
         
         internal static int EnemyCount(float range, float min = 0, float max = 100)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
         {
-            return GetEnemyList().Where(x => x.Distance(Player.ServerPosition) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
+            return GetEnemyList().Where(x => x.Distance(Player.ServerPosition) <= range && x.HealthPercent > min && x.HealthPercent <= max).Count();
         }
         
         internal static int ECTarget(Obj_AI_Hero target, float range, float min = 0, float max = 100)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
         {
-            return GetEnemyList().Where(x => x.Distance(target.ServerPosition) <= range && getHealthPercent(x) > min && getHealthPercent(x) <= max).Count();
+            return GetEnemyList().Where(x => x.Distance(target.ServerPosition) <= range && x.HealthPercent > min && x.HealthPercent <= max).Count();
         }
 
         internal static double UnitIsImmobileUntil(Obj_AI_Base unit)

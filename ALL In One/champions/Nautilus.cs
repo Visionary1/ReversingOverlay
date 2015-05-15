@@ -179,7 +179,7 @@ namespace ALL_In_One.champions
         static void Laneclear()
         {
 
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
            
@@ -207,7 +207,7 @@ namespace ALL_In_One.champions
         static void Jungleclear()
         {
             
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
          

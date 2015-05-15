@@ -82,11 +82,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
             #endregion
-            #region AfterAttack
-            AIO_Func.AASkill(Q);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -137,7 +132,7 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || Target == null)
                 return;
             AIO_Func.AALcJc(Q);
-            if(!utility.Activator.AfterAttack.AIO)
+            
             AA();
         }
 
@@ -157,14 +152,14 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-                if(AIO_Func.isKillable(Rtarget, R.GetDamage2(Rtarget)-Rtarget.HPRegenRate) || AIO_Func.getHealthPercent(Player) < 50)
+                if(AIO_Func.isKillable(Rtarget, R.GetDamage2(Rtarget)-Rtarget.HPRegenRate) || Player.HealthPercent < 50)
                 R.Cast(Rtarget);
             }
         }
         
         static void Laneclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Laneclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -177,7 +172,7 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

@@ -83,11 +83,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
                 KillstealQ();
             #endregion
-            #region AfterAttack
-            AIO_Func.AASkill(Q);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -117,7 +112,7 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || Target == null)
                 return;
             AIO_Func.AALcJc(Q);
-            if(!utility.Activator.AfterAttack.AIO)
+            
             AA();
         }
 
@@ -140,14 +135,14 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-                if(AIO_Func.getHealthPercent(Player) < 60 || Rtarget.Distance(Player.ServerPosition) < 600)
+                if(Player.HealthPercent < 60 || Rtarget.Distance(Player.ServerPosition) < 600)
                 R.Cast();
             }
         }
 
         static void Harass()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
                 return;
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())

@@ -116,7 +116,7 @@ namespace ALL_In_One.champions
         
         static void AutoR()
         {
-            if(HeroManager.Allies.Where(x => AIO_Func.getHealthPercent(x) < 40 && AIO_Func.ECTarget(x,1000f) > 0).Count() > 1 || AIO_Func.getHealthPercent(Player) < 40 && AIO_Func.ECTarget(Player,1000f) > 0)
+            if(HeroManager.Allies.Where(x => x.HealthPercent < 40 && AIO_Func.ECTarget(x,1000f) > 0).Count() > 1 || Player.HealthPercent < 40 && AIO_Func.ECTarget(Player,1000f) > 0)
             {
                 if(R.IsReady())
                 R.Cast();

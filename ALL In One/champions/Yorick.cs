@@ -53,7 +53,6 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addErange();
             AIO_Menu.Champion.Drawings.addRrange();
 
-        
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
@@ -74,17 +73,7 @@ namespace ALL_In_One.champions
                     Combo();
             }
 
-            #region Killsteal
-            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealW"))
-                KillstealW();
-            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
-                KillstealE();
-            #endregion
-            #region AfterAttack
-            AIO_Func.AASkill(Q);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
+            Killsteal();
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -95,10 +84,13 @@ namespace ALL_In_One.champions
             var drawW = AIO_Menu.Champion.Drawings.Wrange;
             var drawE = AIO_Menu.Champion.Drawings.Erange;
             var drawR = AIO_Menu.Champion.Drawings.Rrange;
+
             if (W.IsReady() && drawW.Active)
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
+
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
@@ -114,7 +106,7 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || Target == null)
                 return;
             AIO_Func.AALcJc(Q);
-            if(!utility.Activator.AfterAttack.AIO)
+            
             AA();
         }
 
@@ -122,24 +114,19 @@ namespace ALL_In_One.champions
         {            
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-                if(AIO_Func.getHealthPercent(Player) < 40 && AIO_Func.EnemyCount(700f) > 0)
+                if(Player.HealthPercent < 40 && AIO_Func.EnemyCount(700f) > 0)
                 R.Cast(Player);
             }
         }
 
-        static void KillstealW()
+        static void Killsteal()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (W.CanCast(target) && AIO_Func.isKillable(target, W))
+                if (W.CanCast(target) && AIO_Func.isKillable(target, W) && AIO_Menu.Champion.Misc.getBoolValue("KillstealW"))
                     AIO_Func.CCast(W,target);
-            }
-        }
-        static void KillstealE()
-        {
-            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
-            {
-                if (E.CanCast(target) && AIO_Func.isKillable(target, E))
+
+                if (E.CanCast(target) && AIO_Func.isKillable(target, E) && AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
                     E.Cast(target);
             }
         }

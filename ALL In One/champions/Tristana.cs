@@ -90,12 +90,6 @@ namespace ALL_In_One.champions
                 KillstealE();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
-                
-            #region AfterAttack
-            AIO_Func.AASkill(E);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -151,8 +145,6 @@ namespace ALL_In_One.champions
 
             AIO_Func.AALcJc(Q);
             AIO_Func.AALcJc(E);
-            
-            if(!utility.Activator.AfterAttack.AIO)
             AA();
         }
         
@@ -162,7 +154,7 @@ namespace ALL_In_One.champions
             AIO_Func.AACb(Q);
             AIO_Func.AACb(E);
             if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseR ||
-            Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseR && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana)
+            Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseR && Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana)
             && R.IsReady() && Target.Health + Target.HPRegenRate <= R.GetDamage2(Target)+ (float)Player.GetAutoAttackDamage2(Target, true))
             { // 평-R-평 => Kill
                 R.Cast(Target);

@@ -90,12 +90,6 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
             #endregion
-            
-            #region AfterAttack
-            AIO_Func.AASkill(E);
-            if(AIO_Func.AfterAttack())
-            AA();
-            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -159,9 +153,9 @@ namespace ALL_In_One.champions
         {
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
             if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count >= 1 &&
-            (!AIO_Menu.Champion.Jungleclear.UseW || !(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))) ||
+            (!AIO_Menu.Champion.Jungleclear.UseW || !(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))) ||
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !AIO_Menu.Champion.Combo.UseW || !AIO_Menu.Champion.Harass.UseW ||
-            Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && !(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Harass.IfMana))
+            Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && !(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
             return;
             if (IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady() && Player.Distance(args.End) < 110)
             W.Cast();
@@ -191,7 +185,7 @@ namespace ALL_In_One.champions
 
             AIO_Func.AALcJc(E);
         
-        if(!utility.Activator.AfterAttack.AIO)
+        
             AA();
     }
 
@@ -217,7 +211,7 @@ namespace ALL_In_One.champions
 
         static void Jungleclear()
         {
-            if (!(AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Jungleclear.IfMana))
+            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);

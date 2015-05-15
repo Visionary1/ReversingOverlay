@@ -43,6 +43,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addIfMana();
+            
+            AIO_Menu.Champion.Flee.addUseE();
+            AIO_Menu.Champion.Flee.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
@@ -67,6 +70,7 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(10))
             {
                 AIO_Func.SC(W,WD,0f);
+                AIO_Func.FleeToPosition(E);
                 //AIO_Func.SC(E);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();

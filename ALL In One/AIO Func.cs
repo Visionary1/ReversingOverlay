@@ -63,140 +63,16 @@ namespace ALL_In_One
         {
             return (float)Damage.CalcDamage(Sender,Target, Type, Equation);
         }
-        
-        internal static void CCast(Spell spell, Obj_AI_Base target) //for Circular spells
-        {
-            if(spell.Type == SkillshotType.SkillshotCircle || spell.Type == SkillshotType.SkillshotCone) // Cone 스킬은 임시로
-            {
-                if(spell != null && target !=null)
-                {
-                    var pred = Prediction.GetPrediction(target, spell.Delay, spell.Width/2, spell.Speed);
-                    SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + target.ServerPosition.To2D()) / 2 ;
-                    SharpDX.Vector2 castVec2 = Player.ServerPosition.To2D() +
-                                               SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (spell.Range);
-                    
-                    if (target.IsValidTarget(spell.Range))
-                    {
-                        if(target.MoveSpeed*(Game.Ping/2000 + spell.Delay+Player.ServerPosition.Distance(target.ServerPosition)/spell.Speed) <= spell.Width*1/2)
-                            spell.Cast(target.ServerPosition); //Game.Ping/2000  추가함.
-                        else if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && pred.UnitPosition.Distance(target.ServerPosition) < Math.Max(spell.Width,300f))
-                        {
-                            if(target.MoveSpeed*(Game.Ping/2000 + spell.Delay+Player.ServerPosition.Distance(target.ServerPosition)/spell.Speed) <= spell.Width*2/3 && castVec.Distance(pred.UnitPosition) <= spell.Width*1/2 && castVec.Distance(Player.ServerPosition) <= spell.Range)
-                            {
-                                spell.Cast(castVec);
-                            }
-                            else if(castVec.Distance(pred.UnitPosition) > spell.Width*1/2 && Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range)
-                            {
-                                spell.Cast(pred.UnitPosition);
-                            }
-                            else
-                                spell.Cast(pred.CastPosition); // <- 별로 좋은 선택은 아니지만.. 
-                        }
-                    }
-                    else if (target.IsValidTarget(spell.Range + spell.Width/2)) //사거리 밖 대상에 대해서
-                    {
-                        if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range+spell.Width*1/2 && pred.UnitPosition.Distance(target.ServerPosition) < Math.Max(spell.Width,300f))
-                        {
-                            if(Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range)
-                            {
-                                if(Player.ServerPosition.Distance(pred.CastPosition) <= spell.Range)
-                                spell.Cast(pred.CastPosition);
-                            }
-                            else if(Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range+spell.Width*1/2 && target.MoveSpeed*(Game.Ping/2000 + spell.Delay+Player.ServerPosition.Distance(target.ServerPosition)/spell.Speed) <= spell.Width/2)
-                            {
-                                if(Player.Distance(castVec2) <= spell.Range)
-                                spell.Cast(castVec2);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        internal static void LCast(Spell spell, Obj_AI_Base target, float alpha = 0f, float colmini = float.MaxValue, bool HeroOnly = false) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
-        {                            //        AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue); <- 이런식으로 사용.
-            if(spell.Type == SkillshotType.SkillshotLine)
-            {
-                if(spell != null && target !=null)
-                {
-                    var pred = Prediction.GetPrediction(target, spell.Delay, spell.Width/2, spell.Speed); //spell.Width/2
-                    var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
-                    //var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
-                    var minioncol = collision.Count(x => (HeroOnly == false ? x.IsMinion : (x is Obj_AI_Hero)));
 
-                    if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-                    {
-                        spell.Cast(pred.CastPosition);
-                    }
-                }
-            }
-        }
-        
-        internal static void AtoB(Spell spell, Obj_AI_Base T, float Drag = 700f) //Coded By RL244 AtoB Drag 기본값 700f는 빅토르를 위한 것임.
-        {
-            if(T != null)
-            {
-                var T2 = HeroManager.Enemies.Where(x => x != T && CanHit(spell,x,Drag)).FirstOrDefault();
-                var pred = Prediction.GetPrediction(T, spell.Delay, spell.Width/2, spell.Speed);
-                var T2pred = Prediction.GetPrediction(T2, spell.Delay, spell.Width/2, spell.Speed);
-                SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + T.ServerPosition.To2D()) / 2 ;
-                SharpDX.Vector2 castVec2 = Player.ServerPosition.To2D() +
-                                           SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (spell.Range);
-                SharpDX.Vector2 castVec3 = T.ServerPosition.To2D() -
-                                           SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (40f);
-                if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-                {
-                    if(T.Distance(Player.ServerPosition) >= spell.Range)
-                    {
-                        if(CanHit(spell,T,Drag) && T2 == null && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-                        spell.Cast(castVec2,pred.UnitPosition.To2D());
-                        else //if(CanHit(spell,T,Drag) && T2 != null && T2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
-                        {
-                        spell.Cast(castVec2,T.ServerPosition.To2D());//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
-                        }
-                    }
-                    else
-                    {
-                        if(T2 == null || !CanHit(spell,T2,Drag))
-                        spell.Cast(castVec3,T.ServerPosition.To2D());
-                        else if(T2 != null && CanHit(spell,T2,Drag) && T2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-                        {
-                            SharpDX.Vector2 castVec4 = T.ServerPosition.To2D() -
-                                                       SharpDX.Vector2.Normalize(T2pred.UnitPosition.To2D() - T.ServerPosition.To2D()) * (40f);
-                            spell.Cast(castVec4,T2pred.UnitPosition.To2D());
-                        }
-                    }
-                }
-            }
-        }
         
         internal static bool CanHit(Spell spell, Obj_AI_Base T, float Drag = 0f)
         {
             return T.IsValidTarget(spell.Range + Drag - ((T.Distance(Player.ServerPosition)-spell.Range)/spell.Speed+spell.Delay)*T.MoveSpeed);
         }
         
-        internal static void LH(Spell spell, float ALPHA = 0f) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
-        {
-            var M = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health).FirstOrDefault(m => isKillable(m,spell,0) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
-            if(spell.IsReady() && M != null)
-            {
-                if(spell.IsSkillshot)
-                {
-                    if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우 위에 MinionOrderTypes.MaxHealth 없애서 기본값으로 바꿨음 막타잘치게 NotAlly
-                    LCast(spell,M,50f,ALPHA);
-                    else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
-                    CCast(spell,M);
-                    else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
-                    spell.Cast(M);
-                }
-                else
-                spell.Cast(M);
-            }
-        }
-        
         internal static float PredHealth(Obj_AI_Base Target, Spell spell)
         {
-            return HealthPrediction.GetHealthPrediction(Target, (int)(Player.Distance(Target, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2));
+            return AIO_Pred.PredHealth(Target,spell);
         }
 
         internal static void MotionCancel()
@@ -337,6 +213,25 @@ namespace ALL_In_One
                         Orbwalking.ResetAutoAttackTimer();
                     }
                 }
+            }
+        }
+        
+        internal static void LH(Spell spell, float ALPHA = 0f) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
+        {
+            var M = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health).FirstOrDefault(m => isKillable(m,spell,0) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
+            if(spell.IsReady() && M != null)
+            {
+                if(spell.IsSkillshot)
+                {
+                    if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우 위에 MinionOrderTypes.MaxHealth 없애서 기본값으로 바꿨음 막타잘치게 NotAlly
+                    LCast(spell,M,50f,ALPHA);
+                    else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
+                    CCast(spell,M);
+                    else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+                    spell.Cast(M);
+                }
+                else
+                spell.Cast(M);
             }
         }
         
@@ -636,6 +531,27 @@ namespace ALL_In_One
 
                 return hitcount;
             }
+        }
+        
+        internal static void CCast(Spell spell, Obj_AI_Base target) //for Circular spells
+        {
+            AIO_Pred.CCast(spell,target);
+        }
+        internal static void LCast(Spell spell, Obj_AI_Base target, float alpha = 0f, float colmini = float.MaxValue, bool HeroOnly = false) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
+        {
+            AIO_Pred.LCast(spell,target,alpha,colmini,HeroOnly );
+        }
+        internal static void RMouse(Spell spell)
+        {
+            AIO_Pred.RMouse(spell);
+        }
+        internal static void AtoB(Spell spell, Obj_AI_Base T, float Drag = 700f) //Coded By RL244 AtoB Drag 기본값 700f는 빅토르를 위한 것임.
+        {
+            AIO_Pred.AtoB(spell,T,Drag);
+        }
+        internal static void FleeToPosition(Spell spell, string W = "N") // N 정방향, R 역방향.
+        {
+            AIO_Pred.FleeToPosition(spell,W);
         }
     }
 }

@@ -48,6 +48,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseE(false);
             AIO_Menu.Champion.Jungleclear.addIfMana();
+            
+            AIO_Menu.Champion.Flee.addUseE();
+            AIO_Menu.Champion.Flee.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(0, 0, 250));
@@ -77,6 +80,7 @@ namespace ALL_In_One.champions
                 AIO_Func.SC(Q,QD,0f);
                 AIO_Func.SC(W,QD);
                 AIO_Func.SC(E);
+                AIO_Func.FleeToPosition(E);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
             }

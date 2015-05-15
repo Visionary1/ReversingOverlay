@@ -51,8 +51,10 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
             
 
-            AIO_Menu.Champion.Misc.addHitchanceSelector();
+            AIO_Menu.Champion.Flee.addUseW(false);
+            AIO_Menu.Champion.Flee.addIfMana();
 
+            AIO_Menu.Champion.Misc.addHitchanceSelector();
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(0, 0, 250));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);

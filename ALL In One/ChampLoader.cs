@@ -149,10 +149,10 @@ namespace ALL_In_One
                     MadeBy(Developer.xcsoft);
                     champions.Amumu.Load();
                     break;
-                /*case "Yasuo":
+                case "Yasuo":
                     MadeBy(Developer.RL244);
                     champions.Yasuo.Load();
-                    break;*/
+                    break;
                 /*case "Syndra":
                     MadeBy(Developer.RL244);// Work In Progress
                     champions.Syndra.Load();
@@ -309,10 +309,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Nocturne.Load();
                     break;
-                /*case "Sona":
+                case "Sona":
                     MadeBy(Developer.RL244);
                     champions.Sona.Load();
-                    break;*/
+                    break;
                 case "Pantheon":
                     MadeBy(Developer.RL244);
                     champions.Pantheon.Load();
@@ -321,7 +321,7 @@ namespace ALL_In_One
                     MadeBy(Developer.xcsoft);
                     champions.Twitch.Load();
                     break;
-                case "Ashe": //리메이크 전 애쉬로 일단 미리 테스트했음. 치명타 패시브 추가했고 Q 데미지 등은 리메이크 된 애쉬를 직접 플레이해보며 추가할것임.
+                case "Ashe":
                     MadeBy(Developer.RL244);
                     champions.Ashe.Load();
                     break;

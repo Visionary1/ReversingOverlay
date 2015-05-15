@@ -39,6 +39,10 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
+            AIO_Menu.Champion.Flee.addUseW();
+            AIO_Menu.Champion.Flee.addIfMana();
+            
+            AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
 
             AIO_Menu.Champion.Drawings.addQrange();

@@ -48,6 +48,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseE(false);
             AIO_Menu.Champion.Jungleclear.addIfMana();
+            
+            AIO_Menu.Champion.Flee.addUseE();
+            AIO_Menu.Champion.Flee.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Qrange")).SetValue(new Slider(25, 0, 150));
@@ -91,6 +94,8 @@ namespace ALL_In_One.champions
                     Laneclear();
                     Jungleclear();
                 }
+                
+                AIO_Func.FleeToPosition(E,"R");
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))

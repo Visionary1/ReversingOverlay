@@ -51,6 +51,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addUseR(false);
             AIO_Menu.Champion.Jungleclear.addIfMana();
+            
+            AIO_Menu.Champion.Flee.addUseR();
+            AIO_Menu.Champion.Flee.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
@@ -84,6 +87,7 @@ namespace ALL_In_One.champions
                 AIO_Func.SC(Q);
                 AIO_Func.SC(E);
                 AIO_Func.SC(R);
+                AIO_Func.FleeToPosition(R);
             }
 
             #region Killsteal

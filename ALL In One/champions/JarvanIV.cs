@@ -50,6 +50,10 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
+            
+            AIO_Menu.Champion.Flee.addUseQ();
+            AIO_Menu.Champion.Flee.addUseE();
+            AIO_Menu.Champion.Flee.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Qrange")).SetValue(new Slider(25, 0, 150));
@@ -79,6 +83,7 @@ namespace ALL_In_One.champions
                     AIO_Func.SC(Q,QD);
                 AIO_Func.SC(W);
                 AIO_Func.SC(E);
+                AIO_Func.FleeToPosition(E);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
             }
@@ -130,6 +135,14 @@ namespace ALL_In_One.champions
                     AIO_Func.LCast(Q,Qtarget,QD,float.MaxValue);
                 }
             }
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee)
+            {
+                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.E).Name)
+                {
+                    AIO_Func.FleeToPosition(Q);
+                }
+            }
+
 
         }
         static void Combo()

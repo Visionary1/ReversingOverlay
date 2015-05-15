@@ -48,8 +48,11 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addIfMana(80);
+            
+            AIO_Menu.Champion.Flee.addUseE();
+            AIO_Menu.Champion.Flee.addIfMana();
 
-            AIO_Menu.Champion.Misc.addItem("Use E on Gap Closer", true);
+            AIO_Menu.Champion.Misc.addItem("Use E on Gap Closer", false);
             AIO_Menu.Champion.Misc.addUseKillsteal();
 
             AIO_Menu.Champion.Drawings.addQrange();
@@ -75,6 +78,7 @@ namespace ALL_In_One.champions
  
             if (Orbwalking.CanMove(10))
             {
+                AIO_Func.FleeToPosition(E);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 

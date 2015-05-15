@@ -80,6 +80,7 @@ namespace ALL_In_One.champions
                 AIO_Func.SC(Q,QD,0f);
                 AIO_Func.SC(W,QD);
                 AIO_Func.SC(E);
+                AIO_Func.FleeToPosition(E);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
             }

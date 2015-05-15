@@ -70,6 +70,7 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(10))
             {
                 AIO_Func.SC(W,WD,0f);
+                AIO_Func.FleeToPosition(E);
                 //AIO_Func.SC(E);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();

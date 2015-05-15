@@ -87,6 +87,7 @@ namespace ALL_In_One.champions
                 AIO_Func.SC(Q);
                 AIO_Func.SC(E);
                 AIO_Func.SC(R);
+                AIO_Func.FleeToPosition(R);
             }
 
             #region Killsteal

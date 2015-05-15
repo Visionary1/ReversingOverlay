@@ -94,9 +94,8 @@ namespace ALL_In_One.champions
                     Laneclear();
                     Jungleclear();
                 }
-				
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee && AIO_Menu.Champion.Flee.UseE && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Flee.IfMana)
-					AIO_Func.RMouse(E);
+                
+                AIO_Func.FleeToPosition(E,"R");
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))

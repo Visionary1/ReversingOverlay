@@ -65,6 +65,7 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
+                AIO_Func.FleeToPosition(Q);
                 AIO_Func.SC(Q,0,0,0f);
                 AIO_Func.SC(E,ED,float.MaxValue,2f);
                 AIO_Func.SC(R,0,0,0f);

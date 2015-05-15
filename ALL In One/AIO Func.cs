@@ -152,6 +152,7 @@ namespace ALL_In_One
             spell.Cast(ReverseVec);
         }
         
+        
         internal static void AtoB(Spell spell, Obj_AI_Base T, float Drag = 700f) //Coded By RL244 AtoB Drag 기본값 700f는 빅토르를 위한 것임.
         {
             if(T != null)
@@ -369,6 +370,31 @@ namespace ALL_In_One
                         spell.Cast();
                         Utility.DelayAction.Add(15, Orbwalking.ResetAutoAttackTimer2);
                     }
+                }
+            }
+        }
+        
+        internal static void FleeToPosition(Spell spell, string W = "N") // N 정방향, R 역방향.
+        {
+            bool FM = true;
+            if (AIO_Menu.Champion.Flee.IfMana != null)
+            {
+                FM = getManaPercent(Player) > AIO_Menu.Champion.Flee.IfMana;
+            }
+            else
+            {
+                FM = true;
+            }
+            SharpDX.Vector2 NormalVec = Player.ServerPosition.To2D() +
+                                       SharpDX.Vector2.Normalize(Game.CursorPos.To2D() - Player.Position.To2D()) * (spell.Range);
+            if(Menu.Item("Flee.Use " + spell.Slot.ToString(), true) != null && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee)
+            {
+                if(Menu.Item("Flee.Use " + spell.Slot.ToString(), true).GetValue<bool>() && spell.IsReady())
+                {
+                    if(W == "N")
+                    spell.Cast(NormalVec);
+                    else
+                    RMouse(spell);
                 }
             }
         }

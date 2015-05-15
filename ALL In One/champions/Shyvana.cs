@@ -43,6 +43,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addUseE();
+            
+            AIO_Menu.Champion.Flee.addUseR();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);

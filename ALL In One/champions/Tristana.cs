@@ -45,6 +45,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseW(false);
             AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
+            
+            AIO_Menu.Champion.Flee.addUseW();
+            AIO_Menu.Champion.Flee.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
 

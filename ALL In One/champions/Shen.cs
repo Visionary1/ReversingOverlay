@@ -36,6 +36,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Laneclear.addUseQ();
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
+            
+            AIO_Menu.Champion.Flee.addUseE();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addUseInterrupter();

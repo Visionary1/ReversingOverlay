@@ -506,6 +506,96 @@ namespace ALL_In_One
                     }
                 }
             }
+            
+
+            internal class Flee
+            {
+                internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
+                {
+                    if (Value == null)
+                    {
+                        MainMenu_Manual.SubMenu("Champion").SubMenu("Flee").AddItem(new MenuItem("Flee." + DisplayName, DisplayName, ChampUniq));
+                        return;
+                    }
+
+                    MainMenu_Manual.SubMenu("Champion").SubMenu("Flee").AddItem(new MenuItem("Flee." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
+                }
+
+                internal static bool getBoolValue(string DisplayName, bool ChampUniq = true)
+                {
+                    return MainMenu_Manual.Item("Flee." + DisplayName, ChampUniq).GetValue<bool>();
+                }
+
+                internal static Slider getSliderValue(string DisplayName, bool ChampUniq = true)
+                {
+                    return MainMenu_Manual.Item("Flee." + DisplayName, ChampUniq).GetValue<Slider>();
+                }
+
+                internal static void addUseQ(bool Enabled = true)
+                {
+                    addItem("Use Q", Enabled);
+                }
+
+                internal static void addUseW(bool Enabled = true)
+                {
+                    addItem("Use W", Enabled);
+                }
+
+                internal static void addUseE(bool Enabled = true)
+                {
+                    addItem("Use E", Enabled);
+                }
+
+                internal static void addUseR(bool Enabled = true)
+                {
+                    addItem("Use R", Enabled);
+                }
+
+                internal static void addIfMana(int DefaultValue = 10)
+                {
+                    addItem("If Mana >", new Slider(DefaultValue));
+                }
+
+                internal static bool UseQ
+                {
+                    get
+                    {
+                        return getBoolValue("Use Q");
+                    }
+                }
+
+                internal static bool UseW
+                {
+                    get
+                    {
+                        return getBoolValue("Use W");
+                    }
+                }
+
+                internal static bool UseE
+                {
+                    get
+                    {
+                        return getBoolValue("Use E");
+                    }
+                }
+
+                internal static bool UseR
+                {
+                    get
+                    {
+                        return getBoolValue("Use R");
+                    }
+                }
+
+                internal static int IfMana
+                {
+                    get
+                    {
+                        return getSliderValue("If Mana >").Value;
+                    }
+                }
+            }
 
             internal class Misc
             {

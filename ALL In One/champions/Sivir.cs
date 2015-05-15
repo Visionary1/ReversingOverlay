@@ -45,6 +45,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addIfMana();
+            
+            AIO_Menu.Champion.Flee.addUseR();
+            AIO_Menu.Champion.Flee.addIfMana();
 
             AIO_Menu.Champion.Misc.addUseKillsteal();
             AIO_Menu.Champion.Misc.addItem("AutoQ", true);

@@ -144,6 +144,14 @@ namespace ALL_In_One
             }
         }
         
+        internal static void RMouse(Spell spell)
+        {
+            SharpDX.Vector2 ReverseVec = Player.ServerPosition.To2D() -
+                                       SharpDX.Vector2.Normalize(Game.CursorPos.To2D() - Player.Position.To2D()) * (spell.Range);
+            if(spell.IsReady())
+            spell.Cast(ReverseVec);
+        }
+        
         internal static void AtoB(Spell spell, Obj_AI_Base T, float Drag = 700f) //Coded By RL244 AtoB Drag 기본값 700f는 빅토르를 위한 것임.
         {
             if(T != null)

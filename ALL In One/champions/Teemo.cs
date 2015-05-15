@@ -39,6 +39,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
+
             AIO_Menu.Champion.Flee.addUseW();
             AIO_Menu.Champion.Flee.addIfMana();
             

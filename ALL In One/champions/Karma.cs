@@ -18,7 +18,7 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
-        static Spell Q, W, E, R, QQ, WW, EE;
+        static Spell Q, W, E, R;
 
         public static void Load()
         {

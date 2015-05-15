@@ -13,16 +13,6 @@ namespace ALL_In_One
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } } 
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } } 
         
-        internal static float getHealthPercent(Obj_AI_Base unit)
-        {
-            return AIO_Func.getHealthPercent(unit);
-        }
-
-        internal static float getManaPercent(Obj_AI_Base unit)
-        {
-            return AIO_Func.getManaPercent(unit);
-        }
-        
         internal static float PredHealth(Obj_AI_Base Target, Spell spell)
         {
             return HealthPrediction.GetHealthPrediction(Target, (int)(Player.Distance(Target, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2));
@@ -147,7 +137,7 @@ namespace ALL_In_One
             bool FM = true;
             if (Menu.Item("Flee.If Mana >" + spell.Slot.ToString(), true) != null)
             {
-                FM = getManaPercent(Player) > AIO_Menu.Champion.Flee.IfMana;
+                FM = Player.ManaPercent > AIO_Menu.Champion.Flee.IfMana;
             }
             else
             {

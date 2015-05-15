@@ -71,7 +71,7 @@ namespace ALL_In_One.champions
             {
                 AIO_Func.SC(Q);
                 AIO_Func.Heal(W);
-                if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee && AIO_Menu.Champion.Flee.UseE && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Flee.IfMana && E.IsReady())
+                if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee && AIO_Menu.Champion.Flee.UseE && Player.ManaPercent > AIO_Menu.Champion.Flee.IfMana && E.IsReady())
                     E.Cast();
                 
                 if(AIO_Func.EnemyCount(R.Range - 10) >= RM && R.IsReady() && AIO_Menu.Champion.Combo.UseR)

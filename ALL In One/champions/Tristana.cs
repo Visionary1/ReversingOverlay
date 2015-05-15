@@ -22,7 +22,7 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R, 700f, TargetSelector.DamageType.Magical);
 
-            W.SetSkillshot(1.0f, 150f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            W.SetSkillshot(0.5f, 250f, 1500f, false, SkillshotType.SkillshotCircle);
             E.SetTargetted(0.25f, 1400f);
             R.SetTargetted(0.25f, 1400f);
             
@@ -80,7 +80,8 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
-                foreach (var target in HeroManager.Enemies.Where(x => AIO_Func.CanHit(W,x,0)&& (float)AIO_Func.getBuffInstance(x, "tristanaecharge").Count > 2 && x.HasBuff("tristanaechargesound")))
+                AIO_Func.FleeToPosition(W);
+                foreach (var target in HeroManager.Enemies.Where(x => AIO_Func.CanHit(W,x,0)&& (float)AIO_Func.getBuffInstance(x, "tristanaecharge").Count > 2 && x.HasBuff("tristanaecharge") && (AIO_Func.getBuffInstance(x, "tristanaechargesound").EndTime - Game.ClockTime) > 0.6))
                 {
                     if(target != null && W.IsReady())
                     AIO_Func.SC(W);
@@ -180,9 +181,9 @@ namespace ALL_In_One.champions
                 {
                     var Buff = (target.HasBuff("tristanaechargesound") ? AIO_Func.getBuffInstance(target, "tristanaecharge") : null);
                     bool EK = (target.HasBuff("tristanaechargesound") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f)) || !target.HasBuff("tristanaechargesound"));
-                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Buff != null && !EK && target.HasBuff("tristanaechargesound") && W.CanCast(target) && R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("KillstealR") && target.HasBuff("tristanaechargesound") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage2(target, true)))
+                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Buff != null && !EK && W.CanCast(target) && R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("KillstealR") && target.HasBuff("tristanaechargesound") && (AIO_Func.getBuffInstance(target, "tristanaechargesound").EndTime - Game.ClockTime) > 0.6 && (float)Buff.Count > 0 && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage2(target, true)))
                     AIO_Func.CCast(W,target);
-                    if (W.CanCast(target) && target.HasBuff("tristanaechargesound") && Buff != null && !EK && (float)Buff.Count > 0 && AIO_Func.isKillable(target, W.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f) + (float)Player.GetAutoAttackDamage2(target, true)))
+                    if (W.CanCast(target) && target.HasBuff("tristanaechargesound") && (AIO_Func.getBuffInstance(target, "tristanaechargesound").EndTime - Game.ClockTime) > 0.6 && Buff != null && !EK && (float)Buff.Count > 0 && AIO_Func.isKillable(target, W.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f) + (float)Player.GetAutoAttackDamage2(target, true)))
                     AIO_Func.CCast(W,target);
                     else if (W.CanCast(target) && !EK && AIO_Func.isKillable(target, W.GetDamage2(target) + (float)Player.GetAutoAttackDamage2(target, true)))
                     AIO_Func.CCast(W,target);
@@ -207,7 +208,7 @@ namespace ALL_In_One.champions
                 {
                     var Buff = (target.HasBuff("tristanaechargesound") ? AIO_Func.getBuffInstance(target, "tristanaecharge") : null);
                     bool EK = (target.HasBuff("tristanaechargesound") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f)) || !target.HasBuff("tristanaechargesound"));
-                    if (R.CanCast(target) && Buff != null && (float)Buff.Count > 0 && target.HasBuff("tristanaechargesound") && AIO_Func.isKillable(target, R.GetDamage2(target) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f)) && !EK)
+                    if (R.CanCast(target) && Buff != null && (float)Buff.Count > 0 && target.HasBuff("tristanaechargesound") && (AIO_Func.getBuffInstance(target, "tristanaechargesound").EndTime - Game.ClockTime) > 0.3 && AIO_Func.isKillable(target, R.GetDamage2(target) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f)) && !EK)
                         R.Cast(target);
                     else if (R.CanCast(target) && AIO_Func.isKillable(target, R) && !EK)
                         R.Cast(target);

@@ -75,13 +75,14 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(10))
             {
+                AIO_Func.FleeToPosition(Q);
                 AIO_Func.SC(R);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
                 if(StealthDuration > 1- RQD/1000) //은신 시간동안 평타 X
-                Orbwalker.SetAttack(false);
+                    Orbwalker.SetAttack(false);
                 else
-                Orbwalker.SetAttack(true);
+                    Orbwalker.SetAttack(true);
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))

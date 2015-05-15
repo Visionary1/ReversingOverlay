@@ -61,6 +61,7 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(100))
             {
+                AIO_Func.FleeToPosition(E);
                 switch (Orbwalker.ActiveMode)
                 {
                     case Orbwalking.OrbwalkingMode.Combo:

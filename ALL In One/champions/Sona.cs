@@ -18,7 +18,7 @@ namespace ALL_In_One.champions
         
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 850f, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 840f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 1000f);
             E = new Spell(SpellSlot.E, 350f);
             R = new Spell(SpellSlot.R, 1000f, TargetSelector.DamageType.Magical);
@@ -37,7 +37,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Lasthit.addUseQ(false);
             AIO_Menu.Champion.Lasthit.addIfMana(20);
             
-            AIO_Menu.Champion.Laneclear.addUseQ();
+            AIO_Menu.Champion.Laneclear.addUseQ(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
@@ -71,6 +71,9 @@ namespace ALL_In_One.champions
             {
                 AIO_Func.SC(Q);
                 AIO_Func.Heal(W);
+                if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee && AIO_Menu.Champion.Flee.UseE && AIO_Func.getManaPercent(Player) > AIO_Menu.Champion.Flee.IfMana && E.IsReady())
+                    E.Cast();
+                
                 if(AIO_Func.EnemyCount(R.Range - 10) >= RM && R.IsReady() && AIO_Menu.Champion.Combo.UseR)
                 {
                     foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
@@ -78,6 +81,10 @@ namespace ALL_In_One.champions
                         if (R.CanCast(target))
                             R.CastIfWillHit(target,RM);
                     }
+                }
+                if(AIO_Func.EnemyCount(600) == 0 && AIO_Func.EnemyCount(1500) >= 1 && E.IsReady() && AIO_Menu.Champion.Combo.UseE && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                {
+                    E.Cast();
                 }
             }
 
@@ -112,7 +119,7 @@ namespace ALL_In_One.champions
         {
             var Sender = (Obj_AI_Base) sender;
             var STarget = (Obj_AI_Hero) args.Target;
-            if (!sender.IsMe || Player.IsDead) // 갈리오 W 로직 미완성
+            if (!sender.IsMe || Player.IsDead) // 
                 return;
             if (args.Target.IsMe && !sender.IsAlly && W.IsReady() && AIO_Func.getHealthPercent(Player) < 80 //args.Target.IsMe && AIO_Menu.Champion.Misc.getBoolValue("R Myself Only")
                 && Player.Distance(args.End) < 150 && AIO_Menu.Champion.Combo.UseW)
@@ -150,11 +157,11 @@ namespace ALL_In_One.champions
             if (Q.IsReady())
                 damage += Q.GetDamage2(enemy);
             
-            if (E.IsReady())
-                damage += E.GetDamage2(enemy);
-            
             if (R.IsReady())
                 damage += R.GetDamage2(enemy);
+                
+            if(!Player.IsWindingUp)
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
                 
             return damage;
         }

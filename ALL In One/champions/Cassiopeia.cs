@@ -28,10 +28,10 @@ namespace ALL_In_One.champions
             R = new Spell(SpellSlot.R, 825f, TargetSelector.DamageType.Magical);
 
             
-            Q.SetSkillshot(0.6f, 130f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            W.SetSkillshot(0.5f, 106f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(0.65f, 130f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            W.SetSkillshot(0.75f, 106f, 2500f, false, SkillshotType.SkillshotCircle);
             E.SetTargetted(0.25f, 1900f);
-            R.SetSkillshot(0.75f, (float)(80 * Math.PI / 180), float.MaxValue, false, SkillshotType.SkillshotCone);
+            R.SetSkillshot(0.3f, (float)(80 * Math.PI / 180), float.MaxValue, false, SkillshotType.SkillshotCone);
             
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();

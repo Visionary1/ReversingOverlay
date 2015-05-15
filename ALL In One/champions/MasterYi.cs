@@ -134,14 +134,6 @@ namespace ALL_In_One.champions
             }
 
         }
-
-        static void AA()
-        {
-            if (HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
-                AIO_Func.AACb(W);
-
-            AIO_Func.AACb(R);
-        }
         
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
@@ -150,8 +142,10 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || Target == null)
                 return;
 
-            
-            AA();
+            if (HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)) && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
+                AIO_Func.AACb(W);
+
+            AIO_Func.AACb(R);
         }
 
         static void Combo()

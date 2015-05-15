@@ -14,7 +14,6 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-        static float RD = 0f;
         
         public static void Load()
         {
@@ -78,7 +77,7 @@ namespace ALL_In_One.champions
                 AIO_Func.SC(Q);
                 AIO_Func.SC(W);
                 AIO_Func.SC(E);
-                AIO_Func.SC(R,RD,0f);
+                AIO_Func.SC(R,0f,0f);
                 AIO_Func.FleeToPosition(W);
             }
 
@@ -122,7 +121,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (R.CanCast(target) && AIO_Func.isKillable(target, R))
-                    AIO_Func.LCast(R,target,RD,0f);
+                    AIO_Func.LCast(R,target,0f,0f);
             }
         }
 

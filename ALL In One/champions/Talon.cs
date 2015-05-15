@@ -20,7 +20,7 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q);
-            W = new Spell(SpellSlot.W, 750f, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, 740f, TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 600f, TargetSelector.DamageType.Physical) {Delay = 0.1f, Speed = 902f};
 
@@ -126,25 +126,19 @@ namespace ALL_In_One.champions
 
         static void Combo()
         {
+            var FullComboTarget = TargetSelector.GetTarget(740, TargetSelector.DamageType.Physical);
+
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
-                var eTarget = TargetSelector.GetTarget(E.Range, W.DamageType);
-
-                if(!eTarget.IsValidTarget(300f))
-                    E.Cast(eTarget);
-            }
-            
-            if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-            {
-                var wTarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-        
-                if (wTarget != null && !Player.IsDashing())
-                    W.Cast(wTarget);       
+                if (!FullComboTarget.IsValidTarget(300f) && FullComboTarget.IsValidTarget(E.Range))
+                    E.Cast(FullComboTarget);
             }
 
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x) && x.HasBuffOfType(BuffType.Slow)))
+            if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && !E.IsReady())
+                W.Cast(FullComboTarget, false, true);
+
+            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && Orbwalking.InAutoAttackRange(FullComboTarget) && FullComboTarget.HasBuffOfType(BuffType.Slow))
                 R.Cast();
-                
         }
 
         static void Harass()

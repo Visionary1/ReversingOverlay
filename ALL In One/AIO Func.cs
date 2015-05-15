@@ -171,7 +171,7 @@ namespace ALL_In_One
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Menu.Item("Combo.Use " + spell.Slot.ToString(), true) != null)
             {
                 if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() // || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>()) 구버전 지원 중단
-                && spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted)
+                && spell.IsReady())
                 {
                     if(spell.IsSkillshot)
                     {
@@ -187,14 +187,14 @@ namespace ALL_In_One
                     else
                     {
                         spell.Cast();
-                        Orbwalking.ResetAutoAttackTimer();
+                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
                     }
                 }
             }
             else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Menu.Item("Harass.Use " + spell.Slot.ToString(), true) != null)
             {
                 if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()
-                && spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && HM)
+                && spell.IsReady() && HM)
                 {
                     if(spell.IsSkillshot)
                     {
@@ -210,7 +210,7 @@ namespace ALL_In_One
                     else
                     {
                         spell.Cast();
-                        Orbwalking.ResetAutoAttackTimer();
+                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
                     }
                 }
             }

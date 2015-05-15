@@ -65,8 +65,8 @@ namespace ALL_In_One.utility
         static void additems()
         {
             BeforeAttack.additem("Youmuu", (int)ItemId.Youmuus_Ghostblade, Orbwalking.GetRealAutoAttackRange(Player));
-            AfterAttack.additem("Tiamat", (int)ItemId.Tiamat_Melee_Only, 250f);
-            AfterAttack.additem("Hydra", (int)ItemId.Ravenous_Hydra_Melee_Only, 250f);
+            AfterAttack.additem("Tiamat", (int)ItemId.Tiamat_Melee_Only, 400f);
+            AfterAttack.additem("Hydra", (int)ItemId.Ravenous_Hydra_Melee_Only, 400f);
             AfterAttack.additem("Bilgewater", (int)ItemId.Bilgewater_Cutlass, 450f, true);
             AfterAttack.additem("BoTRK", (int)ItemId.Blade_of_the_Ruined_King, 450f, true);
         }
@@ -317,10 +317,8 @@ namespace ALL_In_One.utility
                 {
                     var Minions = MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player), MinionTypes.All, MinionTeam.Enemy);
                     var Mobs = MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player), MinionTypes.All, MinionTeam.Neutral);
-                    if((Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || 
-                    Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) &&
-                    Menu.Item("Misc.Jc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count > 0 ||
-                    Menu.Item("Misc.Lc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Minions.Count > 0)
+
+                    if((Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) || (Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) || (Menu.Item("Misc.Jc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count > 0) || (Menu.Item("Misc.Lc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Minions.Count > 0))
                     {
                         if (itemone.isTargeted)
                             Items.UseItem(itemone.Id, (Obj_AI_Base)target);

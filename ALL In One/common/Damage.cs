@@ -88,7 +88,7 @@ namespace ALL_In_One
 
             #region PassiveDamages
 
-            #region Ashe // By Rl244 FlatCritChanceMod FlatCritDamageMod 리메이크 애쉬 패시브 미리 추
+            #region Ashe // By Rl244
             p = new PassiveDamage
             {
                 ChampionName = "Ashe",
@@ -103,11 +103,11 @@ namespace ALL_In_One
             AttackPassives.Add(p);
             #endregion
             
-            #region Ashe // By Rl244 FlatCritChanceMod FlatCritDamageMod 리메이크 애쉬 패시브 미리 추
+            #region Ashe // By Rl244 
             p = new PassiveDamage
             {
                 ChampionName = "Ashe",
-                IsActive = (source, target) => (source.HasBuff("asheqattack")), //리메이크 직후 버프 이름 바꾸겠음.
+                IsActive = (source, target) => (source.HasBuff("asheqattack")), 
                 GetDamage =
                     (source, target) =>
                         (float)
@@ -5381,28 +5381,24 @@ namespace ALL_In_One
             return 0d;
         }
 
-        public static double GetItemDamage(this Obj_AI_Hero source, Obj_AI_Base target, DamageItems item)
+        public static double GetItemDamage2(this Obj_AI_Hero source, Obj_AI_Base target, DamageItems item)
         {
             switch (item)
             {
                 case DamageItems.Bilgewater:
                     return source.CalcDamage(target, DamageType.Magical, 100);
-                case DamageItems.BlackFireTorch:
-                    return source.CalcDamage(target, DamageType.Magical, target.MaxHealth * 0.2);
                 case DamageItems.Botrk:
                     return source.CalcDamage(target, DamageType.Physical, target.MaxHealth * 0.1);
-                case DamageItems.Dfg:
-                    return source.CalcDamage(target, DamageType.Magical, target.MaxHealth * 0.15);
                 case DamageItems.FrostQueenClaim:
                     return source.CalcDamage(target, DamageType.Magical, 50 + 5 * source.Level);
                 case DamageItems.Hexgun:
                     return source.CalcDamage(target, DamageType.Magical, 150 + 0.4 * source.FlatMagicDamageMod);
-                case DamageItems.Hydra:
+                case DamageItems.Hydra: //실제 데미지와는 조금 다름. 혹여나 나중에 수정해야할 일이 생길수도.
                     return source.CalcDamage(
                         target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
                 case DamageItems.OdingVeils:
                     return source.CalcDamage(target, DamageType.Magical, 200);
-                case DamageItems.Tiamat:
+                case DamageItems.Tiamat: //실제 데미지와는 조금 다름. 혹여나 나중에 수정해야할 일이 생길수도.
                     return source.CalcDamage(
                         target, DamageType.Physical, source.BaseAttackDamage + source.FlatPhysicalDamageMod);
                 case DamageItems.LiandrysTorment:

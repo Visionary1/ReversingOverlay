@@ -398,16 +398,16 @@ namespace ALL_In_One.utility
             float damage = 0;
                 
             if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
-                damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
+                damage += (float)Player.GetItemDamage2(enemy, Damage.DamageItems.Tiamat);
             
             if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
-                damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra); 
+                damage += (float)Player.GetItemDamage2(enemy, Damage.DamageItems.Hydra); 
 
             if (Items.CanUseItem((int)ItemId.Bilgewater_Cutlass))
-                damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Bilgewater);
+                damage += (float)Player.GetItemDamage2(enemy, Damage.DamageItems.Bilgewater);
 
             if (Items.CanUseItem((int)ItemId.Blade_of_the_Ruined_King))
-                damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Botrk);
+                damage += (float)Player.GetItemDamage2(enemy, Damage.DamageItems.Botrk);
 
             return damage;
         }

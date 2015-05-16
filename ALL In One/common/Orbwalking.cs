@@ -349,7 +349,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         {
             try
             {
-                if (target.IsValidTarget() && CanAttack() && Attack) // 임의수
+                if (target.IsValidTarget() && CanAttack() && Attack) // 임의수정
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);
@@ -398,7 +398,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         private static void MissileClient_OnCreate(GameObject sender, EventArgs args)
         {
             var missile = sender as MissileClient;
-            if (missile != null && missile.SpellCaster.IsMe && IsAutoAttack(missile.SData.Name)) //공식 커먼에서도 문제있던 미사일 부분. 어쩌면 아직 문제소지 남아있을수
+            if (missile != null && missile.SpellCaster.IsMe && IsAutoAttack(missile.SData.Name)) //공식 커먼에서도 문제있던 미사일 부분. 어쩌면 아직 문제소지 남아있을수도
             {
                 _missileLaunched = true;
             }

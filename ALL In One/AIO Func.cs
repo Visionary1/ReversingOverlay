@@ -116,12 +116,15 @@ namespace ALL_In_One
                         spell.Cast(Mobs[0]);
                         }
                         else if(!spell.IsSkillshot)
-                        spell.Cast(Mobs[0]);
-                        else
-                        {
-                            spell.Cast();
-                        }
-                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+						{
+							if(!spell.Cast())
+							spell.Cast(Mobs[0]);
+							else
+							{
+								spell.Cast();
+								Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+							}
+						}
                     }
                 }
                 if (Minions.Count > 0 && Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true) != null)
@@ -139,12 +142,15 @@ namespace ALL_In_One
                         spell.Cast(Minions[0]);
                         }
                         else if(!spell.IsSkillshot)
-                        spell.Cast(Minions[0]);
-                        else
-                        {
-                            spell.Cast();
-                        }
-                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+						{
+							if(!spell.Cast())
+							spell.Cast(Minions[0]);
+							else
+							{
+								spell.Cast();
+								Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+							}
+						}
                     }
                 }
             }
@@ -182,13 +188,16 @@ namespace ALL_In_One
                         else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
                         spell.Cast(target);
                     }
-                    else if(!spell.IsSkillshot)
-                    spell.Cast(target);
-                    else
-                    {
-                        spell.Cast();
-                    }
-                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+					else if(!spell.IsSkillshot)
+					{
+						if(!spell.Cast())
+						spell.Cast(target);
+						else
+						{
+							spell.Cast();
+							Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+						}
+					}
                 }
             }
             else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Menu.Item("Harass.Use " + spell.Slot.ToString(), true) != null)
@@ -205,13 +214,16 @@ namespace ALL_In_One
                         else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
                         spell.Cast(target);
                     }
-                    else if(!spell.IsSkillshot)
-                    spell.Cast(target);
-                    else
-                    {
-                        spell.Cast();
-                    }
-                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+					else if(!spell.IsSkillshot)
+					{
+						if(!spell.Cast())
+						spell.Cast(target);
+						else
+						{
+							spell.Cast();
+							Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+						}
+					}
                 }
             }
         }
@@ -272,10 +284,13 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
-                        else if(!spell.IsSkillshot)
-                        spell.Cast(target);
-                        else
-                        spell.AOECast(target);
+						else if(!spell.IsSkillshot)
+						{
+							if(!spell.Cast())
+								spell.Cast(target);
+							else
+								spell.AOECast(target);
+						}
                     }
                 }
                 else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Menu.Item("Harass.Use " + spell.Slot.ToString(), true) != null)
@@ -295,10 +310,13 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
-                        else if(!spell.IsSkillshot)
-                        spell.Cast(target);
-                        else
-                        spell.AOECast(target);
+						else if(!spell.IsSkillshot)
+						{
+							if(!spell.Cast())
+								spell.Cast(target);
+							else
+								spell.AOECast(target);
+						}
                     }
                 }
             }
@@ -321,10 +339,13 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(Mobs[0],ExtraTargetDistance,ALPHA);
                         }
-                        else if(!spell.IsSkillshot)
-                        spell.Cast(Mobs[0]);
-                        else
-                        spell.AOECast(Mobs[0]);
+						else if(!spell.IsSkillshot)
+						{
+							if(!spell.Cast())
+								spell.Cast(Mobs[0]);
+							else
+								spell.AOECast(Mobs[0]);
+						}
                     }
                 }
                 if (Minions.Count > 0 && Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true) != null)
@@ -346,10 +367,13 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(Minions[0],ExtraTargetDistance,ALPHA);
                         }
-                        else if(!spell.IsSkillshot)
-                        spell.LH();
-                        else
-                        spell.AOECast(Minions[0]);
+						else if(!spell.IsSkillshot)
+						{
+							if(!spell.Cast())
+								spell.Cast(Minions[0]);
+							else
+								spell.AOECast(Minions[0]);
+						}
                     }
                 }
             }

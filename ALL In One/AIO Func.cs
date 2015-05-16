@@ -65,7 +65,7 @@ namespace ALL_In_One
         }
 
         
-        internal static bool CanHit(Spell spell, Obj_AI_Base T, float Drag = 0f)
+        internal static bool CanHit(this Spell spell, Obj_AI_Base T, float Drag = 0f)
         {
             return T.IsValidTarget(spell.Range + Drag - ((T.Distance(Player.ServerPosition)-spell.Range)/spell.Speed+spell.Delay)*T.MoveSpeed);
         }
@@ -80,7 +80,7 @@ namespace ALL_In_One
             Game.Say("/d");
         }
         
-        internal static void AALcJc(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
+        internal static void AALcJc(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
         {// 아주 편하게 평캔 Lc, Jc를 구현할수 있습니다(그것도 분리해서!!). 그냥 AIO_Func.AALcJc(Q); 이렇게 쓰세요. 선형 스킬일 경우 세부 설정을 원할 경우 AIO_Func.AALcJc(E,ED,0f); 이런식으로 쓰세요.
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
@@ -150,7 +150,7 @@ namespace ALL_In_One
             }
         }
         
-        internal static void AACb(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
+        internal static void AACb(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
         { // 아주 편하게 평캔 Cb, Hrs를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
             var target = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(Player) + 150,TargetSelector.DamageType.Physical, true); //
             bool HM = true;
@@ -216,7 +216,7 @@ namespace ALL_In_One
             }
         }
         
-        internal static void LH(Spell spell, float ALPHA = 0f) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
+        internal static void LH(this Spell spell, float ALPHA = 0f) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
         {
             var M = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health).FirstOrDefault(m => isKillable(m,spell,0) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
             if(spell.IsReady() && M != null)
@@ -228,14 +228,14 @@ namespace ALL_In_One
                     else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
                     CCast(spell,M);
                     else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
-                    spell.Cast(M);
+                    spell.ConeCast(M,50f,ALPHA);
                 }
                 else
                 spell.Cast(M);
             }
         }
         
-        internal static void SC(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f)
+        internal static void SC(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f)
         {
             var target = TargetSelector.GetTarget(spell.Range, spell.DamageType, true);
             bool HM = true;
@@ -270,7 +270,7 @@ namespace ALL_In_One
                             CCast(spell,ctarget);
                             }
                             else if(spell.Type == SkillshotType.SkillshotCone)
-                            spell.Cast(target);
+                            spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
                         else
                         spell.Cast(target);
@@ -291,7 +291,7 @@ namespace ALL_In_One
                             CCast(spell,ctarget);
                             }
                             else if(spell.Type == SkillshotType.SkillshotCone)
-                            spell.Cast(target);
+                            spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
                         else
                         spell.Cast(target);
@@ -315,7 +315,7 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCircle)
                             CCast(spell,Mobs[0]);
                             else if(spell.Type == SkillshotType.SkillshotCone)
-                            spell.Cast(Mobs[0]);
+                            spell.ConeCast(Mobs[0],ExtraTargetDistance,ALPHA);
                         }
                         else
                         spell.Cast(Mobs[0]);
@@ -338,7 +338,7 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCircle)
                             CCast(spell,Minions[0]);
                             else if(spell.Type == SkillshotType.SkillshotCone)
-                            spell.Cast(Minions[0]);
+                            spell.ConeCast(Minions[0],ExtraTargetDistance,ALPHA);
                         }
                         else
                         LH(spell);
@@ -356,7 +356,7 @@ namespace ALL_In_One
             }
         }
         
-        internal static void MouseSC(Spell spell, float Cost = 1f) // 베인 니달리 리븐 등등.,.,
+        internal static void MouseSC(this Spell spell, float Cost = 1f) // 베인 니달리 리븐 등등.,.,
         {
             Obj_AI_Hero target = null;
             float TRange = 500f; // spell.Range
@@ -414,7 +414,7 @@ namespace ALL_In_One
             }
         }
         
-        internal static void Heal(Spell spell, float Mana = 40, float Max = 60, float Cost = 1f)
+        internal static void Heal(this Spell spell, float Mana = 40, float Max = 60, float Cost = 1f)
         {
             bool M = true;
             if (Cost == 1f)
@@ -533,23 +533,23 @@ namespace ALL_In_One
             }
         }
         
-        internal static void CCast(Spell spell, Obj_AI_Base target) //for Circular spells
+        internal static void CCast(this Spell spell, Obj_AI_Base target) //for Circular spells
         {
             AIO_Pred.CCast(spell,target);
         }
-        internal static void LCast(Spell spell, Obj_AI_Base target, float alpha = 0f, float colmini = float.MaxValue, bool HeroOnly = false) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
+        internal static void LCast(this Spell spell, Obj_AI_Base target, float alpha = 0f, float colmini = float.MaxValue, bool HeroOnly = false) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
         {
             AIO_Pred.LCast(spell,target,alpha,colmini,HeroOnly );
         }
-        internal static void RMouse(Spell spell)
+        internal static void RMouse(this Spell spell)
         {
             AIO_Pred.RMouse(spell);
         }
-        internal static void AtoB(Spell spell, Obj_AI_Base T, float Drag = 700f) //Coded By RL244 AtoB Drag 기본값 700f는 빅토르를 위한 것임.
+        internal static void AtoB(this Spell spell, Obj_AI_Base T, float Drag = 700f) //Coded By RL244 AtoB Drag 기본값 700f는 빅토르를 위한 것임.
         {
             AIO_Pred.AtoB(spell,T,Drag);
         }
-        internal static void FleeToPosition(Spell spell, string W = "N") // N 정방향, R 역방향.
+        internal static void FleeToPosition(this Spell spell, string W = "N") // N 정방향, R 역방향.
         {
             AIO_Pred.FleeToPosition(spell,W);
         }

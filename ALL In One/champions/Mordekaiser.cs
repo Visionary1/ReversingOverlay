@@ -128,7 +128,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
-                E.Cast(Etarget);
+                E.ConeCast(Etarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
@@ -147,7 +147,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
                 var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
-                E.Cast(Etarget);
+                E.ConeCast(Etarget);
             }
 
         }
@@ -164,7 +164,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
                 W.Cast(Player);
             if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
-                AIO_Func.LH(E);
+                E.LH();
         }
 
         static void Jungleclear()
@@ -179,7 +179,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady())
                 W.Cast(Player);
             if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
-                E.Cast(Mobs[0]);
+                E.ConeCast(Mobs[0]);
         }
         
         static void KillstealE()
@@ -187,7 +187,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (E.CanCast(target) && AIO_Func.isKillable(target, E))
-                    E.Cast(target);
+                    E.ConeCast(target);
             }
         }
         

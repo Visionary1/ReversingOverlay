@@ -20,8 +20,8 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q);
-            W = new Spell(SpellSlot.W, 720f, TargetSelector.DamageType.Physical);
-            E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Physical);
+            E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R, 600f, TargetSelector.DamageType.Physical) {Delay = 0.1f, Speed = 902f};
 
             W.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 902f, false, SkillshotType.SkillshotCone);
@@ -135,7 +135,7 @@ namespace ALL_In_One.champions
             }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && !E.IsReady())
-                W.Cast(FullComboTarget, false, true);
+                W.ConeCast(FullComboTarget);
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x) && x.HasBuffOfType(BuffType.Slow)))
                 R.Cast();

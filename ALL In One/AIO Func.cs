@@ -235,7 +235,7 @@ namespace ALL_In_One
             }
         }
         
-        internal static void SC(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //
+        internal static void SC(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //
         { // 
             var target = TargetSelector.GetTarget(spell.Range, spell.DamageType, true); //
             bool HM = true;

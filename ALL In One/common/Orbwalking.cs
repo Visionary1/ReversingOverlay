@@ -246,7 +246,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         /// </summary>
         public static bool CanAttack()
         {
-            return Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackDelay * 1000 + 35; //임의수정
+            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000; //일단 원본과 매우 비슷한값임.
         }
 
         /// <summary>
@@ -652,9 +652,8 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                                 minion =>
                                     minion.IsValidTarget() && InAutoAttackRange(minion) &&
                                     minion.Health <
-                                    2 *
-                                    (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod))
-                        )
+                                    (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod) + Player.GetAutoAttackDamage2(minion, true))
+                        ) //좀 병신같았던 Farm 수정. 이전엔 패시브 고려안해서 패시브 데미지 때문에 미니언 버리는 경우도 많았음.
                     {
                         var t = (int) (Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
                                 1000 * (int) Player.Distance(minion, false) / (int) GetMyProjectileSpeed();

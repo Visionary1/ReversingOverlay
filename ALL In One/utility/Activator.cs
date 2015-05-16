@@ -45,7 +45,7 @@ namespace ALL_In_One.utility
 
             additems();
             addPotions();
-            AddAfterAttackData();
+            AddOrderData();
 
             Game.OnUpdate += OnUpdate.Game_OnUpdate;
             Orbwalking.BeforeAttack += BeforeAttack.Orbwalking_BeforeAttack;
@@ -64,9 +64,9 @@ namespace ALL_In_One.utility
             AfterAttack.additem("BoTRK", (int)ItemId.Blade_of_the_Ruined_King, 450f, true);
         }
 
-        static void AddAfterAttackData()
+        static void AddOrderData()
         {
-            AfterAttack.AddAfterAttackData("MasterYi", SpellSlot.W, CastingOrder.ItemFirst);
+            AfterAttack.AddOrderData("MasterYi", SpellSlot.W, CastingOrder.ItemFirst);
         }
 
         internal class item
@@ -320,7 +320,7 @@ namespace ALL_In_One.utility
 
             static List<OrderData> OrderDataList = new List<OrderData>();
 
-            internal static void AddAfterAttackData(string championName, SpellSlot spellSlot, CastingOrder castingOrder)
+            internal static void AddOrderData(string championName, SpellSlot spellSlot, CastingOrder castingOrder)
             {
                 OrderDataList.Add(new OrderData { ChampionName = championName, SpellSlot = spellSlot, CastingOrder = castingOrder });
             }

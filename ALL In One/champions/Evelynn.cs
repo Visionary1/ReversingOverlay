@@ -154,7 +154,7 @@ namespace ALL_In_One.champions
             }
             
             var eTarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
-            if (AIO_Menu.Champion.Combo.UseE && E.IsReady() && eTarget != null && !eTarget.IsValidTarget(Player.AttackRange)) //평타 사거리 밖일때만 평캔 말고 그냥 캐스팅할거임.
+            if (AIO_Menu.Champion.Combo.UseE && E.IsReady() && eTarget != null && !eTarget.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null))) //평타 사거리 밖일때만 평캔 말고 그냥 캐스팅할거임.
                 E.Cast(eTarget);
             
             //if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
@@ -172,7 +172,7 @@ namespace ALL_In_One.champions
                     Q.Cast();
             }
             var eTarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
-            if (AIO_Menu.Champion.Harass.UseE && E.IsReady() && eTarget != null && !eTarget.IsValidTarget(Player.AttackRange)) //평타 사거리 밖일때만 평캔 말고 그냥 캐스팅할거임.
+            if (AIO_Menu.Champion.Harass.UseE && E.IsReady() && eTarget != null && !eTarget.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null))) //평타 사거리 밖일때만 평캔 말고 그냥 캐스팅할거임.
                 E.Cast(eTarget);
 
         }

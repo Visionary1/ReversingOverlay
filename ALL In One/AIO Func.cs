@@ -235,9 +235,9 @@ namespace ALL_In_One
             }
         }
         
-        internal static void SC(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f)
-        {
-            var target = TargetSelector.GetTarget(spell.Range, spell.DamageType, true);
+        internal static void SC(Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //
+        { // 
+            var target = TargetSelector.GetTarget(spell.Range, spell.DamageType, true); //
             bool HM = true;
             bool LM = true;
             bool LHM = false;
@@ -272,8 +272,10 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
-                        else
+                        else if(!spell.IsSkillshot)
                         spell.Cast(target);
+                        else
+                        spell.AOECast(target);
                     }
                 }
                 else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Menu.Item("Harass.Use " + spell.Slot.ToString(), true) != null)
@@ -293,8 +295,10 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
-                        else
+                        else if(!spell.IsSkillshot)
                         spell.Cast(target);
+                        else
+                        spell.AOECast(target);
                     }
                 }
             }
@@ -317,8 +321,10 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(Mobs[0],ExtraTargetDistance,ALPHA);
                         }
-                        else
+                        else if(!spell.IsSkillshot)
                         spell.Cast(Mobs[0]);
+                        else
+                        spell.AOECast(Mobs[0]);
                     }
                 }
                 if (Minions.Count > 0 && Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true) != null)
@@ -340,8 +346,10 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(Minions[0],ExtraTargetDistance,ALPHA);
                         }
+                        else if(!spell.IsSkillshot)
+                        spell.LH();
                         else
-                        LH(spell);
+                        spell.AOECast(Minions[0]);
                     }
                 }
             }

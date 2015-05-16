@@ -16,6 +16,7 @@ namespace ALL_In_One.champions
         static Spell Q, W, E, R;
         static float WD {get{return Menu.Item("Misc.Wtg").GetValue<Slider>().Value; }}
         static float getQBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "asheqattack"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static bool RM {get{return Menu.Item("Combo.Use MR").GetValue<KeyBind>().Active; }}
 
         public static void Load()
         {
@@ -30,7 +31,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseR();
-
+            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.Use MR", "Use R(Manual)")).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press, false));
+			
             AIO_Menu.Champion.Harass.addUseQ(false);
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addIfMana();
@@ -82,6 +84,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealW"))
                 KillstealW();
             #endregion
+			ManualR();
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -133,6 +136,15 @@ namespace ALL_In_One.champions
             
             AA();
         }
+		
+		static void ManualR()
+		{
+			var RTarget = TargetSelector.GetTarget(3000f, R.DamageType, true);
+			if(RM && RTarget != null && R.IsReady())
+			{
+				AIO_Func.LCast(R,RTarget,0f,0f,true);
+			}
+		}
         
         static void Combo()
         {            
@@ -141,9 +153,9 @@ namespace ALL_In_One.champions
                 foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
                 {
                     if (R.CanCast(target) && AIO_Func.isKillable(target, getComboDamage(target) * 2) && target.Distance(Player.ServerPosition) < 1000)
-                        AIO_Func.LCast(R,target,0f,0f);
+                        AIO_Func.LCast(R,target,0f,0f,true);
                     else if (R.CanCast(target) && AIO_Func.isKillable(target, R) && target.Distance(Player.ServerPosition) < 3000)
-                        AIO_Func.LCast(R,target,0f,0f);
+                        AIO_Func.LCast(R,target,0f,0f,true);
                 }
             }
         }

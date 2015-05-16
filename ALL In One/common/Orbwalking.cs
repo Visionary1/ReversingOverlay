@@ -652,7 +652,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                                 minion =>
                                     minion.IsValidTarget() && InAutoAttackRange(minion) &&
                                     minion.Health <
-                                    (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod) + Player.GetAutoAttackDamage2(minion, true))
+                                    Player.GetAutoAttackDamage2(minion, true) * 2)
                         ) //좀 병신같았던 Farm 수정. 이전엔 패시브 고려안해서 패시브 데미지 때문에 미니언 버리는 경우도 많았음.
                     {
                         var t = (int) (Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +

@@ -188,15 +188,12 @@ namespace ALL_In_One
                         else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
                         spell.Cast(target);
                     }
-					else if(!spell.IsSkillshot)
+					else
 					{
 						if(!spell.Cast())
-						spell.Cast(target);
+						    spell.Cast(target);
 						else
-						{
-							spell.Cast();
 							Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
-						}
 					}
                 }
             }
@@ -214,15 +211,12 @@ namespace ALL_In_One
                         else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
                         spell.Cast(target);
                     }
-					else if(!spell.IsSkillshot)
+					else
 					{
 						if(!spell.Cast())
-						spell.Cast(target);
+						    spell.Cast(target);
 						else
-						{
-							spell.Cast();
 							Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
-						}
 					}
                 }
             }
@@ -284,7 +278,7 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
-						else if(!spell.IsSkillshot)
+						else
 						{
 							if(!spell.Cast())
 								spell.Cast(target);
@@ -310,7 +304,7 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
-						else if(!spell.IsSkillshot)
+						else
 						{
 							if(!spell.Cast())
 								spell.Cast(target);
@@ -339,7 +333,7 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(Mobs[0],ExtraTargetDistance,ALPHA);
                         }
-						else if(!spell.IsSkillshot)
+						else
 						{
 							if(!spell.Cast())
 								spell.Cast(Mobs[0]);
@@ -367,7 +361,7 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(Minions[0],ExtraTargetDistance,ALPHA);
                         }
-						else if(!spell.IsSkillshot)
+						else
 						{
 							if(!spell.Cast())
 								spell.Cast(Minions[0]);

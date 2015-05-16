@@ -120,8 +120,8 @@ namespace ALL_In_One
                         else
                         {
                             spell.Cast();
-                            Orbwalking.ResetAutoAttackTimer();
                         }
+                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
                     }
                 }
                 if (Minions.Count > 0 && Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true) != null)
@@ -143,8 +143,8 @@ namespace ALL_In_One
                         else
                         {
                             spell.Cast();
-                            Orbwalking.ResetAutoAttackTimer();
                         }
+                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
                     }
                 }
             }
@@ -187,8 +187,8 @@ namespace ALL_In_One
                     else
                     {
                         spell.Cast();
-                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
                     }
+                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
                 }
             }
             else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Menu.Item("Harass.Use " + spell.Slot.ToString(), true) != null)
@@ -210,8 +210,8 @@ namespace ALL_In_One
                     else
                     {
                         spell.Cast();
-                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
                     }
+                        Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
                 }
             }
         }

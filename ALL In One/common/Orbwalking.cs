@@ -491,7 +491,7 @@ namespace ALL_In_One
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
                 drawings.AddItem(
                     new MenuItem("HoldZone", "HoldZone")
-                        .SetValue(new Circle(true, Color.WhiteSmoke)));
+                        .SetValue(new Circle(true, Color.FromArgb(200, Color.WhiteSmoke))));
                 _config.AddSubMenu(drawings);
 
                 /* Misc options */

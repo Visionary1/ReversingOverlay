@@ -137,7 +137,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && !E.IsReady())
                 W.Cast(FullComboTarget, false, true);
 
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && Orbwalking.InAutoAttackRange(FullComboTarget) && FullComboTarget.HasBuffOfType(BuffType.Slow))
+            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x) && x.HasBuffOfType(BuffType.Slow)))
                 R.Cast();
         }
 

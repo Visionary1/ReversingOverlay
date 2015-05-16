@@ -135,10 +135,10 @@ namespace ALL_In_One.champions
                     E.Cast(FullComboTarget);
             }
 
-            if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && (FullComboTarget.IsValidTarget(150f) && !Q.IsReady()))
+            if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && (FullComboTarget.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null)) && !Player.HasBuff("TalonNoxianDiplomacyBuff")))
                 W.ConeCast(FullComboTarget);
 
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x) && x.HasBuffOfType(BuffType.Slow)))
+            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && HeroManager.Enemies.Any(x => FullComboTarget.IsValidTarget(300f) && x.HasBuffOfType(BuffType.Slow)) && !Player.HasBuff("TalonNoxianDiplomacyBuff"))
                 R.Cast();
         }
 

@@ -85,7 +85,7 @@ namespace ALL_In_One
                 }
             }
         }
-		
+        
         internal static void ConeCast(this Spell spell, Obj_AI_Base target, float alpha = 0f, float colmini = float.MaxValue, bool HeroOnly = false)
         {
             if(spell.Type == SkillshotType.SkillshotCone)
@@ -97,7 +97,7 @@ namespace ALL_In_One
                     var minioncol = collision.Count(x => (HeroOnly == false ? x.IsMinion : (x is Obj_AI_Hero)));
                     if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                     {
-                        spell.Cast(pred.CastPosition);
+                        spell.Cast(target,false,true);
                     }
                 }
             }
@@ -140,7 +140,7 @@ namespace ALL_In_One
                 }
             }
         }
-		
+        
         internal static void RMouse(this Spell spell)
         {
             SharpDX.Vector2 ReverseVec = Player.ServerPosition.To2D() -

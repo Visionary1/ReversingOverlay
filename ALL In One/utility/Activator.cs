@@ -192,7 +192,7 @@ namespace ALL_In_One.utility
                 #endregion
 
                 #region BS
-                if(Menu.Item("Killsteal.BS").GetValue<bool>())
+                if(Menu.Item("Killsteal.BS").GetValue<bool>() && Killsteal.smiteSlot != null)
                 {
                     Killsteal.setBSmiteSlot();
                     
@@ -238,7 +238,7 @@ namespace ALL_In_One.utility
                 if (!unit.IsMe || Target == null)
                         return;
                         
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Menu.Item("OnAttack.RS").GetValue<bool>())
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Menu.Item("OnAttack.RS").GetValue<bool>() && OnAttack.smiteSlot != null)
                 {
                     if(smiteSlot.IsReady() && RS.Slot == smiteSlot)
                     Player.Spellbook.CastSpell(smiteSlot, Target);

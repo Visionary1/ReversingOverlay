@@ -118,7 +118,7 @@ namespace ALL_In_One.champions
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             var Sender = (Obj_AI_Base) sender;
-            var STarget = (Obj_AI_Hero) args.Target;
+            var STarget = (Obj_AI_Base) args.Target;
             if (!sender.IsMe || Player.IsDead) // 
                 return;
             if (args.Target.IsMe && !sender.IsAlly && W.IsReady() && Player.HealthPercent < 80 //args.Target.IsMe && AIO_Menu.Champion.Misc.getBoolValue("R Myself Only")

@@ -42,7 +42,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addIfMana();
-
+			
+            AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addUseKillsteal();
 
             AIO_Menu.Champion.Drawings.addWrange();
@@ -134,7 +135,7 @@ namespace ALL_In_One.champions
                     E.Cast(FullComboTarget);
             }
 
-            if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && !E.IsReady())
+            if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && (FullComboTarget.IsValidTarget(150f) && !Q.IsReady()))
                 W.ConeCast(FullComboTarget);
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x) && x.HasBuffOfType(BuffType.Slow)))

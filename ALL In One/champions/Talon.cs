@@ -20,7 +20,7 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q);
-            W = new Spell(SpellSlot.W, 740f, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, 720f, TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 600f, TargetSelector.DamageType.Physical) {Delay = 0.1f, Speed = 902f};
 
@@ -147,7 +147,7 @@ namespace ALL_In_One.champions
                 return;
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
-                W.CastOnBestTarget();
+                W.CastOnBestTarget(0f, false, true);
         }
         
         static void Laneclear()
@@ -162,7 +162,12 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
             {
-                var wloc = W.GetCircularFarmLocation(Minions);
+                List<SharpDX.Vector2> minionVec2List = new List<SharpDX.Vector2>();
+
+                foreach (var item in Minions)
+                    minionVec2List.Add(item.ServerPosition.To2D());
+
+                var wloc = MinionManager.GetBestCircularFarmLocation(minionVec2List, 200f, W.Range);
 
                 if (wloc.MinionsHit >= 3)
                     W.Cast(wloc.Position);
@@ -188,7 +193,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (W.CanCast(target) && AIO_Func.isKillable(target, W))
-                    W.Cast(target);
+                    W.Cast(target, false, true);
 
                 if (R.CanCast(target) && AIO_Func.isKillable(target, R.GetDamage(target) * 2))
                     R.Cast();

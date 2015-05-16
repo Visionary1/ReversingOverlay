@@ -153,8 +153,8 @@ namespace ALL_In_One.champions
                     Q.Cast();
             }
             
-            if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
-                E.CastOnBestTarget();
+            if (AIO_Menu.Champion.Combo.UseE && E.IsReady() && eTarget != null && !eTarget.IsValidTarget(Player.AttackRange)) //평타 사거리 밖일때만 평캔 말고 그냥 캐스팅할거임.
+                E.Cast(eTarget);
             
             //if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             //   R.CastIfWillHit(R.GetTarget(), RM);
@@ -170,9 +170,8 @@ namespace ALL_In_One.champions
                 if (HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
                     Q.Cast();
             }
-
-            if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
-                E.CastOnBestTarget();
+            if (AIO_Menu.Champion.Harass.UseE && E.IsReady() && eTarget != null && !eTarget.IsValidTarget(Player.AttackRange)) //평타 사거리 밖일때만 평캔 말고 그냥 캐스팅할거임.
+                E.Cast(eTarget);
 
         }
         

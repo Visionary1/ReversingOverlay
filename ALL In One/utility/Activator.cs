@@ -67,6 +67,7 @@ namespace ALL_In_One.utility
         static void AddOrderData()
         {
             AfterAttack.AddOrderData("MasterYi", SpellSlot.W, CastingOrder.ItemFirst);
+            AfterAttack.AddOrderData("Talon", SpellSlot.Q, CastingOrder.SpellFirst);
         }
 
         internal class item

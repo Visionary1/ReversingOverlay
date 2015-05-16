@@ -20,7 +20,7 @@ namespace ALL_In_One.champions
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q);
-            W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Physical);
+            W = new Spell(SpellSlot.W, 720f, TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R, 600f, TargetSelector.DamageType.Physical) {Delay = 0.1f, Speed = 902f};
 
@@ -150,8 +150,9 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
             {
                 var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+
                 if(Wtarget != null)
-                W.ConeCast(Wtarget,50f);
+                    W.ConeCast(Wtarget,50f);
             }
         }
         

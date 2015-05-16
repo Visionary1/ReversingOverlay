@@ -746,22 +746,22 @@ namespace ALL_In_One
 
                 internal static void addQrange(bool Enabled = true)
                 {
-                    addItem("Q Range", new Circle(Enabled, System.Drawing.Color.FromArgb(200, System.Drawing.Color.SpringGreen)));
+                    addItem("Q Range", new Circle(Enabled, System.Drawing.Color.FromArgb(127, System.Drawing.Color.SpringGreen)));
                 }
 
                 internal static void addWrange(bool Enabled = true)
                 {
-                    addItem("W Range", new Circle(Enabled, System.Drawing.Color.FromArgb(200, System.Drawing.Color.SpringGreen)));
+                    addItem("W Range", new Circle(Enabled, System.Drawing.Color.FromArgb(127, System.Drawing.Color.SpringGreen)));
                 }
 
                 internal static void addErange(bool Enabled = true)
                 {
-                    addItem("E Range", new Circle(Enabled, System.Drawing.Color.FromArgb(200, System.Drawing.Color.SpringGreen)));
+                    addItem("E Range", new Circle(Enabled, System.Drawing.Color.FromArgb(127, System.Drawing.Color.SpringGreen)));
                 }
 
                 internal static void addRrange(bool Enabled = true)
                 {
-                    addItem("R Range", new Circle(Enabled, System.Drawing.Color.FromArgb(200, System.Drawing.Color.SpringGreen)));
+                    addItem("R Range", new Circle(Enabled, System.Drawing.Color.FromArgb(127, System.Drawing.Color.SpringGreen)));
                 }
 
                 internal static Circle Qrange

@@ -28,10 +28,10 @@ namespace ALL_In_One
             AIO_Menu.Champion.Drawings.addItem(" ", null, false);
             AIO_Menu.Champion.Drawings.addItem("--PUBLIC OPTIONS--", null, false);
 
-            AIO_Menu.Champion.Drawings.addItem("Auto-Attack Real Range", new Circle(true, Color.Silver), false);
-            AIO_Menu.Champion.Drawings.addItem("Auto-Attack Target", new Circle(true, Color.Red), false);
-            AIO_Menu.Champion.Drawings.addItem("Minion Last Hit", new Circle(true, Color.GreenYellow), false);
-            AIO_Menu.Champion.Drawings.addItem("Minion Near Kill", new Circle(true, Color.Gray), false);
+            AIO_Menu.Champion.Drawings.addItem("Auto-Attack Real Range", new Circle(true, Color.FromArgb(127, Color.Silver)), false);
+            AIO_Menu.Champion.Drawings.addItem("Auto-Attack Target", new Circle(true, Color.FromArgb(127, Color.Red)), false);
+            AIO_Menu.Champion.Drawings.addItem("Minion Last Hit", new Circle(true, Color.FromArgb(127, Color.GreenYellow)), false);
+            AIO_Menu.Champion.Drawings.addItem("Minion Near Kill", new Circle(true, Color.FromArgb(127, Color.Gray)), false);
             AIO_Menu.Champion.Drawings.addItem("Jungle Position", true, false);
 
             Drawing.OnDraw += Drawing_OnDraw;
@@ -84,7 +84,7 @@ namespace ALL_In_One
             var drawTarget = AIO_Menu.Champion.Drawings.getCircleValue("Auto-Attack Target", false);
 
             if (drawAA.Active)
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, Orbwalking.GetRealAutoAttackRange(null) + 32.5f, drawAA.Color, 3);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player), drawAA.Color, 3);
 
             if (drawTarget.Active)
             {

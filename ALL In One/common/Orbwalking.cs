@@ -493,7 +493,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                         .SetValue(new Circle(false, Color.FromArgb(255, 255, 0, 255))));
                 drawings.AddItem(
                     new MenuItem("HoldZone", "HoldZone")
-                        .SetValue(new Circle(true, Color.FromArgb(200, Color.WhiteSmoke))));
+                        .SetValue(new Circle(true, Color.FromArgb(127, Color.WhiteSmoke))));
                 _config.AddSubMenu(drawings);
 
                 /* Misc options */

@@ -245,7 +245,7 @@ namespace ALL_In_One
         /// </summary>
         public static bool CanAttack()
         {
-            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
+            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000;
         }
 
         /// <summary>
@@ -253,11 +253,6 @@ namespace ALL_In_One
         /// </summary>
         public static bool CanMove(float extraWindup)
         {
-            if (!Move)
-            {
-                return false;
-            }
-
             if (_missileLaunched)
             {
                 return true;

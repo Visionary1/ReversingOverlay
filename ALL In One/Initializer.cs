@@ -84,7 +84,7 @@ namespace ALL_In_One
             var drawTarget = AIO_Menu.Champion.Drawings.getCircleValue("Auto-Attack Target", false);
 
             if (drawAA.Active)
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player), drawAA.Color);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player), drawAA.Color, 3);
 
             if (drawTarget.Active)
             {

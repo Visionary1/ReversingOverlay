@@ -801,7 +801,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 {
                     Render.Circle.DrawCircle(
                         Player.Position, GetRealAutoAttackRange(null) + 65,
-                        _config.Item("AACircle").GetValue<Circle>().Color);
+                        _config.Item("AACircle").GetValue<Circle>().Color, 3);
                 }
 
                 if (_config.Item("AACircle2").GetValue<Circle>().Active)
@@ -811,7 +811,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                     {
                         Render.Circle.DrawCircle(
                             target.Position, GetRealAutoAttackRange(target) + 65,
-                            _config.Item("AACircle2").GetValue<Circle>().Color);
+                            _config.Item("AACircle2").GetValue<Circle>().Color, 3);
                     }
                 }
 
@@ -819,7 +819,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 {
                     Render.Circle.DrawCircle(
                         Player.Position, _config.Item("HoldPosRadius").GetValue<Slider>().Value,
-                        _config.Item("HoldZone").GetValue<Circle>().Color);
+                        _config.Item("HoldZone").GetValue<Circle>().Color, 1);
                 }
             }
         }

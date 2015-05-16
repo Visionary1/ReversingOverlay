@@ -97,8 +97,20 @@ namespace ALL_In_One
                     var minioncol = collision.Count(x => (HeroOnly == false ? x.IsMinion : (x is Obj_AI_Hero)));
                     if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                     {
-                        spell.Cast(target,false,true);
+                        spell.Cast(pred.CastPosition);
                     }
+                }
+            }
+        }
+        
+        internal static void AOECast(this Spell spell, Obj_AI_Base target)
+        {
+            if(spell != null && target !=null)
+            {
+                var pred = Prediction.GetPrediction(target, spell.Delay, spell.Range, spell.Speed);
+                if (pred.Hitchance >= HitChance.High && pred.UnitPosition.Distance(Player.ServerPosition) <= spell.Range)
+                {
+                    spell.Cast();
                 }
             }
         }

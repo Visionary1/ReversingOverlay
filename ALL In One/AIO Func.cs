@@ -115,14 +115,14 @@ namespace ALL_In_One
                         else if(spell.Type == SkillshotType.SkillshotCone)
                         spell.Cast(Mobs[0]);
                         }
-                        else if(!spell.IsSkillshot)
+                        else 
 						{
 							if(!spell.Cast())
 							spell.Cast(Mobs[0]);
 							else
 							{
 								spell.Cast();
-								Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
+								Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);  // 이건 액티브에만 진짜 평캔, 위에있는건 타게팅임. 평캔안됨.
 							}
 						}
                     }
@@ -141,14 +141,14 @@ namespace ALL_In_One
                         else if(spell.Type == SkillshotType.SkillshotCone)
                         spell.Cast(Minions[0]);
                         }
-                        else if(!spell.IsSkillshot)
+                        else 
 						{
 							if(!spell.Cast())
 							spell.Cast(Minions[0]);
 							else
 							{
 								spell.Cast();
-								Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
+								Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);  // 이건 액티브에만 진짜 평캔, 위에있는건 타게팅임. 평캔안됨.
 							}
 						}
                     }
@@ -188,14 +188,14 @@ namespace ALL_In_One
                         else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
                         spell.Cast(target);
                     }
-					else if(!spell.IsSkillshot)
+					else 
 					{
 						if(!spell.Cast())
 						spell.Cast(target);
 						else
 						{
 							spell.Cast();
-							Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
+							Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);  // 이건 액티브에만 진짜 평캔, 위에있는건 타게팅임. 평캔안됨.
 						}
 					}
                 }
@@ -214,14 +214,14 @@ namespace ALL_In_One
                         else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
                         spell.Cast(target);
                     }
-					else if(!spell.IsSkillshot)
+					else 
 					{
 						if(!spell.Cast())
 						spell.Cast(target);
 						else
 						{
 							spell.Cast();
-							Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
+							Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);  // 이건 액티브에만 진짜 평캔, 위에있는건 타게팅임. 평캔안됨.
 						}
 					}
                 }
@@ -284,7 +284,7 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
-						else if(!spell.IsSkillshot)
+						else 
 						{
 							if(!spell.Cast())
 								spell.Cast(target);
@@ -310,7 +310,7 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
-						else if(!spell.IsSkillshot)
+						else 
 						{
 							if(!spell.Cast())
 								spell.Cast(target);
@@ -339,7 +339,7 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(Mobs[0],ExtraTargetDistance,ALPHA);
                         }
-						else if(!spell.IsSkillshot)
+						else 
 						{
 							if(!spell.Cast())
 								spell.Cast(Mobs[0]);
@@ -367,7 +367,7 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(Minions[0],ExtraTargetDistance,ALPHA);
                         }
-						else if(!spell.IsSkillshot)
+						else
 						{
 							if(!spell.Cast())
 								spell.Cast(Minions[0]);

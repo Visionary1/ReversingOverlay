@@ -24,7 +24,7 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R, 600f, TargetSelector.DamageType.Physical) {Delay = 0.1f, Speed = 902f};
 
-            W.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 902f, false, SkillshotType.SkillshotCone);
+            W.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 1500f, false, SkillshotType.SkillshotCone);
             E.SetTargetted(0.25f, float.MaxValue);
             
             AIO_Menu.Champion.Combo.addUseQ();
@@ -42,7 +42,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addIfMana();
-
+			
+            AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addUseKillsteal();
 
             AIO_Menu.Champion.Drawings.addWrange();
@@ -134,7 +135,7 @@ namespace ALL_In_One.champions
                     E.Cast(FullComboTarget);
             }
 
-            if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && !E.IsReady())
+            if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && (FullComboTarget.IsValidTarget(150f) && !Q.IsReady()))
                 W.ConeCast(FullComboTarget);
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x) && x.HasBuffOfType(BuffType.Slow)))
@@ -147,7 +148,11 @@ namespace ALL_In_One.champions
                 return;
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
-                W.CastOnBestTarget(0f, false, true);
+			{
+                var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
+				if(Wtarget != null)
+                W.ConeCast(Wtarget,50f);
+			}
         }
         
         static void Laneclear()

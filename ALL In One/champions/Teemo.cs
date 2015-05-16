@@ -107,8 +107,8 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || Target == null)
                 return;
 
-            if (AIO_Menu.Champion.Harass.UseQ && Q.CanCast(Target))
-                Q.CastOnUnit(Target);
+            AIO_Func.AACb(Q);
+            AIO_Func.AALcJc(Q);
         }
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)

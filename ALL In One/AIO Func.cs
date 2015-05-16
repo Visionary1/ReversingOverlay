@@ -104,7 +104,7 @@ namespace ALL_In_One
                 if (Mobs.Count > 0 && Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true) != null)
                 {
                     if(Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
-                    && spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && LHM)
+                    && spell.IsReady() && LHM)
                     {
                         if(spell.IsSkillshot)
                         {
@@ -127,7 +127,7 @@ namespace ALL_In_One
                 if (Minions.Count > 0 && Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true) != null)
                 {
                     if(Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true).GetValue<bool>() //  || Menu.Item("LcUse" + spell.Slot.ToString(), true).GetValue<bool>())
-                    && spell.IsReady() && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && LM)
+                    && spell.IsReady() && LM)
                     {
                         if(spell.IsSkillshot)
                         {

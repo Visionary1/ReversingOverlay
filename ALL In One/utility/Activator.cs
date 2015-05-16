@@ -36,7 +36,6 @@ namespace ALL_In_One.utility
             Menu.SubMenu("AutoPotion").AddItem(new MenuItem("AutoPotion.ifManaPercent", "if Mana Percent <")).SetValue(new Slider(55,0,100));
 
             Menu.SubMenu("OnAttack").AddItem(new MenuItem("OnAttack.RS", "Use Red Smite")).SetValue(true);
-
             Menu.SubMenu("Killsteal").AddItem(new MenuItem("Killsteal.BS", "Blue Smite")).SetValue(true);
 
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Cb", "On Combo")).SetValue(true);
@@ -46,12 +45,28 @@ namespace ALL_In_One.utility
 
             additems();
             addPotions();
+            AddAfterAttackData();
 
             Game.OnUpdate += OnUpdate.Game_OnUpdate;
             Orbwalking.BeforeAttack += BeforeAttack.Orbwalking_BeforeAttack;
             Orbwalking.AfterAttack += AfterAttack.Orbwalking_AfterAttack;
             Orbwalking.OnAttack += OnAttack.Orbwalking_OnAttack;
-            
+            Spellbook.OnCastSpell += AfterAttack.Spellbook_OnCastSpell;
+        }
+
+        static void additems()
+        {
+            BeforeAttack.additem("Youmuu", (int)ItemId.Youmuus_Ghostblade, Orbwalking.GetRealAutoAttackRange(Player));
+
+            AfterAttack.additem("Tiamat", (int)ItemId.Tiamat_Melee_Only, 400f);
+            AfterAttack.additem("Hydra", (int)ItemId.Ravenous_Hydra_Melee_Only, 400f);
+            AfterAttack.additem("Bilgewater", (int)ItemId.Bilgewater_Cutlass, 450f, true);
+            AfterAttack.additem("BoTRK", (int)ItemId.Blade_of_the_Ruined_King, 450f, true);
+        }
+
+        static void AddAfterAttackData()
+        {
+            AfterAttack.AddAfterAttackData("MasterYi", SpellSlot.W, CastingOrder.ItemFirst);
         }
 
         internal class item
@@ -60,15 +75,6 @@ namespace ALL_In_One.utility
             internal int Id { get; set; }
             internal float Range { get; set; }
             internal bool isTargeted { get; set; }
-        }
-
-        static void additems()
-        {
-            BeforeAttack.additem("Youmuu", (int)ItemId.Youmuus_Ghostblade, Orbwalking.GetRealAutoAttackRange(Player));
-            AfterAttack.additem("Tiamat", (int)ItemId.Tiamat_Melee_Only, 400f);
-            AfterAttack.additem("Hydra", (int)ItemId.Ravenous_Hydra_Melee_Only, 400f);
-            AfterAttack.additem("Bilgewater", (int)ItemId.Bilgewater_Cutlass, 450f, true);
-            AfterAttack.additem("BoTRK", (int)ItemId.Blade_of_the_Ruined_King, 450f, true);
         }
 
         #region PotionManager
@@ -181,8 +187,9 @@ namespace ALL_In_One.utility
 
                 #region RS
                 if(Menu.Item("OnAttack.RS").GetValue<bool>())
-                OnAttack.setRSmiteSlot(); //Red Smite
+                    OnAttack.setRSmiteSlot(); //Red Smite
                 #endregion
+
                 #region BS
                 if(Menu.Item("Killsteal.BS").GetValue<bool>())
                 {
@@ -293,11 +300,31 @@ namespace ALL_In_One.utility
             }
         }
 
+        internal enum CastingOrder
+        {
+            SpellFirst,
+            ItemFirst
+        }
+
         internal class AfterAttack
         {
+            internal class OrderData
+            {
+                internal string ChampionName { get; set; }
+                internal SpellSlot SpellSlot { get; set; }
+                internal CastingOrder CastingOrder { get; set; }
+            }
+
             internal static List<item> itemsList = new List<item>();
-            internal static bool ALLCancelItemsAreCasted { get { return !utility.Activator.AfterAttack.itemsList.Any(x => Items.CanUseItem((int)x.Id) && !x.isTargeted && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()); } }
-            
+            internal static bool ALLCancelItemsAreCasted { get { return !AfterAttack.itemsList.Any(x => Items.CanUseItem((int)x.Id) && !x.isTargeted && Menu.Item("AfterAttack.Use " + x.Id.ToString()).GetValue<bool>()); } }
+
+            static List<OrderData> OrderDataList = new List<OrderData>();
+
+            internal static void AddAfterAttackData(string championName, SpellSlot spellSlot, CastingOrder castingOrder)
+            {
+                OrderDataList.Add(new OrderData { ChampionName = championName, SpellSlot = spellSlot, CastingOrder = castingOrder });
+            }
+
             internal static void additem(string itemName, int itemid, float itemRange, bool itemisTargeted = false)
             {
                 itemsList.Add(new item { Name = itemName, Id = itemid, Range = itemRange, isTargeted = itemisTargeted });
@@ -305,7 +332,6 @@ namespace ALL_In_One.utility
                 Menu.SubMenu("AfterAttack").AddItem(new MenuItem("AfterAttack.Use " + itemid.ToString(), "Use " + itemName)).SetValue(true);
             }
             
-
             internal static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
             {
                 if (!unit.IsMe || target == null || target.IsDead || unit.IsDead || (target.Type != GameObjectType.obj_AI_Minion && target.Type != GameObjectType.obj_AI_Hero))
@@ -320,26 +346,69 @@ namespace ALL_In_One.utility
 
                     if((Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) || (Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) || (Menu.Item("Misc.Jc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count > 0) || (Menu.Item("Misc.Lc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Minions.Count > 0))
                     {
-                        if (itemone.isTargeted)
-                            Items.UseItem(itemone.Id, (Obj_AI_Base)target);
+                        var orderdata = OrderDataList.Find(x => x.ChampionName == ObjectManager.Player.ChampionName);
+
+                        if (orderdata != null)
+                        {
+                            switch (orderdata.CastingOrder)
+                            {
+                                case CastingOrder.SpellFirst:
+                                    if(!Player.Spellbook.GetSpell(orderdata.SpellSlot).IsReady())
+                                    {
+                                        if (itemone.isTargeted)
+                                            Items.UseItem(itemone.Id, (Obj_AI_Base)target);
+                                        else
+                                            Items.UseItem(itemone.Id);
+                                    }
+                                    break;
+                                case CastingOrder.ItemFirst:
+                                    if (itemone.isTargeted)
+                                        Items.UseItem(itemone.Id, (Obj_AI_Base)target);
+                                    else
+                                        Items.UseItem(itemone.Id);
+                                    break;
+                            }
+                        }
                         else
-                            Items.UseItem(itemone.Id);
+                        {
+                            if (itemone.isTargeted)
+                                Items.UseItem(itemone.Id, (Obj_AI_Base)target);
+                            else
+                                Items.UseItem(itemone.Id);
+                        }
                     }
                 }
             }
+
+            internal static void Spellbook_OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
+            {
+                var orderdata = OrderDataList.Find(x => x.ChampionName == ObjectManager.Player.ChampionName);
+
+                if(orderdata == null || orderdata.CastingOrder != CastingOrder.ItemFirst)
+                    return;
+
+                if(args.Slot == orderdata.SpellSlot && !ALLCancelItemsAreCasted)
+                    args.Process = true;
+            }
         }
-        
+
         public static float getItemDamage(Obj_AI_Base enemy)
         {
-            float idamage = 0;
+            float damage = 0;
                 
             if (Items.CanUseItem((int)ItemId.Tiamat_Melee_Only))
-                idamage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat) + (float)Player.GetAutoAttackDamage2(enemy, true); //평-티아멧-평
+                damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Tiamat);
             
             if (Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only))
-                idamage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra) + (float)Player.GetAutoAttackDamage2(enemy, true); //평-히드라-평
+                damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Hydra); 
 
-            return idamage;
+            if (Items.CanUseItem((int)ItemId.Bilgewater_Cutlass))
+                damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Bilgewater);
+
+            if (Items.CanUseItem((int)ItemId.Blade_of_the_Ruined_King))
+                damage += (float)Player.GetItemDamage(enemy, Damage.DamageItems.Botrk);
+
+            return damage;
         }
     }
 }

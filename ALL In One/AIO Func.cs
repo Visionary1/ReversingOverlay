@@ -80,7 +80,7 @@ namespace ALL_In_One
             Game.Say("/d");
         }
         
-        internal static void AALcJc(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
+        internal static void AALcJc(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f, int ResetDelay = 50) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
         {// 아주 편하게 평캔 Lc, Jc를 구현할수 있습니다(그것도 분리해서!!). 그냥 AIO_Func.AALcJc(Q); 이렇게 쓰세요. 선형 스킬일 경우 세부 설정을 원할 경우 AIO_Func.AALcJc(E,ED,0f); 이런식으로 쓰세요.
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
@@ -122,7 +122,7 @@ namespace ALL_In_One
 							else
 							{
 								spell.Cast();
-								Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+								Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
 							}
 						}
                     }
@@ -148,7 +148,7 @@ namespace ALL_In_One
 							else
 							{
 								spell.Cast();
-								Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+								Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
 							}
 						}
                     }
@@ -156,7 +156,7 @@ namespace ALL_In_One
             }
         }
         
-        internal static void AACb(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
+        internal static void AACb(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f, int ResetDelay = 50) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
         { // 아주 편하게 평캔 Cb, Hrs를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
             var target = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(Player) + 150,TargetSelector.DamageType.Physical, true); //
             bool HM = true;
@@ -195,7 +195,7 @@ namespace ALL_In_One
 						else
 						{
 							spell.Cast();
-							Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+							Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
 						}
 					}
                 }
@@ -221,7 +221,7 @@ namespace ALL_In_One
 						else
 						{
 							spell.Cast();
-							Utility.DelayAction.Add(50, Orbwalking.ResetAutoAttackTimer);
+							Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
 						}
 					}
                 }

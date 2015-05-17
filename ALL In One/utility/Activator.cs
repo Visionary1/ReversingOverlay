@@ -389,7 +389,7 @@ namespace ALL_In_One.utility
                     return;
 
                 if(args.Slot == orderdata.SpellSlot && !ALLCancelItemsAreCasted)
-                    args.Process = true;
+                    args.Process = false;
             }
         }
 

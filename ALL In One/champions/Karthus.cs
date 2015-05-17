@@ -21,11 +21,11 @@ namespace ALL_In_One.champions
 
             Q = new Spell(SpellSlot.Q, 875f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 1000f, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, 550f, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, 520f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R);
 
-            Q.SetSkillshot(1.0f, 160f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            W.SetSkillshot(0.6f, 1f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(1f, 150f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            W.SetSkillshot(.25f, 1f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
@@ -40,15 +40,10 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Lasthit.addIfMana(0);
 
             AIO_Menu.Champion.Laneclear.addUseQ();
-            AIO_Menu.Champion.Laneclear.addUseE();
             AIO_Menu.Champion.Laneclear.addIfMana();
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
-            AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
-            
-            AIO_Menu.Champion.Flee.addUseE();
-            AIO_Menu.Champion.Flee.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
 
@@ -78,22 +73,16 @@ namespace ALL_In_One.champions
                         Combo();
                         break;
                     case Orbwalking.OrbwalkingMode.Mixed:
-                        Orbwalker.SetAttack(true);
                         Harass();
                         break;
                     case Orbwalking.OrbwalkingMode.LastHit:
-                        Orbwalker.SetAttack(Player.ManaPercent <= AIO_Menu.Champion.Lasthit.IfMana || !AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady());
                         Lasthit();
                         break;
                     case Orbwalking.OrbwalkingMode.LaneClear:
-                        Orbwalker.SetAttack(true);
                         Laneclear();
                         Jungleclear();
                         break;
                     case Orbwalking.OrbwalkingMode.None:
-                        Orbwalker.SetAttack(true);
-                        if (E.IsReady() && E.Instance.ToggleState == 2 && !HeroManager.Enemies.Any(x => x.IsValidTarget(E.Range)) && !MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly).Any())
-                            E.Cast();
                         break;
                 }
             }
@@ -118,41 +107,39 @@ namespace ALL_In_One.champions
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color, 3);
         }
 
+        static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        {
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                args.Process = false;
+        }
+
         static void Combo()
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
                 Q.CastOnBestTarget(0f, false, true);
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-                W.CastOnBestTarget();
+                W.CastOnBestTarget(0f, false, true);
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 if (AIO_Func.anyoneValidInRange(E.Range) && E.Instance.ToggleState == 1)
                     E.Cast();
-                else if (!AIO_Func.anyoneValidInRange(E.Range) && E.Instance.ToggleState == 2)
+                else if (!AIO_Func.anyoneValidInRange(E.Range) && E.Instance.ToggleState != 1)
                     E.Cast();
             }
         }
 
         static void Harass()
         {
-            if (E.IsReady() && !AIO_Func.anyoneValidInRange(E.Range) && E.Instance.ToggleState == 2)
-                E.Cast();
-
             if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
-            {
-                if (E.IsReady() && E.Instance.ToggleState == 2)
-                    E.Cast();
-
                 return;
-            }
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
                 Q.CastOnBestTarget(0f, false, true);
 
             if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
-                W.CastOnBestTarget();
+                W.CastOnBestTarget(0f, false, true);
 
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
@@ -182,18 +169,10 @@ namespace ALL_In_One.champions
 
         static void Laneclear()
         {
-            var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
-
-            if (E.IsReady() && !Minions.Any(x => x.IsValidTarget(E.Range)) && E.Instance.ToggleState == 2)
-                E.Cast();
-
             if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
-            {
-                if (E.IsReady() && E.Instance.ToggleState == 2)
-                    E.Cast();
-
                 return;
-            }
+
+            var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
                 return;
@@ -205,28 +184,14 @@ namespace ALL_In_One.champions
                 if (qloc.MinionsHit >= 1)
                     Q.Cast(qloc.Position);
             }
-
-            if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
-            {
-                if (Minions.Any(x => x.IsValidTarget(E.Range)) && E.Instance.ToggleState == 1)
-                    E.Cast();
-            }
         }
 
         static void Jungleclear()
         {
-            var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-            if (E.IsReady() && !Mobs.Any(x => x.IsValidTarget(E.Range)) && E.Instance.ToggleState == 2)
-                E.Cast();
-
             if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
-            {
-                if (E.IsReady() && E.Instance.ToggleState == 2)
-                    E.Cast();
-
                 return;
-            }
+
+            var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
                 return;
@@ -237,12 +202,6 @@ namespace ALL_In_One.champions
 
                 if (qloc.MinionsHit >= 1)
                     Q.Cast(qloc.Position);
-            }
-
-            if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
-            {
-                if (Mobs.Any(x => x.IsValidTarget(E.Range)) && E.Instance.ToggleState == 1)
-                    E.Cast();
             }
         }
 

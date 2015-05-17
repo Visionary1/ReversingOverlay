@@ -645,7 +645,7 @@ namespace ALL_In_One
                     addItem("Use Killsteal", Enabled);
                 }
 
-                internal static void addHitchanceSelector(HitChance defaultHitchance = HitChance.High)
+                internal static void addHitchanceSelector(HitChance defaultHitchance = HitChance.VeryHigh)
                 {
                     int defaultindex;
 

@@ -88,11 +88,28 @@ namespace ALL_In_One
 
             #region PassiveDamages
             
+            #region Slayer // By Rl244
+            p = new PassiveDamage
+            {
+                ChampionName = ObjectManager.Player.ChampionName,
+                IsActive = (source, target) => (source.HasBuff("enchantment_slayer_stacks")), 
+                GetDamage =
+                    (source, target) =>
+                        (float)
+                            source.CalcDamage(
+                                target, DamageType.Magical,
+                                (from buff in ObjectManager.Player.Buffs
+                                    where buff.Name == "enchantment_slayer_stacks"
+                                    select buff.Count).FirstOrDefault() + 25),
+            };
+            AttackPassives.Add(p);
+            #endregion
+            
             #region MasterYi // By Rl244
             p = new PassiveDamage
             {
                 ChampionName = "MasterYi",
-                IsActive = (source, target) => (target.HasBuff("doublestrike")), 
+                IsActive = (source, target) => (source.HasBuff("doublestrike")), 
                 GetDamage =
                     (source, target) =>
                         (float)
@@ -1450,6 +1467,7 @@ namespace ALL_In_One
                         Damage =
                             (source, target, level) =>
                                 new double[] { 325, 663, 1001 }[level] + 2.34 * source.FlatPhysicalDamageMod
+                                + (source.GetAutoAttackDamage2(target, true) - source.GetAutoAttackDamage2(target, false))*5 // By RL244 온힛 5번 발동.
                     },
                 });
 

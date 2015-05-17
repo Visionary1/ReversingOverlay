@@ -233,7 +233,7 @@ namespace ALL_In_One.utility
 
             internal static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)
             {
-                var Target = (Obj_AI_Base)target;
+                var Target = target as Obj_AI_Hero;
                     
                 if (!unit.IsMe || Target == null)
                         return;

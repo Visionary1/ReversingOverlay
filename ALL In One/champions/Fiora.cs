@@ -195,17 +195,17 @@ namespace ALL_In_One.champions
             {
                 var qd = Menu.Item("Combo.QD").GetValue<Slider>().Value;
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                var fqTarget = TargetSelector.GetTarget(Q.Range * 2, Q.DamageType);
+                //var fqTarget = TargetSelector.GetTarget(Q.Range * 2, Q.DamageType);
     //                var fminion = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => t.Distance(fqTarget.Position)).
     //                Where(t => !t.IsAlly && Player.Distance(t.Position) <= 600 && Player.Distance(t.Position) >= 300 && fqTarget.Distance(t.Position) <= 600).First();
-                var mchase = Chase(fqTarget.Position);
+                //var mchase = Chase(fqTarget.Position);
                 
                 
                 if(qTarget.Distance(Player.ServerPosition) >= qd || getQBuffDuration < 1)
                     Q.Cast(qTarget);
-                    
+                    /*
                 if(fqTarget.Distance(Player.ServerPosition) > 600) //Chasing Enemy
-                    Q.Cast(mchase);
+                    Q.Cast(mchase);*/
             }
         }
 

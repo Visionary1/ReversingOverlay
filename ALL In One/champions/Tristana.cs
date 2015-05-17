@@ -58,8 +58,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseInterrupter(false);
 
             AIO_Menu.Champion.Drawings.addWrange();
-            AIO_Menu.Champion.Drawings.addItem("Q Timer", new Circle(true, Color.Red));
-            AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.Red));
+            AIO_Menu.Champion.Drawings.addItem("Q Timer", new Circle(true, Color.LightPink));
+            AIO_Menu.Champion.Drawings.addItem("E Timer", new Circle(true, Color.White));
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
@@ -81,7 +81,7 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(10))
             {
                 AIO_Func.FleeToPosition(W);
-                foreach (var target in HeroManager.Enemies.Where(x => AIO_Func.CanHit(W,x,0)&& (float)AIO_Func.getBuffInstance(x, "tristanaecharge").Count > 2 && x.HasBuff("tristanaecharge") && (AIO_Func.getBuffInstance(x, "tristanaechargesound").EndTime - Game.ClockTime) > 0.6))
+                foreach (var target in HeroManager.Enemies.Where(x => AIO_Func.CanHit(W,x,0) && x.HasBuff("tristanaecharge") && (AIO_Func.getBuffInstance(x, "tristanaechargesound").EndTime - Game.ClockTime) > 0.55 && ((float)AIO_Func.getBuffInstance(x, "tristanaecharge").Count == 3 && (AIO_Func.getBuffInstance(x, "tristanaechargesound").EndTime - Game.ClockTime) < 1 || (float)AIO_Func.getBuffInstance(x, "tristanaecharge").Count == 4)))
                 {
                     if(target != null && W.IsReady())
                     AIO_Func.SC(W);
@@ -117,7 +117,7 @@ namespace ALL_In_One.champions
                     var pos_temp2 = Drawing.WorldToScreen(target.Position);
                     
                     if (drawETimer.Active && getENuffDuration > 0)
-                        Drawing.DrawText(pos_temp[0], pos_temp2[1], drawETimer.Color, "E: " + getENuffDuration.ToString("0.00"));
+                        Drawing.DrawText(pos_temp2[0], pos_temp2[1], drawETimer.Color, "E Bomb!! : " + getENuffDuration.ToString("0.00"));
                 }
             }
         }
@@ -200,9 +200,9 @@ namespace ALL_In_One.champions
                 {
                     var Buff = (target.HasBuff("tristanaechargesound") ? AIO_Func.getBuffInstance(target, "tristanaecharge") : null);
                     bool EK = (target.HasBuff("tristanaechargesound") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f)) || !target.HasBuff("tristanaechargesound"));
-                    if (R.CanCast(target) && Buff != null && (float)Buff.Count > 0 && target.HasBuff("tristanaechargesound") && (AIO_Func.getBuffInstance(target, "tristanaechargesound").EndTime - Game.ClockTime) > 0.3 && AIO_Func.isKillable(target, R.GetDamage2(target) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f)) && !EK)
+                    if ((AIO_Menu.Champion.Misc.getBoolValue("KillstealW") ? (!AIO_Func.CanHit(W,target,0) || !W.IsReady()) : R.IsReady()) && R.CanCast(target) && Buff != null && (float)Buff.Count > 0 && target.HasBuff("tristanaechargesound") && (AIO_Func.getBuffInstance(target, "tristanaechargesound").EndTime - Game.ClockTime) > 0.3 && AIO_Func.isKillable(target, R.GetDamage2(target) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f)) && !EK)
                         R.Cast(target);
-                    else if (R.CanCast(target) && AIO_Func.isKillable(target, R) && !EK)
+                    else if ((AIO_Menu.Champion.Misc.getBoolValue("KillstealW") ? (!AIO_Func.CanHit(W,target,0) || !W.IsReady()) : R.IsReady()) && R.CanCast(target) && AIO_Func.isKillable(target, R) && !EK)
                         R.Cast(target);
                 }
             }

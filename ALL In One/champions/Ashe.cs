@@ -32,7 +32,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseR();
             Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.Use MR", "Use R(Manual)")).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press, false));
-			
+            
             AIO_Menu.Champion.Harass.addUseQ(false);
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addIfMana();
@@ -84,7 +84,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealW"))
                 KillstealW();
             #endregion
-			ManualR();
+            ManualR();
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -136,15 +136,15 @@ namespace ALL_In_One.champions
             
             AA();
         }
-		
-		static void ManualR()
-		{
-			var RTarget = TargetSelector.GetTarget(3000f, R.DamageType, true);
-			if(RM && RTarget != null && R.IsReady())
-			{
-				AIO_Func.LCast(R,RTarget,0f,0f,true);
-			}
-		}
+        
+        static void ManualR()
+        {
+            var RTarget = TargetSelector.GetTarget(3000f, R.DamageType, true);
+            if(RM && RTarget != null && R.IsReady())
+            {
+                AIO_Func.LCast(R,RTarget,0f,0f,true);
+            }
+        }
         
         static void Combo()
         {            

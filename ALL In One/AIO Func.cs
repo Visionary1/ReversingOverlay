@@ -116,15 +116,15 @@ namespace ALL_In_One
                         spell.Cast(Mobs[0]);
                         }
                         else 
-						{
-							if(!spell.IsSkillshot)
-							spell.Cast(Mobs[0]);
-							else
-							{
-								spell.Cast();
-								Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);  // 이건 액티브에만 진짜 평캔, 위에있는건 타게팅임. 평캔안됨.
-							}
-						}
+                        {
+                            if(!spell.IsSkillshot)
+                            spell.Cast(Mobs[0]);
+                            else
+                            {
+                                spell.Cast(); //이거 왜지우심 -_-; 스킬 캐스팅도 안하고 어택 리셋되면 실제론 어셋 리셋이될리가..--;
+                                Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
+                            }
+                        }
                     }
                 }
                 if (Minions.Count > 0 && Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true) != null)
@@ -142,15 +142,15 @@ namespace ALL_In_One
                         spell.Cast(Minions[0]);
                         }
                         else 
-						{
-							if(!spell.IsSkillshot)
-							spell.Cast(Minions[0]);
-							else
-							{
-								spell.Cast();
-								Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);  // 이건 액티브에만 진짜 평캔, 위에있는건 타게팅임. 평캔안됨.
-							}
-						}
+                        {
+                            if(!spell.IsSkillshot)
+                            spell.Cast(Minions[0]);
+                            else
+                            {
+                                spell.Cast(); //이거 왜지우심 -_-; 스킬 캐스팅도 안하고 어택 리셋되면 실제론 어셋 리셋이될리가..--;
+                                Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
+                            }
+                        }
                     }
                 }
             }
@@ -188,16 +188,16 @@ namespace ALL_In_One
                         else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
                         spell.Cast(target);
                     }
-					else 
-					{
-						if(!spell.IsSkillshot) //스킬샷이 아닐떄
-						spell.Cast(target);
-						else //스킬샷 데이터가 null일때
-						{
-							spell.Cast();
-							Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);  // 이건 액티브에만 진짜 평캔, 위에있는건 타게팅임. 평캔안됨.
-						}
-					}
+                    else 
+                    {
+                        if(!spell.IsSkillshot) //스킬샷이 아닐떄
+                        spell.Cast(target);
+                        else //스킬샷 데이터가 null일때
+                        {
+                            spell.Cast();
+                            Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);  // 이건 액티브에만 진짜 평캔, 위에있는건 타게팅임. 평캔안됨.
+                        }
+                    }
                 }
             }
             else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Menu.Item("Harass.Use " + spell.Slot.ToString(), true) != null)
@@ -214,16 +214,16 @@ namespace ALL_In_One
                         else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
                         spell.Cast(target);
                     }
-					else 
-					{
-						if(!spell.IsSkillshot)
-						spell.Cast(target);
-						else
-						{
-							spell.Cast();
-							Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);  // 이건 액티브에만 진짜 평캔, 위에있는건 타게팅임. 평캔안됨.
-						}
-					}
+                    else 
+                    {
+                        if(!spell.IsSkillshot)
+                        spell.Cast(target);
+                        else
+                        {
+                            spell.Cast(); //이거 왜지우심 -_-; 스킬 캐스팅도 안하고 어택 리셋되면 실제론 어셋 리셋이될리가..--;
+                            Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
+                        }
+                    }
                 }
             }
         }
@@ -284,13 +284,13 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
-						else 
-						{
-							if(!spell.IsSkillshot)
-								spell.Cast(target);
-							else
-								spell.AOECast(target);
-						}
+                        else 
+                        {
+                            if(!spell.IsSkillshot)
+                                spell.Cast(target);
+                            else
+                                spell.AOECast(target);
+                        }
                     }
                 }
                 else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Menu.Item("Harass.Use " + spell.Slot.ToString(), true) != null)
@@ -310,13 +310,13 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
-						else 
-						{
-							if(!spell.IsSkillshot)
-								spell.Cast(target);
-							else
-								spell.AOECast(target);
-						}
+                        else 
+                        {
+                            if(!spell.IsSkillshot)
+                                spell.Cast(target);
+                            else
+                                spell.AOECast(target);
+                        }
                     }
                 }
             }
@@ -339,13 +339,13 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(Mobs[0],ExtraTargetDistance,ALPHA);
                         }
-						else 
-						{
-							if(!spell.IsSkillshot)
-								spell.Cast(Mobs[0]);
-							else
-								spell.AOECast(Mobs[0]);
-						}
+                        else 
+                        {
+                            if(!spell.IsSkillshot)
+                                spell.Cast(Mobs[0]);
+                            else
+                                spell.AOECast(Mobs[0]);
+                        }
                     }
                 }
                 if (Minions.Count > 0 && Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true) != null)
@@ -367,13 +367,13 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(Minions[0],ExtraTargetDistance,ALPHA);
                         }
-						else
-						{
-							if(!spell.IsSkillshot)
-								spell.Cast(Minions[0]);
-							else
-								spell.AOECast(Minions[0]);
-						}
+                        else
+                        {
+                            if(!spell.IsSkillshot)
+                                spell.Cast(Minions[0]);
+                            else
+                                spell.AOECast(Minions[0]);
+                        }
                     }
                 }
             }

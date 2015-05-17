@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class Ashe// By RL244 Q Waiting For Remake. 리메이크 수치 확인용으로 일단 대기. asheqcastready AsheQ(<- Q스택 수) ashepassiveslow(target) asheqattack asheqbuff
+    class Ashe// By RL244 asheqcastready AsheQ(<- Q스택 수) ashepassiveslow(target) asheqattack asheqbuff
     {
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }

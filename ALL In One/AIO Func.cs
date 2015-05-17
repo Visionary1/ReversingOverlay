@@ -463,12 +463,12 @@ namespace ALL_In_One
             return ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.IsValid && !x.IsDead && !x.IsInvulnerable).ToList();
         }
         
-        internal static int EnemyCount(float range, float min = 0, float max = 100)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
+        internal static int EnemyCount(this float range, float min = 0, float max = 100)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
         {
             return GetEnemyList().Where(x => x.Distance(Player.ServerPosition) <= range && x.HealthPercent > min && x.HealthPercent <= max).Count();
         }
         
-        internal static int ECTarget(Obj_AI_Hero target, float range, float min = 0, float max = 100)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
+        internal static int ECTarget(this Obj_AI_Hero target, float range, float min = 0, float max = 100)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
         {
             return GetEnemyList().Where(x => x.Distance(target.ServerPosition) <= range && x.HealthPercent > min && x.HealthPercent <= max).Count();
         }

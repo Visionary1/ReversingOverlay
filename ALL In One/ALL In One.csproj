@@ -77,7 +77,7 @@
     <Compile Include="champions\Aatrox.cs" />
     <Compile Include="champions\Ahri.cs" />
     <Compile Include="champions\_Akali.cs" />
-    <Compile Include="champions\_Alistar.cs" />
+    <Compile Include="champions\Alistar.cs" />
     <Compile Include="champions\Amumu.cs" />
     <Compile Include="champions\_Anivia.cs" />
     <Compile Include="champions\Annie.cs" />
@@ -138,7 +138,7 @@
     <Compile Include="champions\MissFortune.cs" />
     <Compile Include="champions\MonkeyKing.cs" />
     <Compile Include="champions\Mordekaiser.cs" />
-    <Compile Include="champions\_Morgana.cs" />
+    <Compile Include="champions\Morgana.cs" />
     <Compile Include="champions\Nami.cs" />
     <Compile Include="champions\Nasus.cs" />
     <Compile Include="champions\Nautilus.cs" />
@@ -172,7 +172,7 @@
     <Compile Include="champions\Talon.cs" />
     <Compile Include="champions\_Taric.cs" />
     <Compile Include="champions\Teemo.cs" />
-    <Compile Include="champions\_Thresh.cs" />
+    <Compile Include="champions\Thresh.cs" />
     <Compile Include="champions\Tristana.cs" />
     <Compile Include="champions\Trundle.cs" />
     <Compile Include="champions\_Tryndamere.cs" />

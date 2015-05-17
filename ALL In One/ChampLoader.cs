@@ -325,6 +325,18 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Ashe.Load();
                     break;
+                /*case "Morgana": WIP
+                    MadeBy(Developer.RL244);
+                    champions.Morgana.Load();
+                    break;
+                case "Alistar":
+                    MadeBy(Developer.RL244);
+                    champions.Alistar.Load();
+                    break;
+                case "Thresh":
+                    MadeBy(Developer.RL244);
+                    champions.Thresh.Load();
+                    break;*/
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

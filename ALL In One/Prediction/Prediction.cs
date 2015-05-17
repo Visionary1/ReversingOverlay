@@ -161,6 +161,22 @@ namespace ALL_In_One
             spell.Cast(ReverseVec);
         }
         
+        internal static void RTarget(this Spell spell, Obj_AI_Base Target)
+        {
+            SharpDX.Vector2 ReverseVec = Player.ServerPosition.To2D() -
+                                       SharpDX.Vector2.Normalize(Target.ServerPosition.To2D() - Player.Position.To2D()) * (spell.Range);
+            if(spell.IsReady())
+            spell.Cast(ReverseVec);
+        }
+        
+        internal static void NTarget(this Spell spell, Obj_AI_Base Target)
+        {
+            SharpDX.Vector2 Vec = Player.ServerPosition.To2D() +
+                                       SharpDX.Vector2.Normalize(Target.ServerPosition.To2D() - Player.Position.To2D()) * (spell.Range);
+            if(spell.IsReady())
+            spell.Cast(Vec);
+        }
+        
         internal static void FleeToPosition(this Spell spell, string W = "N") // N 정방향, R 역방향.
         {
             bool FM = true;

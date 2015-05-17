@@ -80,7 +80,7 @@ namespace ALL_In_One
             Game.Say("/d");
         }
         
-        internal static void AALcJc(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f, int ResetDelay = 150) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
+        internal static void AALcJc(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
         {// 아주 편하게 평캔 Lc, Jc를 구현할수 있습니다(그것도 분리해서!!). 그냥 AIO_Func.AALcJc(Q); 이렇게 쓰세요. 선형 스킬일 경우 세부 설정을 원할 경우 AIO_Func.AALcJc(E,ED,0f); 이런식으로 쓰세요.
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
@@ -121,8 +121,7 @@ namespace ALL_In_One
                             spell.Cast(Mobs[0]);
                             else
                             {
-                                spell.Cast(); //이거 왜지우심 -_-; 스킬 캐스팅도 안하고 어택 리셋되면 실제론 어셋 리셋이될리가..--;
-                                Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
+                                spell.Cast(); 
                             }
                         }
                     }
@@ -147,8 +146,7 @@ namespace ALL_In_One
                             spell.Cast(Minions[0]);
                             else
                             {
-                                spell.Cast(); //이거 왜지우심 -_-; 스킬 캐스팅도 안하고 어택 리셋되면 실제론 어셋 리셋이될리가..--;
-                                Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
+                                spell.Cast(); 
                             }
                         }
                     }
@@ -156,7 +154,7 @@ namespace ALL_In_One
             }
         }
         
-        internal static void AACb(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f, int ResetDelay = 150) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
+        internal static void AACb(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
         { // 아주 편하게 평캔 Cb, Hrs를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
             var target = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(Player) + 150,TargetSelector.DamageType.Physical, true); //
             bool HM = true;
@@ -195,7 +193,6 @@ namespace ALL_In_One
                         else //스킬샷 데이터가 null일때
                         {
                             spell.Cast();
-                            Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);  // 이건 액티브에만 진짜 평캔, 위에있는건 타게팅임. 평캔안됨.
                         }
                     }
                 }
@@ -220,8 +217,7 @@ namespace ALL_In_One
                         spell.Cast(target);
                         else
                         {
-                            spell.Cast(); //이거 왜지우심 -_-; 스킬 캐스팅도 안하고 어택 리셋되면 실제론 어셋 리셋이될리가..--;
-                            Utility.DelayAction.Add(ResetDelay, Orbwalking.ResetAutoAttackTimer);
+                            spell.Cast();
                         }
                     }
                 }

@@ -412,7 +412,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
 
                 if (IsAutoAttackReset(spellName) && unit.IsMe)
                 {
-                    Utility.DelayAction.Add(150, ResetAutoAttackTimer);
+                    Utility.DelayAction.Add(75, ResetAutoAttackTimer);
                 }
 
                 if (!IsAutoAttack(spellName))

@@ -22,9 +22,9 @@ namespace ALL_In_One.champions
             Q = new Spell(SpellSlot.Q);
             W = new Spell(SpellSlot.W, 720f, TargetSelector.DamageType.Physical);
             E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Physical);
-            R = new Spell(SpellSlot.R, 600f, TargetSelector.DamageType.Physical) {Delay = 0.1f, Speed = 902f};
+            R = new Spell(SpellSlot.R, 600f, TargetSelector.DamageType.Physical) {Delay = 0.1f, Speed = 902f*2};
 
-            W.SetSkillshot(0.25f, 60f * (float)Math.PI / 180, 1500f, false, SkillshotType.SkillshotCone);
+            W.SetSkillshot(0.25f, 52f * (float)Math.PI / 180, 902f*2, false, SkillshotType.SkillshotCone);
             E.SetTargetted(0.25f, float.MaxValue);
             
             AIO_Menu.Champion.Combo.addUseQ();
@@ -32,6 +32,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
 
+            AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addIfMana();
 
@@ -135,10 +136,10 @@ namespace ALL_In_One.champions
                     E.Cast(FullComboTarget);
             }
 
-            if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && (FullComboTarget.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null)) && !Player.HasBuff("TalonNoxianDiplomacyBuff")))
+            if (AIO_Menu.Champion.Combo.UseW && W.IsReady() && (FullComboTarget.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null)) && !Q.IsReady() && !Player.HasBuff("TalonNoxianDiplomacyBuff")))
                 W.ConeCast(FullComboTarget);
 
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && HeroManager.Enemies.Any(x => FullComboTarget.IsValidTarget(300f) && x.HasBuffOfType(BuffType.Slow)) && !Player.HasBuff("TalonNoxianDiplomacyBuff"))
+            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && HeroManager.Enemies.Any(x => FullComboTarget.IsValidTarget(300f) && !Q.IsReady() && x.HasBuffOfType(BuffType.Slow)) && !Player.HasBuff("TalonNoxianDiplomacyBuff"))
                 R.Cast();
         }
 

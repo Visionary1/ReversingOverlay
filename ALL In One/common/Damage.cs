@@ -87,7 +87,22 @@ namespace ALL_In_One
             PassiveDamage p;
 
             #region PassiveDamages
-
+            
+            #region MasterYi // By Rl244
+            p = new PassiveDamage
+            {
+                ChampionName = "MasterYi",
+                IsActive = (source, target) => (target.HasBuff("doublestrike")), 
+                GetDamage =
+                    (source, target) =>
+                        (float)
+                            source.CalcDamage(
+                                target, DamageType.Physical,
+                                0.5 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
+            };
+            AttackPassives.Add(p);
+            #endregion
+            
             #region Ashe // By Rl244
             p = new PassiveDamage
             {

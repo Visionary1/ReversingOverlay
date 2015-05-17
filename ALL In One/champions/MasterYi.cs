@@ -210,13 +210,10 @@ namespace ALL_In_One.champions
             float damage = 0;
 
             if (Q.IsReady())
-                damage += Q.GetDamage2(enemy);
+                damage += Q.GetDamage2(enemy) + (float)Player.GetAutoAttackDamage2(enemy, false);
                 
             if (E.IsReady())
                 damage += E.GetDamage2(enemy);
-                
-            if (getPBuffDuration > 0)
-                damage += (float)Player.GetAutoAttackDamage2(enemy, false) / 2;
                 
             if (W.IsReady())
                 damage += (float)Player.GetAutoAttackDamage2(enemy, false);

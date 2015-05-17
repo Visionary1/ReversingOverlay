@@ -117,7 +117,7 @@ namespace ALL_In_One
                         }
                         else 
                         {
-                            if(!spell.IsSkillshot)
+                            if(false == spell.IsSkillshot)
                             spell.Cast(Mobs[0]);
                             else
                             {
@@ -142,7 +142,7 @@ namespace ALL_In_One
                         }
                         else 
                         {
-                            if(!spell.IsSkillshot)
+                            if(false == spell.IsSkillshot)
                             spell.Cast(Minions[0]);
                             else
                             {
@@ -188,7 +188,7 @@ namespace ALL_In_One
                     }
                     else 
                     {
-                        if(!spell.IsSkillshot) //스킬샷이 아닐떄
+                        if(false == spell.IsSkillshot) //스킬샷이 아닐떄
                         spell.Cast(target);
                         else //스킬샷 데이터가 null일때
                         {
@@ -213,7 +213,7 @@ namespace ALL_In_One
                     }
                     else 
                     {
-                        if(!spell.IsSkillshot)
+                        if(false == spell.IsSkillshot)
                         spell.Cast(target);
                         else
                         {
@@ -238,8 +238,10 @@ namespace ALL_In_One
                     else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
                     spell.ConeCast(M,50f,ALPHA);
                 }
-                else
+                else if(false == spell.IsSkillshot)
                 spell.Cast(M);
+                else
+                spell.Cast();
             }
         }
         
@@ -282,7 +284,7 @@ namespace ALL_In_One
                         }
                         else 
                         {
-                            if(!spell.IsSkillshot)
+                            if(false == spell.IsSkillshot)
                                 spell.Cast(target);
                             else
                                 spell.AOECast(target);
@@ -308,7 +310,7 @@ namespace ALL_In_One
                         }
                         else 
                         {
-                            if(!spell.IsSkillshot)
+                            if(false == spell.IsSkillshot)
                                 spell.Cast(target);
                             else
                                 spell.AOECast(target);
@@ -337,7 +339,7 @@ namespace ALL_In_One
                         }
                         else 
                         {
-                            if(!spell.IsSkillshot)
+                            if(false == spell.IsSkillshot)
                                 spell.Cast(Mobs[0]);
                             else
                                 spell.AOECast(Mobs[0]);
@@ -365,7 +367,7 @@ namespace ALL_In_One
                         }
                         else
                         {
-                            if(!spell.IsSkillshot)
+                            if(false == spell.IsSkillshot)
                                 spell.Cast(Minions[0]);
                             else
                                 spell.AOECast(Minions[0]);

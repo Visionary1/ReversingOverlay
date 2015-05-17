@@ -150,7 +150,7 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
-            if (R.CanCast(gapcloser.Sender) && gapcloser.Sender.IsFacing(Player))
+            if (R.CanCast(gapcloser.Sender))// && gapcloser.Sender.IsFacing(Player) 너무 안쓴다는 제보가 있어 수정함.
                 R.Cast(gapcloser.Sender);
         }
 

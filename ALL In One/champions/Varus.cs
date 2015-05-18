@@ -14,6 +14,8 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
+        static float WM {get{return Menu.Item("Combo.WM").GetValue<Slider>().Value; }}
+
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 1600f, TargetSelector.DamageType.Physical);
@@ -28,6 +30,7 @@ namespace ALL_In_One.champions
             Q.SetCharged("VarusQ", "VarusQ", 250, 1600, 1.2f);
             
             AIO_Menu.Champion.Combo.addUseQ();
+            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.WM", "W Min Stacks")).SetValue(new Slider(2, 1, 3));
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
             
@@ -67,8 +70,19 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(35))
             {
-                AIO_Func.SC(Q);
-                AIO_Func.SC(E);
+                foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
+                {
+                    if (target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) && (float)AIO_Func.getBuffInstance(target, "varuswdebuff").Count >= WM)
+                    {
+                        AIO_Func.SC(Q);
+                        AIO_Func.SC(E);
+                    }
+                    else if(!target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
+                    {
+                        AIO_Func.SC(Q);
+                        AIO_Func.SC(E);
+                    }
+                }
                 AIO_Func.SC(R);
             }
             

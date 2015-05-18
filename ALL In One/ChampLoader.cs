@@ -337,15 +337,15 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Thresh.Load();
                     break;*/
-                /*case "Swain":
+                case "Swain":
                     MadeBy(Developer.RL244);
                     champions.Swain.Load();
-                    break;*/
+                    break;
                 case "Xerath":
                     MadeBy(Developer.RL244);
                     champions.Xerath.Load();
                     break;
-                case "Varus": //QWER전부 실사용 가능함. 다만 아직 스택 관련 작업필요. 평평-q평평평e 이런거.
+                case "Varus":
                     MadeBy(Developer.RL244);
                     champions.Varus.Load();
                     break;

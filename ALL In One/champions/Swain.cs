@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class Swain// By RL244 
+    class Swain// By RL244 swaindampeningfieldmana SwainTorment(Target) swainbeamdamage(Target) SwainMetamorphism
     {
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
@@ -36,15 +36,15 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW(false);
             AIO_Menu.Champion.Harass.addUseE();
-            AIO_Menu.Champion.Harass.addIfMana();
+            AIO_Menu.Champion.Harass.addIfMana(20);
             
             AIO_Menu.Champion.Laneclear.addUseW(false);
-            AIO_Menu.Champion.Laneclear.addUseR();
-            AIO_Menu.Champion.Laneclear.addIfMana();
+            AIO_Menu.Champion.Laneclear.addUseR(false);
+            AIO_Menu.Champion.Laneclear.addIfMana(10);
 
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addUseR();
-            AIO_Menu.Champion.Jungleclear.addIfMana();
+            AIO_Menu.Champion.Jungleclear.addIfMana(10);
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
@@ -75,13 +75,13 @@ namespace ALL_In_One.champions
                 AIO_Func.SC(Q);
                 AIO_Func.SC(W);
                 AIO_Func.SC(E);
-                if(R.Range.EnemyCount() >= RM && !Player.HasBuff(""))
+                if((R.Range.EnemyCount() >= RM || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear) && !Player.HasBuff("SwainMetamorphism"))
                 AIO_Func.SC(R);
             }
             
-            if((R.Range+200f).EnemyCount() == 0 && R.Range.EnemyCount() == 0 && Player.HasBuff(""))
+            if((R.Range+200f).EnemyCount() == 0 && Player.HasBuff("SwainMetamorphism") && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
             R.Cast();
-
+            
             #region Killsteal
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
                 KillstealQ();

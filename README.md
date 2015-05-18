@@ -93,9 +93,9 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Sion|✔|xcsoft|
 |Sivir|✔|fakker|
 |Skarner|　|　|
-|Sona|WIP|rl244|
+|Sona|✔|rl244|
 |Soraka|✔|rl244|
-|Swain|WIP|rl244|
+|Swain|✔|rl244|
 |Syndra|WIP|rl244|
 |Talon|✔|rl244|
 |Taric|　|　|

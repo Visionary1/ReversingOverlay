@@ -15,6 +15,7 @@ namespace ALL_In_One.champions
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
         static float WM {get{return Menu.Item("Combo.WM").GetValue<Slider>().Value; }}
+        static bool RM {get{return Menu.Item("Combo.Use MR").GetValue<KeyBind>().Active; }}
 
         public static void Load()
         {
@@ -32,8 +33,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseQ();
             Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.WM", "W Min Stacks")).SetValue(new Slider(2, 1, 3));
             AIO_Menu.Champion.Combo.addUseE();
-            AIO_Menu.Champion.Combo.addUseR();
-            
+            AIO_Menu.Champion.Combo.addUseR(false);
+            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.Use MR", "Use R(Manual)")).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press, false));
+
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana();
@@ -83,6 +85,7 @@ namespace ALL_In_One.champions
                         AIO_Func.SC(E);
                     }
                 }
+                if(!RM)
                 AIO_Func.SC(R);
             }
             
@@ -90,8 +93,16 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
                 KillstealE();
             #endregion
+            ManualR();
         }
-
+        static void ManualR()
+        {
+            var RTarget = TargetSelector.GetTarget(R.Range, R.DamageType, true);
+            if(RM && RTarget != null && R.IsReady())
+            {
+                AIO_Func.LCast(R,RTarget,0f,0f,true);
+            }
+        }
         static void Drawing_OnDraw(EventArgs args)
         {
             if (Player.IsDead)

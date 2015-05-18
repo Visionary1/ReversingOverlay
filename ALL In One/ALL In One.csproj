@@ -122,11 +122,11 @@
     <Compile Include="champions\Katarina.cs" />
     <Compile Include="champions\Kayle.cs" />
     <Compile Include="champions\_Kennen.cs" />
-    <Compile Include="champions\KhaZix.cs" />
+    <Compile Include="champions\Khazix.cs" />
     <Compile Include="champions\KogMaw.cs" />
     <Compile Include="champions\_LeBlanc.cs" />
     <Compile Include="champions\_LeeSin.cs" />
-    <Compile Include="champions\_Leona.cs" />
+    <Compile Include="champions\Leona.cs" />
     <Compile Include="champions\_Lissandra.cs" />
     <Compile Include="champions\_Lucian.cs" />
     <Compile Include="champions\Lulu.cs" />

@@ -349,6 +349,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Varus.Load();
                     break;
+                case "Leona":
+                    MadeBy(Developer.RL244);
+                    champions.Leona.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

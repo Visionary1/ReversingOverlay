@@ -226,7 +226,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
             {
                 return false;
             }
-            var myRange = GetRealAutoAttackRange(target);
+            var myRange = GetRealAutoAttackRange(Player);
             return
                 Vector2.DistanceSquared(
                     (target is Obj_AI_Base) ? ((Obj_AI_Base) target).ServerPosition.To2D() : target.Position.To2D(),
@@ -799,7 +799,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 if (_config.Item("AACircle").GetValue<Circle>().Active)
                 {
                     Render.Circle.DrawCircle(
-                        Player.Position, GetRealAutoAttackRange(null) + 0,
+                        Player.Position, GetRealAutoAttackRange(Player) + 0,
                         _config.Item("AACircle").GetValue<Circle>().Color, 3);
                 }
 

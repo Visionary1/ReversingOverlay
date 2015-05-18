@@ -84,8 +84,8 @@ namespace ALL_In_One
         {// 아주 편하게 평캔 Lc, Jc를 구현할수 있습니다(그것도 분리해서!!). 그냥 AIO_Func.AALcJc(Q); 이렇게 쓰세요. 선형 스킬일 경우 세부 설정을 원할 경우 AIO_Func.AALcJc(E,ED,0f); 이런식으로 쓰세요.
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                var Minions = MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player)/2+200f, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
-                var Mobs = MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player)/2+200f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+                var Minions = MinionManager.GetMinions((spell.Range > 1 ? spell.Range : Orbwalking.GetRealAutoAttackRange(Player)), MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
+                var Mobs = MinionManager.GetMinions((spell.Range > 1 ? spell.Range : Orbwalking.GetRealAutoAttackRange(Player)), MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                 bool HM = true;
                 bool LM = true;
                 bool LHM = true;
@@ -156,7 +156,7 @@ namespace ALL_In_One
         
         internal static void AACb(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
         { // 아주 편하게 평캔 Cb, Hrs를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
-            var target = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(Player) + 150,TargetSelector.DamageType.Physical, true); //
+            var target = TargetSelector.GetTarget((spell.Range > 1 ? spell.Range : Orbwalking.GetRealAutoAttackRange(Player)),(spell.DamageType != null ? spell.DamageType : TargetSelector.DamageType.True), true); //
             bool HM = true;
             bool LM = true;
             bool LHM = true;
@@ -226,7 +226,7 @@ namespace ALL_In_One
         
         internal static void LH(this Spell spell, float ALPHA = 0f) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
         {
-            var M = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health).FirstOrDefault(m => isKillable(m,spell,0) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
+            var M = MinionManager.GetMinions((spell.Range > 1 ? spell.Range : Orbwalking.GetRealAutoAttackRange(Player)), MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health).FirstOrDefault(m => isKillable(m,spell,0) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
             if(spell.IsReady() && M != null)
             {
                 if(spell.IsSkillshot)
@@ -254,7 +254,7 @@ namespace ALL_In_One
         
         internal static void SC(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //
         { // 
-            var target = TargetSelector.GetTarget(spell.Range, spell.DamageType, true); //
+            var target = TargetSelector.GetTarget((spell.Range > 1 ? spell.Range : Orbwalking.GetRealAutoAttackRange(Player)), (spell.DamageType != null ? spell.DamageType : TargetSelector.DamageType.True), true); //
             bool HM = true;
             bool LM = true;
             bool LHM = false;
@@ -338,8 +338,8 @@ namespace ALL_In_One
             }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                var Minions = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy);
-                var Mobs = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+                var Minions = MinionManager.GetMinions((spell.Range > 1 ? spell.Range : Orbwalking.GetRealAutoAttackRange(Player)), MinionTypes.All, MinionTeam.Enemy);
+                var Mobs = MinionManager.GetMinions((spell.Range > 1 ? spell.Range : Orbwalking.GetRealAutoAttackRange(Player)), MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                 
                 if (Mobs.Count > 0 && Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true) != null)
                 {
@@ -407,7 +407,7 @@ namespace ALL_In_One
             {
                 if(Menu.Item("Lasthit.Use " + spell.Slot.ToString(), true).GetValue<bool>() && spell.IsReady() && LHM)
                 {
-                    var Mini = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.NotAlly);
+                    var Mini = MinionManager.GetMinions((spell.Range > 1 ? spell.Range : Orbwalking.GetRealAutoAttackRange(Player)), MinionTypes.All, MinionTeam.NotAlly);
                     if(Mini.Count() > 0)
                     LH(spell,ALPHA);
                 }
@@ -439,10 +439,7 @@ namespace ALL_In_One
         {
             Obj_AI_Hero target = null;
             float TRange = 500f; // spell.Range
-            if(Orbwalking.GetRealAutoAttackRange(Player) > 200)
-            target = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(Player) + 300f, TargetSelector.DamageType.True, true);
-            else
-            target = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(Player) + 500f, TargetSelector.DamageType.True, true);
+            target = TargetSelector.GetTarget(Math.Max(Orbwalking.GetRealAutoAttackRange(Player),spell.Range) + 300f, (spell.DamageType != null ? spell.DamageType : TargetSelector.DamageType.True), true);
             bool HM = true;
             bool LM = true;
             bool LHM = true;

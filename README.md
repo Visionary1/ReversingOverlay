@@ -1,5 +1,5 @@
 #L# TeamProjects (XC-Squad)
-###● ALL In One: 84/124(67.7%) Champions supported.
+###● ALL In One: 85/124(68.5%) Champions supported.
 It's a Early Development Build. So it's still a Work In Progress. (A little lacking performance)
 
 |Champion|Supported|Developer|
@@ -55,7 +55,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Kog'Maw|✔|rl244|
 |LeBlanc|　|　|
 |Lee Sin|　|　|
-|Leona|　|　|
+|Leona|✔|rl244|
 |Lissandra|　|　|
 |Lucian|　|　|
 |Lulu|✔(Incomplete)|xcsoft|

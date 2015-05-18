@@ -100,7 +100,7 @@ namespace ALL_In_One.champions
             var RTarget = TargetSelector.GetTarget(R.Range, R.DamageType, true);
             if(RM && RTarget != null && R.IsReady())
             {
-                AIO_Func.LCast(R,RTarget,0f,0f,true);
+                AIO_Func.LCast(R,RTarget);
             }
         }
         static void Drawing_OnDraw(EventArgs args)

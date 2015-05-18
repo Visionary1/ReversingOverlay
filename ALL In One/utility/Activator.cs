@@ -68,6 +68,24 @@ namespace ALL_In_One.utility
         {
             AfterAttack.AddOrderData("MasterYi", SpellSlot.W, CastingOrder.ItemFirst);
             AfterAttack.AddOrderData("Talon", SpellSlot.Q, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Fiora", SpellSlot.E, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Jax", SpellSlot.W, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Rengar", SpellSlot.Q, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Renekton", SpellSlot.W, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Khazix", SpellSlot.Q, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Yorick", SpellSlot.Q, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("XinZhao", SpellSlot.Q, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Vi", SpellSlot.Q, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Nasus", SpellSlot.Q, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Mordekaiser", SpellSlot.Q, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("MonkeyKing", SpellSlot.Q, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Leona", SpellSlot.Q, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Kassadin", SpellSlot.Q, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Garen", SpellSlot.Q, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Darius", SpellSlot.W, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Blitzcrank", SpellSlot.E, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Sejuani", SpellSlot.W, CastingOrder.SpellFirst);
+            AfterAttack.AddOrderData("Sejuani", SpellSlot.Q, CastingOrder.SpellFirst);
         }
 
         internal class item

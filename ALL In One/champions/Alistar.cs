@@ -26,19 +26,19 @@ namespace ALL_In_One.champions
             W.SetTargetted(0.25f, 1800f);
             
             AIO_Menu.Champion.Combo.addUseQ();
-            AIO_Menu.Champion.Combo.addUseE();
-            AIO_Menu.Champion.Combo.addUseR();
+            AIO_Menu.Champion.Combo.addUseW();
+            AIO_Menu.Champion.Combo.addUseR(false);
             
             AIO_Menu.Champion.Harass.addUseQ();
-            AIO_Menu.Champion.Harass.addUseE();
+            AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addIfMana();
             
             AIO_Menu.Champion.Laneclear.addUseQ(false);
-            AIO_Menu.Champion.Laneclear.addUseE(false);
+            AIO_Menu.Champion.Laneclear.addUseW(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
 
             AIO_Menu.Champion.Jungleclear.addUseQ(false);
-            AIO_Menu.Champion.Jungleclear.addUseE(false);
+            AIO_Menu.Champion.Jungleclear.addUseW(false);
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
@@ -100,9 +100,10 @@ namespace ALL_In_One.champions
 
             if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseQ || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseQ))
             {
-                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
+                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.W).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range + 300)))
                 {
-                    var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+                    var Qtarget = TargetSelector.GetTarget(Q.Range + 300, Q.DamageType);
+                    if(Qtarget != null)
                     Q.AOECast(Qtarget);
                 }
             }

@@ -238,6 +238,13 @@ namespace ALL_In_One
                     else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
                     spell.ConeCast(M,50f,ALPHA);
                 }
+                else if(spell.IsChargedSpell)
+                {
+                    if(spell.IsCharging)
+                    spell.Cast(M);
+                    else
+                    spell.StartCharging();
+                }
                 else if(false == spell.IsSkillshot)
                 spell.Cast(M);
                 else
@@ -281,6 +288,12 @@ namespace ALL_In_One
                             }
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
+                            
+                        }
+                        else if(spell.IsChargedSpell)
+                        {
+                            if(!spell.IsCharging)
+                            spell.StartCharging();
                         }
                         else 
                         {
@@ -308,6 +321,11 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
                         }
+                        else if(spell.IsChargedSpell)
+                        {
+                            if(!spell.IsCharging)
+                            spell.StartCharging();
+                        }
                         else 
                         {
                             if(false == spell.IsSkillshot)
@@ -319,7 +337,7 @@ namespace ALL_In_One
                 }
             }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-            {            
+            {
                 var Minions = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Enemy);
                 var Mobs = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                 
@@ -336,6 +354,11 @@ namespace ALL_In_One
                             CCast(spell,Mobs[0]);
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(Mobs[0],ExtraTargetDistance,ALPHA);
+                        }
+                        else if(spell.IsChargedSpell)
+                        {
+                            if(!spell.IsCharging)
+                            spell.StartCharging();
                         }
                         else 
                         {
@@ -365,6 +388,11 @@ namespace ALL_In_One
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(Minions[0],ExtraTargetDistance,ALPHA);
                         }
+                        else if(spell.IsChargedSpell)
+                        {
+                            if(!spell.IsCharging)
+                            spell.StartCharging();
+                        }
                         else
                         {
                             if(false == spell.IsSkillshot)
@@ -382,6 +410,27 @@ namespace ALL_In_One
                     var Mini = MinionManager.GetMinions(spell.Range, MinionTypes.All, MinionTeam.NotAlly);
                     if(Mini.Count() > 0)
                     LH(spell,ALPHA);
+                }
+            }
+            if(spell.IsChargedSpell && spell.IsCharging) // 따로 해놔야 스킬 써서 마나가 ifMana보다 적어졌거나 타겟이 사라져 새 타겟이 필요할때 혹은 스킬을 직접 캐스팅했을 때에도 대응 가능.
+            {
+                if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                {
+                    var TG = TargetSelector.GetTarget(spell.ChargedMaxRange, spell.DamageType); //타겟을 다시 잡게 지정해야함. 그래야 타겟이 사라져 새 타겟을 잡아야 할 때 멍때리고 움직이지도 못하는 병신같은 일 방지 가능.
+                    if(TG != null)
+                    spell.Cast(TG,false,false);
+                    else
+                    {
+                        Player.Spellbook.CastSpell(SpellSlot.Recall); //귀환으로 차지 취소.
+                        Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+                    }
+                }
+                if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                {
+                    var MINI = MinionManager.GetMinions(Player.ServerPosition, spell.ChargedMaxRange, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth);
+                    var Vec = spell.GetLineFarmLocation(MINI);
+                    if(Vec.MinionsHit > 0 && Vec.Position.IsValid())
+                        spell.Cast(Vec.Position);
                 }
             }
         }
@@ -563,23 +612,23 @@ namespace ALL_In_One
             }
         }
         
-        internal static void CCast(this Spell spell, Obj_AI_Base target) //for Circular spells
+        internal static void CCast(Spell spell, Obj_AI_Base target) //for Circular spells
         {
             AIO_Pred.CCast(spell,target);
         }
-        internal static void LCast(this Spell spell, Obj_AI_Base target, float alpha = 0f, float colmini = float.MaxValue, bool HeroOnly = false) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
+        internal static void LCast(Spell spell, Obj_AI_Base target, float alpha = 0f, float colmini = float.MaxValue, bool HeroOnly = false) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
         {
             AIO_Pred.LCast(spell,target,alpha,colmini,HeroOnly );
         }
-        internal static void RMouse(this Spell spell)
+        internal static void RMouse(Spell spell)
         {
             AIO_Pred.RMouse(spell);
         }
-        internal static void AtoB(this Spell spell, Obj_AI_Base T, float Drag = 700f) //Coded By RL244 AtoB Drag 기본값 700f는 빅토르를 위한 것임.
+        internal static void AtoB(Spell spell, Obj_AI_Base T, float Drag = 700f) //Coded By RL244 AtoB Drag 기본값 700f는 빅토르를 위한 것임.
         {
             AIO_Pred.AtoB(spell,T,Drag);
         }
-        internal static void FleeToPosition(this Spell spell, string W = "N") // N 정방향, R 역방향.
+        internal static void FleeToPosition(Spell spell, string W = "N") // N 정방향, R 역방향.
         {
             AIO_Pred.FleeToPosition(spell,W);
         }

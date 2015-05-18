@@ -246,7 +246,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         /// </summary>
         public static bool CanAttack()
         {
-            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000; //일단 원본과 매우 비슷한값임.
+            return Utils.GameTimeTickCount + Game.Ping / 2 - 15 >= LastAATick + Player.AttackDelay * 1000; //일단 원본과 매우 비슷한값임.
         }
 
         /// <summary>
@@ -509,7 +509,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                     new MenuItem("ExtraWindup", "Extra windup time").SetValue(new Slider(35, 0, 200)));
                 _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetValue(new Slider(0, 0, 200)));
                 _config.AddItem(
-                    new MenuItem("MovementDelay", "Movement delay").SetValue(new Slider(0, 0, 250)))
+                    new MenuItem("MovementDelay", "Movement delay").SetValue(new Slider(45, 0, 250)))
                     .ValueChanged += (sender, args) => SetMovementDelay(args.GetNewValue<Slider>().Value);
 
 
@@ -799,7 +799,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 if (_config.Item("AACircle").GetValue<Circle>().Active)
                 {
                     Render.Circle.DrawCircle(
-                        Player.Position, GetRealAutoAttackRange(null) + 65,
+                        Player.Position, GetRealAutoAttackRange(null) + 0,
                         _config.Item("AACircle").GetValue<Circle>().Color, 3);
                 }
 
@@ -809,7 +809,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                         HeroManager.Enemies.FindAll(target => target.IsValidTarget(1175)))
                     {
                         Render.Circle.DrawCircle(
-                            target.Position, GetRealAutoAttackRange(target) + 65,
+                            target.Position, GetRealAutoAttackRange(target) + 0,
                             _config.Item("AACircle2").GetValue<Circle>().Color, 3);
                     }
                 }

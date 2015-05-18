@@ -73,6 +73,7 @@ namespace ALL_In_One.champions
             {
                 AIO_Func.SC(Q);
                 AIO_Func.SC(W);
+                if(E.Range.EnemyCount() - W.Range.EnemyCount() >= 1) 
                 AIO_Func.SC(E);
                 //AIO_Func.SC(R);
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
@@ -90,23 +91,6 @@ namespace ALL_In_One.champions
                 KillstealQ();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
-            /* 커먼에 이거좀 추가해줬으면..!!
-            #region Diana
-            p = new PassiveDamage
-            {
-                ChampionName = "Diana",
-                IsActive = (source, target) => (source.HasBuff("DianaPassiveMarker") && source.HasBuff("dianaarcready")),
-                GetDamage2 =
-                    (source, target) =>
-                        (float)
-                            source.CalcDamage(
-                                target, DamageType.Magical,
-                                new float[] { 20,25,30,35,40,50,60,70,80,90,105,120,135,155,175,200,225,250 }[source.Level - 1]
-                                +(float)0.8d * source.FlatMagicDamageMod),
-            };
-            AttackPassives.Add(p);
-            #endregion
-            */
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -222,22 +206,15 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health)) // Advanced Kill Combo by rl244
             {
-                if (R.CanCast(target) && Player.HasBuff("DianaOrbs") && Player.HasBuff("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage2(target) + DianaPDamage(target) + W.GetDamage2(target) +(float)Player.GetAutoAttackDamage2(target, false)))
+                if (R.CanCast(target) && Player.HasBuff("DianaOrbs") && Player.HasBuff("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target) +(float)Player.GetAutoAttackDamage2(target, false)))
                 R.Cast(target);
-                else if (R.CanCast(target) && Player.HasBuff("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage2(target) + DianaPDamage(target) + (float)Player.GetAutoAttackDamage2(target, false)))
+                else if (R.CanCast(target) && Player.HasBuff("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage2(target) + (float)Player.GetAutoAttackDamage2(target, false)))
                 R.Cast(target);
                 else if (R.CanCast(target) && Player.HasBuff("DianaOrbs") && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target) + (float)Player.GetAutoAttackDamage2(target, false)))
                 R.Cast(target);
                 else if (R.CanCast(target) && AIO_Func.isKillable(target, R))
                 R.Cast(target);
             }
-        }
-        
-        static float DianaPDamage(Obj_AI_Base enemy) //Code Made By RL244. 
-        {
-            return (float)Damage.CalcDamage(Player,enemy, Damage.DamageType.Magical, 
-            new float[] { 20,25,30,35,40,50,60,70,80,90,105,120,135,155,175,200,225,250 }[Player.Level - 1]//20 + (Player.Level-1)*(3d + 1.169d * (Player.Level-1)) + 
-            +(float)0.8d * Player.FlatMagicDamageMod);
         }
         
         static float getComboDamage(Obj_AI_Base enemy)
@@ -250,8 +227,8 @@ namespace ALL_In_One.champions
                 damage += W.GetDamage2(enemy)*2;
             if (R.IsReady())
                 damage += R.GetDamage2(enemy);
-            if (Player.HasBuff("dianaarcready"))
-                damage += DianaPDamage(enemy);
+            if(!Player.IsWindingUp)
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
             return damage;
         }
     }

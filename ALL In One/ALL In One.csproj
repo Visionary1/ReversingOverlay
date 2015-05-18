@@ -167,7 +167,7 @@
     <Compile Include="champions\_Skarner.cs" />
     <Compile Include="champions\Sona.cs" />
     <Compile Include="champions\Soraka.cs" />
-    <Compile Include="champions\_Swain.cs" />
+    <Compile Include="champions\Swain.cs" />
     <Compile Include="champions\Syndra.cs" />
     <Compile Include="champions\Talon.cs" />
     <Compile Include="champions\_Taric.cs" />
@@ -180,7 +180,7 @@
     <Compile Include="champions\Twitch.cs" />
     <Compile Include="champions\_Udyr.cs" />
     <Compile Include="champions\Urgot.cs" />
-    <Compile Include="champions\_Varus.cs" />
+    <Compile Include="champions\Varus.cs" />
     <Compile Include="champions\Vayne.cs" />
     <Compile Include="champions\Veigar.cs" />
     <Compile Include="champions\_VelKoz.cs" />
@@ -189,7 +189,7 @@
     <Compile Include="champions\Vladimir.cs" />
     <Compile Include="champions\Volibear.cs" />
     <Compile Include="champions\Warwick.cs" />
-    <Compile Include="champions\_Xerath.cs" />
+    <Compile Include="champions\Xerath.cs" />
     <Compile Include="champions\XinZhao.cs" />
     <Compile Include="champions\Yasuo.cs" />
     <Compile Include="champions\Yorick.cs" />

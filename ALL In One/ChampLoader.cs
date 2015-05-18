@@ -325,7 +325,7 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Ashe.Load();
                     break;
-                /*case "Morgana": WIP
+                case "Morgana": 
                     MadeBy(Developer.RL244);
                     champions.Morgana.Load();
                     break;
@@ -333,10 +333,18 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Alistar.Load();
                     break;
-                case "Thresh":
+                /*case "Thresh": //WIP 쓰래쉬.. 챔프가없엉..아놔.. 100개넘게 챔프있는 아이디에 없는챔이라니..
                     MadeBy(Developer.RL244);
                     champions.Thresh.Load();
                     break;*/
+                /*case "Swain":
+                    MadeBy(Developer.RL244);
+                    champions.Swain.Load();
+                    break;*/
+                case "Xerath":
+                    MadeBy(Developer.RL244);
+                    champions.Xerath.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

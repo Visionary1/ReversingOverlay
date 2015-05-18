@@ -7,7 +7,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Aatrox|✔|rl244|
 |Ahri|✔|rl244|
 |Akali|　|　|
-|Allistar|WIP|rl244|
+|Allistar|✔|rl244|
 |Amumu|✔|xcsoft|
 |Anivia|　|　|
 |Annie|✔|xcsoft|
@@ -66,7 +66,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Master Yi|✔|xcsoft|
 |Miss Fortune|✔|rl244|
 |Mordekaiser|✔|rl244|
-|Morgana|WIP|rl244|
+|Morgana|✔|rl244|
 |Nami|✔|xcsoft|
 |Nasus|✔|rl244|
 |Nautilus|✔|fakker|
@@ -95,7 +95,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Skarner|　|　|
 |Sona|WIP|rl244|
 |Soraka|✔|rl244|
-|Swain|　|　|
+|Swain|WIP|rl244|
 |Syndra|WIP|rl244|
 |Talon|✔|rl244|
 |Taric|　|　|
@@ -117,9 +117,9 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Volibear|✔|rl244|
 |Warwick|✔|rl244|
 |Wukong|✔|xcsoft|
-|Xerath|　|　|
+|Xerath|✔|rl244|
 |Xin Zhao|✔|rl244|
-|Yasuo|WIP|　|
+|Yasuo|WIP|rl244|
 |Yorick|✔|rl244|
 |Zac|　|　|
 |Zed|✔(Incomplete)|xcsoft|

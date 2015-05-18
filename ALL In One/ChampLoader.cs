@@ -345,6 +345,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Xerath.Load();
                     break;
+                case "Varus": //QWER전부 실사용 가능함. 다만 아직 스택 관련 작업필요. 평평-q평평평e 이런거.
+                    MadeBy(Developer.RL244);
+                    champions.Varus.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

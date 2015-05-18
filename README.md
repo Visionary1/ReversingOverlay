@@ -1,5 +1,5 @@
 #L# TeamProjects (XC-Squad)
-###● ALL In One: 80/124(64.5%) Champions supported.
+###● ALL In One: 84/124(67.7%) Champions supported.
 It's a Early Development Build. So it's still a Work In Progress. (A little lacking performance)
 
 |Champion|Supported|Developer|
@@ -106,8 +106,8 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Twisted Fate|　|　|
 |Twitch|✔|xcsoft|
 |Udyr|　|　|
-|Urgot|✔|fakker|
-|Varus|　|　|
+|Urgot|✔|rl244|
+|Varus|✔|rl244|
 |Vayne|✔|rl244|
 |Veigar|✔|rl244|
 |Vel'Koz|　|　|

@@ -47,6 +47,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addErange();
+            AIO_Menu.Champion.Drawings.addRrange();
 
         
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
@@ -74,7 +75,7 @@ namespace ALL_In_One.champions
             var RTarget = TargetSelector.GetTarget(R.Range, R.DamageType, true);
             if(RM && RTarget != null && R.IsReady())
             {
-                AIO_Func.LCast(R,RTarget);
+                AIO_Func.CCast(R,RTarget);
             }
         }
         static void Drawing_OnDraw(EventArgs args)

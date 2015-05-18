@@ -25,7 +25,7 @@ namespace ALL_In_One.champions
             R = new Spell(SpellSlot.R, 1200f, TargetSelector.DamageType.Magical);
 
             E.SetSkillshot(0.25f, 120f, 2000f, false, SkillshotType.SkillshotLine);
-            R.SetSkillshot(1.0f, 300f, float.MaxValue, false, SkillshotType.SkillshotLine);
+            R.SetSkillshot(1.0f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();

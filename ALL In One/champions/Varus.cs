@@ -84,6 +84,8 @@ namespace ALL_In_One.champions
                         AIO_Func.SC(Q);
                         AIO_Func.SC(E);
                     }
+                    if(Q.IsCharging) //차징일 경우 위와 상관없이 되도
+                    AIO_Func.SC(Q);
                 }
                 AIO_Func.SC(R);
             }

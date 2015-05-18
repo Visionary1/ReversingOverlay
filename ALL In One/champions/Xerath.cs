@@ -14,6 +14,7 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
+        static bool RM {get{return Menu.Item("Combo.Use MR").GetValue<KeyBind>().Active; }}
 
         public static void Load()
         {
@@ -32,7 +33,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
-            
+            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.Use MR", "Use R(Manual)")).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press, false));
+
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE();
@@ -89,6 +91,16 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
                 KillstealE();
             #endregion
+            ManualR();
+        }
+        
+        static void ManualR()
+        {
+            var RTarget = TargetSelector.GetTarget(R.Range, R.DamageType, true);
+            if(RM && RTarget != null && R.IsReady() && Player.HasBuff("XerathLocusOfPower2", true) ||(Player.LastCastedSpellName() == "XerathLocusOfPower2" && Utils.TickCount - Player.LastCastedSpellT() < 500))
+            {
+                R.CCast(RTarget);
+            }
         }
 
         static void Drawing_OnDraw(EventArgs args)

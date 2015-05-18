@@ -85,7 +85,6 @@ namespace ALL_In_One.champions
                         AIO_Func.SC(E);
                     }
                 }
-                if(!RM)
                 AIO_Func.SC(R);
             }
             

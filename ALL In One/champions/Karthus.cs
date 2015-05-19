@@ -64,12 +64,11 @@ namespace ALL_In_One.champions
 
             Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
             
-            if (Orbwalking.CanMove(10))
+            if (Orbwalking.CanMove(100))
             {
                 switch (Orbwalker.ActiveMode)
                 {
                     case Orbwalking.OrbwalkingMode.Combo:
-                        Orbwalker.SetAttack(false);
                         Combo();
                         break;
                     case Orbwalking.OrbwalkingMode.Mixed:

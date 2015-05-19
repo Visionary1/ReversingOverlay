@@ -16,6 +16,8 @@ namespace ALL_In_One.champions
 
         static Spell Q, W, E, R;
 
+        static float LastPingTime;
+
         public static void Load()
         {
 
@@ -46,6 +48,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
+            AIO_Menu.Champion.Misc.addItem("Ping Notify on R killable enemies", true);
 
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addWrange();
@@ -85,6 +88,19 @@ namespace ALL_In_One.champions
                         break;
                 }
             }
+
+            #region Ping Notify on R killable enemies
+            if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Ping Notify on R killable enemies"))
+            {
+                if (LastPingTime + 400 < Utils.TickCount)
+                {
+                    foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget() && AIO_Func.isKillable(x, R)))
+                        Game.ShowPing(PingCategory.Normal, target, true);
+
+                    LastPingTime = Utils.TickCount;
+                }
+            } 
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -108,7 +124,7 @@ namespace ALL_In_One.champions
 
         static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit && Q.IsReady() && Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana && AIO_Menu.Champion.Lasthit.UseQ))
                 args.Process = false;
         }
 
@@ -143,6 +159,8 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
             {
                 if (AIO_Func.anyoneValidInRange(E.Range) && E.Instance.ToggleState == 1)
+                    E.Cast();
+                else if (!AIO_Func.anyoneValidInRange(E.Range) && E.Instance.ToggleState != 1)
                     E.Cast();
             }
         }

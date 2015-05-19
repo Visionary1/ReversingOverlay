@@ -25,7 +25,7 @@ namespace ALL_In_One.champions
             E = new Spell(SpellSlot.E);
             R = new Spell(SpellSlot.R, 20000f, TargetSelector.DamageType.Magical);
 
-            W.SetSkillshot(0.25f, 70f, 1500f, true, SkillshotType.SkillshotLine); // 투과 안되는 Cone이므로 충돌 판단을 쉽게 하기 위해 스킬타입 Line인 것처럼 설정. 실제 게임상 문제없음.
+            W.SetSkillshot(0.25f, 70f, 2000f, true, SkillshotType.SkillshotLine); // 투과 안되는 Cone이므로 충돌 판단을 쉽게 하기 위해 스킬타입 Line인 것처럼 설정. 실제 게임상 문제없음.
             R.SetSkillshot(0.25f, 130f, 1600f, true, SkillshotType.SkillshotLine);
             
             AIO_Menu.Champion.Combo.addUseQ();

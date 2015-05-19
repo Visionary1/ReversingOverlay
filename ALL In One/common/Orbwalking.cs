@@ -358,7 +358,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                     {
                         /*if (!NoCancelChamps.Contains(Player.ChampionName))  
                         {  
-                            LastAATick = Utils.GameTimeTickCount + Game.Ping + 70 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);  
+                            LastAATick = Utils.GameTimeTickCount + Game.Ping + 100 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);  
                             _missileLaunched = false;      
                         }  */
 

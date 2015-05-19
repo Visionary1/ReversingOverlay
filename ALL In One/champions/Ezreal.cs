@@ -33,10 +33,11 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
 
+            AIO_Menu.Champion.Harass.addAuto();
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE(false);
-            AIO_Menu.Champion.Harass.addIfMana();
+            AIO_Menu.Champion.Harass.addIfMana(40);
             
             AIO_Menu.Champion.Lasthit.addUseQ();
             AIO_Menu.Champion.Lasthit.addIfMana(20);

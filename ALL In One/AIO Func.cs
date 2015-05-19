@@ -335,6 +335,40 @@ namespace ALL_In_One
                         }
                     }
                 }
+                else if(Menu.Item("Harass.Auto Harass", true) != null)
+                {
+                    if(Menu.Item("Harass.Auto Harass", true).GetValue<bool>() && Menu.Item("Harass.Use " + spell.Slot.ToString(), true) != null)
+                    {
+                        if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()
+                        && spell.IsReady() && HM)
+                        {
+                            if(spell.IsSkillshot)
+                            {
+                                if(spell.Type == SkillshotType.SkillshotLine)
+                                LCast(spell,target,ExtraTargetDistance,ALPHA);
+                                else if(spell.Type == SkillshotType.SkillshotCircle)
+                                {
+                                var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width/2, spell.DamageType, true);
+                                CCast(spell,ctarget);
+                                }
+                                else if(spell.Type == SkillshotType.SkillshotCone)
+                                spell.ConeCast(target,ExtraTargetDistance,ALPHA);
+                            }
+                            /*else if(spell.IsChargedSpell)
+                            { 오토하레스 차징 스킬은 음 일단 잠시 보류.
+                                if(!spell.IsCharging)
+                                spell.StartCharging();
+                            }*/
+                            else 
+                            {
+                                if(false == spell.IsSkillshot)
+                                    spell.Cast(target);
+                                else
+                                    spell.AOECast(target);
+                            }
+                        }
+                    }
+                }
             }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
@@ -427,10 +461,14 @@ namespace ALL_In_One
                 }
                 if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 {
-                    var MINI = MinionManager.GetMinions(Player.ServerPosition, spell.ChargedMaxRange, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth);
-                    var Vec = spell.GetLineFarmLocation(MINI);
-                    if(Vec.MinionsHit > 0 && Vec.Position.IsValid())
+                    var M = MinionManager.GetMinions(Player.ServerPosition, spell.ChargedMaxRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+                    var MI = MinionManager.GetMinions(Player.ServerPosition, spell.ChargedMaxRange, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
+                    var Vec = spell.GetLineFarmLocation(MI);
+                    var Vec2 = spell.GetLineFarmLocation(M);
+                    if(MI.Count() >= 1 && Vec.MinionsHit >= Math.Min(MI.Count(),4) && Vec.Position.IsValid())
                         spell.Cast(Vec.Position);
+                    if(M.Count() >= 1 && Vec2.MinionsHit >= Math.Min(M.Count(),4) && Vec2.Position.IsValid())
+                        spell.Cast(Vec2.Position);
                 }
             }
         }

@@ -173,7 +173,12 @@ namespace ALL_In_One
                 {
                     return MainMenu_Manual.Item("Harass." + DisplayName, ChampUniq).GetValue<Slider>();
                 }
-
+                
+                internal static void addAuto(bool Enabled = true)
+                {
+                    addItem("Auto Harass", Enabled);
+                }
+                
                 internal static void addUseQ(bool Enabled = true)
                 {
                     addItem("Use Q", Enabled);
@@ -199,6 +204,14 @@ namespace ALL_In_One
                     addItem("If Mana >", new Slider(DefaultValue));
                 }
 
+                internal static bool Auto
+                {
+                    get
+                    {
+                        return getBoolValue("Auto Harass");
+                    }
+                }
+                
                 internal static bool UseQ
                 {
                     get

@@ -48,7 +48,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
-            AIO_Menu.Champion.Misc.addItem("Ping Notify on R killable enemies", true);
+            AIO_Menu.Champion.Misc.addItem("Ping Notify on R killable enemies (local/client side)", true);
 
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addWrange();
@@ -90,7 +90,7 @@ namespace ALL_In_One.champions
             }
 
             #region Ping Notify on R killable enemies
-            if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Ping Notify on R killable enemies"))
+            if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Ping Notify on R killable enemies (local/client side)"))
             {
                 if (LastPingTime + 333 < Utils.TickCount)
                 {

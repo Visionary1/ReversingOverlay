@@ -15,7 +15,7 @@ namespace ALL_In_One.champions
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
         static bool RM {get{return Menu.Item("Combo.Use MR").GetValue<KeyBind>().Active; }}
-
+        static float LastPingTime = 0;
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 1550, TargetSelector.DamageType.Magical);
@@ -50,6 +50,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana(20);
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
+            AIO_Menu.Champion.Misc.addItem("Ping Notify on R killable enemies (local/client side)", true);
             AIO_Menu.Champion.Misc.addItem("KillstealW", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
@@ -92,6 +93,19 @@ namespace ALL_In_One.champions
                 KillstealE();
             #endregion
             ManualR();
+            
+            #region Ping Notify on R killable enemies
+            if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Ping Notify on R killable enemies (local/client side)"))
+            {
+                if (LastPingTime + 333 < Utils.TickCount) //궁 2방으로 잡을수 있는 적 핑찍기.
+                {
+                    foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && AIO_Func.isKillable(x, R.GetDamage2(x)*2)))
+                        Game.ShowPing(PingCategory.Normal, target.Position, true);
+
+                    LastPingTime = Utils.TickCount;
+                }
+            } 
+            #endregion
         }
         
         static void ManualR()

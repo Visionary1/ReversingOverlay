@@ -1469,6 +1469,39 @@ namespace ALL_In_One
                                 new double[] { 325, 663, 1001 }[level] + 2.34 * source.FlatPhysicalDamageMod
                                 + (source.GetAutoAttackDamage2(target, true) - source.GetAutoAttackDamage2(target, false))*5 // By RL244 온힛 5번 발동.
                     },
+                    //R - First Tick
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.R,
+                        Stage = 1,
+                        DamageType = DamageType.Physical,
+                        Damage =
+                            (source, target, level) =>
+                                new double[] { 125, 255, 385 }[level] + 0.9 * source.FlatPhysicalDamageMod
+                                + (source.GetAutoAttackDamage2(target, true) - source.GetAutoAttackDamage2(target, false)) // By RL244 온힛 5번 발동.
+                    },
+                    //R - Continueous Tick
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.R,
+                        Stage = 2,
+                        DamageType = DamageType.Physical,
+                        Damage =
+                            (source, target, level) =>
+                                new double[] { 50, 102, 154 }[level] + 0.36 * source.FlatPhysicalDamageMod
+                                + (source.GetAutoAttackDamage2(target, true) - source.GetAutoAttackDamage2(target, false)) // By RL244 온힛 5번 발동.
+                    },
+                    //R - 2 Tick (First And Second)
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.R,
+                        Stage = 3,
+                        DamageType = DamageType.Physical,
+                        Damage =
+                            (source, target, level) =>
+                                new double[] { 175, 357, 539 }[level] + 1.26 * source.FlatPhysicalDamageMod
+                                + (source.GetAutoAttackDamage2(target, true) - source.GetAutoAttackDamage2(target, false)) * 2 // By RL244 온힛 5번 발동.
+                    },
                 });
 
             Spells.Add(

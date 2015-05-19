@@ -15,6 +15,7 @@ namespace ALL_In_One.champions
         static Spell Q, W, E, R;
         static float QD {get{return Menu.Item("Misc.Qtg").GetValue<Slider>().Value; }}
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} // 확실히 필요함. 특히 논타겟 챔프 타겟 선정 범위 사용자가 설정하게 하기 위해서도.
+        static float LastPingTime = 0;
         
         public static void Load()
         {
@@ -54,6 +55,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Flee.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
+            AIO_Menu.Champion.Misc.addItem("Ping Notify on R killable enemies (local/client side)", true);
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(0, 0, 250));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealW", true);
@@ -93,6 +95,19 @@ namespace ALL_In_One.champions
                 KillstealW();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
                 KillstealE();
+            #endregion
+            
+            #region Ping Notify on R killable enemies
+            if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Ping Notify on R killable enemies (local/client side)"))
+            {
+                if (LastPingTime + 333 < Utils.TickCount) //궁 80퍼 뎀지 이상으로 잡을수 있는 적 핑찍기.
+                {
+                    foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(10000f) && AIO_Func.isKillable(x, R.GetDamage2(x)*0.8f)))
+                        Game.ShowPing(PingCategory.Normal, target.Position, true);
+
+                    LastPingTime = Utils.TickCount;
+                }
+            } 
             #endregion
         }
 

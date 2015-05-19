@@ -15,6 +15,7 @@ namespace ALL_In_One.champions
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
         static float getEBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "RaiseMoraleBuff"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float LastPingTime = 0;
 
         public static void Load()
         {
@@ -46,6 +47,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Flee.addIfMana();
 
             AIO_Menu.Champion.Misc.addUseKillsteal();
+            AIO_Menu.Champion.Misc.addItem("Ping Notify on R killable enemies (local/client side)", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Misc.addItem("Cleanse(W)", true);
             AIO_Menu.Champion.Drawings.addQrange();
@@ -88,6 +90,19 @@ namespace ALL_In_One.champions
             Killsteal();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
             KillstealR();
+            #endregion
+            
+            #region Ping Notify on R killable enemies
+            if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Ping Notify on R killable enemies (local/client side)"))
+            {
+                if (LastPingTime + 333 < Utils.TickCount) //궁 4틱 이상으로 잡을수 있는 적 핑찍기.
+                {
+                    foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && AIO_Func.isKillable(x, R.GetDamage2(x)*4)))
+                        Game.ShowPing(PingCategory.Normal, target.Position, true);
+
+                    LastPingTime = Utils.TickCount;
+                }
+            } 
             #endregion
         }
 

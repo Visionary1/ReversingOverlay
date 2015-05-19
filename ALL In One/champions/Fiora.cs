@@ -169,11 +169,11 @@ namespace ALL_In_One.champions
         {                
             foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady()
-            && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && !E.IsReady()
-            && HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range))
-            && AIO_Func.isKillable(rtarget,R.GetDamage2(rtarget) + Q.GetDamage2(rtarget)*2))
-            R.Cast(rtarget);
+                if (AIO_Menu.Champion.Combo.UseR && R.IsReady()
+                && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && !E.IsReady()
+                && HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range) && AIO_Func.ECTarget(x,600) == 1)
+                && AIO_Func.isKillable(rtarget,R.GetDamage2(rtarget) + (float)Player.GetAutoAttackDamage2(rtarget, true)))
+                R.Cast(rtarget);
             }
         }
     }
@@ -236,7 +236,9 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && AIO_Func.isKillable(target, R))
+                if (!Q.IsReady() && target.Distance(Player.ServerPosition) > R.Range - 100f && R.CanCast(target) && AIO_Func.ECTarget(target,800f) == 1 && AIO_Func.isKillable(target, R.GetDamage2(target)))
+                    R.Cast(target);
+                else if (R.CanCast(target) && AIO_Func.ECTarget(target,800f) >= 2 && AIO_Func.isKillable(target, R.GetDamage2(target,3)))
                     R.Cast(target);
             }
         }

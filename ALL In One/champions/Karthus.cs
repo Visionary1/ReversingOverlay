@@ -92,10 +92,10 @@ namespace ALL_In_One.champions
             #region Ping Notify on R killable enemies
             if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Ping Notify on R killable enemies"))
             {
-                if (LastPingTime + 400 < Utils.TickCount)
+                if (LastPingTime + 333 < Utils.TickCount)
                 {
                     foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget() && AIO_Func.isKillable(x, R)))
-                        Game.ShowPing(PingCategory.Normal, target, true);
+                        Game.ShowPing(PingCategory.Normal, target.Position, true);
 
                     LastPingTime = Utils.TickCount;
                 }
@@ -124,6 +124,9 @@ namespace ALL_In_One.champions
 
         static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
+            if (!args.Unit.IsMe)
+                return;
+
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit && Q.IsReady() && Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana && AIO_Menu.Champion.Lasthit.UseQ))
                 args.Process = false;
         }

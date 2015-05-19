@@ -48,7 +48,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Karma|WIP|rl244|
 |Karthus|✔|xcsoft|
 |Kassadin|　|　|
-|Katarina|✔|　|
+|Katarina|✔|xcsoft|
 |Kayle|✔|rl244|
 |Kennen|　|　|
 |Kha'Zix|✔|rl244|

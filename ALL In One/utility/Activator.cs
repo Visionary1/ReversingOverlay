@@ -367,7 +367,7 @@ namespace ALL_In_One.utility
                     {
                         var orderdata = OrderDataList.Find(x => x.ChampionName == ObjectManager.Player.ChampionName);
 
-                        if (orderdata != null && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                        if (orderdata != null)
                         {
                             switch (orderdata.CastingOrder)
                             {
@@ -388,7 +388,7 @@ namespace ALL_In_One.utility
                                     break;
                             }
                         }
-                        else 
+                        else
                         {
                             if (itemone.isTargeted)
                                 Items.UseItem(itemone.Id, (Obj_AI_Base)target);

@@ -373,10 +373,10 @@ namespace ALL_In_One.utility
                             {
                                 case CastingOrder.SpellFirst:
                                     if(!Player.Spellbook.GetSpell(orderdata.SpellSlot).IsReady() || 
-                                    (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !Menu.Item("Combo.Use " + orderdata.SpellSlot.ToString().Replace("SpellSlot.",""), true).GetValue<bool>() ||
-                                    Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && !Menu.Item("Harass.Use " + orderdata.SpellSlot.ToString().Replace("SpellSlot.",""), true).GetValue<bool>() ||
-                                    Minions.Count() > 0 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && !Menu.Item("Laneclear.Use " + orderdata.SpellSlot.ToString().Replace("SpellSlot.",""), true).GetValue<bool>() ||
-                                    Mobs.Count() > 0 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && !Menu.Item("Jungleclear.Use " + orderdata.SpellSlot.ToString().Replace("SpellSlot.",""), true).GetValue<bool>() ))
+                                    (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && (!Menu.Item("Combo.Use " + orderdata.SpellSlot.ToString().Replace("SpellSlot.",""), true).GetValue<bool>() || Menu.Item("Combo.Use " + orderdata.SpellSlot.ToString().Replace("SpellSlot.",""), true) == null) ||
+                                    Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && (!Menu.Item("Harass.Use " + orderdata.SpellSlot.ToString().Replace("SpellSlot.",""), true).GetValue<bool>() || Menu.Item("Harass.Use " + orderdata.SpellSlot.ToString().Replace("SpellSlot.",""), true) == null) ||
+                                    Minions.Count() > 0 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && (!Menu.Item("Laneclear.Use " + orderdata.SpellSlot.ToString().Replace("SpellSlot.",""), true).GetValue<bool>() || Menu.Item("Laneclear.Use " + orderdata.SpellSlot.ToString().Replace("SpellSlot.",""), true) == null) ||
+                                    Mobs.Count() > 0 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && (!Menu.Item("Jungleclear.Use " + orderdata.SpellSlot.ToString().Replace("SpellSlot.",""), true).GetValue<bool>() || Menu.Item("Jungleclear.Use " + orderdata.SpellSlot.ToString().Replace("SpellSlot.",""), true) == null)))
                                     {
                                         if (itemone.isTargeted)
                                             Items.UseItem(itemone.Id, (Obj_AI_Base)target);

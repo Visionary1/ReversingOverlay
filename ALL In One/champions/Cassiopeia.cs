@@ -58,7 +58,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealW", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
-            AIO_Menu.Champion.Misc.addItem("KillstealR", true);
+            AIO_Menu.Champion.Misc.addItem("KillstealR", false);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
 

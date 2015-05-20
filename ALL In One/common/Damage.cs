@@ -1478,7 +1478,7 @@ namespace ALL_In_One
                         Damage =
                             (source, target, level) =>
                                 new double[] { 125, 255, 385 }[level] + 0.9 * source.FlatPhysicalDamageMod
-                                + (source.GetAutoAttackDamage2(target, true) - source.GetAutoAttackDamage2(target, false)) // By RL244 온힛 5번 발동.
+                                + (source.GetAutoAttackDamage2(target, true) - source.GetAutoAttackDamage2(target, false)) // By RL244
                     },
                     //R - Continueous Tick
                     new DamageSpell
@@ -1489,7 +1489,7 @@ namespace ALL_In_One
                         Damage =
                             (source, target, level) =>
                                 new double[] { 50, 102, 154 }[level] + 0.36 * source.FlatPhysicalDamageMod
-                                + (source.GetAutoAttackDamage2(target, true) - source.GetAutoAttackDamage2(target, false)) // By RL244 온힛 5번 발동.
+                                + (source.GetAutoAttackDamage2(target, true) - source.GetAutoAttackDamage2(target, false)) // By RL244
                     },
                     //R - 2 Tick (First And Second)
                     new DamageSpell
@@ -1500,7 +1500,7 @@ namespace ALL_In_One
                         Damage =
                             (source, target, level) =>
                                 new double[] { 175, 357, 539 }[level] + 1.26 * source.FlatPhysicalDamageMod
-                                + (source.GetAutoAttackDamage2(target, true) - source.GetAutoAttackDamage2(target, false)) * 2 // By RL244 온힛 5번 발동.
+                                + (source.GetAutoAttackDamage2(target, true) - source.GetAutoAttackDamage2(target, false)) * 2 // By RL244
                     },
                 });
 

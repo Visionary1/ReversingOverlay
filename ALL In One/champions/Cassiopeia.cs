@@ -244,7 +244,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
             {
-                var wloc = W.GetCircularFarmLocation(Minions.Where(x => x.IsValidTarget(Q.Range)).ToList());
+                var wloc = W.GetCircularFarmLocation(Minions.Where(x => x.IsValidTarget(W.Range)).ToList());
 
                 if (wloc.MinionsHit >= 1)
                     W.Cast(wloc.Position);

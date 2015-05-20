@@ -372,7 +372,11 @@ namespace ALL_In_One.utility
                             switch (orderdata.CastingOrder)
                             {
                                 case CastingOrder.SpellFirst:
-                                    if(!Player.Spellbook.GetSpell(orderdata.SpellSlot).IsReady())
+                                    if(!Player.Spellbook.GetSpell(orderdata.SpellSlot).IsReady() || 
+                                    (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !Menu.Item("Combo.Use " + orderdata.SpellSlot.ToString(), true).GetValue<bool>() ||
+                                    Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && !Menu.Item("Harass.Use " + orderdata.SpellSlot.ToString(), true).GetValue<bool>() ||
+                                    Minions.Count() > 0 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && !Menu.Item("Laneclear.Use " + orderdata.SpellSlot.ToString(), true).GetValue<bool>() ||
+                                    Mobs.Count() > 0 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && !Menu.Item("Jungleclear.Use " + orderdata.SpellSlot.ToString(), true).GetValue<bool>() ))
                                     {
                                         if (itemone.isTargeted)
                                             Items.UseItem(itemone.Id, (Obj_AI_Base)target);

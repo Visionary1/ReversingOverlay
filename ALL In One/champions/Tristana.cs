@@ -78,16 +78,17 @@ namespace ALL_In_One.champions
             E.Range = Orbwalking.GetRealAutoAttackRange(Player);
             R.Range = Orbwalking.GetRealAutoAttackRange(Player);
 
-            if (Orbwalking.CanMove(10))
+            /*if (Orbwalking.CanMove(10))
             {
+
+            }*/
+                AIO_Func.SC(E); //평타-e말고 그냥 e 
                 AIO_Func.FleeToPosition(W);
                 foreach (var target in HeroManager.Enemies.Where(x => AIO_Func.CanHit(W,x,0) && x.HasBuff("tristanaecharge") && (AIO_Func.getBuffInstance(x, "tristanaechargesound").EndTime - Game.ClockTime) > 0.59 && ((float)AIO_Func.getBuffInstance(x, "tristanaecharge").Count == 3 && (AIO_Func.getBuffInstance(x, "tristanaechargesound").EndTime - Game.ClockTime) < 0.8 || (float)AIO_Func.getBuffInstance(x, "tristanaecharge").Count == 4)))
                 {
                     if(target != null && W.IsReady())
                     AIO_Func.SC(W);
                 }
-            }
-
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealW"))
                 KillstealW();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))

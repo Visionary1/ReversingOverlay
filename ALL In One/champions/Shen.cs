@@ -16,6 +16,8 @@ namespace ALL_In_One.champions
 
         static Spell Q, W, E, R;
 
+        static float LastPingTime;
+
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 475f, TargetSelector.DamageType.Magical);
@@ -42,6 +44,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addUseInterrupter();
             AIO_Menu.Champion.Misc.addItem("Auto-W", true);
+            AIO_Menu.Champion.Misc.addItem("Ping Notify on allies in danger (local/client side)", true);
 
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addErange();
@@ -83,6 +86,19 @@ namespace ALL_In_One.champions
             }
 
             E.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
+
+            #region Ping Notify
+            if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Ping Notify on allies in danger (local/client side)"))
+            {
+                if (LastPingTime + 333 < Utils.TickCount)
+                {
+                    foreach (var target in HeroManager.Allies.Where(x => x.IsTargetable && !x.IsDead && x.HealthPercent < 50 && x.CountEnemiesInRange(1000f) >= 1))
+                        Game.ShowPing(PingCategory.Danger, target.Position, true);
+
+                    LastPingTime = Utils.TickCount;
+                }
+            }
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)

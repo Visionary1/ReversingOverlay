@@ -19,7 +19,8 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-        
+        static float LastPingTime = 0;
+
         static float getQBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "fioraqcd"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static float getWBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "FioraRiposte"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
         static float getEBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "FioraFlurry"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
@@ -37,8 +38,8 @@ namespace ALL_In_One.champions
             Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.QD", "Q Distance")).SetValue(new Slider(150, 0, 600));
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
-            AIO_Menu.Champion.Combo.addUseR();
-
+            AIO_Menu.Champion.Combo.addItem("R Usage For Solo Target(Killsteal R Needed)", false);
+            
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana();
@@ -50,7 +51,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addUseE();
             AIO_Menu.Champion.Jungleclear.addIfMana();
-
+            AIO_Menu.Champion.Misc.addItem("Ping Notify on R killable enemies (local)", true);
 
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
@@ -90,6 +91,19 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
                 KillstealR();
             #endregion
+            
+            #region Ping Notify on R killable enemies
+            if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Ping Notify on R killable enemies (local/client side)"))
+            {
+                if (LastPingTime + 333 < Utils.TickCount) //1:1 상황에서 궁으로 킬 가능시 핑찍기.
+                {
+                    foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(1200f) && AIO_Func.isKillable(x, R.GetDamage2(x)) && AIO_Func.ECTarget(x,1000f) == 1))
+                        Game.ShowPing(PingCategory.Normal, target.Position, true);
+
+                    LastPingTime = Utils.TickCount;
+                }
+            } 
+            #endregion
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -117,27 +131,6 @@ namespace ALL_In_One.champions
                 Drawing.DrawText(pos_temp[0], pos_temp[1], drawETimer.Color, "E: " + getEBuffDuration.ToString("0.00"));
         }
         
-    static Obj_AI_Minion Chase(Vector3 pos)
-    {
-        var minions =
-        ObjectManager.Get<Obj_AI_Minion>()
-        .Where(minion => minion.IsValid && minion.IsEnemy && !minion.IsDead
-        && Player.Distance(minion.Position) <= 600 && Player.Distance(minion.Position) > 400);
-        var objAiMinions = minions as Obj_AI_Minion[] ?? minions.ToArray();
-        Obj_AI_Minion sMinion = objAiMinions.FirstOrDefault();
-        double? nearest = null;
-        foreach (Obj_AI_Minion minion in objAiMinions)
-        {
-            double distance = Vector3.Distance(pos, minion.Position);
-            if (nearest == null || nearest > distance)
-            {
-                nearest = distance;
-                sMinion = minion;
-            }
-        }
-        return sMinion;
-    }
-        
         static readonly string[] Attacks = { "jarvanivcataclysmattack", "monkeykingdoubleattack", "shyvanadoubleattack", "shyvanadoubleattackdragon", "caitlynheadshotmissile", "frostarrow", "garenslash2", "kennenmegaproc", "masteryidoublestrike", "quinnwenhanced", "renektonexecute", "renektonsuperexecute", "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "viktorqbuff", "xenzhaothrust2", "xenzhaothrust3" };
         static readonly string[] NoAttacks = { "zyragraspingplantattack", "zyragraspingplantattack2", "zyragraspingplantattackfire", "zyragraspingplantattack2fire" };
         static readonly string[] OHSP = { "Parley", "EzrealMysticShot"};
@@ -145,7 +138,7 @@ namespace ALL_In_One.champions
 
         static bool IsOnHit(string name)
         {
-            return !(name.ToLower().Contains("tower")) &&!(name.ToLower().Contains("turret")) && !(name.ToLower().Contains("mini")) && (name.ToLower().Contains("attack")) && !NoAttacks.Contains(name.ToLower()) ||
+            return !(name.ToLower().Contains("tower")) &&!(name.ToLower().Contains("turret")) && !(name.ToLower().Contains("mini")) && !(name.ToLower().Contains("minion")) && (name.ToLower().Contains("attack")) && !NoAttacks.Contains(name.ToLower()) ||
             Attacks.Contains(name.ToLower()) || AttackResets.Contains(name.ToLower()) || OHSP.Contains(name.ToLower());
         }
 
@@ -157,37 +150,19 @@ namespace ALL_In_One.champions
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !AIO_Menu.Champion.Combo.UseW || !AIO_Menu.Champion.Harass.UseW ||
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && !(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
             return;
-            if (IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady() && Player.Distance(args.End) < 110)
-            W.Cast();
+            if ((Player.Level == 1 && Player.HealthPercent < 100 || Player.Level > 1) && IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady() && Player.Distance(args.End) < 40)
+            W.Cast(); //1렙일때 만피로 정글에 W쓰는건 정글링 효율 떨어지기에 이렇게함.
         }
 
-    static void AA()
-    {
-        AIO_Func.AACb(E);
-            
-        if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-        {                
-            foreach (var rtarget in HeroManager.Enemies.OrderByDescending(x => x.Health))
-            {
-                if (AIO_Menu.Champion.Combo.UseR && R.IsReady()
-                && utility.Activator.AfterAttack.ALLCancelItemsAreCasted && !E.IsReady()
-                && HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range) && AIO_Func.ECTarget(x,600) == 1)
-                && AIO_Func.isKillable(rtarget,R.GetDamage2(rtarget) + (float)Player.GetAutoAttackDamage2(rtarget, true)))
-                R.Cast(rtarget);
-            }
-        }
-    }
-    static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
-    {
-        var Target = (Obj_AI_Base)target;
-        if (!unit.IsMe || Target == null)
-            return;
+        static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
+        {
+            var Target = (Obj_AI_Base)target;
+            if (!unit.IsMe || Target == null)
+                return;
 
-            AIO_Func.AALcJc(E);
-        
-        
-            AA();
-    }
+                AIO_Func.AALcJc(E);
+                AIO_Func.AACb(E);
+        }
 
         static void Combo()
         {
@@ -195,17 +170,13 @@ namespace ALL_In_One.champions
             {
                 var qd = Menu.Item("Combo.QD").GetValue<Slider>().Value;
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                //var fqTarget = TargetSelector.GetTarget(Q.Range * 2, Q.DamageType);
-    //                var fminion = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => t.Distance(fqTarget.Position)).
-    //                Where(t => !t.IsAlly && Player.Distance(t.Position) <= 600 && Player.Distance(t.Position) >= 300 && fqTarget.Distance(t.Position) <= 600).First();
-                //var mchase = Chase(fqTarget.Position);
-                
-                
-                if(qTarget.Distance(Player.ServerPosition) >= qd || getQBuffDuration < 1)
+                var Q2T = TargetSelector.GetTarget(Q.Range * 2, Q.DamageType);
+                var QM = MinionManager.GetMinions(Q2T.ServerPosition, 550f, MinionTypes.All, MinionTeam.NotAlly).FirstOrDefault(x => x.Distance(Player.ServerPosition) <= Q.Range && x.Distance(Player.ServerPosition) >= Q.Range-150f);
+
+                if(qTarget != null && (qTarget.Distance(Player.ServerPosition) >= qd || getQBuffDuration < 1))
                     Q.Cast(qTarget);
-                    /*
-                if(fqTarget.Distance(Player.ServerPosition) > 600) //Chasing Enemy
-                    Q.Cast(mchase);*/
+                if(!Player.HasBuff("fioraqcd") && Q2T != null && QM != null && Q2T.HealthPercent < Player.HealthPercent - 10 && AIO_Func.ECTarget(Q2T,600f,Player.HealthPercent - 9) == 0)
+                    Q.Cast(QM);
             }
         }
 
@@ -236,9 +207,12 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (!Q.IsReady() && target.Distance(Player.ServerPosition) > R.Range - 100f && R.CanCast(target) && AIO_Func.ECTarget(target,800f) == 1 && AIO_Func.isKillable(target, R.GetDamage2(target)))
-                    R.Cast(target);
-                else if (R.CanCast(target) && AIO_Func.ECTarget(target,800f) >= 2 && AIO_Func.isKillable(target, R.GetDamage2(target,3)))
+                if (!Q.IsReady() && target.Distance(Player.ServerPosition) > R.Range - 100f && R.CanCast(target) && AIO_Func.ECTarget(target,800f) == 1 && AIO_Func.isKillable(target, R.GetDamage2(target) + (float)Player.GetAutoAttackDamage2(target, true)))
+                {
+                    if(AIO_Menu.Champion.Combo.getBoolValue("R Usage For Solo Target"))
+                        R.Cast(target);
+                }
+                if (R.CanCast(target) && AIO_Func.ECTarget(target,800f) >= 2 && AIO_Func.isKillable(target, R.GetDamage2(target,3)))
                     R.Cast(target);
             }
         }
@@ -246,9 +220,12 @@ namespace ALL_In_One.champions
         static float getComboDamage(Obj_AI_Base enemy)
         {
             float damage = 0;
+            var Target = enemy as Obj_AI_Hero;
 
-            if (Q.IsReady())
+            if (Q.IsReady() && !Player.HasBuff("fioraqcd"))
                 damage += Q.GetDamage2(enemy) * 2;
+            else if (Q.IsReady() && Player.HasBuff("fioraqcd"))
+                damage += Q.GetDamage2(enemy);
                 
             if (W.IsReady())
                 damage += W.GetDamage2(enemy);
@@ -256,8 +233,10 @@ namespace ALL_In_One.champions
             if (E.IsReady())
                 damage += (float)Player.GetAutoAttackDamage2(enemy, true) * 2;
                 
-            if (R.IsReady() && AIO_Menu.Champion.Combo.UseR)
+            if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("KillstealR") && AIO_Func.ECTarget(Target,800f) == 1)
                 damage += R.GetDamage2(enemy);
+            else if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("KillstealR") && AIO_Func.ECTarget(Target,800f) > 1)
+                damage += R.GetDamage2(enemy,3);
 
             if (!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage2(enemy, true);

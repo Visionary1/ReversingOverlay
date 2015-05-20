@@ -42,17 +42,17 @@ namespace ALL_In_One.champions
             
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE();
-            AIO_Menu.Champion.Harass.addIfMana();
+            AIO_Menu.Champion.Harass.addIfMana(40);
             
-            AIO_Menu.Champion.Laneclear.addUseE();
+            AIO_Menu.Champion.Laneclear.addUseE(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
             
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addUseE();
-            AIO_Menu.Champion.Jungleclear.addIfMana();
-            AIO_Menu.Champion.Misc.addItem("Ping Notify on R killable enemies (local)", true);
+            AIO_Menu.Champion.Jungleclear.addIfMana(0);
 
+            AIO_Menu.Champion.Misc.addItem("Ping Notify on R killable enemies (local)", true);
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             
@@ -133,7 +133,7 @@ namespace ALL_In_One.champions
         
         static readonly string[] Attacks = { "jarvanivcataclysmattack", "monkeykingdoubleattack", "shyvanadoubleattack", "shyvanadoubleattackdragon", "caitlynheadshotmissile", "frostarrow", "garenslash2", "kennenmegaproc", "masteryidoublestrike", "quinnwenhanced", "renektonexecute", "renektonsuperexecute", "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "viktorqbuff", "xenzhaothrust2", "xenzhaothrust3" };
         static readonly string[] NoAttacks = { "zyragraspingplantattack", "zyragraspingplantattack2", "zyragraspingplantattackfire", "zyragraspingplantattack2fire" };
-        static readonly string[] OHSP = { "Parley", "EzrealMysticShot"};
+        static readonly string[] OHSP = { "parley", "ezrealmysticshot"};
         static readonly string[] AttackResets = { "dariusnoxiantacticsonh", "fioraflurry", "garenq", "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "leonashieldofdaybreak", "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade", "parley", "poppydevastatingblow", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack", "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie", "volibearq", "xenzhaocombotarget", "yorickspectral" };
 
         static bool IsOnHit(string name)
@@ -150,7 +150,7 @@ namespace ALL_In_One.champions
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !AIO_Menu.Champion.Combo.UseW || !AIO_Menu.Champion.Harass.UseW ||
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && !(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
             return;
-            if ((Player.Level == 1 && Player.HealthPercent < 100 || Player.Level > 1) && IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady() && Player.Distance(args.End) < 40)
+            if ((Player.Level == 1 && Player.HealthPercent < 100 && Mobs.Count >= 1 || Player.Level > 1 || Player.Level == 1 && Mobs.Count == 0) && IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady() && Player.Distance(args.End) < 40)
             W.Cast(); //1렙일때 만피로 정글에 W쓰는건 정글링 효율 떨어지기에 이렇게함.
         }
 

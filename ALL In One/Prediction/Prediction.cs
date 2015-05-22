@@ -119,37 +119,73 @@ namespace ALL_In_One
         {
             if(T != null)
             {
-                var T2 = HeroManager.Enemies.Where(x => x != T && AIO_Func.CanHit(spell,x,Drag)).FirstOrDefault();
-                var pred = Prediction.GetPrediction(T, spell.Delay, spell.Width/2, spell.Speed);
-                var T2pred = Prediction.GetPrediction(T2, spell.Delay, spell.Width/2, spell.Speed);
-                SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + T.ServerPosition.To2D()) / 2 ;
-                SharpDX.Vector2 castVec2 = Player.ServerPosition.To2D() +
-                                           SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (spell.Range);
-                SharpDX.Vector2 castVec3 = T.ServerPosition.To2D() -
-                                           SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (40f);
-                if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+                var TH = T as Obj_AI_Hero;
+                var TM = T as Obj_AI_Minion;
+                if(TH != null)
                 {
-                    if(T.Distance(Player.ServerPosition) >= spell.Range)
+                    var TH2 = HeroManager.Enemies.Where(x => x != TH && AIO_Func.CanHit(spell,x,Drag)).FirstOrDefault();
+                    var THdelay = (Player.Distance(TH.ServerPosition) > spell.Range ? (Player.Distance(TH.ServerPosition) - spell.Range)/spell.Speed : 100f/spell.Speed);
+                    var pred = Prediction.GetPrediction(TH, THdelay + spell.Delay);
+                    var TH2delay = (TH2 != null ?(Player.Distance(TH.ServerPosition) > spell.Range ? (Player.Distance(TH2.ServerPosition) - spell.Range)/spell.Speed : TH2.ServerPosition.Distance(TH.ServerPosition)/spell.Speed):0f);
+                    var TH2pred = (TH2 != null ? Prediction.GetPrediction(TH2, TH2delay + spell.Delay) : null);
+                    SharpDX.Vector2 castVec = (pred.UnitPosition.To2D() + TH.ServerPosition.To2D()) / 2 ;
+                    SharpDX.Vector2 castVec2 = Player.ServerPosition.To2D() +
+                                               SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (spell.Range);
+                    SharpDX.Vector2 castVec3 = TH.ServerPosition.To2D() -
+                                               SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (100f);
+                    if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                     {
-                        if(AIO_Func.CanHit(spell,T,Drag) && T2 == null && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
-                        spell.Cast(castVec2,pred.UnitPosition.To2D());
-                        else //if(AIO_Func.CanHit(spell,T,Drag) && T2 != null && T2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
+                        if(TH.Distance(Player.ServerPosition) >= spell.Range)
                         {
-                        spell.Cast(castVec2,T.ServerPosition.To2D());//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
+                            if(AIO_Func.CanHit(spell,TH,Drag) && (pred.UnitPosition.Distance(TH.ServerPosition) <= spell.Width/2 || TH.MoveSpeed*THdelay <= spell.Width/2))//if(AIO_Func.CanHit(spell,TH,Drag) && TH2 != null && TH2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
+                            {
+                                spell.Cast(castVec2,TH.ServerPosition.To2D());//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
+                            }
+                            else if(AIO_Func.CanHit(spell,TH,Drag) && pred.UnitPosition.Distance(TH.ServerPosition) < 350)
+                            {
+                                if(pred.UnitPosition.Distance(Player.ServerPosition) > spell.Range)
+                                spell.Cast(castVec2,pred.UnitPosition.To2D());
+                            }
                         }
-                    }
-                    else
-                    {
-                        if(T2 == null || !AIO_Func.CanHit(spell,T2,Drag))
-                        spell.Cast(castVec3,T.ServerPosition.To2D());
-                        else if(T2 != null && AIO_Func.CanHit(spell,T2,Drag) && T2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+                        else
                         {
-                            SharpDX.Vector2 castVec4 = T.ServerPosition.To2D() -
-                                                       SharpDX.Vector2.Normalize(T2pred.UnitPosition.To2D() - T.ServerPosition.To2D()) * (40f);
-                            spell.Cast(castVec4,T2pred.UnitPosition.To2D());
+                            if(TH2 == null || !AIO_Func.CanHit(spell,TH2,Drag))
+                            {
+                                if(castVec3.Distance(Player.ServerPosition) < TH.ServerPosition.Distance(Player.ServerPosition))
+                                spell.Cast(castVec3,TH.ServerPosition.To2D());
+                                else
+                                spell.Cast(TH.ServerPosition.To2D(),castVec3);
+                            }
+                            else if(TH2 != null && AIO_Func.CanHit(spell,TH2,Drag) && TH2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+                            {
+                                SharpDX.Vector2 castVec4 = TH.ServerPosition.To2D() -
+                                                           SharpDX.Vector2.Normalize(TH2pred.UnitPosition.To2D() - TH.ServerPosition.To2D()) * (80f);
+                                if(castVec4.Distance(Player.ServerPosition) < TH2pred.UnitPosition.Distance(Player.ServerPosition))
+                                spell.Cast(castVec4,TH2pred.UnitPosition.To2D());
+                                else
+                                spell.Cast(TH2pred.UnitPosition.To2D(),castVec4);
+                            }
                         }
                     }
                 }
+                if(TM != null)
+                {
+                    var Minions = MinionManager.GetMinions(spell.Range+Drag, MinionTypes.All, MinionTeam.NotAlly);
+                    var FM = Minions.OrderBy(o => o.MaxHealth).FirstOrDefault().ServerPosition;
+                    var P = MinionManager.GetMinionsPredictedPositions(Minions,spell.Delay,spell.Width,spell.Speed,FM,Drag,true,SkillshotType.SkillshotLine);
+                    var PP = MinionManager.GetBestLineFarmLocation(P,spell.Width,Drag);
+                    if(FM != null && FM.Distance(Player.ServerPosition) <= spell.Range)
+                    spell.Cast(FM.To2D(),PP.Position);
+                }
+            }
+            if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            {
+                    var Minions = MinionManager.GetMinions(spell.Range+Drag, MinionTypes.All, MinionTeam.NotAlly);
+                    var FM = Minions.OrderBy(o => o.MaxHealth).FirstOrDefault().ServerPosition;
+                    var P = MinionManager.GetMinionsPredictedPositions(Minions,spell.Delay,spell.Width,spell.Speed,FM,Drag,true,SkillshotType.SkillshotLine);
+                    var PP = MinionManager.GetBestLineFarmLocation(P,spell.Width,Drag);
+                    if(FM != null && FM.Distance(Player.ServerPosition) <= spell.Range)
+                    spell.Cast(FM.To2D(),PP.Position);
             }
         }
         

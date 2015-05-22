@@ -246,7 +246,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         /// </summary>
         public static bool CanAttack()
         {
-            return Utils.GameTimeTickCount + Game.Ping / 2 - 15 >= LastAATick + Player.AttackDelay * 1000; //일단 원본과 매우 비슷한값임.
+            return Utils.GameTimeTickCount - 15 >= LastAATick + Player.AttackDelay * 1000; // + Game.Ping / 2 일단 원본과 매우 비슷한값임.
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 return true;
             }*/
              
-            return NoCancelChamps.Contains(Player.ChampionName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup); // 임의수정
+            return NoCancelChamps.Contains(Player.ChampionName) || (Utils.GameTimeTickCount >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup); // + Game.Ping / 2 임의수정
         }
 
         public static void SetMovementDelay(int delay)

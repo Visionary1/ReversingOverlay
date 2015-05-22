@@ -171,7 +171,7 @@ namespace ALL_In_One
             p = new PassiveDamage
             {
                 ChampionName = "Viktor",
-                IsActive = (source, target) => (source.HasBuff("viktorpowertransferreturn")),
+                IsActive = (source, target) => (source.HasBuff("viktorqbuff")), // viktorpowertransferreturn
                 GetDamage =
                     (source, target) =>
                         (float)
@@ -4977,6 +4977,18 @@ namespace ALL_In_One
                         Damage =
                             (source, target, level) =>
                                 new double[] { 98, 161, 224, 287, 350 }[level] + 0.98 * source.FlatMagicDamageMod
+                    },
+                    //E
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.E,
+                        Stage = 2,
+                        DamageType = DamageType.Magical,
+                        Damage =
+                            (source, target, level) =>
+                                (source.HasBuff("viktoreaug") || source.HasBuff("viktorweaug") || source.HasBuff("viktorqeaug") || source.HasBuff("viktorqweaug")) ?
+                                (new double[] { 98, 161, 224, 287, 350 }[level] + 0.98 * source.FlatMagicDamageMod) :
+                                new double[] { 70, 115, 160, 205, 250 }[level] + 0.7 * source.FlatMagicDamageMod
                     },
                     //R - summon damage
                     new DamageSpell

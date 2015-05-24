@@ -33,7 +33,7 @@ namespace ALL_In_One.champions
             
             Q.SetTargetted(0.25f, 2000f);
             W.SetSkillshot(1.5f, 200f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            E.SetSkillshot(0.25f, 80f, 780f, false, SkillshotType.SkillshotLine); // 550f + 700f
+            E.SetSkillshot(0.25f, 160f, 780f, false, SkillshotType.SkillshotLine); // 550f + 700f
             R.SetSkillshot(0.25f, 325f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             
             AIO_Menu.Champion.Combo.addUseQ();
@@ -55,11 +55,10 @@ namespace ALL_In_One.champions
             
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW(false);
-            //AIO_Menu.Champion.Jungleclear.addUseE(false);
+            AIO_Menu.Champion.Jungleclear.addUseE(false);
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
-            //Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Etg", "Additional Erange")).SetValue(new Slider(50, 0, 250));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
             AIO_Menu.Champion.Misc.addItem("KillstealR", false);
@@ -170,13 +169,18 @@ namespace ALL_In_One.champions
         
         static void Storm()
         {
+            var T = TargetSelector.GetTarget(1300f, R.DamageType);
+            if(T != null && T.IsDead)
+                RDelay = 0;
             if(R.Instance.Name != "ViktorChaosStorm" && Environment.TickCount - RDelay > 0)
             {
-                var T = TargetSelector.GetTarget(1300f, R.DamageType);
                 if(T != null)
                 {
-                    R.Cast(T);
-                    RDelay = Environment.TickCount + 1000f;
+                    if(!T.IsDead)
+                    {
+                        R.Cast(T);
+                        RDelay = Environment.TickCount + 1000f;
+                    }
                 }
             }
         }
@@ -270,7 +274,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
             //AIO_Func.LH(Q,0);
-                var _m = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / Q.Speed), (int)(Q.Delay * 1000 + Game.Ping / 2)) > Q.GetDamage2(m) + (float)Player.GetAutoAttackDamage2(m, true)/2);            
+                var _m = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / Q.Speed), (int)(Q.Delay * 1000 + Game.Ping / 2)) > Q.GetDamage2(m) + (float)Player.GetAutoAttackDamage2(m, true)*3/4);            
                 Q.Cast(_m); //Minions[0]
             }
         }

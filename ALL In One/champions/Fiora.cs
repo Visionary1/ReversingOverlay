@@ -151,7 +151,7 @@ namespace ALL_In_One.champions
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !AIO_Menu.Champion.Combo.UseW || !AIO_Menu.Champion.Harass.UseW ||
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && !(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
             return;
-            if ((Player.Level == 1 && Player.HealthPercent < 100 && Mobs.Count >= 1 || Player.Level > 1 || Player.Level == 1 && Mobs.Count == 0) && IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady() && Player.Distance(args.End) < 40 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if ((Player.Level == 1 && Player.HealthPercent < 100 && Mobs.Count >= 1 || Player.Level > 1 && Mobs.Count >= 1) && IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady() && Player.Distance(args.End) < 40 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             W.Cast(); //1렙일때 만피로 정글에 W쓰는건 정글링 효율 떨어지기에 이렇게함.
             if (HeroTargets != null && IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady() && Player.Distance(args.End) < 40)
             W.Cast(); //1렙일때 만피로 정글에 W쓰는건 정글링 효율 떨어지기에 이렇게함.

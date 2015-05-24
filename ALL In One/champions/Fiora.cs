@@ -145,12 +145,15 @@ namespace ALL_In_One.champions
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var HeroTargets = sender as Obj_AI_Hero;
             if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count >= 1 &&
             (!AIO_Menu.Champion.Jungleclear.UseW || !(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))) ||
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !AIO_Menu.Champion.Combo.UseW || !AIO_Menu.Champion.Harass.UseW ||
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && !(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
             return;
-            if ((Player.Level == 1 && Player.HealthPercent < 100 && Mobs.Count >= 1 || Player.Level > 1 || Player.Level == 1 && Mobs.Count == 0) && IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady() && Player.Distance(args.End) < 40)
+            if ((Player.Level == 1 && Player.HealthPercent < 100 && Mobs.Count >= 1 || Player.Level > 1 || Player.Level == 1 && Mobs.Count == 0) && IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady() && Player.Distance(args.End) < 40 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            W.Cast(); //1렙일때 만피로 정글에 W쓰는건 정글링 효율 떨어지기에 이렇게함.
+            if (HeroTargets != null && IsOnHit(args.SData.Name) && (args.Target.IsMe || !sender.IsAlly) && W.IsReady() && Player.Distance(args.End) < 40)
             W.Cast(); //1렙일때 만피로 정글에 W쓰는건 정글링 효율 떨어지기에 이렇게함.
         }
 

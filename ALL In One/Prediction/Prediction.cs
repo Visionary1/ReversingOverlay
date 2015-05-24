@@ -170,22 +170,34 @@ namespace ALL_In_One
                 }
                 if(TM != null)
                 {
-                    var Minions = MinionManager.GetMinions(spell.Range+Drag, MinionTypes.All, MinionTeam.NotAlly);
-                    var FM = Minions.OrderBy(o => o.MaxHealth).FirstOrDefault().ServerPosition;
-                    var P = MinionManager.GetMinionsPredictedPositions(Minions,spell.Delay,spell.Width,spell.Speed,FM,Drag,true,SkillshotType.SkillshotLine);
-                    var PP = MinionManager.GetBestLineFarmLocation(P,spell.Width,Drag);
-                    if(FM != null && FM.Distance(Player.ServerPosition) <= spell.Range)
-                    spell.Cast(FM.To2D(),PP.Position);
+                    var Minions = ObjectManager.Get<Obj_AI_Minion>().Where(m=> m.IsValidTarget(spell.Range+Drag) && m.Team != ObjectManager.Player.Team).Cast<Obj_AI_Base>().ToList();
+                    if(Minions.Count > 0)
+                    { //으....
+                        //MinionManager.GetMinions(spell.Range+Drag, MinionTypes.All, MinionTeam.NotAlly);
+                        var FM = Minions.OrderBy(o => o.Distance(Player.ServerPosition)).FirstOrDefault().ServerPosition;
+                        var FFM = Minions.OrderBy(o => o.Distance(Player.ServerPosition)).Reverse().FirstOrDefault().ServerPosition;
+                        var P = MinionManager.GetMinionsPredictedPositions(Minions,spell.Delay,spell.Width,spell.Speed,FM,Drag,true,SkillshotType.SkillshotLine);
+                        var PP = MinionManager.GetBestLineFarmLocation(P,spell.Width,spell.Range+Drag);
+                        if(FM != null && FM.Distance(Player.ServerPosition) <= spell.Range)// && PP.MinionsHit >= Math.Min(Minions.Count,6))
+                        //spell.Cast(FM.To2D(),PP.Position);
+                        spell.Cast(FM.To2D(),FFM.To2D());
+                    }
                 }
             }
             if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                    var Minions = MinionManager.GetMinions(spell.Range+Drag, MinionTypes.All, MinionTeam.NotAlly);
-                    var FM = Minions.OrderBy(o => o.MaxHealth).FirstOrDefault().ServerPosition;
-                    var P = MinionManager.GetMinionsPredictedPositions(Minions,spell.Delay,spell.Width,spell.Speed,FM,Drag,true,SkillshotType.SkillshotLine);
-                    var PP = MinionManager.GetBestLineFarmLocation(P,spell.Width,Drag);
-                    if(FM != null && FM.Distance(Player.ServerPosition) <= spell.Range)
-                    spell.Cast(FM.To2D(),PP.Position);
+                    var Minions = ObjectManager.Get<Obj_AI_Minion>().Where(m=> m.IsValidTarget(spell.Range+Drag) && m.Team != ObjectManager.Player.Team).Cast<Obj_AI_Base>().ToList();
+                    if(Minions.Count > 0)
+                    {
+                        //MinionManager.GetMinions(spell.Range+Drag, MinionTypes.All, MinionTeam.NotAlly);
+                        var FM = Minions.OrderBy(o => o.Distance(Player.ServerPosition)).FirstOrDefault().ServerPosition;
+                        var FFM = Minions.OrderBy(o => o.Distance(Player.ServerPosition)).Reverse().FirstOrDefault().ServerPosition;
+                        var P = MinionManager.GetMinionsPredictedPositions(Minions,spell.Delay,spell.Width,spell.Speed,FM,Drag,true,SkillshotType.SkillshotLine);
+                        var PP = MinionManager.GetBestLineFarmLocation(P,spell.Width,spell.Range+Drag);
+                        if(FM != null && FM.Distance(Player.ServerPosition) <= spell.Range)// && PP.MinionsHit >= Math.Min(Minions.Count,6))
+                        //spell.Cast(FM.To2D(),PP.Position);
+                        spell.Cast(FM.To2D(),FFM.To2D());
+                    }
             }
         }
         

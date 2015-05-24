@@ -453,11 +453,11 @@ namespace ALL_In_One
                     var TG = TargetSelector.GetTarget(spell.ChargedMaxRange, spell.DamageType); //타겟을 다시 잡게 지정해야함. 그래야 타겟이 사라져 새 타겟을 잡아야 할 때 멍때리고 움직이지도 못하는 병신같은 일 방지 가능.
                     if(TG != null)
                     spell.Cast(TG,false,false);
-                    else
+                    /*else 있어도 상관은 없지만. Flee 모드 추가함.
                     {
                         Player.Spellbook.CastSpell(SpellSlot.Recall); //귀환으로 차지 취소.
                         Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-                    }
+                    }*/
                 }
                 if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 {
@@ -469,6 +469,11 @@ namespace ALL_In_One
                         spell.Cast(Vec.Position);
                     if(M.Count() >= 1 && Vec2.MinionsHit >= Math.Min(M.Count(),4) && Vec2.Position.IsValid())
                         spell.Cast(Vec2.Position);
+                }
+                if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee)
+                {
+                    Player.Spellbook.CastSpell(SpellSlot.Recall); //귀환으로 차지 취소.
+                    Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 }
             }
         }

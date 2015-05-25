@@ -178,7 +178,7 @@ namespace ALL_In_One.champions
 
                 if(qTarget != null && (qTarget.Distance(Player.ServerPosition) >= qd || getQBuffDuration < 1))
                     Q.Cast(qTarget);
-                if(!Player.HasBuff("fioraqcd") && Q2T != null && QM != null && Q2T.HealthPercent < Player.HealthPercent - 10 && AIO_Func.ECTarget(Q2T,600f,Player.HealthPercent - 9) == 0)
+                if(!Player.HasBuff2("fioraqcd") && Q2T != null && QM != null && Q2T.HealthPercent < Player.HealthPercent - 10 && AIO_Func.ECTarget(Q2T,600f,Player.HealthPercent - 9) == 0)
                     Q.Cast(QM);
             }
         }
@@ -225,9 +225,9 @@ namespace ALL_In_One.champions
             float damage = 0;
             var Target = enemy as Obj_AI_Hero;
 
-            if (Q.IsReady() && !Player.HasBuff("fioraqcd"))
+            if (Q.IsReady() && !Player.HasBuff2("fioraqcd"))
                 damage += Q.GetDamage2(enemy) * 2;
-            else if (Q.IsReady() && Player.HasBuff("fioraqcd"))
+            else if (Q.IsReady() && Player.HasBuff2("fioraqcd"))
                 damage += Q.GetDamage2(enemy);
                 
             if (W.IsReady())

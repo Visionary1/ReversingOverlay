@@ -87,7 +87,7 @@ namespace ALL_In_One.champions
                 Killsteal();
             #endregion
 
-            Orbwalker.SetAttack(!Player.HasBuff("MonkeyKingSpinToWin", true));
+            Orbwalker.SetAttack(!Player.HasBuff2("MonkeyKingSpinToWin", true));
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -147,7 +147,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
                 E.CastOnBestTarget();
 
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && !Q.IsReady() && !E.IsReady() && !Player.HasBuff("MonkeyKingDoubleAttack", true))
+            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && !Q.IsReady() && !E.IsReady() && !Player.HasBuff2("MonkeyKingDoubleAttack", true))
             {
                 if (AIO_Func.SelfAOE_Prediction.HitCount(R.Delay, R.Range) >= AIO_Menu.Champion.Combo.getSliderValue("Cast R if Enemy number >=").Value)
                     CastR1();

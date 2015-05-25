@@ -17,7 +17,7 @@ namespace ALL_In_One.champions
 
         static Spell Q, W, E, R;
 
-        static bool stunisReady { get { return Player.HasBuff("pyromania_particle", true); } }
+        static bool stunisReady { get { return Player.HasBuff2("pyromania_particle", true); } }
 
         public static void Load()
         {

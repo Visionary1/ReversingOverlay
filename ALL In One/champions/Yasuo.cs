@@ -140,7 +140,7 @@ namespace ALL_In_One.champions
         if (R.IsReady() && drawR.Active)
         Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         
-        if (QQ.IsReady() && drawQQr.Active && Player.HasBuff("yasuoq3w") &&QQTarget != null)
+        if (QQ.IsReady() && drawQQr.Active && Player.HasBuff2("yasuoq3w") &&QQTarget != null)
         Render.Circle.DrawCircle(Player.Position, QQ.Range - QQTarget.MoveSpeed*QQ.Delay, drawQQr.Color);
 
 
@@ -159,7 +159,7 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
                 return;
 
-            if (QQ.IsReady() && Player.HasBuff("yasuoq3w") && !Dash.IsDashing(Player)
+            if (QQ.IsReady() && Player.HasBuff2("yasuoq3w") && !Dash.IsDashing(Player)
             && Player.Distance(sender.Position) <= QQ.Range)
                 QQ.Cast(sender.Position);
 
@@ -222,7 +222,7 @@ namespace ALL_In_One.champions
             var buff = AIO_Func.getBuffInstance(Player, "yasuoq3w");
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-                if(!Player.HasBuff("yasuoq3w"))
+                if(!Player.HasBuff2("yasuoq3w"))
                 {
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
                 if(qTarget.Distance(Player.Position) >= Orbwalking.GetRealAutoAttackRange(Player) + 50)
@@ -238,7 +238,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
-                if(!ETarget.HasBuff("YasuoDashWrapper") && Player.HasBuff("yasuoq3w"))
+                if(!ETarget.HasBuff2("YasuoDashWrapper") && Player.HasBuff2("yasuoq3w"))
                 E.Cast(ETarget);
             }
             
@@ -256,7 +256,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-                if(!Player.HasBuff("yasuoq3w"))
+                if(!Player.HasBuff2("yasuoq3w"))
                 {
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
                 if(qTarget.Distance(Player.Position) >= Orbwalking.GetRealAutoAttackRange(Player) + 50)
@@ -273,7 +273,7 @@ namespace ALL_In_One.champions
             {
                 var Buff = AIO_Func.getBuffInstance(Player, "yasuodashscalar");
                 var ETarget = TargetSelector.GetTarget(E.Range, E.DamageType, true);
-                if(!ETarget.HasBuff("YasuoDashWrapper") && (float)Buff.Count > 1)
+                if(!ETarget.HasBuff2("YasuoDashWrapper") && (float)Buff.Count > 1)
                 E.Cast(ETarget);
             }
 
@@ -297,7 +297,7 @@ namespace ALL_In_One.champions
         {
 
             var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
-            var EM = MinionManager.GetMinions(Game.CursorPos, 150f, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => !x.HasBuff("YasuoDashWrapper") && x.Distance(Player.ServerPosition) <= E.Range);
+            var EM = MinionManager.GetMinions(Game.CursorPos, 150f, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => !x.HasBuff2("YasuoDashWrapper") && x.Distance(Player.ServerPosition) <= E.Range);
             if (Minions.Count <= 0)
                 return;
                 
@@ -321,7 +321,7 @@ namespace ALL_In_One.champions
         {
 
             var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-            var EM = MinionManager.GetMinions(Game.CursorPos, 150f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => !x.HasBuff("YasuoDashWrapper") && x.Distance(Player.ServerPosition) <= E.Range);
+            var EM = MinionManager.GetMinions(Game.CursorPos, 150f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => !x.HasBuff2("YasuoDashWrapper") && x.Distance(Player.ServerPosition) <= E.Range);
 
             if (Mobs.Count <= 0)
                 return;
@@ -350,7 +350,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 var Buff = AIO_Func.getBuffInstance(Player, "yasuodashscalar");
-                if(E.CanCast(target) && AIO_Func.isKillable(target, E.GetDamage2(target)*((float)Buff.Count*0.25f + 1f)) && !target.HasBuff("YasuoDashWrapper"))
+                if(E.CanCast(target) && AIO_Func.isKillable(target, E.GetDamage2(target)*((float)Buff.Count*0.25f + 1f)) && !target.HasBuff2("YasuoDashWrapper"))
                 E.Cast(target);
             }
         }

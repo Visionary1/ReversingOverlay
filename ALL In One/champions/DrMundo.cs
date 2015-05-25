@@ -62,7 +62,7 @@ namespace ALL_In_One.champions
             if (Orbwalking.CanMove(10))
             {
                 AIO_Func.SC(Q,QD,0f,0);
-                if(!Player.HasBuff("BurningAgony"))
+                if(!Player.HasBuff2("BurningAgony"))
                 AIO_Func.SC(W,0,0,0);
                 AIO_Func.SC(E,0,0,0);
                 WOff();
@@ -95,7 +95,7 @@ namespace ALL_In_One.champions
         
         static void WOff()
         {
-            if(Player.HasBuff("BurningAgony"))
+            if(Player.HasBuff2("BurningAgony"))
             {
             var Target = TargetSelector.GetTarget(W.Range, W.DamageType);
             if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None || (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && Target == null)

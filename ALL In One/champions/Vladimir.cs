@@ -82,7 +82,7 @@ namespace ALL_In_One.champions
                 }
             }
 
-            //Orbwalker.SetAttack(!Player.HasBuff("VladimirSanguinePool"));
+            //Orbwalker.SetAttack(!Player.HasBuff2("VladimirSanguinePool"));
             Orbwalker.SetAttack(Player.IsTargetable);
 
             #region Killsteal

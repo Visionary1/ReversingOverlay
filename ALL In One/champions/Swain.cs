@@ -75,11 +75,11 @@ namespace ALL_In_One.champions
                 AIO_Func.SC(Q);
                 AIO_Func.SC(W);
                 AIO_Func.SC(E);
-                if((R.Range.EnemyCount() >= RM || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear) && !Player.HasBuff("SwainMetamorphism"))
+                if((R.Range.EnemyCount() >= RM || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear) && !Player.HasBuff2("SwainMetamorphism"))
                 AIO_Func.SC(R);
             }
             
-            if((R.Range+200f).EnemyCount() == 0 && Player.HasBuff("SwainMetamorphism") && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
+            if((R.Range+200f).EnemyCount() == 0 && Player.HasBuff2("SwainMetamorphism") && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
             R.Cast();
             
             #region Killsteal

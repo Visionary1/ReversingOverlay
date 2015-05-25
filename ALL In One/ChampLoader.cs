@@ -353,6 +353,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Leona.Load();
                     break;
+                case "Malzahar":
+                    MadeBy(Developer.RL244);
+                    champions.Malzahar.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

@@ -121,15 +121,15 @@ namespace ALL_In_One.champions
 
                 if (Q.IsReady() && Recall.IsReady())
                     Drawing.DrawText(mypos[0] - 60, mypos[1] - 50, Color.SpringGreen, "Try Stealth recall");
-                else if (Player.HasBuff("TwitchHideInShadows") && Player.HasBuff("Recall"))
+                else if (Player.HasBuff2("TwitchHideInShadows") && Player.HasBuff2("Recall"))
                     Drawing.DrawText(mypos[0] - 60, mypos[1] - 50, Color.SpringGreen, "Stealth Recall Activated");
-                else if (!Player.HasBuff("recall"))
+                else if (!Player.HasBuff2("recall"))
                     Drawing.DrawText(mypos[0] - 60, mypos[1] - 50, Color.SpringGreen, "Q is not ready");
             }
 
             if (AIO_Menu.Champion.Drawings.getBoolValue("R Pierce Line"))
             {
-                if (Player.HasBuff("TwitchFullAutomatic", true))
+                if (Player.HasBuff2("TwitchFullAutomatic", true))
                 {
                     var aatarget = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(Player), TargetSelector.DamageType.Physical);
 

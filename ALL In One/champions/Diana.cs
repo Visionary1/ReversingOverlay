@@ -15,7 +15,7 @@ namespace ALL_In_One.champions
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
         static float getWBuffDuration { get { var buff = AIO_Func.getBuffInstance(Player, "dianashield"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
-        static float getPBuffDuration { get { var buff = (Player.HasBuff("dianaarcready") ? AIO_Func.getBuffInstance(Player, "DianaPassiveMarker") : null); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float getPBuffDuration { get { var buff = (Player.HasBuff2("dianaarcready") ? AIO_Func.getBuffInstance(Player, "DianaPassiveMarker") : null); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
         {
@@ -132,7 +132,7 @@ namespace ALL_In_One.champions
         {
             if(AIO_Menu.Champion.Combo.UseR)
             {
-                foreach (var Enemy in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff("dianamoonlight")).OrderByDescending(x => x.Health))
+                foreach (var Enemy in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff2("dianamoonlight")).OrderByDescending(x => x.Health))
                 {
                     if (R.IsReady() && Enemy != null)
                         R.Cast(Enemy);
@@ -147,7 +147,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseR && R.IsReady())
                 {
-                    foreach (var Enemy in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff("dianamoonlight")).OrderByDescending(x => x.Health))
+                    foreach (var Enemy in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff2("dianamoonlight")).OrderByDescending(x => x.Health))
                     {
                         if (R.IsReady() && Enemy != null)
                             R.Cast(Enemy);
@@ -165,7 +165,7 @@ namespace ALL_In_One.champions
                 return;
             if (AIO_Menu.Champion.Laneclear.UseR)
             {
-                foreach (var Enemy in Mobs.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff("dianamoonlight")).OrderByDescending(x => x.MaxHealth))
+                foreach (var Enemy in Mobs.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff2("dianamoonlight")).OrderByDescending(x => x.MaxHealth))
                 {
                     if (R.IsReady() && Enemy != null)
                         R.Cast(Enemy);
@@ -185,7 +185,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Jungleclear.UseR)
             {
-                foreach (var Enemy in Mobs.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff("dianamoonlight")).OrderByDescending(x => x.MaxHealth))
+                foreach (var Enemy in Mobs.Where(x => x.Distance(Player.ServerPosition) <= R.Range && x.HasBuff2("dianamoonlight")).OrderByDescending(x => x.MaxHealth))
                 {
                     if (R.IsReady() && Enemy != null)
                         R.Cast(Enemy);
@@ -206,11 +206,11 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health)) // Advanced Kill Combo by rl244
             {
-                if (R.CanCast(target) && Player.HasBuff("DianaOrbs") && Player.HasBuff("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target) +(float)Player.GetAutoAttackDamage2(target, false)))
+                if (R.CanCast(target) && Player.HasBuff2("DianaOrbs") && Player.HasBuff2("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target) +(float)Player.GetAutoAttackDamage2(target, false)))
                 R.Cast(target);
-                else if (R.CanCast(target) && Player.HasBuff("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage2(target) + (float)Player.GetAutoAttackDamage2(target, false)))
+                else if (R.CanCast(target) && Player.HasBuff2("dianaarcready") && AIO_Func.isKillable(target, R.GetDamage2(target) + (float)Player.GetAutoAttackDamage2(target, false)))
                 R.Cast(target);
-                else if (R.CanCast(target) && Player.HasBuff("DianaOrbs") && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target) + (float)Player.GetAutoAttackDamage2(target, false)))
+                else if (R.CanCast(target) && Player.HasBuff2("DianaOrbs") && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target) + (float)Player.GetAutoAttackDamage2(target, false)))
                 R.Cast(target);
                 else if (R.CanCast(target) && AIO_Func.isKillable(target, R))
                 R.Cast(target);

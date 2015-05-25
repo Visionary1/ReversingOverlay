@@ -234,9 +234,9 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var rTarget = TargetSelector.GetTarget(W.Range, R.DamageType, true);
-                if(rTarget != null && !Player.HasBuff("rivenwindslashready"))
+                if(rTarget != null && !Player.HasBuff2("rivenwindslashready"))
                 R.Cast();
-                if(Player.HasBuff("rivenwindslashready") && AIO_Menu.Champion.Combo.getBoolValue("Use Auto R2"))
+                if(Player.HasBuff2("rivenwindslashready") && AIO_Menu.Champion.Combo.getBoolValue("Use Auto R2"))
                 {
                     foreach (var target in HeroManager.Enemies.Where(x => x.Distance(Player.ServerPosition) >= RD).OrderByDescending(x => x.Health))
                     {
@@ -270,14 +270,14 @@ namespace ALL_In_One.champions
                 if (R.CanCast(target) && AIO_Func.isKillable(target, R) && E.IsReady())
                 {
                     E.Cast(target.ServerPosition);
-                    if(!Player.HasBuff("rivenwindslashready"))
+                    if(!Player.HasBuff2("rivenwindslashready"))
                     R.Cast();
                     else
                     R.Cast(target);
                 }
                 else if (R.CanCast(target) && AIO_Func.isKillable(target, R))
                 {
-                    if(!Player.HasBuff("rivenwindslashready"))
+                    if(!Player.HasBuff2("rivenwindslashready"))
                     R.Cast();
                     else
                     R.Cast(target);

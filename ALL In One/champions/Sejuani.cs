@@ -84,7 +84,7 @@ namespace ALL_In_One.champions
                 AIO_Func.SC(Q,QD);
                 if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 {
-                    foreach (var target in HeroManager.Enemies.Where(x => x.HasBuff("sejuanifrost")))
+                    foreach (var target in HeroManager.Enemies.Where(x => x.HasBuff2("sejuanifrost")))
                     {
                         if(target.Distance(Player.ServerPosition) <= E.Range && E.IsReady() && target != null)
                         AIO_Func.SC(E);
@@ -92,7 +92,7 @@ namespace ALL_In_One.champions
                 }
                 if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 {
-                    var EMinion = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(x => x.HasBuff("sejuanifrost"));
+                    var EMinion = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(x => x.HasBuff2("sejuanifrost"));
                     foreach (var target in EMinion)
                     {
                         if(target.Distance(Player.ServerPosition) <= E.Range && E.IsReady() && target != null && EMinion.Count() > 3)
@@ -145,7 +145,7 @@ namespace ALL_In_One.champions
         
         static void AA()
         {
-            if(!Player.HasBuff("sejuaninorthernwindsenrage"))
+            if(!Player.HasBuff2("sejuaninorthernwindsenrage"))
             AIO_Func.AACb(W);
         }
         
@@ -154,7 +154,7 @@ namespace ALL_In_One.champions
             var Target = (Obj_AI_Base)target;
             if (!unit.IsMe || Target == null)
                 return;
-            if(!Player.HasBuff("sejuaninorthernwindsenrage"))
+            if(!Player.HasBuff2("sejuaninorthernwindsenrage"))
             AIO_Func.AALcJc(W);
             
             AA();

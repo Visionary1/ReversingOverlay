@@ -114,9 +114,9 @@ namespace ALL_In_One.champions
         
         static void WWW()
         {
-            if(Player.HasBuff("attroxwlife") && Player.HealthPercent > 50)
+            if(Player.HasBuff2("attroxwlife") && Player.HealthPercent > 50)
             W.Cast();
-            if(Player.HasBuff("aatroxwpower") && Player.HealthPercent < 50)
+            if(Player.HasBuff2("aatroxwpower") && Player.HealthPercent < 50)
             W.Cast();
         }
         
@@ -166,7 +166,7 @@ namespace ALL_In_One.champions
             if (Q.IsReady())
                 damage += Q.GetDamage2(enemy) + (float)Player.GetAutoAttackDamage2(enemy, false);
             
-            if (Player.HasBuff("aatroxwpower"))
+            if (Player.HasBuff2("aatroxwpower"))
                 damage += W.GetDamage2(enemy);
             
             if (E.IsReady())

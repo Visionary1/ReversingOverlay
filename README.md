@@ -16,6 +16,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Bard|　|　|
 |Blitzcrank|✔|rl244|
 |Brand|✔|rl244|
+|Braum|　|　|
 |Caitlyn|✔|rl244|
 |Cassiopeia|✔|rl244|
 |Cho'Gath|✔|fakker|
@@ -61,7 +62,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Lulu|✔(Incomplete)|xcsoft|
 |Lux|　|　|
 |Malphite|　|　|
-|Malzahar|　|　|
+|Malzahar|✔|rl244|
 |Maokai|　|　|
 |Master Yi|✔|xcsoft|
 |Miss Fortune|✔|rl244|

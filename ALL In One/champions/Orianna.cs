@@ -101,13 +101,13 @@ namespace ALL_In_One.champions
             W.UpdateSourcePosition(BallPosition, BallPosition);
             R.UpdateSourcePosition(BallPosition, BallPosition);
 
-            if (Player.HasBuff("orianaghostself", true))
+            if (Player.HasBuff2("orianaghostself", true))
             {
                 BallPosition = ObjectManager.Player.Position;
                 return;
             }
 
-            var ballowner = HeroManager.Allies.FirstOrDefault(x => x.IsAlly && !x.IsMe && x.HasBuff("orianaghost", true));
+            var ballowner = HeroManager.Allies.FirstOrDefault(x => x.IsAlly && !x.IsMe && x.HasBuff2("orianaghost", true));
 
             if (ballowner != null)
                 BallPosition = ballowner.Position;

@@ -17,10 +17,10 @@ namespace ALL_In_One.champions
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-        static bool Q2 { get { return (Player.HasBuff("viktorqaug", true) || Player.HasBuff("viktorqwaug", true) || Player.HasBuff("viktorqeaug", true) || Player.HasBuff("viktorqweaug", true)); } }
-        static bool W2 { get { return (Player.HasBuff("viktorwaug", true) || Player.HasBuff("viktorweaug", true) || Player.HasBuff("viktorqwaug", true) || Player.HasBuff("viktorqweaug", true)); } }
-        static bool E2 { get { return (Player.HasBuff("viktoreaug", true) || Player.HasBuff("viktorweaug", true) || Player.HasBuff("viktorqeaug", true) || Player.HasBuff("viktorqweaug", true)); } }
-        static bool R2 { get { return Player.HasBuff("viktorqweaug", true); } }
+        static bool Q2 { get { return (Player.HasBuff2("viktorwaug", true) || Player.HasBuff2("viktorqwaug", true) || Player.HasBuff2("viktorqeaug", true) || Player.HasBuff2("viktorqweaug", true)); } }
+        static bool W2 { get { return (Player.HasBuff2("viktorwaug", true) || Player.HasBuff2("viktorweaug", true) || Player.HasBuff2("viktorqwaug", true) || Player.HasBuff2("viktorqweaug", true)); } }
+        static bool E2 { get { return (Player.HasBuff2("viktoreaug", true) || Player.HasBuff2("viktorweaug", true) || Player.HasBuff2("viktorqeaug", true) || Player.HasBuff2("viktorqweaug", true)); } }
+        static bool R2 { get { return Player.HasBuff2("viktorqweaug", true); } }
         static Spell Q, W, E, R;
         static float RDelay = 0f;
         public static void Load()
@@ -98,7 +98,7 @@ namespace ALL_In_One.champions
                         Harass();
                         break;
                     case Orbwalking.OrbwalkingMode.LastHit:
-                        Orbwalker.SetAttack(!AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady() || Player.HasBuff("viktorqbuff"));
+                        Orbwalker.SetAttack(!AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady() || Player.HasBuff2("viktorqbuff"));
                         Lasthit();
                         break;
                     case Orbwalking.OrbwalkingMode.LaneClear:
@@ -343,7 +343,7 @@ namespace ALL_In_One.champions
             if (R.IsReady())
                 damage += R.GetDamage2(enemy)+R.Width/enemy.MoveSpeed*2*R.GetDamage2(enemy,1);
 
-            if(Player.HasBuff("viktorqbuff"))
+            if(Player.HasBuff2("viktorqbuff"))
                 damage += (float)Player.GetAutoAttackDamage2(enemy, true); //어짜피 여기에 빅토르 Q 증강뎀 들어감.
             return damage;
         }

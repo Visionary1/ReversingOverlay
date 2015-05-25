@@ -65,7 +65,7 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(35))
             {
-                if(!Player.HasBuff(""))
+                if(!Player.HasBuff2(""))
                 AIO_Func.SC(Q,QD,0f);
                 AIO_Func.SC(E);
                 AIO_Func.SC(R);

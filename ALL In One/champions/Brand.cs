@@ -148,7 +148,7 @@ namespace ALL_In_One.champions
             if (W.IsReady()
                 && Player.Distance(gapcloser.Sender.Position) <= W.Range)
                 AIO_Func.CCast(W,gapcloser.Sender); //W.Cast((Vector3)gapcloser.End);
-            if (gapcloser.Sender.HasBuff("brandablaze") && Q.IsReady()
+            if (gapcloser.Sender.HasBuff2("brandablaze") && Q.IsReady()
                 && Player.Distance(gapcloser.Sender.Position) <= Q.Range)
                 AIO_Func.LCast(Q,gapcloser.Sender,QD,0);
         }
@@ -161,7 +161,7 @@ namespace ALL_In_One.champions
             if (W.IsReady()
             && Player.Distance(sender.Position) <= W.Range)
                 AIO_Func.CCast(W,sender);
-            if (sender.HasBuff("brandablaze") && Q.IsReady()
+            if (sender.HasBuff2("brandablaze") && Q.IsReady()
             && Player.Distance(sender.Position) <= Q.Range)
                 AIO_Func.LCast(Q,sender,QD,0);
         }
@@ -227,21 +227,21 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
                 var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                if((PriorSpell.Q != SelectedPriorSpell || Qtarget.HasBuff("brandablaze")) && Qtarget != null)
+                if((PriorSpell.Q != SelectedPriorSpell || Qtarget.HasBuff2("brandablaze")) && Qtarget != null)
                     AIO_Func.LCast(Q,Qtarget,QD,0);
             }
 
             if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
             {
                 var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                if((PriorSpell.E != SelectedPriorSpell || Etarget.HasBuff("brandablaze")) && Etarget != null)
+                if((PriorSpell.E != SelectedPriorSpell || Etarget.HasBuff2("brandablaze")) && Etarget != null)
                     E.Cast(Etarget);
             }
 
             if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
             {
                 var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType);
-                if((PriorSpell.W != SelectedPriorSpell || Wtarget.HasBuff("brandablaze")) && Wtarget != null)
+                if((PriorSpell.W != SelectedPriorSpell || Wtarget.HasBuff2("brandablaze")) && Wtarget != null)
                     AIO_Func.CCast(W,Wtarget);
 
             }

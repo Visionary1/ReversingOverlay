@@ -148,7 +148,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
                 var Rtarget = TargetSelector.GetTarget(R.Range, R.DamageType);
-                if(!Player.HasBuff("JarvanIVCataclysm") && AIO_Func.isKillable(Rtarget, (((Player.ManaPercent > 15) ? Q.GetDamage2(Rtarget) : (Q.IsReady() ? Q.GetDamage2(Rtarget) : 0)) + R.GetDamage2(Rtarget)))) //R.Instance.Name == "JarvanIVCataclysm"
+                if(!Player.HasBuff2("JarvanIVCataclysm") && AIO_Func.isKillable(Rtarget, (((Player.ManaPercent > 15) ? Q.GetDamage2(Rtarget) : (Q.IsReady() ? Q.GetDamage2(Rtarget) : 0)) + R.GetDamage2(Rtarget)))) //R.Instance.Name == "JarvanIVCataclysm"
                 R.Cast(Rtarget);
             }
         }
@@ -165,7 +165,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (R.CanCast(target) && AIO_Func.isKillable(target, R) && !Player.HasBuff("JarvanIVCataclysm"))
+                if (R.CanCast(target) && AIO_Func.isKillable(target, R) && !Player.HasBuff2("JarvanIVCataclysm"))
                     R.Cast(target);
             }
         }
@@ -173,7 +173,7 @@ namespace ALL_In_One.champions
         static float JarvanPDamage(Obj_AI_Base enemy) //Code Made By RL244. 
         {
             return (float)Damage.CalcDamage(Player,enemy, Damage.DamageType.Physical, 
-            (float)(!enemy.HasBuff("jarvanivmartialcadencecheck") ? (enemy.Health)*0.1d : 0));
+            (float)(!enemy.HasBuff2("jarvanivmartialcadencecheck") ? (enemy.Health)*0.1d : 0));
         }
         
         static float getComboDamage(Obj_AI_Base enemy)
@@ -192,7 +192,7 @@ namespace ALL_In_One.champions
             if (R.IsReady())
                 damage += R.GetDamage2(enemy);
                 
-            if (!enemy.HasBuff("jarvanivmartialcadencecheck"))
+            if (!enemy.HasBuff2("jarvanivmartialcadencecheck"))
                 damage += JarvanPDamage(enemy) + (float)Player.GetAutoAttackDamage2(enemy, false);
                 
             return damage;

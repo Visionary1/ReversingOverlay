@@ -126,7 +126,7 @@ namespace ALL_In_One.champions
 
             if (Menu.Item("soulboundsaver", true).GetValue<bool>() && sender.Type == GameObjectType.obj_AI_Hero && sender.IsEnemy && R.IsReady())
             {
-                var soulbound = HeroManager.Allies.FirstOrDefault(hero => hero.HasBuff("kalistacoopstrikeally", true) && args.Target.NetworkId == hero.NetworkId && hero.HealthPercent <= 20);
+                var soulbound = HeroManager.Allies.FirstOrDefault(hero => hero.HasBuff2("kalistacoopstrikeally", true) && args.Target.NetworkId == hero.NetworkId && hero.HealthPercent <= 20);
 
                 if (soulbound != null)
                     R.Cast();

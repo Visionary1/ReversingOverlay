@@ -80,7 +80,7 @@ namespace ALL_In_One.champions
                     {
                         if(target.Distance(Player.ServerPosition) <= R.Range && R.IsReady() && target != null && AIO_Menu.Champion.Combo.UseR)
                         {
-                            if(Player.HasBuff("NocturnPeranoia"))
+                            if(Player.HasBuff2("NocturnPeranoia"))
                                 R.Cast(target);
                             else
                                 R.Cast();
@@ -149,7 +149,7 @@ namespace ALL_In_One.champions
             {
                 if (R.CanCast(target) && AIO_Func.isKillable(target, R))
                 {
-                    if(Player.HasBuff("NocturnPeranoia"))
+                    if(Player.HasBuff2("NocturnPeranoia"))
                         R.Cast(target);
                     else
                         R.Cast();

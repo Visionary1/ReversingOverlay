@@ -166,7 +166,7 @@ namespace ALL_In_One.champions
             if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
                 return;
 
-            var Minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy);
+            var Minions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
 
             if (Minions.Count <= 0)
                 return;
@@ -179,7 +179,7 @@ namespace ALL_In_One.champions
             if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 return;
 
-            var Mobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var Mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (Mobs.Count <= 0)
                 return;

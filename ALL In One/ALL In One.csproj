@@ -132,7 +132,7 @@
     <Compile Include="champions\Lulu.cs" />
     <Compile Include="champions\_Lux.cs" />
     <Compile Include="champions\_Malphite.cs" />
-    <Compile Include="champions\_Malzahar.cs" />
+    <Compile Include="champions\Malzahar.cs" />
     <Compile Include="champions\_Maokai.cs" />
     <Compile Include="champions\MasterYi.cs" />
     <Compile Include="champions\MissFortune.cs" />

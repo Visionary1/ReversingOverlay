@@ -17,7 +17,7 @@ namespace ALL_In_One.champions
 
         static Spell Q, W, E, R;
 
-        static bool QisActive { get { return Player.HasBuff("JinxQ", true); } }
+        static bool QisActive { get { return Player.HasBuff2("JinxQ", true); } }
 
         const int DefaultRange = 590;
 

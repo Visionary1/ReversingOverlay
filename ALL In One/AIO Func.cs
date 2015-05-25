@@ -27,7 +27,21 @@ namespace ALL_In_One
 
             return Collision.GetCollision(new List<SharpDX.Vector3> { targetPos }, input).OrderBy(obj => obj.Distance(source, false)).ToList();
         }
-
+        
+        internal static bool HasBuff2(this Obj_AI_Base unit,
+            string buffName,
+            bool dontUseDisplayName = false)
+        {
+            return
+                unit.Buffs.Any(
+                    buff =>
+                        ((dontUseDisplayName &&
+                          String.Equals(buff.Name, buffName, StringComparison.CurrentCultureIgnoreCase)) ||
+                         (!dontUseDisplayName &&
+                          String.Equals(buff.DisplayName, buffName, StringComparison.CurrentCultureIgnoreCase))) &&
+                        buff.IsValidBuff());
+        }
+        
         internal static BuffInstance getBuffInstance(Obj_AI_Base target, string buffName)
         {
             return target.Buffs.Find(x => x.Name == buffName && x.IsValidBuff());

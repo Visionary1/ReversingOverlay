@@ -18,8 +18,8 @@ namespace ALL_In_One.champions
         static Spell Q, W, E, R;
         
         static bool E1isReady { get { return Player.Spellbook.GetSpell(SpellSlot.E).Name == "GarenE" && E.IsReady(); } }
-        static bool QisOn { get { return Player.HasBuff("GarenQ", true); } }
-        static bool imSpinning { get { return Player.HasBuff("GarenE", true); } }
+        static bool QisOn { get { return Player.HasBuff2("GarenQ", true); } }
+        static bool imSpinning { get { return Player.HasBuff2("GarenE", true); } }
 
         public static void Load()
         {

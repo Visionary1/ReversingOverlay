@@ -8,26 +8,25 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class Xerath// By RL244 
+    class Malzahar// By RL244 
     {
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
         static bool RM {get{return Menu.Item("Combo.Use MR").GetValue<KeyBind>().Active; }}
-        static float LastPingTime = 0;
+
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 1550, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 1000, TargetSelector.DamageType.Magical);
-            E = new Spell(SpellSlot.E, 1100, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 675, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 900f, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 800f, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, 650f, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 700f, TargetSelector.DamageType.Magical);
 
-            Q.SetSkillshot(0.6f, 100f, float.MaxValue, false, SkillshotType.SkillshotLine);
-            W.SetSkillshot(0.7f, 125f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            E.SetSkillshot(0.25f, 60f, 1400f, true, SkillshotType.SkillshotLine);
-            R.SetSkillshot(0.7f, 120f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            Q.SetCharged("XerathArcanopulseChargeUp", "XerathArcanopulseChargeUp", 750, 1550, 1.5f);
+            Q.SetSkillshot(1f, 85f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            W.SetSkillshot(0.25f, 250f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            E.SetTargetted(0.25f, float.MaxValue);
+            R.SetTargetted(0.25f, float.MaxValue);
             
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
@@ -38,20 +37,19 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE();
-            AIO_Menu.Champion.Harass.addIfMana(20);
+            AIO_Menu.Champion.Harass.addIfMana();
             
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW();
-            AIO_Menu.Champion.Laneclear.addIfMana(20);
+            AIO_Menu.Champion.Laneclear.addUseE();
+            AIO_Menu.Champion.Laneclear.addIfMana();
 
             AIO_Menu.Champion.Jungleclear.addUseQ();
             AIO_Menu.Champion.Jungleclear.addUseW();
             AIO_Menu.Champion.Jungleclear.addUseE();
-            AIO_Menu.Champion.Jungleclear.addIfMana(20);
+            AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
-            AIO_Menu.Champion.Misc.addItem("Ping Notify on R killable enemies (local/client side)", true);
-            AIO_Menu.Champion.Misc.addItem("KillstealW", true);
             AIO_Menu.Champion.Misc.addItem("KillstealE", true);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
@@ -67,6 +65,7 @@ namespace ALL_In_One.champions
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
+            Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -74,49 +73,72 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
                 
-            R.Range = 2000 + R.Level * 1200;
+            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
+            {
+                if (target.IsValidTarget(R.Range) && AIO_Func.isKillable(target,(E.IsReady() ? E.GetDamage2(target) : 0f) + R.GetDamage2(target)))
+                {
+                    AIO_Func.SC(R);
+                }
+            }
             
             if (Orbwalking.CanMove(35))
             {
+
                 AIO_Func.SC(Q);
                 AIO_Func.SC(W);
-                AIO_Func.SC(E,0,0);
+                AIO_Func.SC(E);
             }
             
-            if(Player.HasBuff2("XerathLocusOfPower2", true) ||(Player.LastCastedSpellName() == "XerathLocusOfPower2" && Utils.TickCount - Player.LastCastedSpellT() < 500))
-            AIO_Func.SC(R);
-
             #region Killsteal
-            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealW"))
-                KillstealW();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
                 KillstealE();
             #endregion
             ManualR();
-            
-            #region Ping Notify on R killable enemies
-            if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Ping Notify on R killable enemies (local/client side)"))
-            {
-                if (LastPingTime + 333 < Utils.TickCount) //궁 2방으로 잡을수 있는 적 핑찍기.
-                {
-                    foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && AIO_Func.isKillable(x, R.GetDamage2(x)*2)))
-                        Game.ShowPing(PingCategory.Normal, target.Position, true);
-
-                    LastPingTime = Utils.TickCount;
-                }
-            } 
-            #endregion
         }
         
         static void ManualR()
         {
             var RTarget = TargetSelector.GetTarget(R.Range, R.DamageType, true);
-            if(RM && RTarget != null && R.IsReady() && Player.HasBuff2("XerathLocusOfPower2", true) ||(Player.LastCastedSpellName() == "XerathLocusOfPower2" && Utils.TickCount - Player.LastCastedSpellT() < 500))
+            if(RM && RTarget != null && R.IsReady())
             {
-                R.CCast(RTarget);
+                R.Cast(RTarget);
             }
         }
+        
+        static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!sender.IsMe || Player.IsDead)
+                return;
 
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            {
+                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
+                {
+                    var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
+                    if(Qtarget != null && AIO_Func.isKillable(Qtarget, Q.GetDamage2(Qtarget) + (AIO_Menu.Champion.Combo.UseW ? W.GetDamage2(Qtarget)*4 : 0f) + (AIO_Menu.Champion.Combo.UseE ? E.GetDamage2(Qtarget) : 0f) + (AIO_Menu.Champion.Combo.UseR && R.IsReady() ? R.GetDamage2(Qtarget) : 0f) + (float)Player.GetAutoAttackDamage2(Qtarget, true)*3))
+                    {
+                        if(AIO_Menu.Champion.Combo.UseR && R.IsReady())
+                        R.Cast(Qtarget);
+                    }
+                }
+                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.E).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
+                {
+                    var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
+                    if(Etarget != null && AIO_Func.isKillable(Etarget, E.GetDamage2(Etarget) + (AIO_Menu.Champion.Combo.UseW ? W.GetDamage2(Etarget)*4 : 0f) + (AIO_Menu.Champion.Combo.UseQ ? Q.GetDamage2(Etarget) : 0f) +(AIO_Menu.Champion.Combo.UseR && R.IsReady() ? R.GetDamage2(Etarget) : 0f) + (float)Player.GetAutoAttackDamage2(Etarget, true)*3))
+                    {
+                        if(AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
+                        Q.Cast(Etarget.ServerPosition);
+                    }
+                }
+                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.R).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(R.Range)))
+                {
+                    Orbwalker.SetMovement(false);
+                }
+                else
+                Orbwalker.SetMovement(true);
+            }
+        }
+        
         static void Drawing_OnDraw(EventArgs args)
         {
             if (Player.IsDead)
@@ -142,8 +164,8 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
                 return;
 
-            if (E.CanCast(gapcloser.Sender))
-                E.Cast(gapcloser.End);
+            if (Q.CanCast(gapcloser.Sender))
+                Q.Cast(gapcloser.End);
         }
         
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -151,17 +173,8 @@ namespace ALL_In_One.champions
             if (!AIO_Menu.Champion.Misc.UseInterrupter || Player.IsDead)
                 return;
 
-            if (E.CanCast(sender))
-                E.Cast(sender);
-        }
-        
-        static void KillstealW()
-        {
-            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
-            {
-                if (W.CanCast(target) && AIO_Func.isKillable(target, W))
-                    W.CCast(target);
-            }
+            if (Q.CanCast(sender))
+                Q.Cast(sender);
         }
         
         static void KillstealE()
@@ -169,7 +182,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (E.CanCast(target) && AIO_Func.isKillable(target, E))
-                    E.LCast(target,0,0);
+                    E.Cast(target);
             }
         }
         
@@ -187,7 +200,7 @@ namespace ALL_In_One.champions
                 damage += E.GetDamage2(enemy);
                 
             if (R.IsReady())
-                damage += R.GetDamage2(enemy)*3;
+                damage += R.GetDamage2(enemy);
                 
             if(!Player.IsWindingUp)
                 damage += (float)Player.GetAutoAttackDamage2(enemy, true);

@@ -155,7 +155,7 @@ namespace ALL_In_One.champions
             {
                 var Q2target = TargetSelector.GetTarget(Q2.Range, TargetSelector.DamageType.Physical);
                 
-                if(Q2target != null && Q2target.HasBuff("urgotcorrosivedebuff"))
+                if(Q2target != null && Q2target.HasBuff2("urgotcorrosivedebuff"))
                 {
                     Q2.Cast(Q2target);
                     if(W.IsReady() && AIO_Menu.Champion.Combo.UseW)
@@ -194,7 +194,7 @@ namespace ALL_In_One.champions
             {
                 var Q2target = TargetSelector.GetTarget(Q2.Range, TargetSelector.DamageType.Physical);
                 
-                if(Q2target != null && Q2target.HasBuff("urgotcorrosivedebuff"))
+                if(Q2target != null && Q2target.HasBuff2("urgotcorrosivedebuff"))
                 {
                     Q2.Cast(Q2target);
                 }
@@ -220,7 +220,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
             {
-                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(x => x.HasBuff("urgotcorrosivedebuff") && AIO_Func.isKillable(x,Q,0) && AIO_Func.PredHealth(x,Q) > 0).FirstOrDefault();
+                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(x => x.HasBuff2("urgotcorrosivedebuff") && AIO_Func.isKillable(x,Q,0) && AIO_Func.PredHealth(x,Q) > 0).FirstOrDefault();
                 var qTarget = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault(x => AIO_Func.isKillable(x,Q,0) && AIO_Func.PredHealth(x,Q) > 0);
                 if(Q2t != null)
                 {
@@ -246,7 +246,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
             {
-                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.HasBuff("urgotcorrosivedebuff"));
+                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.HasBuff2("urgotcorrosivedebuff"));
                 if(Q2t != null)
                 {
                     Q2.Cast(Q2t);
@@ -273,7 +273,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
             {
-                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.HasBuff("urgotcorrosivedebuff"));
+                var Q2t = MinionManager.GetMinions(Q2.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.HasBuff2("urgotcorrosivedebuff"));
                 if(Q2t != null)
                 {
                     Q2.Cast(Q2t);

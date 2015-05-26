@@ -38,7 +38,7 @@ namespace ALL_In_One.champions
             Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.QD", "Q Distance")).SetValue(new Slider(150, 0, 600));
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
-            AIO_Menu.Champion.Combo.addItem("R Usage For Solo Target(Killsteal R Needed)", false);
+            AIO_Menu.Champion.Combo.addItem("R Usage For Solo Target", false);
             
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE();
@@ -138,7 +138,7 @@ namespace ALL_In_One.champions
 
         static bool IsOnHit(string name)
         {
-            return !(name.ToLower().Contains("tower")) &&!(name.ToLower().Contains("turret")) && !(name.ToLower().Contains("mini")) && !(name.ToLower().Contains("minion")) && (name.ToLower().Contains("attack")) && !NoAttacks.Contains(name.ToLower()) ||
+            return !name.ToLower().Contains("tower") &&!name.ToLower().Contains("turret") && !name.ToLower().Contains("mini") && !name.ToLower().Contains("minion") && name.ToLower().Contains("attack") && !NoAttacks.Contains(name.ToLower()) ||
             Attacks.Contains(name.ToLower()) || AttackResets.Contains(name.ToLower()) || OHSP.Contains(name.ToLower());
         }
 
@@ -151,7 +151,7 @@ namespace ALL_In_One.champions
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !AIO_Menu.Champion.Combo.UseW || !AIO_Menu.Champion.Harass.UseW ||
             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && !(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
             return;
-            if ((Player.Level == 1 && Player.HealthPercent < 100 && Mobs.Count >= 1 || Player.Level > 1 && Mobs.Count >= 1) && IsOnHit(args.SData.Name) && args.Target.IsMe && !sender.IsAlly && W.IsReady() && Player.Distance(args.End) < 40 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (HeroTargets == null && (Player.Level == 1 && Player.HealthPercent < 100 && Mobs.Count >= 1 || Player.Level > 1 && Mobs.Count >= 1) && IsOnHit(args.SData.Name) && args.Target.IsMe && !sender.IsAlly && W.IsReady() && Player.Distance(args.End) < 40 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             W.Cast(); //1렙일때 만피로 정글에 W쓰는건 정글링 효율 떨어지기에 이렇게함.
             if (HeroTargets != null && IsOnHit(args.SData.Name) && args.Target.IsMe && !sender.IsAlly && W.IsReady())
             W.Cast(); //1렙일때 만피로 정글에 W쓰는건 정글링 효율 떨어지기에 이렇게함.
@@ -174,7 +174,7 @@ namespace ALL_In_One.champions
                 var qd = Menu.Item("Combo.QD").GetValue<Slider>().Value;
                 var qTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
                 var Q2T = TargetSelector.GetTarget(Q.Range * 2, Q.DamageType);
-                var QM = MinionManager.GetMinions(Q2T.ServerPosition, 550f, MinionTypes.All, MinionTeam.NotAlly).FirstOrDefault(x => x.Distance(Player.ServerPosition) <= Q.Range && x.Distance(Player.ServerPosition) >= Q.Range-150f);
+                var QM = (Q2T != null ? MinionManager.GetMinions(Q2T.ServerPosition, 550f, MinionTypes.All, MinionTeam.NotAlly).FirstOrDefault(x => x.Distance(Player.ServerPosition) <= Q.Range && x.Distance(Player.ServerPosition) >= Q.Range-150f) : null);
 
                 if(qTarget != null && (qTarget.Distance(Player.ServerPosition) >= qd || getQBuffDuration < 1))
                     Q.Cast(qTarget);

@@ -87,6 +87,35 @@ namespace ALL_In_One
             PassiveDamage p;
 
             #region PassiveDamages
+
+            #region Nashors_Tooth // By Rl244 리치베인 광휘의검 삼위일체 얼어붙은 건틀릿도 추가해야함. 왜이렇게 없는게 많을까.
+            p = new PassiveDamage
+            {
+                ChampionName = ObjectManager.Player.ChampionName,
+                IsActive = (source, target) => (Items.HasItem((int)ItemId.Nashors_Tooth,source)), 
+                GetDamage =
+                    (source, target) =>
+                        (float)
+                            source.CalcDamage(
+                                target, DamageType.Magical, 
+                                15 + (float)0.15d * source.FlatMagicDamageMod),
+            };
+            AttackPassives.Add(p);
+            #endregion
+            
+            #region Wits_End // By Rl244
+            p = new PassiveDamage
+            {
+                ChampionName = ObjectManager.Player.ChampionName,
+                IsActive = (source, target) => (Items.HasItem((int)ItemId.Wits_End,source)), 
+                GetDamage =
+                    (source, target) =>
+                        (float)
+                            source.CalcDamage(
+                                target, DamageType.Magical, 42),
+            };
+            AttackPassives.Add(p);
+            #endregion
             
             #region Slayer // By Rl244
             p = new PassiveDamage

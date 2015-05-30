@@ -107,7 +107,7 @@ namespace ALL_In_One
         {
             if(spell != null && target !=null)
             {
-                var pred = Prediction.GetPrediction(target, spell.Delay, spell.Range, spell.Speed);
+                var pred = Prediction.GetPrediction(target, spell.Delay > 0 ? spell.Delay : 0.25f, spell.Range);
                 if (pred.Hitchance >= HitChance.High && pred.UnitPosition.Distance(Player.ServerPosition) <= spell.Range)
                 {
                     spell.Cast();

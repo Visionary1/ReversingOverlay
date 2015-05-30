@@ -2073,6 +2073,16 @@ namespace ALL_In_One
                             (source, target, level) =>
                                 new double[] { 20, 65, 110, 155, 200 }[level] + 1 * source.FlatPhysicalDamageMod
                     },
+                    //Q - Ranged Max Damage
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.Q,
+                        Stage = 2,
+                        DamageType = DamageType.Physical,
+                        Damage =
+                            (source, target, level) =>
+                                (new double[] { 60, 115, 170, 225, 280 }[level] + 1.2 * source.FlatPhysicalDamageMod) * 1.4f
+                    },
                     //W - per second
                     new DamageSpell
                     {
@@ -2089,7 +2099,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                (new double[] { 8, 11, 14, 17, 20 }[level] / 100) * target.MaxHealth +
+                                new double[] { 8, 11, 14, 17, 20 }[level] / 100 * target.MaxHealth +
                                 1 * source.FlatPhysicalDamageMod
                     },
                 });

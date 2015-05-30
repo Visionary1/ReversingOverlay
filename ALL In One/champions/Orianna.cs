@@ -31,7 +31,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
-            AIO_Menu.Champion.Combo.addItem("R Min Targets", new Slider(1, 2, 5));
+            AIO_Menu.Champion.Combo.addItem("R Min Targets", new Slider(1, 1, 5));
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();

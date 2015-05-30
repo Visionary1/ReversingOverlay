@@ -129,7 +129,7 @@ namespace ALL_In_One.champions
 
             if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseQ || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseQ))
             {
-                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.E).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)))
+                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.E).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(Q.Range)) && Q.IsReady())
                 {
                     var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
                     AIO_Func.LCast(Q,Qtarget,QD,float.MaxValue);
@@ -137,7 +137,7 @@ namespace ALL_In_One.champions
             }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee)
             {
-                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.E).Name)
+                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.E).Name && Q.IsReady())
                 {
                     AIO_Func.FleeToPosition(Q);
                 }

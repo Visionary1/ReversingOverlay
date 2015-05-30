@@ -357,6 +357,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Malzahar.Load();
                     break;
+                case "Jayce":
+                    MadeBy(Developer.RL244);
+                    champions.Jayce.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

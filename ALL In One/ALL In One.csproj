@@ -113,7 +113,7 @@
     <Compile Include="champions\Janna.cs" />
     <Compile Include="champions\JarvanIV.cs" />
     <Compile Include="champions\Jax.cs" />
-    <Compile Include="champions\_Jayce.cs" />
+    <Compile Include="champions\Jayce.cs" />
     <Compile Include="champions\Jinx.cs" />
     <Compile Include="champions\Kalista.cs" />
     <Compile Include="champions\Karma.cs" />

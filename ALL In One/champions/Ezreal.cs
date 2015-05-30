@@ -16,7 +16,8 @@ namespace ALL_In_One.champions
         static float QD {get{return Menu.Item("Misc.Qtg").GetValue<Slider>().Value; }}
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}} // 확실히 필요함. 특히 논타겟 챔프 타겟 선정 범위 사용자가 설정하게 하기 위해서도.
         static float LastPingTime = 0;
-        
+        static bool RM {get{return Menu.Item("Combo.Use MR").GetValue<KeyBind>().Active; }}
+
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 1150f, TargetSelector.DamageType.Physical);
@@ -33,6 +34,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
+            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.Use MR", "Use R(Manual)")).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press, false));
 
             AIO_Menu.Champion.Harass.addAuto();
             AIO_Menu.Champion.Harass.addUseQ();
@@ -109,6 +111,16 @@ namespace ALL_In_One.champions
                 }
             } 
             #endregion
+            ManualR();
+        }
+        
+        static void ManualR()
+        {
+            var RTarget = TargetSelector.GetTarget(3000f, R.DamageType, true);
+            if(RM && RTarget != null && R.IsReady())
+            {
+                AIO_Func.LCast(R,RTarget);
+            }
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -136,7 +148,7 @@ namespace ALL_In_One.champions
         
         static void AA()
         {
-            AIO_Func.AACb(Q);
+            AIO_Func.AACb(Q,QD,0f);
         }
         
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -146,7 +158,7 @@ namespace ALL_In_One.champions
             if (!unit.IsMe || Target == null)
                 return;
 
-            AIO_Func.AALcJc(Q);
+            AIO_Func.AALcJc(Q,QD,0f);
 
             
             AA();

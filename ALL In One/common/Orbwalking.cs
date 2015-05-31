@@ -520,7 +520,9 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 _config.AddItem(
                     new MenuItem("LastHit", "Last hit").SetValue(new KeyBind('X', KeyBindType.Press)));
 
-                _config.AddItem(new MenuItem("Farm", "Mixed").SetValue(new KeyBind('C', KeyBindType.Press)));
+                _config.AddItem(new MenuItem("Harass", "Mixed").SetValue(new KeyBind('C', KeyBindType.Press)));
+                
+                _config.AddItem(new MenuItem("Harass.MLH", "Mixed + Lasthit").SetValue(true));
 
                 _config.AddItem(
                     new MenuItem("LaneClear", "LaneClear").SetValue(new KeyBind('V', KeyBindType.Press)));
@@ -563,7 +565,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                         return OrbwalkingMode.LaneClear;
                     }
 
-                    if (_config.Item("Farm").GetValue<KeyBind>().Active)
+                    if (_config.Item("Harass").GetValue<KeyBind>().Active)
                     {
                         return OrbwalkingMode.Mixed;
                     }
@@ -643,7 +645,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 }
 
                 /*Killable Minion*/
-                if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed ||
+                if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed && _config.Item("Harass.MLH").GetValue<bool>() || //미니언 킬 하레스..!!
                     ActiveMode == OrbwalkingMode.LastHit)
                 {
                     foreach (var minion in

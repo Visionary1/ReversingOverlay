@@ -67,7 +67,7 @@ namespace ALL_In_One
             }
         }
         
-        internal static void LCast(this Spell spell, Obj_AI_Base target, float alpha = 0f, float colmini = float.MaxValue, bool HeroOnly = false) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
+        internal static void LCast(this Spell spell, Obj_AI_Base target, float alpha = 0f, float colmini = float.MaxValue, bool HeroOnly = false, float BombRadius = 0f) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
         {                            //        AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue); <- 이런식으로 사용.
             if(spell.Type == SkillshotType.SkillshotLine)
             {
@@ -77,10 +77,29 @@ namespace ALL_In_One
                     var collision = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
                     //var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
                     var minioncol = collision.Count(x => (HeroOnly == false ? x.IsMinion : (x is Obj_AI_Hero)));
+                    SharpDX.Vector2 EditedVec = pred.UnitPosition.To2D() -
+                                               SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - target.ServerPosition.To2D()) * (spell.Width / 2);
 
-                    if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol <= colmini && pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
+                    var collision2 = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { EditedVec });
+                    var minioncol2 = collision2.Count(x => (HeroOnly == false ? x.IsMinion : (x is Obj_AI_Hero)));
+
+
+                    if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                     {
-                        spell.Cast(pred.CastPosition);
+                        if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol2 <= colmini)
+                        {
+                            spell.Cast(EditedVec);
+                        }
+                        else if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol <= colmini)
+                        {
+                            spell.Cast(pred.CastPosition);
+                        }
+                        else if(false == spell.Collision && colmini < 1 && minioncol >= 1)
+                        {
+                            var FirstMinion = collision.OrderBy(o => o.Distance(Player.ServerPosition)).FirstOrDefault();
+                            if(FirstMinion.ServerPosition.Distance(pred.UnitPosition) <= BombRadius / 2)
+                            spell.Cast(pred.CastPosition);
+                        }
                     }
                 }
             }
@@ -133,6 +152,8 @@ namespace ALL_In_One
                                                SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (spell.Range);
                     SharpDX.Vector2 castVec3 = TH.ServerPosition.To2D() -
                                                SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (100f);
+                    SharpDX.Vector2 EditedVec = pred.UnitPosition.To2D() -
+                                               SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - TH.ServerPosition.To2D()) * (spell.Width / 2);
                     if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                     {
                         if(TH.Distance(Player.ServerPosition) >= spell.Range)
@@ -144,7 +165,7 @@ namespace ALL_In_One
                             else if(AIO_Func.CanHit(spell,TH,Drag) && pred.UnitPosition.Distance(TH.ServerPosition) < 350)
                             {
                                 if(pred.UnitPosition.Distance(Player.ServerPosition) > spell.Range)
-                                spell.Cast(castVec2,pred.UnitPosition.To2D());
+                                spell.Cast(castVec2,EditedVec);//pred.UnitPosition.To2D());
                             }
                         }
                         else

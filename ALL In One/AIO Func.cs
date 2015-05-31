@@ -266,7 +266,7 @@ namespace ALL_In_One
             }
         }
         
-        internal static void SC(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //
+        internal static void SC(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f, float BombRadius = 0f) //
         { // 
             var target = TargetSelector.GetTarget(Math.Max(spell.Range,Orbwalking.GetRealAutoAttackRange(Player)), (spell.DamageType), true); //
             bool HM = true;
@@ -294,11 +294,11 @@ namespace ALL_In_One
                         if(spell.IsSkillshot)
                         {
                             if(spell.Type == SkillshotType.SkillshotLine)
-                            LCast(spell,target,ExtraTargetDistance,ALPHA);
+                            LCast(spell,target,ExtraTargetDistance,ALPHA,false,BombRadius);
                             else if(spell.Type == SkillshotType.SkillshotCircle)
                             {
-                            var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width/2, spell.DamageType, true);
-                            CCast(spell,ctarget);
+                                var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width/2, spell.DamageType, true);
+                                CCast(spell,ctarget);
                             }
                             else if(spell.Type == SkillshotType.SkillshotCone)
                             spell.ConeCast(target,ExtraTargetDistance,ALPHA);
@@ -326,7 +326,7 @@ namespace ALL_In_One
                         if(spell.IsSkillshot)
                         {
                             if(spell.Type == SkillshotType.SkillshotLine)
-                            LCast(spell,target,ExtraTargetDistance,ALPHA);
+                            LCast(spell,target,ExtraTargetDistance,ALPHA,false,BombRadius);
                             else if(spell.Type == SkillshotType.SkillshotCircle)
                             {
                             var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width/2, spell.DamageType, true);
@@ -359,7 +359,7 @@ namespace ALL_In_One
                             if(spell.IsSkillshot)
                             {
                                 if(spell.Type == SkillshotType.SkillshotLine)
-                                LCast(spell,target,ExtraTargetDistance,ALPHA);
+                                LCast(spell,target,ExtraTargetDistance,ALPHA,false,BombRadius);
                                 else if(spell.Type == SkillshotType.SkillshotCircle)
                                 {
                                 var ctarget = TargetSelector.GetTarget(spell.Range + spell.Width/2, spell.DamageType, true);
@@ -397,7 +397,7 @@ namespace ALL_In_One
                         if(spell.IsSkillshot)
                         {
                             if(spell.Type == SkillshotType.SkillshotLine)
-                            LCast(spell,Mobs[0],ExtraTargetDistance,ALPHA);
+                            LCast(spell,Mobs[0],ExtraTargetDistance,ALPHA,false,BombRadius);
                             else if(spell.Type == SkillshotType.SkillshotCircle)
                             CCast(spell,Mobs[0]);
                             else if(spell.Type == SkillshotType.SkillshotCone)
@@ -427,7 +427,7 @@ namespace ALL_In_One
                             if(spell.Type == SkillshotType.SkillshotLine)
                             {
                                 if(ALPHA > 1f)
-                                LCast(spell,Minions[0],ExtraTargetDistance,ALPHA);
+                                LCast(spell,Minions[0],ExtraTargetDistance,ALPHA,false,BombRadius);
                                 else
                                 LH(spell, ALPHA);
                             }
@@ -670,9 +670,9 @@ namespace ALL_In_One
         {
             AIO_Pred.CCast(spell,target);
         }
-        internal static void LCast(Spell spell, Obj_AI_Base target, float alpha = 0f, float colmini = float.MaxValue, bool HeroOnly = false) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
+        internal static void LCast(Spell spell, Obj_AI_Base target, float alpha = 0f, float colmini = float.MaxValue, bool HeroOnly = false, float BombRadius = 0f) //for Linar spells  사용예시 AIO_Func.LCast(Q,Qtarget,50,0)  
         {
-            AIO_Pred.LCast(spell,target,alpha,colmini,HeroOnly );
+            AIO_Pred.LCast(spell,target,alpha,colmini,HeroOnly,BombRadius);
         }
         internal static void RMouse(Spell spell)
         {

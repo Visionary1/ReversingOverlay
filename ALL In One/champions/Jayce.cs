@@ -14,6 +14,7 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R, RQ, RW, RE, REQ;
+        static int RQTime = 0;
         static bool HAMMER {get{return Player.HasBuff2("jaycestancehammer"); }}
         static bool QEM {get{return Menu.Item("Combo.Use QEM").GetValue<KeyBind>().Active; }}
 
@@ -22,16 +23,16 @@ namespace ALL_In_One.champions
             Q = new Spell(SpellSlot.Q, 600f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W, 285f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 300f, TargetSelector.DamageType.Magical);
-            RQ = new Spell(SpellSlot.Q, 1200f, TargetSelector.DamageType.Physical); // 1050
-            REQ = new Spell(SpellSlot.Q, 1680f, TargetSelector.DamageType.Physical); // 1470
+            RQ = new Spell(SpellSlot.Q, 1150f, TargetSelector.DamageType.Physical); // 1050
+            REQ = new Spell(SpellSlot.Q, 1610f, TargetSelector.DamageType.Physical); // 1470
             RW = new Spell(SpellSlot.W, 500f, TargetSelector.DamageType.Physical);
             RE = new Spell(SpellSlot.E, 650f, TargetSelector.DamageType.Physical);
             R = new Spell(SpellSlot.R);
             
             Q.SetTargetted(0.25f, float.MaxValue);
             E.SetTargetted(0.25f, float.MaxValue);
-            RQ.SetSkillshot(0.25f, 70f, 1450f, true, SkillshotType.SkillshotLine);
-            REQ.SetSkillshot(0.25f, 70f, 2030f, true, SkillshotType.SkillshotLine);
+            RQ.SetSkillshot(0.25f, 80f, 1450f, false, SkillshotType.SkillshotLine); //true 했다가 false로 고침. 이는 폭발 반경을 이용하기 위함.
+            REQ.SetSkillshot(0.25f, 80f, 2030f, false, SkillshotType.SkillshotLine);
             RE.SetSkillshot(0.25f, 20f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
             AIO_Menu.Champion.Flee.addUseE();
@@ -80,7 +81,6 @@ namespace ALL_In_One.champions
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
-            MissileClient.OnCreate += MissileClient_OnCreate;
             Spellbook.OnCastSpell += OnCastSpell;
         }
 
@@ -103,7 +103,7 @@ namespace ALL_In_One.champions
             {
                 foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
                 {
-                    if (E.CanCast(target) && HAMMER && R.IsReady())
+                    if (E.CanCast(target) && HAMMER && (R.IsReady() || !Player.HasBuff2("jaycehypercharge") && !Q.IsReady()))
                     E.Cast(target);
                 }
             }
@@ -120,13 +120,10 @@ namespace ALL_In_One.champions
                 {
                     AIO_Func.SC(RW);
                     if(!E.IsReady())
-                    AIO_Func.SC(RQ,0f,0f);
+                    AIO_Func.SC(RQ,0f,0f,1f,150f); // 폭발범위 확인필요함.
                     else
                     {
-                        var Target = TargetSelector.GetTarget(REQ.Range, Q.DamageType, true);
-                        AIO_Func.SC(REQ,0f,0f);
-                        if(Target != null && !Q.IsReady())
-                        E.Cast(getParalelVec(Target.ServerPosition));
+                        AIO_Func.SC(REQ,0f,0f,1f,210f);
                     }
                 }
             }
@@ -143,6 +140,7 @@ namespace ALL_In_One.champions
                 KillstealQ();
                 
             ManualQE();
+            AutoRE();
             if (AIO_Menu.Champion.Misc.getBoolValue("AutoR"))
                 AutoR();
         }
@@ -190,7 +188,15 @@ namespace ALL_In_One.champions
             if (E.CanCast(sender) && !HAMMER)
                 R.Cast();
         }
-        
+        static void AutoRE()
+        {
+            if(RQTime - Utils.GameTimeTickCount + 250 >= 0 && (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed))
+            {
+                var Target = TargetSelector.GetTarget(REQ.Range, Q.DamageType, true);
+                if(Target != null && !HAMMER)
+                E.Cast(getParalelVec(Target.ServerPosition));
+            }
+        }
         static void AutoR()
         {
             var Target = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
@@ -225,22 +231,6 @@ namespace ALL_In_One.champions
             }
         }
         
-        private static void MissileClient_OnCreate(GameObject sender, EventArgs args)
-        {
-            var missile = sender as MissileClient;
-            if (missile != null && missile.SpellCaster.IsMe && (IsJayceQ(missile.SData.Name) || missile.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name) && !HAMMER && RE.IsReady()) //공식 커먼에서도 문제있던 미사일 부분. 어쩌면 아직 문제소지 남아있을수도
-            {
-                AIO_Func.sendDebugMsg("제이스 미사일 개같은!! 넘 !!");
-                if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseE || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseE))
-                RE.Cast(getParalelVec(missile.Position));
-            }
-        }
-        
-        public static bool IsJayceQ(string name) //JayceShockBlastMis JayceShockBlastWallMis
-        {
-            return name.ToLower().Contains("jayceshockblast");
-        }
-        
         static void OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
         {
             if (!sender.Owner.IsMe)
@@ -264,10 +254,11 @@ namespace ALL_In_One.champions
                 if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(REQ.Range)) && RE.IsReady() && !HAMMER)
                 {
                     //var Etarget = TargetSelector.GetTarget(REQ.Range, Q.DamageType);
-                    Utility.DelayAction.Add(
-                            (int)(RQ.Delay), () => RE.Cast(getParalelVec(args.End)));
                     //Utility.DelayAction.Add(
-                    //        (int)(RQ.Delay), () => AIO_Func.sendDebugMsg("제이스 개같은 넘 !!"));
+                    //        (int)(RQ.Delay), () => RE.Cast(getParalelVec(args.End)));
+                    RQTime = Utils.GameTimeTickCount;
+                    Utility.DelayAction.Add(
+                            (int)(RQ.Delay), () => AIO_Func.sendDebugMsg("제이스 개같은 넘 !!"));
                     //if(Etarget != null)
 
                 }

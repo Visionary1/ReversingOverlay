@@ -33,7 +33,7 @@ namespace ALL_In_One.champions
             
             Q.SetTargetted(0.25f, 2000f);
             W.SetSkillshot(1.5f, 200f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            E.SetSkillshot(0.25f, 160f, 780f, false, SkillshotType.SkillshotLine); // 550f + 700f
+            E.SetSkillshot(0.25f, 80f, 780f, false, SkillshotType.SkillshotLine); // 550f + 700f
             R.SetSkillshot(0.25f, 325f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             
             AIO_Menu.Champion.Combo.addUseQ();

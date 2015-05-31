@@ -24,7 +24,7 @@ namespace ALL_In_One.champions
 
             Q.SetSkillshot(0.3f, 250f, 1000f, false, SkillshotType.SkillshotCircle);
             W.SetSkillshot(0.25f, 100f, 650f, false, SkillshotType.SkillshotLine);
-            R.SetSkillshot(0.25f, 60f, 2000f, true, SkillshotType.SkillshotLine);
+            R.SetSkillshot(0.25f, 60f, 2000f, false, SkillshotType.SkillshotLine); //false로 함은 어짜피 AIO_Func.에서 충돌 관련해서 다 확인하기 때문
             
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW(false);
@@ -77,7 +77,7 @@ namespace ALL_In_One.champions
                 AIO_Func.SC(Q);
                 AIO_Func.SC(W);
                 AIO_Func.SC(E);
-                AIO_Func.SC(R,0f,0f);
+                AIO_Func.SC(R,0f,0f,1f,150f);
                 AIO_Func.FleeToPosition(W);
             }
 

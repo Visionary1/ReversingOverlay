@@ -72,12 +72,12 @@ namespace ALL_In_One.champions
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                     Harass();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-                {
-                    Laneclear();
-                    Jungleclear();
-                }
+            }
+            
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear) //빼놔야 평타와 상관없이 막타침.
+            {
+                Laneclear();
+                Jungleclear();
             }
 
             #region Call Killsteal

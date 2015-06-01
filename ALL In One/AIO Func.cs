@@ -40,6 +40,9 @@ namespace ALL_In_One
                 return;
             var HeroSender = sender as Obj_AI_Hero;
             var Target = args.Target as Obj_AI_Hero;
+            if (HeroSender == null)
+                return;
+                
             if (HeroSender != null && !Orbwalking.IsOnHit(args.SData.Name) && Target.IsAlly && !HeroSender.IsAlly && Target.Distance(Player.ServerPosition) <= 1000)
             {
                 ShieldTarget = Target;

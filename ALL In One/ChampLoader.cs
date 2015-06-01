@@ -133,10 +133,10 @@ namespace ALL_In_One
                     MadeBy(Developer.xcsoft);
                     champions.Karthus.Load();
                     break;
-                /*case "Karma":
+                case "Karma":
                     MadeBy(Developer.RL244);// Work In Progress
                     champions.Karma.Load();
-                    break;*/
+                    break;
                 case "Jax":
                     MadeBy(Developer.RL244);
                     champions.Jax.Load();
@@ -217,10 +217,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Yorick.Load();
                     break;
-                /*case "Renekton": 
+                case "Renekton": 
                     MadeBy(Developer.RL244); // Work In Progress
                     champions.Renekton.Load();
-                    break;*/
+                    break;
                 case "Rengar":
                     MadeBy(Developer.RL244);
                     champions.Rengar.Load();

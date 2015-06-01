@@ -2222,10 +2222,20 @@ namespace ALL_In_One
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 60, 110, 160, 210, 260 }[level] + 0.6 * source.FlatMagicDamageMod
+                                new double[] { 60, 110, 160, 210, 260 }[level] + 0.9 * source.FlatMagicDamageMod
                     },
-                    //W - mantra
+                    //W - Per Tick
                     new DamageSpell
+                    {
+                        Slot = SpellSlot.W,
+                        Stage = 1,
+                        DamageType = DamageType.Magical,
+                        Damage =
+                            (source, target, level) =>
+                                (new double[] { 60, 110, 160, 210, 260 }[level] + 0.9 * source.FlatMagicDamageMod) / 3
+                    },
+                    //W - mantra 만트라 W 역시 더이상 데미지 없다.
+                    /*new DamageSpell
                     {
                         Slot = SpellSlot.W,
                         Stage = 1,
@@ -2235,9 +2245,9 @@ namespace ALL_In_One
                                 new double[] { 60, 110, 160, 210, 260 }[level] +
                                 new double[] { 75, 150, 225, 300 }[source.Spellbook.GetSpell(SpellSlot.R).Level - 1] +
                                 1.2 * source.FlatMagicDamageMod
-                    },
-                    //E - mantra // By Rl244
-                    new DamageSpell
+                    },*/
+                    //E - mantra // By Rl244 만트라 E는 더이상 데미지가 없다.
+                    /*new DamageSpell
                     {
                         Slot = SpellSlot.E,
                         DamageType = DamageType.Magical,
@@ -2245,7 +2255,7 @@ namespace ALL_In_One
                             (source, target, level) =>
                                 new double[] { 60, 140, 220, 300 }[source.Spellbook.GetSpell(SpellSlot.R).Level - 1] +
                                 0.6 * source.FlatMagicDamageMod
-                    },
+                    },*/
                 });
 
             Spells.Add(

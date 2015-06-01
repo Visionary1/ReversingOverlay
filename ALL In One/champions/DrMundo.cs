@@ -45,6 +45,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("AutoR", true);
+            AIO_Menu.Champion.Misc.addItem("AutoW Off", true);
             AIO_Menu.Champion.Drawings.addQrange();
 
         
@@ -65,7 +66,8 @@ namespace ALL_In_One.champions
                 if(!Player.HasBuff2("BurningAgony"))
                 AIO_Func.SC(W,0,0,0);
                 AIO_Func.SC(E,0,0,0);
-                WOff();
+                if (AIO_Menu.Champion.Misc.getBoolValue("AutoW Off"))
+                    WOff();
             }
 
             #region Killsteal
@@ -97,9 +99,9 @@ namespace ALL_In_One.champions
         {
             if(Player.HasBuff2("BurningAgony"))
             {
-            var Target = TargetSelector.GetTarget(W.Range, W.DamageType);
-            if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None || (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && Target == null)
-            W.Cast();
+                var Target = TargetSelector.GetTarget(W.Range, W.DamageType);
+                if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None || (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && Target == null)
+                    W.Cast();
             }
         }
         

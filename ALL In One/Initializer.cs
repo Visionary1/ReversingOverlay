@@ -22,6 +22,7 @@ namespace ALL_In_One
             AIO_Menu.Champion.addTargetSelector();
 
             ChampLoader.Load(ObjectManager.Player.ChampionName);
+            AIO_Func.Load();
             utility.Activator.Load();
             utility.SetOrb.Load();
 

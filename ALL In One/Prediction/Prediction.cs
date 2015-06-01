@@ -78,7 +78,7 @@ namespace ALL_In_One
                     //var minioncol = collision.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
                     var minioncol = collision.Count(x => (HeroOnly == false ? x.IsMinion : (x is Obj_AI_Hero)));
                     SharpDX.Vector2 EditedVec = pred.UnitPosition.To2D() -
-                                               SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - target.ServerPosition.To2D()) * (spell.Width / 2);
+                                               SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - target.ServerPosition.To2D()) * (spell.Width * 2 / 5);
 
                     var collision2 = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { EditedVec });
                     var minioncol2 = collision2.Count(x => (HeroOnly == false ? x.IsMinion : (x is Obj_AI_Hero)));
@@ -153,14 +153,17 @@ namespace ALL_In_One
                     SharpDX.Vector2 castVec3 = TH.ServerPosition.To2D() -
                                                SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * (100f);
                     SharpDX.Vector2 EditedVec = pred.UnitPosition.To2D() -
-                                               SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - TH.ServerPosition.To2D()) * (spell.Width / 2);
+                                               SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - TH.ServerPosition.To2D()) * (spell.Width * 2 / 5);
+                    SharpDX.Vector2 EditedCV2Vec = Player.ServerPosition.To2D() +
+                                               SharpDX.Vector2.Normalize(EditedVec - Player.Position.To2D()) * (spell.Range);
+
                     if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                     {
                         if(TH.Distance(Player.ServerPosition) >= spell.Range)
                         {
                             if(AIO_Func.CanHit(spell,TH,Drag) && (pred.UnitPosition.Distance(TH.ServerPosition) <= spell.Width/2 || TH.MoveSpeed*THdelay <= spell.Width/2))//if(AIO_Func.CanHit(spell,TH,Drag) && TH2 != null && TH2pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
                             {
-                                spell.Cast(castVec2,TH.ServerPosition.To2D());//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
+                                spell.Cast(EditedCV2Vec,TH.ServerPosition.To2D());//별로 좋은 생각이 더 안나고 피곤해서 걍관둠.
                             }
                             else if(AIO_Func.CanHit(spell,TH,Drag) && pred.UnitPosition.Distance(TH.ServerPosition) < 350)
                             {

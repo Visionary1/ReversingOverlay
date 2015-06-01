@@ -13,13 +13,14 @@ namespace ALL_In_One.champions
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-        static Spell Q, W, E, R;
+        static Spell Q, W, W2, E, R;
         static int RM {get{return Menu.Item("Combo.RM").GetValue<Slider>().Value; }}
         
         public static void Load()
         {
             Q = new Spell(SpellSlot.Q, 840f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 1000f);
+            W2 = new Spell(SpellSlot.W, 350f); //Shield
             E = new Spell(SpellSlot.E, 350f);
             R = new Spell(SpellSlot.R, 1000f, TargetSelector.DamageType.Magical);
 
@@ -67,6 +68,8 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
 
+            if(Player.ManaPercent >= 40)
+                W2.Shield();
             if (Orbwalking.CanMove(35))
             {
                 AIO_Func.SC(Q);

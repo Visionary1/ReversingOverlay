@@ -11,8 +11,47 @@ namespace ALL_In_One
     {
         internal static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
+        static Obj_AI_Hero ShieldTarget;
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
+        static int AttackTime;
 
+        internal static void Load()
+        {
+            Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
+        }
+        
+        internal static void Shield(this Spell spell, float EffectRadius = 0f)
+        {
+            if(ShieldTarget != null && ShieldTarget.Distance(Player.ServerPosition) <= spell.Range && spell.IsReady()
+            && AttackTime - Utils.GameTimeTickCount +250 >= 0)
+            {
+                if(EffectRadius == 0f)
+                spell.Cast(ShieldTarget);
+                else
+                return; //차후 추가예정.
+            }
+        }
+        
+        internal static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (Player.IsDead)
+                return;
+            if (Player.Distance(args.End) > 1000)
+                return;
+            var HeroSender = sender as Obj_AI_Hero;
+            var Target = args.Target as Obj_AI_Hero;
+            if (HeroSender != null && !Orbwalking.IsOnHit(args.SData.Name) && Target.IsAlly && !HeroSender.IsAlly && Target.Distance(Player.ServerPosition) <= 1000)
+            {
+                ShieldTarget = Target;
+                AttackTime = Utils.GameTimeTickCount;
+            }
+            if (HeroSender != null && !Orbwalking.IsOnHit(args.SData.Name) && HeroManager.Allies.Where(x => x.Distance(args.End) <= 80 && x.Distance(Player.ServerPosition) <= 1000).Count() > 0)
+            {
+                ShieldTarget = HeroManager.Allies.Where(x => x.Distance(args.End) <= 80).FirstOrDefault();
+                AttackTime = Utils.GameTimeTickCount;
+            }
+        }
+        
         internal static List<Obj_AI_Base> getCollisionMinions(Obj_AI_Hero source, SharpDX.Vector3 targetPos, float predDelay, float predWidth, float predSpeed)
         {
             var input = new PredictionInput
@@ -466,7 +505,7 @@ namespace ALL_In_One
                 {
                     var TG = TargetSelector.GetTarget(spell.ChargedMaxRange, spell.DamageType); //타겟을 다시 잡게 지정해야함. 그래야 타겟이 사라져 새 타겟을 잡아야 할 때 멍때리고 움직이지도 못하는 병신같은 일 방지 가능.
                     if(TG != null)
-                    spell.Cast(TG,false,false);
+                    spell.LCast(TG,ExtraTargetDistance,ALPHA,false,BombRadius);
                     /*else 있어도 상관은 없지만. Flee 모드 추가함.
                     {
                         Player.Spellbook.CastSpell(SpellSlot.Recall); //귀환으로 차지 취소.

@@ -86,6 +86,8 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
             "renektonsuperexecute", "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "xenzhaothrust2",
             "xenzhaothrust3", "viktorqbuff"
         };
+        // Onhit Spell 온힛 스펠
+        private static readonly string[] OHSP = { "parley", "ezrealmysticshot"};
 
         // Champs whose auto attacks can't be cancelled
         private static readonly string[] NoCancelChamps = { "Kalista" };
@@ -202,6 +204,12 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         {
             return (name.ToLower().Contains("attack") && !NoAttacks.Contains(name.ToLower())) ||
                    Attacks.Contains(name.ToLower());
+        }
+        
+        public static bool IsOnHit(this string name)
+        {
+            return !name.ToLower().Contains("tower") &&!name.ToLower().Contains("turret") && !name.ToLower().Contains("mini") && !name.ToLower().Contains("minion") && name.ToLower().Contains("attack") && !NoAttacks.Contains(name.ToLower()) ||
+            Attacks.Contains(name.ToLower()) || AttackResets.Contains(name.ToLower()) || OHSP.Contains(name.ToLower());
         }
 
         /// <summary>

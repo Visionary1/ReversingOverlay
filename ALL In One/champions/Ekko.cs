@@ -8,37 +8,35 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One.champions
 {
-    class Galio// By RL244
+    class Ekko// By RL244
     {
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         static Spell Q, W, E, R;
-        static int RM {get{return Menu.Item("Combo.RM").GetValue<Slider>().Value; }}
-        static float ED {get{return Menu.Item("Misc.Etg").GetValue<Slider>().Value; }}
+        static float QD {get{return Menu.Item("Misc.Qtg").GetValue<Slider>().Value; }}
+        static Obj_AI_Base Clone; // 에코 클론.
         
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 900f, TargetSelector.DamageType.Magical);
-            W = new Spell(SpellSlot.W, 800f);
-            E = new Spell(SpellSlot.E, 1150f, TargetSelector.DamageType.Magical);
-            R = new Spell(SpellSlot.R, 550f, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 1050f, TargetSelector.DamageType.Magical);
+            W = new Spell(SpellSlot.W, 1600f, TargetSelector.DamageType.Magical);
+            E = new Spell(SpellSlot.E, 325f, TargetSelector.DamageType.Magical);
+            R = new Spell(SpellSlot.R, 400f) {Delay = 0.25f};
 
-            E.SetSkillshot(0.25f, 120f, 1200f, false, SkillshotType.SkillshotLine);
-            Q.SetSkillshot(0.25f, 120f, 1300f, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(0.25f, 60f, 1700f, false, SkillshotType.SkillshotLine);
+            W.SetSkillshot(3.0f, 350f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+
+            AIO_Menu.Champion.Flee.addUseE();
             
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
-            Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.RM", "R Min Targets")).SetValue(new Slider(1, 1, 5));
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseE();
             AIO_Menu.Champion.Harass.addIfMana();
-            
-            AIO_Menu.Champion.Lasthit.addUseQ();
-            AIO_Menu.Champion.Lasthit.addIfMana(20);
             
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseE();
@@ -49,10 +47,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Etg", "Additional Range")).SetValue(new Slider(0, 0, 150));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Range")).SetValue(new Slider(0, 0, 150));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
-            AIO_Menu.Champion.Misc.addItem("KillstealE", true);
-            AIO_Menu.Champion.Misc.addItem("KillstealR", true);
+            AIO_Menu.Champion.Misc.addItem("R Cast for Heal", true);
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addErange();
@@ -64,6 +61,8 @@ namespace ALL_In_One.champions
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
+            GameObject.OnCreate += OnCreate;
+            GameObject.OnDelete += OnDelete;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -73,19 +72,26 @@ namespace ALL_In_One.champions
 
             if (Orbwalking.CanMove(35))
             {
-                AIO_Func.SC(Q);
-                if(AIO_Func.EnemyCount(R.Range - 10) >= RM)
-                AIO_Func.SC(R);
-                AIO_Func.SC(E,ED);
+                Q.SC(QD);
+                E.MouseSC();
+                W.SC();
             }
-
+            
+            E.FleeToPosition();
+            
+            #region R.Cast()
+            var RT = (Clone != null ? HeroManager.Enemies.Where(x => x.Distance(Clone.ServerPosition) <= R.Range).FirstOrDefault() : null);
+            if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseR && Clone.ECTarget(R.Range) > 0 && R.IsReady())
+                R.Cast();
+                
+            if(Player.HealthPercent < 30 && (RT != null && AIO_Func.isKillable(RT,R.GetDamage2(RT)) || RT == null && 1000f.EnemyCount() > 0) && R.IsReady()
+            && AIO_Menu.Champion.Misc.getBoolValue("R Cast for Heal"))
+                R.Cast();
+            #endregion
+            
             #region Killsteal
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
                 KillstealQ();
-            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
-                KillstealE();
-            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
-                KillstealR();
             #endregion
         }
 
@@ -104,13 +110,32 @@ namespace ALL_In_One.champions
                 Render.Circle.DrawCircle(Player.Position, W.Range, drawW.Color);
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
-            if (R.IsReady() && drawR.Active)
-                Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
+            if (R.IsReady() && drawR.Active && Clone != null)
+                Render.Circle.DrawCircle(Clone.Position, R.Range, drawR.Color);
+        }
+        
+        static void OnCreate(GameObject sender, EventArgs args)
+        {
+            if (!(sender is Obj_AI_Base) || !sender.IsAlly)
+                return;
+
+            if (sender.IsAlly && sender.Name == "Ekko")
+                Clone = (Obj_AI_Base)sender;
+        }
+        
+        static void OnDelete(GameObject sender, EventArgs args)
+        {
+            if (!(sender is Obj_AI_Base) || !sender.IsAlly)
+                return;
+
+            if (sender.IsAlly && sender.Name == "Ekko")
+                Clone = null;
         }
         
         static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            var Sender = (Obj_AI_Base) sender;
+            return; //당장은 쓸계획이 없음.
+            /*var Sender = (Obj_AI_Base) sender;
             var STarget = (Obj_AI_Hero) args.Target;
             if (!sender.IsMe || Player.IsDead) // 갈리오 W 로직 미완성
                 return;
@@ -122,7 +147,7 @@ namespace ALL_In_One.champions
                 W.Cast(Player);
             if (!sender.IsAlly && W.IsReady() && Player.HealthPercent < 80 &&
                 Sender.Distance(Player.ServerPosition) <= 700f && AIO_Menu.Champion.Combo.UseW)
-                W.Cast(Player);
+                W.Cast(Player);*/
         }
         
         static void KillstealQ()
@@ -130,23 +155,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
-                    AIO_Func.CCast(Q,target);
-            }
-        }
-        static void KillstealE()
-        {
-            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
-            {
-                if (E.CanCast(target) && AIO_Func.isKillable(target, E))
-                    AIO_Func.LCast(E,target,ED);
-            }
-        }
-        static void KillstealR()
-        {
-            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
-            {
-                if (R.CanCast(target) && AIO_Func.isKillable(target, R))
-                    R.Cast();
+                    Q.LCast(target,QD);
             }
         }
 
@@ -163,6 +172,8 @@ namespace ALL_In_One.champions
             if (R.IsReady())
                 damage += R.GetDamage2(enemy);
                 
+            if(!Player.IsWindingUp)
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
             return damage;
         }
     }

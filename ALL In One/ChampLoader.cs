@@ -361,6 +361,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Jayce.Load();
                     break;
+                /*case "Ekko": Work In Progress (Almost done)
+                    MadeBy(Developer.RL244);
+                    champions.Ekko.Load();
+                    break;*/
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

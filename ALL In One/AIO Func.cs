@@ -282,7 +282,9 @@ namespace ALL_In_One
         
         internal static void LH(this Spell spell, float ALPHA = 0f) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
         {
-            var M = MinionManager.GetMinions(Math.Max(spell.Range,Orbwalking.GetRealAutoAttackRange(Player)), MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health).FirstOrDefault(m => isKillable(m,spell,0) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
+            var M = MinionManager.GetMinions(Math.Max(spell.Range,Orbwalking.GetRealAutoAttackRange(Player)), MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health).FirstOrDefault(m => isKillable(m,spell,0) && (!isKillable(m,(float)Player.GetAutoAttackDamage2(m, true))
+            || !m.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
+            && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
             if(spell.IsReady() && M != null)
             {
                 if(spell.IsSkillshot)
@@ -613,7 +615,7 @@ namespace ALL_In_One
             return GetEnemyList().Where(x => x.Distance(Player.ServerPosition) <= range && x.HealthPercent > min && x.HealthPercent <= max).Count();
         }
         
-        internal static int ECTarget(this Obj_AI_Hero target, float range, float min = 0, float max = 100)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
+        internal static int ECTarget(this Obj_AI_Base target, float range, float min = 0, float max = 100)// 어짜피 원 기능은 중복되니 추가적으로 옵션을 줌. 특정 체력% 초과 특정 체력% 이하의 적챔프 카운트
         {
             return GetEnemyList().Where(x => x.Distance(target.ServerPosition) <= range && x.HealthPercent > min && x.HealthPercent <= max).Count();
         }

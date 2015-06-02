@@ -79,13 +79,34 @@ namespace ALL_In_One.champions
                 
             if (Environment.TickCount - pastTime <= Game.Ping / 2 + 20) return; // 얘가 스펠 인식을 제대로 못해서 넣어줌 -_-;
             pastTime = Environment.TickCount;
-        
-            var QTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
-            var pred = Prediction.GetPrediction(QTarget, Q.Delay, Q.Width/2, Q.Speed); //spell.Width/2
-            var collision = Q.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
-            var minioncol = collision.Count(x => x.IsMinion);
-            if(QTarget != null && !Mantra && Player.HealthPercent > 60 && Q.IsReady() && AIO_Menu.Champion.Combo.UseR && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && minioncol == 0)
-                R.Cast();
+            
+
+
+            if(!Mantra)
+            {
+                if(AIO_Menu.Champion.Combo.UseE && Player.ManaPercent > 20)
+                E.Shield();
+            
+                var ETarget = TargetSelector.GetTarget(Q.Range*1.5f, Q.DamageType, true);
+                if(ETarget != null && ETarget.Distance(Player.ServerPosition) > W.Range && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseE && E.IsReady() && E.Instance.Name == "KarmaSolKimShield")
+                    E.Cast(Player);
+                
+                var QTarget = TargetSelector.GetTarget(Q.Range, Q.DamageType, true);
+                var pred = Prediction.GetPrediction(QTarget, Q.Delay, Q.Width/2, Q.Speed); //spell.Width/2
+                var collision = Q.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { pred.CastPosition.To2D() });
+                var minioncol = collision.Count(x => x.IsMinion);
+                if(QTarget != null && !Mantra && Player.HealthPercent > 60 && Q.IsReady() && AIO_Menu.Champion.Combo.UseR && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && minioncol == 0)
+                    R.Cast();
+                    
+                var Target = TargetSelector.GetTarget(W.Range, W.DamageType, true);
+                if(Player.HealthPercent <= 40 && W.IsReady() && Target != null && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseR)
+                    R.Cast();
+            }
+            
+            if(Player.HealthPercent > 40 && !Mantra)
+                AIO_Func.SC(W);
+            else if(Player.HealthPercent <= 40 && Mantra)
+                AIO_Func.SC(W);
             
             if(Player.HealthPercent >= 40)
                 AIO_Func.SC(Q,QD,0f,1f,250f);
@@ -93,17 +114,6 @@ namespace ALL_In_One.champions
                 AIO_Func.SC(Q,QD,0f,1f,250f);
             else if(!Mantra)
                 AIO_Func.SC(Q,QD,0f,1f,250f);
-                
-            var Target = TargetSelector.GetTarget(W.Range, W.DamageType, true);
-            if(Player.HealthPercent <= 40 && W.IsReady() && Target != null && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseR)
-                R.Cast();
-                
-            if(Player.HealthPercent > 40 && !Mantra)
-                AIO_Func.SC(W);
-            else if(Player.HealthPercent <= 40 && Mantra)
-                AIO_Func.SC(W);
-            
-
             
             if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee && E.IsReady() && AIO_Menu.Champion.Flee.UseE)
                 E.Cast(Player);
@@ -112,13 +122,6 @@ namespace ALL_In_One.champions
                 KillstealQ();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealW"))
                 KillstealW();
-                
-            var ETarget = TargetSelector.GetTarget(Q.Range*1.5f, Q.DamageType, true);
-            if(ETarget != null && ETarget.Distance(Player.ServerPosition) > W.Range && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseE && E.IsReady() && !Mantra && E.Instance.Name == "KarmaSolKimShield")
-                E.Cast(Player);
-                
-            if(!Mantra)
-            E.Shield();
         }
 
         static void Drawing_OnDraw(EventArgs args)

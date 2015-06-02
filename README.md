@@ -1,5 +1,5 @@
 #L# TeamProjects (XC-Squad)
-###● ALL In One: 87/125(69.6%) Champions supported.
+###● ALL In One: 88/125(70.4%) Champions supported.
 It's a Early Development Build. So it's still a Work In Progress. (A little lacking performance)
 해당 어셈블리는 베타 단계이니 기능이 부족하거나 혹은 오작동할 수 있습니다. 그러한 문제점 발견시 연락주시면 어셈블리 개선에 큰 도움이 됩니다.
 
@@ -26,6 +26,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Diana|✔|rl244|
 |Dr. Mundo|✔|rl244|
 |Draven|　|　|
+|Ekko|✔(WIP)|rl244|
 |Elise|　|　|
 |Evelynn|✔|rl244|
 |Ezreal|✔|rl244|
@@ -128,6 +129,5 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Ziggs|　|　|
 |Zilean|　|　|
 |Zyra|✔|rl244|
-|Ekko|![](https://cdn.joduska.me/forum/public/style_emoticons/default/kappa.png)|
 
 ![](https://cdn.joduska.me/forum/public/style_emoticons/default/cat_lazy.gif)

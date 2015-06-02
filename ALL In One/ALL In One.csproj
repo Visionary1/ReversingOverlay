@@ -95,6 +95,7 @@
     <Compile Include="champions\Diana.cs" />
     <Compile Include="champions\_Draven.cs" />
     <Compile Include="champions\DrMundo.cs" />
+    <Compile Include="champions\Ekko.cs" />
     <Compile Include="champions\_Elise.cs" />
     <Compile Include="champions\Evelynn.cs" />
     <Compile Include="champions\Ezreal.cs" />

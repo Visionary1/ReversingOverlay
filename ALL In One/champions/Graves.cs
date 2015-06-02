@@ -56,7 +56,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Misc.addUseKillsteal();
 
             AIO_Menu.Champion.Drawings.addQrange();
-            AIO_Menu.Champion.Drawings.addQrange();
+            AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addErange();
             AIO_Menu.Champion.Drawings.addRrange();
 

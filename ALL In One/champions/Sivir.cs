@@ -33,7 +33,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
-
+            AIO_Menu.Champion.Combo.addUseR();
+            
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addIfMana(60);
@@ -70,10 +71,14 @@ namespace ALL_In_One.champions
         
             if (Player.IsDead)
                 return;
-
-            
+                
+            var rTarget = TargetSelector.GetTarget(1000, Q.DamageType, true);
+            if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee && AIO_Menu.Champion.Flee.UseR && R.IsReady() && rTarget != null)
+                R.Cast();
+                
             if (Orbwalking.CanMove(10))
             {
+                R.SC();
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     Combo();
 

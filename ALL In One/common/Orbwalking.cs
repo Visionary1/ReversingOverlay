@@ -254,7 +254,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         /// </summary>
         public static bool CanAttack()
         {
-            return Utils.GameTimeTickCount - 15 >= LastAATick + Player.AttackDelay * 1000; // + Game.Ping / 2 일단 원본과 매우 비슷한값임.
+            return Utils.GameTimeTickCount >= LastAATick + Player.AttackDelay * 1000; // + Game.Ping / 2 일단 원본과 매우 비슷한값임.
         }
 
         /// <summary>

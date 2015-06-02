@@ -1272,7 +1272,6 @@ namespace ALL_In_One
                                         new double[] { 80, 130, 180, 230, 280 }[level],
                                         new double[] { 15, 18, 21, 23, 25 }[level] / 100 * target.Health));
                             }
-                            else
                             return Math.Max(
                                 new double[] { 80, 130, 180, 230, 280 }[level],
                                 new double[] { 15, 18, 21, 23, 25 }[level] / 100 * target.Health);
@@ -1322,58 +1321,6 @@ namespace ALL_In_One
                     },
                 });
 
-            Spells.Add(
-                "Ekko", new List<DamageSpell>
-                {
-                    //Q - First
-                    new DamageSpell
-                    {
-                        Slot = SpellSlot.Q,
-                        DamageType = DamageType.Magical,
-                        Damage =
-                            (source, target, level) =>
-                                new double[] { 60, 75, 90, 105, 120 }[level] + 0.2d * source.FlatMagicDamageMod
-                    },
-                    //Q - Second
-                    new DamageSpell
-                    {
-                        Slot = SpellSlot.Q,
-                        Stage = 1,
-                        DamageType = DamageType.Magical,
-                        Damage =
-                            (source, target, level) =>
-                                new double[] { 60, 85, 110, 135, 160 }[level] + 0.2 * source.FlatMagicDamageMod
-                    },
-                    //W - 
-                    new DamageSpell
-                    {
-                        Slot = SpellSlot.W,
-                        DamageType = DamageType.Magical,
-                        Damage =
-                            (source, target, level) =>
-                                (target.HealthPercent < 30 ? (target is Obj_AI_Minion ? Math.Min(target.HealthPercent * (5 + 1 / 45 * source.FlatMagicDamageMod),150)
-                                : target.HealthPercent * (5 + 1 / 45 * source.FlatMagicDamageMod)) : 0) //(target.MaxHealth - target.Health) / 100
-                    },
-                    //E
-                    new DamageSpell
-                    {
-                        Slot = SpellSlot.E,
-                        DamageType = DamageType.Magical,
-                        Damage =
-                            (source, target, level) =>
-                                new double[] { 50, 80, 110, 140, 170 }[level] + 0.2 * source.FlatMagicDamageMod
-                    },
-                    //R
-                    new DamageSpell
-                    {
-                        Slot = SpellSlot.R,
-                        DamageType = DamageType.Magical,
-                        Damage =
-                            (source, target, level) =>
-                                new double[] { 200, 350, 500  }[level] + 1.3 * source.FlatMagicDamageMod
-                    },
-                });
-                
             Spells.Add(
                 "Elise", new List<DamageSpell>
                 {
@@ -2114,7 +2061,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 60, 115, 170, 225, 280 }[level] + 1.2 * source.FlatPhysicalDamageMod
+                                new double[] { 60, 100, 160, 210, 260, 280 }[level] + 1.2 * source.FlatPhysicalDamageMod
                     },
                     //Q - Melee
                     new DamageSpell
@@ -2124,7 +2071,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 20, 65, 110, 155, 200 }[level] + 1 * source.FlatPhysicalDamageMod
+                                new double[] { 20, 60, 100, 140, 180, 220 }[level] + 1 * source.FlatPhysicalDamageMod
                     },
                     //Q - Ranged Max Damage
                     new DamageSpell
@@ -2143,7 +2090,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new[] { 25, 42.5, 60, 77.5, 95 }[level] + 0.25 * source.FlatMagicDamageMod
+                                new[] { 25, 40, 55, 70, 85, 100 }[level] + 0.25 * source.FlatMagicDamageMod
                     },
                     //E
                     new DamageSpell
@@ -2152,7 +2099,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 8, 11, 14, 17, 20 }[level] / 100 * target.MaxHealth +
+                                new double[] { 8, 10.4, 12.8, 15.2, 17.6, 20 }[level] / 100 * target.MaxHealth +
                                 1 * source.FlatPhysicalDamageMod
                     },
                 });
@@ -2447,7 +2394,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 60, 85, 110, 135, 160 }[level] + 0.4 * source.FlatMagicDamageMod
+                                new double[] { 40, 70, 100, 130, 160 }[level] + 0.4 * source.FlatMagicDamageMod
                     },
                     //R - per dagger
                     new DamageSpell
@@ -2980,8 +2927,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 30, 38, 46, 54, 62 }[level] / 100 *
-                                (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
+                                new double[] { 25, 40, 55, 70, 85 }[level] + 0.15 * source.FlatMagicDamageMod
                     },
                     //E
                     new DamageSpell

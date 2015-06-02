@@ -38,6 +38,8 @@ namespace ALL_In_One
                 return;
             if (Player.Distance(args.End) > 1000)
                 return;
+            if (sender.IsMe)
+                return;
             var HeroSender = sender as Obj_AI_Hero;
             var Target = args.Target as Obj_AI_Hero;
             if (HeroSender == null)

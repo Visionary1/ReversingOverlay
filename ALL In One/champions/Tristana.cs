@@ -78,11 +78,10 @@ namespace ALL_In_One.champions
             E.Range = Orbwalking.GetRealAutoAttackRange(Player);
             R.Range = Orbwalking.GetRealAutoAttackRange(Player);
 
-            /*if (Orbwalking.CanMove(10))
+            if (Orbwalking.CanMove(10))
             {
-
-            }*/
                 AIO_Func.SC(E); //평타-e말고 그냥 e 
+            }
                 AIO_Func.FleeToPosition(W);
                 foreach (var target in HeroManager.Enemies.Where(x => AIO_Func.CanHit(W,x,0) && x.HasBuff2("tristanaecharge") && (AIO_Func.getBuffInstance(x, "tristanaechargesound").EndTime - Game.ClockTime) > 0.59 && ((float)AIO_Func.getBuffInstance(x, "tristanaecharge").Count == 3 && (AIO_Func.getBuffInstance(x, "tristanaechargesound").EndTime - Game.ClockTime) < 0.8 || (float)AIO_Func.getBuffInstance(x, "tristanaecharge").Count == 4)))
                 {
@@ -173,10 +172,11 @@ namespace ALL_In_One.champions
                 if(W.IsReady() && target != null)
                 {
                     var Buff = (target.HasBuff2("tristanaechargesound") ? AIO_Func.getBuffInstance(target, "tristanaecharge") : null);
-                    bool EK = (target.HasBuff2("tristanaechargesound") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f)) || !target.HasBuff2("tristanaechargesound"));
-                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Buff != null && !EK && W.CanCast(target) && R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("KillstealR") && target.HasBuff2("tristanaechargesound") && (AIO_Func.getBuffInstance(target, "tristanaechargesound").EndTime - Game.ClockTime) > 0.6 && (float)Buff.Count > 0 && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage2(target, true)))
+                    var BC = Buff == null ? 0 : Buff.Count;
+                    bool EK = (target.HasBuff2("tristanaechargesound") && (float)BC > 0 && AIO_Func.isKillable(target, E.GetDamage2(target)*(((float)BC-1)*0.30f+1f)) || !target.HasBuff2("tristanaechargesound"));
+                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Buff != null && !EK && W.CanCast(target) && R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("KillstealR") && target.HasBuff2("tristanaechargesound") && (AIO_Func.getBuffInstance(target, "tristanaechargesound").EndTime - Game.ClockTime) > 0.6 && (float)BC > 0 && AIO_Func.isKillable(target, R.GetDamage2(target) + W.GetDamage2(target)*(((float)BC-1)*0.25f+1f) + E.GetDamage2(target)*(((float)BC-1)*0.25f+1f) + (float)Player.GetAutoAttackDamage2(target, true)))
                     AIO_Func.CCast(W,target);
-                    if (W.CanCast(target) && target.HasBuff2("tristanaechargesound") && (AIO_Func.getBuffInstance(target, "tristanaechargesound").EndTime - Game.ClockTime) > 0.6 && Buff != null && !EK && (float)Buff.Count > 0 && AIO_Func.isKillable(target, W.GetDamage2(target)*(((float)Buff.Count-1)*0.25f+1f) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f) + (float)Player.GetAutoAttackDamage2(target, true)))
+                    if (W.CanCast(target) && target.HasBuff2("tristanaechargesound") && (AIO_Func.getBuffInstance(target, "tristanaechargesound").EndTime - Game.ClockTime) > 0.6 && Buff != null && !EK && (float)BC > 0 && AIO_Func.isKillable(target, W.GetDamage2(target)*(((float)BC-1)*0.25f+1f) + E.GetDamage2(target)*(((float)BC-1)*0.30f+1f) + (float)Player.GetAutoAttackDamage2(target, true)))
                     AIO_Func.CCast(W,target);
                     else if (W.CanCast(target) && !EK && AIO_Func.isKillable(target, W.GetDamage2(target) + (float)Player.GetAutoAttackDamage2(target, true)))
                     AIO_Func.CCast(W,target);
@@ -200,8 +200,9 @@ namespace ALL_In_One.champions
                 if(R.IsReady() && target != null)
                 {
                     var Buff = (target.HasBuff2("tristanaechargesound") ? AIO_Func.getBuffInstance(target, "tristanaecharge") : null);
-                    bool EK = (target.HasBuff2("tristanaechargesound") && (float)Buff.Count > 0 && AIO_Func.isKillable(target, E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f)) || !target.HasBuff2("tristanaechargesound"));
-                    if ((AIO_Menu.Champion.Misc.getBoolValue("KillstealW") ? (!AIO_Func.CanHit(W,target,0) || !W.IsReady()) : R.IsReady()) && R.CanCast(target) && Buff != null && (float)Buff.Count > 0 && target.HasBuff2("tristanaechargesound") && (AIO_Func.getBuffInstance(target, "tristanaechargesound").EndTime - Game.ClockTime) > 0.3 && AIO_Func.isKillable(target, R.GetDamage2(target) + E.GetDamage2(target)*(((float)Buff.Count-1)*0.30f+1f)) && !EK)
+                    var BC = Buff == null ? 0 : Buff.Count;
+                    bool EK = (target.HasBuff2("tristanaechargesound") && (float)BC > 0 && AIO_Func.isKillable(target, E.GetDamage2(target)*(((float)BC-1)*0.30f+1f)) || !target.HasBuff2("tristanaechargesound"));
+                    if ((AIO_Menu.Champion.Misc.getBoolValue("KillstealW") ? (!AIO_Func.CanHit(W,target,0) || !W.IsReady()) : R.IsReady()) && R.CanCast(target) && Buff != null && (float)BC > 0 && target.HasBuff2("tristanaechargesound") && (AIO_Func.getBuffInstance(target, "tristanaechargesound").EndTime - Game.ClockTime) > 0.3 && AIO_Func.isKillable(target, R.GetDamage2(target) + E.GetDamage2(target)*(((float)BC-1)*0.30f+1f)) && !EK)
                         R.Cast(target);
                     else if ((AIO_Menu.Champion.Misc.getBoolValue("KillstealW") ? (!AIO_Func.CanHit(W,target,0) || !W.IsReady()) : R.IsReady()) && R.CanCast(target) && AIO_Func.isKillable(target, R) && !EK)
                         R.Cast(target);
@@ -226,7 +227,7 @@ namespace ALL_In_One.champions
             if (R.IsReady())
                 damage += R.GetDamage2(enemy);
                 
-            if(!Player.IsWindingUp)
+            if(enemy.InAARange())
                 damage += (float)Player.GetAutoAttackDamage2(enemy, true);
             return damage;
         }

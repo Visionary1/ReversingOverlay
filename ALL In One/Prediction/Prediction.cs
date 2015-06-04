@@ -97,7 +97,7 @@ namespace ALL_In_One
                         else if(false == spell.Collision && colmini < 1 && minioncol >= 1)
                         {
                             var FirstMinion = collision.OrderBy(o => o.Distance(Player.ServerPosition)).FirstOrDefault();
-                            if(FirstMinion.ServerPosition.Distance(pred.UnitPosition) <= BombRadius / 2)
+                            if(FirstMinion.ServerPosition.Distance(pred.UnitPosition) <= BombRadius / 4)
                             spell.Cast(pred.CastPosition);
                         }
                     }

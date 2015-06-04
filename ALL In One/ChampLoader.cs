@@ -365,6 +365,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Ekko.Load();
                     break;*/
+                case "Quinn":
+                    MadeBy(Developer.RL244);
+                    champions.Quinn.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

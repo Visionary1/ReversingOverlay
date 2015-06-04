@@ -37,6 +37,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
+            AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
 
 
@@ -178,6 +179,16 @@ namespace ALL_In_One.champions
                 if (wTarget != null && !Player.IsDashing())
                     W.Cast(wTarget);
             }
+            
+            if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
+            {
+                var eTarget = TargetSelector.GetTarget(E.Range + Orbwalking.GetRealAutoAttackRange(Player), E.DamageType, true);
+                var turret = ObjectManager.Get<Obj_AI_Turret>().OrderBy(t => t.Distance(Player.Position)).First(t => t.IsEnemy);
+                var EP = (eTarget != null ? Player.ServerPosition.Extend(eTarget.ServerPosition, E.Range) : Player.ServerPosition);
+                var SZ = (turret != null ? (EP.Distance(turret.ServerPosition) > 950 ? EP : Player.ServerPosition) : EP);
+                if (eTarget != null && AIO_Func.isKillable(eTarget, getComboDamage(eTarget)) && (turret != null && EP.Distance(turret.ServerPosition) > 950 || turret == null))
+                    E.Cast(SZ);
+            }
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
@@ -294,10 +305,17 @@ namespace ALL_In_One.champions
         {
             
             float damage = 0;
-
+            if (Q.IsReady())
+                damage += Q.GetDamage2(enemy);
+                
+            if (W.IsReady())
+                damage += W.GetDamage2(enemy);
 
             if (R.IsReady())
                 damage += R.GetDamage2(enemy);
+                
+            if(!Player.IsWindingUp)
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
 
             return damage;
         }

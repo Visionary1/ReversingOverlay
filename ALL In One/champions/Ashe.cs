@@ -61,7 +61,6 @@ namespace ALL_In_One.champions
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
         }
@@ -122,21 +121,6 @@ namespace ALL_In_One.champions
                 AIO_Func.LCast(R,sender,0f,0f);
         }
         
-        static void AA()
-        {
-            AIO_Func.AACb(W);
-        }
-        
-        static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
-        {
-            var Target = (Obj_AI_Base)target;
-            if (!unit.IsMe || Target == null)
-                return;
-            AIO_Func.AALcJc(W);
-            
-            AA();
-        }
-        
         static void ManualR()
         {
             var RTarget = TargetSelector.GetTarget(3000f, R.DamageType, true);
@@ -182,7 +166,7 @@ namespace ALL_In_One.champions
             if (R.IsReady())
                 damage += R.GetDamage2(enemy);
                 
-            if(!Player.IsWindingUp)
+            if(enemy.InAARange())
                 damage += (float)Player.GetAutoAttackDamage2(enemy, true);
                 
             return damage;

@@ -1,5 +1,5 @@
 #L# TeamProjects (XC-Squad)
-###● ALL In One: 88/125(70.4%) Champions supported.
+###● ALL In One: 89/125(71.2%) Champions supported.
 It's a Early Development Build. So it's still a Work In Progress. (A little lacking performance)
 해당 어셈블리는 베타 단계이니 기능이 부족하거나 혹은 오작동할 수 있습니다. 그러한 문제점 발견시 연락주시면 어셈블리 개선에 큰 도움이 됩니다.
 
@@ -80,7 +80,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Orianna|✔|xcsoft|
 |Pantheon|✔|rl244|
 |Poppy|　|　|
-|Quinn|　|　|
+|Quinn|✔|rl244|
 |Rammus|　|　|
 |Rek'Sai|　|　|
 |Renekton|✔|rl244|

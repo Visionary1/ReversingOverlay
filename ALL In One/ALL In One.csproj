@@ -150,7 +150,7 @@
     <Compile Include="champions\Orianna.cs" />
     <Compile Include="champions\Pantheon.cs" />
     <Compile Include="champions\_Poppy.cs" />
-    <Compile Include="champions\_Quinn.cs" />
+    <Compile Include="champions\Quinn.cs" />
     <Compile Include="champions\_Rammus.cs" />
     <Compile Include="champions\_RekSai.cs" />
     <Compile Include="champions\Renekton.cs" />

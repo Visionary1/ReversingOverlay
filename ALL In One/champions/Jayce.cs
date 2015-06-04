@@ -338,7 +338,7 @@ namespace ALL_In_One.champions
             }
 
                 
-            if(!Player.IsWindingUp && Player.Distance(enemy.Position) <= Orbwalking.GetRealAutoAttackRange(Player))
+            if(enemy.InAARange())
                 damage += (float)Player.GetAutoAttackDamage2(enemy, true);
                 
             return damage;

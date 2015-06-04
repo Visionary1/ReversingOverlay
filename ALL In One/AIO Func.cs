@@ -138,7 +138,7 @@ namespace ALL_In_One
             Game.Say("/d");
         }
         
-        internal static void AALcJc(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
+        internal static void AALcJc(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f, float BombRadius = 0f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능. AALaneclear AAJungleclear 대체
         {// 아주 편하게 평캔 Lc, Jc를 구현할수 있습니다(그것도 분리해서!!). 그냥 AIO_Func.AALcJc(Q); 이렇게 쓰세요. 선형 스킬일 경우 세부 설정을 원할 경우 AIO_Func.AALcJc(E,ED,0f); 이런식으로 쓰세요.
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
@@ -192,7 +192,12 @@ namespace ALL_In_One
                         if(spell.IsSkillshot)
                         {
                         if(spell.Type == SkillshotType.SkillshotLine)
-                        LCast(spell,Minions[0],ExtraTargetDistance,ALPHA);
+                        {
+                            if(ALPHA > 1f)
+                            LCast(spell,Minions[0],ExtraTargetDistance,ALPHA,false,BombRadius);
+                            else
+                            LH(spell, ALPHA);
+                        }
                         else if(spell.Type == SkillshotType.SkillshotCircle)
                         CCast(spell,Minions[0]);
                         else if(spell.Type == SkillshotType.SkillshotCone)
@@ -212,7 +217,7 @@ namespace ALL_In_One
             }
         }
         
-        internal static void AACb(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
+        internal static void AACb(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f, float BombRadius = 0f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
         { // 아주 편하게 평캔 Cb, Hrs를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
             var target = TargetSelector.GetTarget(Math.Max(spell.Range,Orbwalking.GetRealAutoAttackRange(Player)),(spell.DamageType), true); //
             bool HM = true;
@@ -731,6 +736,10 @@ namespace ALL_In_One
         internal static void FleeToPosition(Spell spell, string W = "N") // N 정방향, R 역방향.
         {
             AIO_Pred.FleeToPosition(spell,W);
+        }
+        internal static bool InAARange(this Obj_AI_Base T)
+        {
+            return Player.Distance(T.ServerPosition) <= Orbwalking.GetRealAutoAttackRange(Player);
         }
     }
 }

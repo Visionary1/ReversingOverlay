@@ -80,7 +80,7 @@ namespace ALL_In_One.champions
                 }
             }
 
-            if (AIO_Menu.Champion.Misc.getKeyBIndValue("Stealth Recall").Active)
+            if (AIO_Menu.Champion.Misc.getKeyBindValue("Stealth Recall").Active)
             {
                 if (Q.IsReady() && Recall.IsReady())
                 {
@@ -115,7 +115,7 @@ namespace ALL_In_One.champions
                     Drawing.DrawText(mypos[0] - 10, mypos[1], Color.SpringGreen, (buff.EndTime - Game.ClockTime).ToString("0.00"));
             }
 
-            if (AIO_Menu.Champion.Misc.getKeyBIndValue("Stealth Recall").Active)
+            if (AIO_Menu.Champion.Misc.getKeyBindValue("Stealth Recall").Active)
             {
                 var mypos = Drawing.WorldToScreen(Player.Position);
 

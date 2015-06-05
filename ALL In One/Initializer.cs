@@ -35,6 +35,8 @@ namespace ALL_In_One
             AIO_Menu.Champion.Drawings.addItem("Minion Near Kill", new Circle(true, Color.FromArgb(127, Color.Gray)), false);
             AIO_Menu.Champion.Drawings.addItem("Jungle Position", true, false);
 
+            AIO_Menu.Champion.Misc.addItem("Notify Debug Message", false, false);
+
             Drawing.OnDraw += Drawing_OnDraw;
             
             AIO_Func.sendDebugMsg(ObjectManager.Player.ChampionName + " Loaded.");

@@ -172,14 +172,14 @@ namespace ALL_In_One.champions
             var T = TargetSelector.GetTarget(1300f, R.DamageType);
             if(T != null && T.IsDead)
                 RDelay = 0;
-            if(R.Instance.Name != "ViktorChaosStorm" && Environment.TickCount - RDelay > 0)
+            if(R.Instance.Name != "ViktorChaosStorm" && Utils.TickCount - RDelay > 0)
             {
                 if(T != null)
                 {
                     if(!T.IsDead)
                     {
                         R.Cast(T);
-                        RDelay = Environment.TickCount + 1000f;
+                        RDelay = Utils.TickCount + 1000f;
                     }
                 }
             }

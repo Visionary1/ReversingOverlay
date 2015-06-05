@@ -77,8 +77,8 @@ namespace ALL_In_One.champions
             if (Player.IsDead)
                 return;
                 
-            if (Environment.TickCount - pastTime <= Game.Ping / 2 + 20) return; // 얘가 스펠 인식을 제대로 못해서 넣어줌 -_-;
-            pastTime = Environment.TickCount;
+            if (Utils.TickCount - pastTime <= Game.Ping / 2 + 20) return; // 얘가 스펠 인식을 제대로 못해서 넣어줌 -_-;
+            pastTime = Utils.TickCount;
             
 
 

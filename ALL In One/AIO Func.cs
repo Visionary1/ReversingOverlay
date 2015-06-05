@@ -153,10 +153,10 @@ namespace ALL_In_One
                 bool LHM = true;
                 if (Cost == 1f)
                 {
-                    HM = Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana;
-                    LM = Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana;
-                    JM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
-                    LHM = Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana;
+                    HM = (Menu.Item("Harass.If Mana >", true) != null ? (Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana) : true);
+                    LM = (Menu.Item("Laneclear.If Mana >", true) != null ? Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana : true);
+                    JM = (Menu.Item("Jungleclear.If Mana >", true) != null ? Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana : true);
+                    LHM = (Menu.Item("Lasthit.If Mana >", true) != null ?  Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana : true);
                 }
                 if (Mobs.Count > 0 && Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true) != null)
                 {
@@ -215,10 +215,10 @@ namespace ALL_In_One
             bool LHM = true;
             if (Cost == 1f)
             {
-                HM = Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana;
-                LM = Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana;
-                JM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
-                LHM = Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana;
+                HM = (Menu.Item("Harass.If Mana >", true) != null ? Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana : true);
+                LM = (Menu.Item("Laneclear.If Mana >", true) != null ? Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana : true);
+                JM = (Menu.Item("Jungleclear.If Mana >", true) != null ? Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana : true);
+                LHM = (Menu.Item("Lasthit.If Mana >", true) != null ?  Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana : true);
             } //굳이 switch문을 쓸 필요가 없음. 또한 false == spell.IsSkillshot을 !spell.IsSkillshot로 고치면 바로 밑의 else가 존재하지 않게 되어 액티브 스킬 사용불가하게됨.
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Menu.Item("Combo.Use " + spell.Slot.ToString(), true) != null)
             {
@@ -301,10 +301,10 @@ namespace ALL_In_One
             bool LHM = false;
             if (Cost == 1f)
             {
-                HM = Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana;
-                LM = Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana;
-                JM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
-                LHM = Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana;
+                HM = (Menu.Item("Harass.If Mana >", true) != null ? Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana : true);
+                LM = (Menu.Item("Laneclear.If Mana >", true) != null ? Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana : true);
+                JM = (Menu.Item("Jungleclear.If Mana >", true) != null ? Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana : true);
+                LHM = (Menu.Item("Lasthit.If Mana >", true) != null ?  Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana : true);
             }
             if(target != null)
             {
@@ -525,10 +525,10 @@ namespace ALL_In_One
             bool LHM = false;
             if (Cost == 1f)
             {
-                HM = Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana;
-                LM = Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana;
-                JM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
-                LHM = Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana;
+                HM = (Menu.Item("Harass.If Mana >", true) != null ? Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana : true);
+                LM = (Menu.Item("Laneclear.If Mana >", true) != null ? Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana : true);
+                JM = (Menu.Item("Jungleclear.If Mana >", true) != null ? Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana : true);
+                LHM = (Menu.Item("Lasthit.If Mana >", true) != null ?  Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana : true);
             }
             if(target != null)
             {

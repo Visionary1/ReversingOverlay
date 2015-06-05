@@ -365,11 +365,11 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
 
                     if (!DisableNextAttack)
                     {
-                        if (!NoCancelChamps.Contains(Player.ChampionName))  
+                        /*if (!NoCancelChamps.Contains(Player.ChampionName))  
                         {  
                             LastAATick = Utils.GameTimeTickCount - Game.Ping - (int)(ObjectManager.Player.AttackCastDelay * 1000f);  
                             _missileLaunched = false;      
-                        }  
+                        }  */
 
                         Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                         _lastTarget = target;
@@ -684,6 +684,8 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                                     minion.IsValidTarget() && InAutoAttackRange(minion) &&
                                     minion.Health <
                                     Player.GetAutoAttackDamage2(minion, true) * 2); //좀 병신같았던 Farm 수정. 이전엔 패시브 고려안해서 패시브 데미지 때문에 미니언 버리는 경우도 많았음.
+
+
                     foreach (var minion in MinionList)
                     {
                         var FreezeDamage = Player.GetAutoAttackDamage2(minion, true) * (_config.Item("FreezeHealth").GetValue<Slider>().Value / 100f);

@@ -153,21 +153,21 @@ namespace ALL_In_One
             #endregion  
   
 
-            
+            /*
             #region Quinn // By Rl244
             p = new PassiveDamage
             {
                 ChampionName = "Quinn",
-                IsActive = (source, target) => (target.HasBuff2("quinnw_cosmetic")), 
+                IsActive = (source, target) => (!source.HasBuff2("quinnpassiveammo")), //
                 GetDamage =
                     (source, target) =>
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Physical,
-                                new float[] { 25/35/45/55/65/75/85/95/105/115/125/135/145/155/170/185/200/215 }[source.Level - 1] + 0.5 * source.FlatPhysicalDamageMod),
+                                (target.HasBuff2("quinnw_cosmetic") ? new float[] { 25/35/45/55/65/75/85/95/105/115/125/135/145/155/170/185/200/215 }[source.Level - 1] + 0.5 * source.FlatPhysicalDamageMod : 0)),
             };
             AttackPassives.Add(p);
-            #endregion
+            #endregion*/
             
             #region MasterYi // By Rl244
             p = new PassiveDamage
@@ -3774,7 +3774,7 @@ namespace ALL_In_One
                         Damage =
                             (source, target, level) =>
                                 (new double[] { 100, 150, 200 }[level] + 0.5 * source.FlatPhysicalDamageMod) *
-                                ((target.MaxHealth - target.Health) / target.MaxHealth + 1)
+                                (2 - target.HealthPercent / 100)
                     },
                 });
 

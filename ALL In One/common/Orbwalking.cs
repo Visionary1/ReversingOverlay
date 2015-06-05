@@ -510,7 +510,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 misc.AddItem(
                     new MenuItem("HoldPosRadius", "Hold Position Radius").SetValue(new Slider(65, 0, 250)));
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetValue(true));
-                misc.AddItem(new MenuItem("FreezeHealth", "LaneFreeze Damage %").SetValue(new Slider(50, 50, 100)));
+                misc.AddItem(new MenuItem("FreezeHealth", "LaneFreeze Damage %").SetValue(new Slider(50, 50)));
                 misc.AddItem(new MenuItem("PermaShow", "PermaShow").SetValue(true)).ValueChanged += (s, args) => {
                     if (args.GetNewValue<bool>())
                     {
@@ -524,7 +524,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 _config.AddSubMenu(misc);
 
                 /* Missile check */
-                _config.AddItem(new MenuItem("MissileCheck", "Use Missile Check").Utils.GameTimeTickCountSetValue(false));
+                _config.AddItem(new MenuItem("MissileCheck", "Use Missile Check").SetShared().SetValue(false));
                 /* Delay sliders */
                 _config.AddItem(
                     new MenuItem("ExtraWindup", "Extra windup time").SetValue(new Slider(35, 0, 200)));
@@ -551,7 +551,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 _config.AddItem(
                     new MenuItem("Orbwalk", "Combo").SetValue(new KeyBind(32, KeyBindType.Press)));
                 _config.AddItem(
-                   new MenuItem("Freeze", "Lane Freeze (Toggle)").Utils.GameTimeTickCountSetValue(new KeyBind('H', KeyBindType.Toggle)));
+                   new MenuItem("Freeze", "Lane Freeze (Toggle)").SetShared().SetValue(new KeyBind('H', KeyBindType.Toggle)));
 
                 _config.Item("Freeze").Permashow(_config.Item("PermaShow").GetValue<bool>(), "Freeze");
                 _delay = _config.Item("MovementDelay").GetValue<Slider>().Value;

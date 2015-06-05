@@ -111,8 +111,7 @@ namespace ALL_In_One
             Console.WriteLine(tag + message);
             if (AIO_Menu.Champion.Misc.getBoolValue("Notify Debug Message", false) != null &&
                 AIO_Menu.Champion.Misc.getBoolValue("Notify Debug Message", false))
-                Notifications.AddNotification("[Debug] " + message, 3);
-            //Game.PrintChat(tag + message); //임시 롤백
+                Notifications.AddNotification("[Debug]" + message, 3);
         }
 
         internal static bool anyoneValidInRange(float range)
@@ -149,23 +148,19 @@ namespace ALL_In_One
                 var Mobs = MinionManager.GetMinions(Math.Max(spell.Range,Orbwalking.GetRealAutoAttackRange(Player)), MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                 bool HM = true;
                 bool LM = true;
+                bool JM = true;
                 bool LHM = true;
                 if (Cost == 1f)
                 {
                     HM = Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana;
                     LM = Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana;
-                    LHM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
-                }
-                else
-                {
-                    HM = true;
-                    LM = true;
-                    LHM = true;
+                    JM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
+                    LHM = Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana;
                 }
                 if (Mobs.Count > 0 && Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true) != null)
                 {
                     if(Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>()// || Menu.Item("JcUse" + spell.Slot.ToString(), true).GetValue<bool>())
-                    && spell.IsReady() && LHM)
+                    && spell.IsReady() && JM)
                     {
                         if(spell.IsSkillshot)
                         {
@@ -222,59 +217,67 @@ namespace ALL_In_One
         
         internal static void AACb(this Spell spell, float ExtraTargetDistance = 150f,float ALPHA = float.MaxValue, float Cost = 1f, float BombRadius = 0f) //지금으로선 새 방식으로 메뉴 만든 경우에만 사용가능.
         { // 아주 편하게 평캔 Cb, Hrs를 구현할수 있습니다. 그냥 AIO_Func.AACb(Q); 이렇게 쓰세요. Line 스킬일 경우에만 AIO_Func.AACb(E,ED,0f) 이런식으로 쓰시면 됩니다.
-            var target = TargetSelector.GetTarget(Math.Max(spell.Range, Orbwalking.GetRealAutoAttackRange(Player)), spell.DamageType, true); //
+            var target = TargetSelector.GetTarget(Math.Max(spell.Range,Orbwalking.GetRealAutoAttackRange(Player)),(spell.DamageType), true); //
             bool HM = true;
-            bool LM = true; // 이거 3개 뭔지 1분동안 고민하다가 아래 보고 알았음.. ㅠㅠ
-            bool LHM = true; // 이름을 팍 바꾸고 싶었지만 개발자취향이므로.. 안건들게요..
+            bool LM = true;
+            bool JM = true;
+            bool LHM = true;
             if (Cost == 1f)
             {
                 HM = Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana;
                 LM = Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana;
-                LHM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
-            } // 이미 true인데 왜 또 true요?
-
-            switch (Orbwalker.ActiveMode)
+                JM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
+                LHM = Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana;
+            } //굳이 switch문을 쓸 필요가 없음. 또한 false == spell.IsSkillshot을 !spell.IsSkillshot로 고치면 바로 밑의 else가 존재하지 않게 되어 액티브 스킬 사용불가하게됨.
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Menu.Item("Combo.Use " + spell.Slot.ToString(), true) != null)
             {
-                case Orbwalking.OrbwalkingMode.Combo:
-                    if (Menu.Item("Combo.Use " + spell.Slot.ToString(), true) != null &&
-                        Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() &&
-                        spell.IsReady())
+                if(Menu.Item("Combo.Use " + spell.Slot.ToString(), true).GetValue<bool>() // || Menu.Item("CbUse" + spell.Slot.ToString(), true).GetValue<bool>()) 구버전 지원 중단
+                && spell.IsReady())
+                {
+                    if(spell.IsSkillshot)
                     {
-                        if (spell.IsSkillshot)
-                        {
-                            if (spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
-                                LCast(spell, target, ExtraTargetDistance, ALPHA);
-                            else if (spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
-                                CCast(spell, target);
-                            else if (spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
-                                spell.Cast(target);
-                        }
-                        else if (!spell.IsSkillshot)
-                            spell.Cast(target);
+                        if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
+                        LCast(spell,target,ExtraTargetDistance,ALPHA);
+                        else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
+                        CCast(spell,target);
+                        else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+                        spell.Cast(target);
+                    }
+                    else 
+                    {
+                        if(false == spell.IsSkillshot) //스킬샷이 아닐떄
+                        spell.Cast(target);
                         else //스킬샷 데이터가 null일때
-                            spell.Cast();
-                    }
-                    break;
-                case Orbwalking.OrbwalkingMode.Mixed:
-                    if (Menu.Item("Harass.Use " + spell.Slot.ToString(), true) != null &&
-                        Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>() &&
-                        spell.IsReady() && HM)
-                    {
-                        if (spell.IsSkillshot)
                         {
-                            if (spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
-                                LCast(spell, target, ExtraTargetDistance, ALPHA);
-                            else if (spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
-                                CCast(spell, target);
-                            else if (spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
-                                spell.Cast(target);
-                        }
-                        else if (!spell.IsSkillshot)
-                            spell.Cast(target);
-                        else
                             spell.Cast();
+                        }
                     }
-                    break;
+                }
+            }
+            else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Menu.Item("Harass.Use " + spell.Slot.ToString(), true) != null)
+            {
+                if(Menu.Item("Harass.Use " + spell.Slot.ToString(), true).GetValue<bool>()
+                && spell.IsReady() && HM)
+                {
+                    if(spell.IsSkillshot)
+                    {
+                        if(spell.Type == SkillshotType.SkillshotLine) // 선형 스킬일경우
+                        LCast(spell,target,ExtraTargetDistance,ALPHA);
+                        else if(spell.Type == SkillshotType.SkillshotCircle) // 원형 스킬일경우
+                        CCast(spell,target);
+                        else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
+                        spell.Cast(target);
+                    }
+                    else 
+                    {
+                        if(false == spell.IsSkillshot)
+                        spell.Cast(target);
+                        else
+                        {
+                            spell.Cast();
+                        }
+                    }
+                }
             }
         }
         
@@ -313,18 +316,14 @@ namespace ALL_In_One
             var target = TargetSelector.GetTarget(Math.Max(spell.Range,Orbwalking.GetRealAutoAttackRange(Player)), (spell.DamageType), true); //
             bool HM = true;
             bool LM = true;
+            bool JM = false;
             bool LHM = false;
             if (Cost == 1f)
             {
                 HM = Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana;
                 LM = Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana;
-                LHM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
-            }
-            else
-            {
-                HM = true;
-                LM = true;
-                LHM = true;
+                JM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
+                LHM = Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana;
             }
             if(target != null)
             {
@@ -434,7 +433,7 @@ namespace ALL_In_One
                 if (Mobs.Count > 0 && Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true) != null)
                 {
                     if(Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>()
-                    && spell.IsReady() && LHM)
+                    && spell.IsReady() && JM)
                     {
                         if(spell.IsSkillshot)
                         {
@@ -541,18 +540,14 @@ namespace ALL_In_One
             target = TargetSelector.GetTarget(Math.Max(Orbwalking.GetRealAutoAttackRange(Player),spell.Range) + 300f, (spell.DamageType), true);
             bool HM = true;
             bool LM = true;
-            bool LHM = true;
+            bool JM = false;
+            bool LHM = false;
             if (Cost == 1f)
             {
                 HM = Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana;
                 LM = Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana;
-                LHM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
-            }
-            else
-            {
-                HM = true;
-                LM = true;
-                LHM = true;
+                JM = Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana;
+                LHM = Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana;
             }
             if(target != null)
             {
@@ -577,7 +572,7 @@ namespace ALL_In_One
                 if (Mobs.Count > 0 && Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true) != null)
                 {
                     if(Menu.Item("Jungleclear.Use " + spell.Slot.ToString(), true).GetValue<bool>()
-                    && spell.IsReady() && LHM)
+                    && spell.IsReady() && JM)
                     spell.Cast(Game.CursorPos);
                 }
                 if (Minions.Count > 0 && Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true) != null)

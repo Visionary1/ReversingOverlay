@@ -90,12 +90,12 @@ namespace ALL_In_One.champions
             #region Ping Notify
             if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Ping Notify on allies in danger (local/client side)"))
             {
-                if (LastPingTime + 333 < Utils.TickCount)
+                if (LastPingTime + 333 < Utils.GameTimeTickCount)
                 {
                     foreach (var target in HeroManager.Allies.Where(x => x.IsTargetable && !x.IsDead && x.HealthPercent < 50 && x.CountEnemiesInRange(1000f) >= 1))
                         Game.ShowPing(PingCategory.Danger, target.Position, true);
 
-                    LastPingTime = Utils.TickCount;
+                    LastPingTime = Utils.GameTimeTickCount;
                 }
             }
             #endregion

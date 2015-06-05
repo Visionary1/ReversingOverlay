@@ -92,12 +92,12 @@ namespace ALL_In_One.champions
             #region Ping Notify on R killable enemies
             if (R.IsReady() && AIO_Menu.Champion.Misc.getBoolValue("Ping Notify on R killable enemies (local/client side)"))
             {
-                if (LastPingTime + 333 < Utils.TickCount)
+                if (LastPingTime + 333 < Utils.GameTimeTickCount)
                 {
                     foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget() && AIO_Func.isKillable(x, R)))
                         Game.ShowPing(PingCategory.Normal, target.Position, true);
 
-                    LastPingTime = Utils.TickCount;
+                    LastPingTime = Utils.GameTimeTickCount;
                 }
             } 
             #endregion

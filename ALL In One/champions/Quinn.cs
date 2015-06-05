@@ -28,7 +28,7 @@ namespace ALL_In_One.champions
             
             E.SetTargetted(0.25f, 1600f);
             RE.SetTargetted(0.25f, 1600f);
-            Q.SetSkillshot(0.25f, 80f, 1450f, false, SkillshotType.SkillshotLine); //true 했다가 false로 고침. 이는 폭발 반경을 이용하기 위함.
+            Q.SetSkillshot(0.25f, 80f, 1500f, false, SkillshotType.SkillshotLine); //true 했다가 false로 고침. 이는 폭발 반경을 이용하기 위함. 1550하면 상대가 안맞음. 1500이 정확한듯.
 
             AIO_Menu.Champion.Flee.addUseR();
             
@@ -54,6 +54,7 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
+            AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
 
             AIO_Menu.Champion.Drawings.addQrange();
@@ -101,12 +102,15 @@ namespace ALL_In_One.champions
             
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee && AIO_Menu.Champion.Flee.UseR)
             {
-                if(!Bird)
+                var Rtarget = TargetSelector.GetTarget(1000f, Q.DamageType, true); 
+                if(!Bird && Rtarget != null)
                 R.Cast();
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
                 KillstealQ();
+            if (AIO_Menu.Champion.Misc.getBoolValue("KillstealR"))
+                KillstealR();
 
         }
 
@@ -164,6 +168,15 @@ namespace ALL_In_One.champions
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q) && !Bird)
                 AIO_Func.LCast(Q,target,0f,0f,false,210f);
+            }
+        }
+        
+        static void KillstealR()
+        {
+            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
+            {
+                if (R.CanCast(target) && AIO_Func.isKillable(target, R) && Bird)
+                R.Cast();
             }
         }
 

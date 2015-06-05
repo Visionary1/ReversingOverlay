@@ -3773,8 +3773,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                (new double[] { 100, 150, 200 }[level] + 0.5 * source.FlatPhysicalDamageMod) *
-                                (2 - target.HealthPercent / 100)
+                                (new double[] { 100, 150, 200 }[level] * (2 - target.HealthPercent / 100) + 0.5 * source.FlatPhysicalDamageMod) //원래 값이 잘못된것 같아 수정함. 막타가 안돼 -_-;
                     },
                 });
 

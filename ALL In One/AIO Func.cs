@@ -106,12 +106,13 @@ namespace ALL_In_One
             return target.Health + (target.HPRegenRate/2) <= spell.GetDamage2(target, stage);
         }
 
-        internal static void sendDebugMsg(string message, string tag = "[TeamProjects] ALL In One: ")
+        internal static void sendDebugMsg(string message, string tag = "[TeamProjects] AIO: ")
         {
             Console.WriteLine(tag + message);
-            if (AIO_Menu.Champion.Misc.getBoolValue("Notify Debug Message", false) != null &&
-                AIO_Menu.Champion.Misc.getBoolValue("Notify Debug Message", false))
-                Notifications.AddNotification("[Debug]" + message, 3);
+             
+            if (Menu.Item("Misc.Notify Debug Message", true) != null &&
+                Menu.Item("Misc.Notify Debug Message", true).GetValue<bool>())
+                Notifications.AddNotification(tag + message, 4000);
         }
 
         internal static bool anyoneValidInRange(float range)

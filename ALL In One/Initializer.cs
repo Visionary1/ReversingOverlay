@@ -34,8 +34,7 @@ namespace ALL_In_One
             AIO_Menu.Champion.Drawings.addItem("Minion Last Hit", new Circle(true, Color.FromArgb(127, Color.GreenYellow)), false);
             AIO_Menu.Champion.Drawings.addItem("Minion Near Kill", new Circle(true, Color.FromArgb(127, Color.Gray)), false);
             AIO_Menu.Champion.Drawings.addItem("Jungle Position", true, false);
-
-            AIO_Menu.Champion.Misc.addItem("Notify Debug Message", false, false);
+            AIO_Menu.Champion.Misc.addItem("Notify Debug Message", true, true);
 
             Drawing.OnDraw += Drawing_OnDraw;
             

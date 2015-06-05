@@ -75,7 +75,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         {
             "monkeykingdoubleattack",
             "shyvanadoubleattack", "shyvanadoubleattackdragon", "zyragraspingplantattack", "zyragraspingplantattack2",
-            "zyragraspingplantattackfire", "zyragraspingplantattack2fire", "viktorpowertransfer"
+            "zyragraspingplantattackfire", "zyragraspingplantattack2fire", "viktorpowertransfer", "sivirwattackbounce"
         }; // "jarvanivcataclysmattack" is auto attack. Edited by RL244
 
         //Spells that are attacks even if they dont have the "attack" word in their name.
@@ -234,7 +234,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
             {
                 return false;
             }
-            var myRange = GetRealAutoAttackRange(Player);
+            var myRange = GetRealAutoAttackRange(target);
             return
                 Vector2.DistanceSquared(
                     (target is Obj_AI_Base) ? ((Obj_AI_Base) target).ServerPosition.To2D() : target.Position.To2D(),
@@ -267,10 +267,11 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 return false;
             }*/
                // 타 커먼에서 미사일 런치드 무시한것처럼 하면 과연 평캔현상이 사라지려나
-            /*if (_missileLaunched)
+            if (_missileLaunched && Orbwalker.MissileCheck)
             {
                 return true;
-            }*/
+
+            }
              
             return NoCancelChamps.Contains(Player.ChampionName) || (Utils.GameTimeTickCount >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup); // + Game.Ping / 2 임의수정
         }
@@ -364,11 +365,11 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
 
                     if (!DisableNextAttack)
                     {
-                        /*if (!NoCancelChamps.Contains(Player.ChampionName))  
+                        if (!NoCancelChamps.Contains(Player.ChampionName))  
                         {  
-                            LastAATick = Utils.GameTimeTickCount + Game.Ping + 100 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);  
+                            LastAATick = Utils.GameTimeTickCount - Game.Ping - (int)(ObjectManager.Player.AttackCastDelay * 1000f);  
                             _missileLaunched = false;      
-                        }  */
+                        }  
 
                         Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                         _lastTarget = target;
@@ -509,9 +510,21 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 misc.AddItem(
                     new MenuItem("HoldPosRadius", "Hold Position Radius").SetValue(new Slider(65, 0, 250)));
                 misc.AddItem(new MenuItem("PriorizeFarm", "Priorize farm over harass").SetValue(true));
+                misc.AddItem(new MenuItem("FreezeHealth", "LaneFreeze Damage %").SetValue(new Slider(50, 50, 100)));
+                misc.AddItem(new MenuItem("PermaShow", "PermaShow").SetValue(true)).ValueChanged += (s, args) => {
+                    if (args.GetNewValue<bool>())
+                    {
+                        _config.Item("Freeze").Permashow(true, "Freeze");
+                    }
+                    else
+                    {
+                        _config.Item("Freeze").Permashow(false);
+                    }
+                };
                 _config.AddSubMenu(misc);
 
-
+                /* Missile check */
+                _config.AddItem(new MenuItem("MissileCheck", "Use Missile Check").SetValue(false));
                 /* Delay sliders */
                 _config.AddItem(
                     new MenuItem("ExtraWindup", "Extra windup time").SetValue(new Slider(35, 0, 200)));
@@ -537,7 +550,10 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
 
                 _config.AddItem(
                     new MenuItem("Orbwalk", "Combo").SetValue(new KeyBind(32, KeyBindType.Press)));
+                _config.AddItem(
+                   new MenuItem("Freeze", "Lane Freeze (Toggle)").SetValue(new KeyBind('H', KeyBindType.Toggle)));
 
+                _config.Item("Freeze").Permashow(_config.Item("PermaShow").GetValue<bool>(), "Freeze");
                 _delay = _config.Item("MovementDelay").GetValue<Slider>().Value;
                 Player = ObjectManager.Player;
                 Game.OnUpdate += GameOnOnGameUpdate;
@@ -554,6 +570,10 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 get { return _config.Item("FarmDelay").GetValue<Slider>().Value; }
             }
 
+            public static bool MissileCheck
+            {
+                get { return _config.Item("MissileCheck").GetValue<bool>(); }
+            }
             public OrbwalkingMode ActiveMode
             {
                 get
@@ -656,18 +676,25 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                 if (ActiveMode == OrbwalkingMode.LaneClear || ActiveMode == OrbwalkingMode.Mixed && _config.Item("Harass.MLH").GetValue<bool>() || //미니언 킬 하레스..!!
                     ActiveMode == OrbwalkingMode.LastHit)
                 {
-                    foreach (var minion in
+                    var FreezeActive = _config.Item("Freeze").GetValue<KeyBind>().Active && (ActiveMode != OrbwalkingMode.LaneClear);
+                    var MinionList =
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 minion =>
                                     minion.IsValidTarget() && InAutoAttackRange(minion) &&
                                     minion.Health <
-                                    Player.GetAutoAttackDamage2(minion, true) * 2)
-                        ) //좀 병신같았던 Farm 수정. 이전엔 패시브 고려안해서 패시브 데미지 때문에 미니언 버리는 경우도 많았음.
+                                    Player.GetAutoAttackDamage2(minion, true) * 2); //좀 병신같았던 Farm 수정. 이전엔 패시브 고려안해서 패시브 데미지 때문에 미니언 버리는 경우도 많았음.
+                    foreach (var minion in MinionList)
                     {
+                        var FreezeDamage = Player.GetAutoAttackDamage2(minion, true) * (_config.Item("FreezeHealth").GetValue<Slider>().Value / 100f);
                         var t = (int) (Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
                                 1000 * (int) Player.Distance(minion, false) / (int) GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
+
+                        if (FreezeActive && predHealth.Equals(minion.Health))
+                        {
+                            continue;
+                        }
 
                         if (minion.Team != GameObjectTeam.Neutral && MinionManager.IsMinion(minion, true))
                         {
@@ -676,7 +703,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
                                 FireOnNonKillableMinion(minion);
                             }
 
-                            if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage2(minion, true))
+                            if (predHealth > 0 && predHealth <= (FreezeActive ? FreezeDamage : Player.GetAutoAttackDamage2(minion, true)))
                             {
                                 return minion;
                             }

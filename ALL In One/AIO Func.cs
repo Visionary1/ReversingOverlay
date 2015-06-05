@@ -164,22 +164,17 @@ namespace ALL_In_One
                     {
                         if(spell.IsSkillshot)
                         {
-                        if(spell.Type == SkillshotType.SkillshotLine)
-                        LCast(spell,Mobs[0],ExtraTargetDistance,ALPHA);
-                        else if(spell.Type == SkillshotType.SkillshotCircle)
-                        CCast(spell,Mobs[0]);
-                        else if(spell.Type == SkillshotType.SkillshotCone)
-                        spell.Cast(Mobs[0]);
+                            if(spell.Type == SkillshotType.SkillshotLine)
+                                LCast(spell,Mobs[0],ExtraTargetDistance,ALPHA);
+                            else if(spell.Type == SkillshotType.SkillshotCircle)
+                                CCast(spell,Mobs[0]);
+                            else if(spell.Type == SkillshotType.SkillshotCone)
+                                spell.Cast(Mobs[0]);
                         }
-                        else 
-                        {
-                            if(false == spell.IsSkillshot)
+                        else if(false == spell.IsSkillshot)
                             spell.Cast(Mobs[0]);
-                            else
-                            {
-                                spell.Cast(); 
-                            }
-                        }
+                        else
+                            spell.Cast(); 
                     }
                 }
                 if (Minions.Count > 0 && Menu.Item("Laneclear.Use " + spell.Slot.ToString(), true) != null)
@@ -189,27 +184,22 @@ namespace ALL_In_One
                     {
                         if(spell.IsSkillshot)
                         {
-                        if(spell.Type == SkillshotType.SkillshotLine)
-                        {
-                            if(ALPHA > 1f)
-                            LCast(spell,Minions[0],ExtraTargetDistance,ALPHA,false,BombRadius);
-                            else
-                            LH(spell, ALPHA);
-                        }
-                        else if(spell.Type == SkillshotType.SkillshotCircle)
-                        CCast(spell,Minions[0]);
-                        else if(spell.Type == SkillshotType.SkillshotCone)
-                        spell.Cast(Minions[0]);
-                        }
-                        else 
-                        {
-                            if(false == spell.IsSkillshot)
-                            spell.Cast(Minions[0]);
-                            else
+                            if(spell.Type == SkillshotType.SkillshotLine)
                             {
-                                spell.Cast(); 
+                                if(ALPHA > 1f)
+                                    LCast(spell,Minions[0],ExtraTargetDistance,ALPHA,false,BombRadius);
+                                else
+                                    LH(spell, ALPHA);
                             }
+                            else if(spell.Type == SkillshotType.SkillshotCircle)
+                                CCast(spell,Minions[0]);
+                            else if(spell.Type == SkillshotType.SkillshotCone)
+                                spell.Cast(Minions[0]);
                         }
+                        else if(false == spell.IsSkillshot)
+                            spell.Cast(Minions[0]);
+                        else
+                            spell.Cast(); 
                     }
                 }
             }
@@ -243,15 +233,10 @@ namespace ALL_In_One
                         else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
                         spell.Cast(target);
                     }
-                    else 
-                    {
-                        if(false == spell.IsSkillshot) //스킬샷이 아닐떄
+                    else if(false == spell.IsSkillshot) //스킬샷이 아닐떄
                         spell.Cast(target);
-                        else //스킬샷 데이터가 null일때
-                        {
-                            spell.Cast();
-                        }
-                    }
+                    else //스킬샷 데이터가 null일때
+                        spell.Cast();
                 }
             }
             else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Menu.Item("Harass.Use " + spell.Slot.ToString(), true) != null)
@@ -268,15 +253,10 @@ namespace ALL_In_One
                         else if(spell.Type == SkillshotType.SkillshotCone) //원뿔 스킬
                         spell.Cast(target);
                     }
-                    else 
-                    {
-                        if(false == spell.IsSkillshot)
+                    else if(false == spell.IsSkillshot)
                         spell.Cast(target);
-                        else
-                        {
-                            spell.Cast();
-                        }
-                    }
+                    else
+                        spell.Cast();
                 }
             }
         }

@@ -134,6 +134,26 @@ namespace ALL_In_One
             AttackPassives.Add(p);
             #endregion
             
+            #region Riven  
+
+            p = new PassiveDamage  
+            {  
+                ChampionName = "Riven",  
+                IsActive = (source, target) => source.GetBuffCount("rivenpassiveaaboost") > 0,  
+                GetDamage =  
+                    (source, target) =>  
+                        ((float)  
+                            source.CalcDamage(  
+                               target, DamageType.Physical,  
+                                new double[] { 0.2, 0.2, 0.25, 0.25, 0.25, 0.3, 0.3, 0.3, 0.35, 0.35, 0.35, 0.4, 0.4, 0.4, 0.45, 0.45, 0.45, 0.5 }[  
+                                source.Level - 1] * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),  
+            };  
+            AttackPassives.Add(p);  
+
+            #endregion  
+  
+
+            
             #region Quinn // By Rl244
             p = new PassiveDamage
             {

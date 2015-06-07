@@ -118,7 +118,7 @@ namespace ALL_In_One
                     champions.Zyra.Load();
                     break;
                 case "Caitlyn":
-                    MadeBy(Developer.RL244); 
+                    MadeBy(Developer.RL244);
                     champions.Caitlyn.Load();
                     break;
                 case "MissFortune":
@@ -217,7 +217,7 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Yorick.Load();
                     break;
-                case "Renekton": 
+                case "Renekton":
                     MadeBy(Developer.RL244); // Work In Progress
                     champions.Renekton.Load();
                     break;
@@ -233,7 +233,7 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Ezreal.Load();
                     break;
-                case "JarvanIV": 
+                case "JarvanIV":
                     MadeBy(Developer.RL244);
                     champions.JarvanIV.Load();
                     break;
@@ -253,7 +253,7 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.DrMundo.Load();
                     break;
-                case "Volibear": 
+                case "Volibear":
                     MadeBy(Developer.RL244);
                     champions.Volibear.Load();
                     break;
@@ -261,27 +261,27 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Riven.Load();
                     break;*/
-                case "Ahri": 
+                case "Ahri":
                     MadeBy(Developer.RL244);
                     champions.Ahri.Load();
                     break;
-                case "Corki": 
+                case "Corki":
                     MadeBy(Developer.RL244);
                     champions.Corki.Load();
                     break;
-                case "Vayne": 
+                case "Vayne":
                     MadeBy(Developer.RL244);
                     champions.Vayne.Load();
                     break;
-                case "Kayle": 
+                case "Kayle":
                     MadeBy(Developer.RL244);
                     champions.Kayle.Load();
                     break;
-                case "Soraka": 
+                case "Soraka":
                     MadeBy(Developer.RL244);
                     champions.Soraka.Load();
                     break;
-                case "Olaf": 
+                case "Olaf":
                     MadeBy(Developer.RL244);
                     champions.Olaf.Load();
                     break;
@@ -325,7 +325,7 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Ashe.Load();
                     break;
-                case "Morgana": 
+                case "Morgana":
                     MadeBy(Developer.RL244);
                     champions.Morgana.Load();
                     break;
@@ -372,9 +372,9 @@ namespace ALL_In_One
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;
-            } 
+            }
         }
-        
+
         static void MadeBy(Developer Developer)
         {
             AIO_Func.sendDebugMsg(ObjectManager.Player.ChampionName + " Made By '" + Developer.ToString() + "'.");
@@ -387,7 +387,7 @@ namespace ALL_In_One
             {
                 AIO_Func.sendDebugMsg(Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " is supported.");
                 Notifications.AddNotification(Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " is supported.", 4000);
-               return true;
+                return true;
             }
             catch
             {

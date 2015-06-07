@@ -148,9 +148,9 @@ namespace ALL_In_One.champions
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-                var qTarget = TargetSelector.GetTargetNoCollision(Q);
+                var qTarget = AIO_Menu.Champion.Combo.getBoolValue("Ignore Collision") ? TargetSelector.GetTarget(Q.Range, Q.DamageType) : TargetSelector.GetTargetNoCollision(Q);
 
-                if (qTarget.IsValidTarget(Q.Range))
+                if (qTarget != null)
                     Q.Cast(qTarget);
             }
 
@@ -166,7 +166,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-                if(!Q.IsReady() && !E.IsReady() && Player.HealthPercent <= 98 && Player.CountEnemiesInRange(Q.Range) >= 1)
+                if (!Q.IsReady() && !E.IsReady() && Player.HealthPercent <= 98 && Player.CountEnemiesInRange(Q.Range) >= 1)
                     R.Cast();
             }
         }
@@ -178,9 +178,9 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-                var qTarget = TargetSelector.GetTargetNoCollision(Q);
+                var qTarget = AIO_Menu.Champion.Combo.getBoolValue("Ignore Collision") ? TargetSelector.GetTarget(Q.Range, Q.DamageType) : TargetSelector.GetTargetNoCollision(Q);
 
-                if (qTarget.IsValidTarget(Q.Range))
+                if (qTarget != null)
                     Q.Cast(qTarget);
             }
 
@@ -216,7 +216,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
             {
                 var wTarget = Minions.Where(x => x.IsValidTarget(W.Range) && W.IsKillable(x)).OrderByDescending(x => x.Health).FirstOrDefault();
-                
+
                 if (wTarget != null)
                     W.Cast(wTarget);
             }
@@ -261,7 +261,7 @@ namespace ALL_In_One.champions
 
         static void Killsteal()
         {
-            foreach (var target in HeroManager.Enemies.OrderByDescending(x=>x.Health))
+            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
                     Q.Cast(target);

@@ -58,6 +58,7 @@ namespace ALL_In_One.champions
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
+            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
         }
 
         static void Game_OnUpdate(EventArgs args)

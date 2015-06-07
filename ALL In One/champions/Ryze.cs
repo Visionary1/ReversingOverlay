@@ -36,6 +36,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
+            AIO_Menu.Champion.Combo.addItem("Ignore Collision", false);
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
@@ -72,6 +73,7 @@ namespace ALL_In_One.champions
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
+            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -91,7 +93,6 @@ namespace ALL_In_One.champions
                     var RTarget = TargetSelector.GetTarget(W.Range, W.DamageType, true);
                     if((PassiveCount == 1 && Q.IsReady() || PassiveCount == 2 && !Q.IsReady() || PassiveDuration > 0) && RTarget != null && AIO_Menu.Champion.Combo.UseR && R.IsReady())
                         R.Cast();
-                    
                 }
                 else
                 {
@@ -107,10 +108,10 @@ namespace ALL_In_One.champions
                     if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     {
                         Combo();
-                        Orbwalker.SetAttack(!W.IsReady());
+                        Q.Collision = !AIO_Menu.Champion.Combo.getBoolValue("Ignore Collision");
                     }
                     else
-                        Orbwalker.SetAttack(true);
+                        Q.Collision = true;
 
                     if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                     {
@@ -164,7 +165,7 @@ namespace ALL_In_One.champions
                 return;
 
             if (W.CanCast(gapcloser.Sender))
-                W.Cast(gapcloser.Sender);
+                W.CastOnUnit(gapcloser.Sender);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -173,16 +174,25 @@ namespace ALL_In_One.champions
                 return;
 
             if (W.CanCast(sender))
-                W.Cast(sender);
+                W.CastOnUnit(sender);
+        }
+
+        static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        {
+            if (!args.Unit.IsMe)
+                return;
+
+            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && W.IsReady())
+                args.Process = false;
         }
 
         static void Combo()
         {
             if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
             {
-                var qTarget = TargetSelector.GetTargetNoCollision(Q);
+                var qTarget = AIO_Menu.Champion.Combo.getBoolValue("Ignore Collision") ? TargetSelector.GetTarget(Q.Range, Q.DamageType) : TargetSelector.GetTargetNoCollision(Q);
 
-                if (qTarget.IsValidTarget(Q.Range))
+                if (qTarget != null)
                     Q.Cast(qTarget);
             }
 
@@ -198,7 +208,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-                if(!Q.IsReady() && !E.IsReady() && Player.HealthPercent <= 98 && Player.CountEnemiesInRange(Q.Range) >= 1)
+                if (!Q.IsReady() && !E.IsReady() && Player.HealthPercent <= 98 && Player.CountEnemiesInRange(Q.Range) >= 1)
                     R.Cast();
             }
         }
@@ -212,7 +222,7 @@ namespace ALL_In_One.champions
             {
                 var qTarget = TargetSelector.GetTargetNoCollision(Q);
 
-                if (qTarget.IsValidTarget(Q.Range))
+                if (qTarget != null)
                     Q.Cast(qTarget);
             }
 
@@ -248,7 +258,7 @@ namespace ALL_In_One.champions
             if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
             {
                 var wTarget = Minions.Where(x => x.IsValidTarget(W.Range) && W.IsKillable(x)).OrderByDescending(x => x.Health).FirstOrDefault();
-                
+
                 if (wTarget != null)
                     W.Cast(wTarget);
             }
@@ -293,7 +303,7 @@ namespace ALL_In_One.champions
 
         static void Killsteal()
         {
-            foreach (var target in HeroManager.Enemies.OrderByDescending(x=>x.Health))
+            foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (Q.CanCast(target) && AIO_Func.isKillable(target, Q))
                     Q.Cast(target);

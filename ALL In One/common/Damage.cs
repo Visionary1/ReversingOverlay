@@ -46,7 +46,7 @@ namespace ALL_In_One
     {
         public static float GetDamage2(this Spell spell, Obj_AI_Base target, int stage = 0)
         {
-            return (float) ObjectManager.Player.GetSpellDamage(target, spell.Slot, stage);
+            return (float)ObjectManager.Player.GetSpellDamage(target, spell.Slot, stage);
         }
         public enum DamageItems
         {
@@ -92,22 +92,22 @@ namespace ALL_In_One
             p = new PassiveDamage
             {
                 ChampionName = ObjectManager.Player.ChampionName,
-                IsActive = (source, target) => (Items.HasItem((int)ItemId.Nashors_Tooth,source)), 
+                IsActive = (source, target) => (Items.HasItem((int)ItemId.Nashors_Tooth, source)),
                 GetDamage =
                     (source, target) =>
                         (float)
                             source.CalcDamage(
-                                target, DamageType.Magical, 
+                                target, DamageType.Magical,
                                 15 + (float)0.15d * source.FlatMagicDamageMod),
             };
             AttackPassives.Add(p);
             #endregion
-            
+
             #region Wits_End // By Rl244
             p = new PassiveDamage
             {
                 ChampionName = ObjectManager.Player.ChampionName,
-                IsActive = (source, target) => (Items.HasItem((int)ItemId.Wits_End,source)), 
+                IsActive = (source, target) => (Items.HasItem((int)ItemId.Wits_End, source)),
                 GetDamage =
                     (source, target) =>
                         (float)
@@ -116,42 +116,42 @@ namespace ALL_In_One
             };
             AttackPassives.Add(p);
             #endregion
-            
+
             #region Slayer // By Rl244
             p = new PassiveDamage
             {
                 ChampionName = ObjectManager.Player.ChampionName,
-                IsActive = (source, target) => (source.HasBuff2("enchantment_slayer_stacks")), 
+                IsActive = (source, target) => (source.HasBuff2("enchantment_slayer_stacks")),
                 GetDamage =
                     (source, target) =>
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Magical,
                                 (from buff in ObjectManager.Player.Buffs
-                                    where buff.Name == "enchantment_slayer_stacks"
-                                    select buff.Count).FirstOrDefault() + 25),
+                                 where buff.Name == "enchantment_slayer_stacks"
+                                 select buff.Count).FirstOrDefault() + 25),
             };
             AttackPassives.Add(p);
             #endregion
-            
-            #region Riven  
 
-            p = new PassiveDamage  
-            {  
-                ChampionName = "Riven",  
-                IsActive = (source, target) => source.GetBuffCount("rivenpassiveaaboost") > 0,  
-                GetDamage =  
-                    (source, target) =>  
-                        ((float)  
-                            source.CalcDamage(  
-                               target, DamageType.Physical,  
-                                new double[] { 0.2, 0.2, 0.25, 0.25, 0.25, 0.3, 0.3, 0.3, 0.35, 0.35, 0.35, 0.4, 0.4, 0.4, 0.45, 0.45, 0.45, 0.5 }[  
-                                source.Level - 1] * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),  
-            };  
-            AttackPassives.Add(p);  
+            #region Riven
 
-            #endregion  
-  
+            p = new PassiveDamage
+            {
+                ChampionName = "Riven",
+                IsActive = (source, target) => source.GetBuffCount("rivenpassiveaaboost") > 0,
+                GetDamage =
+                    (source, target) =>
+                        ((float)
+                            source.CalcDamage(
+                               target, DamageType.Physical,
+                                new double[] { 0.2, 0.2, 0.25, 0.25, 0.25, 0.3, 0.3, 0.3, 0.35, 0.35, 0.35, 0.4, 0.4, 0.4, 0.45, 0.45, 0.45, 0.5 }[
+                                source.Level - 1] * (source.BaseAttackDamage + source.FlatPhysicalDamageMod))),
+            };
+            AttackPassives.Add(p);
+
+            #endregion
+
 
             /*
             #region Quinn // By Rl244
@@ -168,12 +168,12 @@ namespace ALL_In_One
             };
             AttackPassives.Add(p);
             #endregion*/
-            
+
             #region MasterYi // By Rl244
             p = new PassiveDamage
             {
                 ChampionName = "MasterYi",
-                IsActive = (source, target) => (source.HasBuff2("doublestrike")), 
+                IsActive = (source, target) => (source.HasBuff2("doublestrike")),
                 GetDamage =
                     (source, target) =>
                         (float)
@@ -183,12 +183,12 @@ namespace ALL_In_One
             };
             AttackPassives.Add(p);
             #endregion
-            
+
             #region Ashe // By Rl244
             p = new PassiveDamage
             {
                 ChampionName = "Ashe",
-                IsActive = (source, target) => (target.HasBuff2("ashepassiveslow")), 
+                IsActive = (source, target) => (target.HasBuff2("ashepassiveslow")),
                 GetDamage =
                     (source, target) =>
                         (float)
@@ -198,23 +198,23 @@ namespace ALL_In_One
             };
             AttackPassives.Add(p);
             #endregion
-            
-            #region Ashe // By Rl244 
+
+            #region Ashe // By Rl244
             p = new PassiveDamage
             {
                 ChampionName = "Ashe",
-                IsActive = (source, target) => (source.HasBuff2("asheqattack")), 
+                IsActive = (source, target) => (source.HasBuff2("asheqattack")),
                 GetDamage =
                     (source, target) =>
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Physical,
-                                (0.15d+0.05d*(source.Spellbook.GetSpell(SpellSlot.Q).Level - 1))
+                                (0.15d + 0.05d * (source.Spellbook.GetSpell(SpellSlot.Q).Level - 1))
                                 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
             };
             AttackPassives.Add(p);
             #endregion
-            
+
             #region Diana // By Rl244
             p = new PassiveDamage
             {
@@ -225,12 +225,12 @@ namespace ALL_In_One
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Magical,
-                                new float[] { 20,25,30,35,40,50,60,70,80,90,105,120,135,155,175,200,225,250 }[source.Level - 1]
-                                +(float)0.8d * source.FlatMagicDamageMod),
+                                new float[] { 20, 25, 30, 35, 40, 50, 60, 70, 80, 90, 105, 120, 135, 155, 175, 200, 225, 250 }[source.Level - 1]
+                                + (float)0.8d * source.FlatMagicDamageMod),
             };
             AttackPassives.Add(p);
             #endregion
-            
+
             #region Viktor // By Rl244
             p = new PassiveDamage
             {
@@ -241,12 +241,12 @@ namespace ALL_In_One
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Magical,
-                                new float[] { 20/25/30/35/40/45/50/55/60/70/80/90/110/130/150/170/190/210 }[source.Level - 1]
-                                +(float)0.5d * source.FlatMagicDamageMod),
+                                new float[] { 20 / 25 / 30 / 35 / 40 / 45 / 50 / 55 / 60 / 70 / 80 / 90 / 110 / 130 / 150 / 170 / 190 / 210 }[source.Level - 1]
+                                + (float)0.5d * source.FlatMagicDamageMod),
             };
             AttackPassives.Add(p);
             #endregion
-            
+
             #region Pantheon // By Rl244
             p = new PassiveDamage
             {
@@ -257,18 +257,18 @@ namespace ALL_In_One
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Physical,
-                                1d  * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
+                                1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
             };
             AttackPassives.Add(p);
             #endregion
-            
+
             #region Aatrox
 
             p = new PassiveDamage
             {
                 ChampionName = "Aatrox",
                 IsActive = (source, target) => (source.HasBuff2("AatroxWPower") && source.HasBuff2("AatroxWONHPowerBuff")),
-                GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.W)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
             };
             AttackPassives.Add(p);
 
@@ -332,7 +332,7 @@ namespace ALL_In_One
                 ChampionName = "Corki",
                 IsActive = (source, target) => (source.HasBuff2("rapidreload")),
                 GetDamage =
-                    (source, target) => ((float) 0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
+                    (source, target) => ((float)0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
             };
             AttackPassives.Add(p);
 
@@ -347,14 +347,14 @@ namespace ALL_In_One
                     (source, target) =>
                         (from buff in target.Buffs where buff.DisplayName == "GnarWProc" select buff.Count)
                             .FirstOrDefault() == 2,
-                GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.W)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
             };
             AttackPassives.Add(p);
 
             #endregion
-            
+
             #region JarvanIV // By Rl244
-            
+
             p = new PassiveDamage
             {
                 ChampionName = "JarvanIV",
@@ -367,7 +367,7 @@ namespace ALL_In_One
                                 0.1d * (source.Health))),
             };
             AttackPassives.Add(p);
-            
+
             #endregion
 
             #region Jinx
@@ -393,7 +393,7 @@ namespace ALL_In_One
             {
                 ChampionName = "Katarina",
                 IsActive = (source, target) => (target.HasBuff2("KataQMark1")),
-                GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.Q, 1)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q, 1)),
             };
             AttackPassives.Add(p);
 
@@ -405,7 +405,7 @@ namespace ALL_In_One
             {
                 ChampionName = "KogMaw",
                 IsActive = (source, target) => (source.HasBuff2("KogMawBioArcaneBarrage")),
-                GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.W)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
             };
             AttackPassives.Add(p);
 
@@ -422,7 +422,7 @@ namespace ALL_In_One
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Magical,
-                                (float) 0.06 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
+                                (float)0.06 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
             };
             AttackPassives.Add(p);
 
@@ -434,7 +434,7 @@ namespace ALL_In_One
             {
                 ChampionName = "Nasus",
                 IsActive = (source, target) => (source.HasBuff2("NasusQ")),
-                GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.Q)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q)),
             };
             AttackPassives.Add(p);
 
@@ -451,7 +451,7 @@ namespace ALL_In_One
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Magical,
-                                (float) 0.15 * source.FlatMagicDamageMod +
+                                (float)0.15 * source.FlatMagicDamageMod +
                                 new float[] { 10, 10, 10, 18, 18, 18, 26, 26, 26, 34, 34, 34, 42, 42, 42, 50, 50, 50 }[
                                     source.Level - 1]),
             };
@@ -484,7 +484,7 @@ namespace ALL_In_One
                 IsActive = (source, target) => (source.HasBuff2("bluecardpreattack")),
                 GetDamage =
                     (source, target) =>
-                        (float) source.GetSpellDamage(target, SpellSlot.W) -
+                        (float)source.GetSpellDamage(target, SpellSlot.W) -
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Physical, (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
@@ -495,7 +495,7 @@ namespace ALL_In_One
             {
                 ChampionName = "TwistedFate",
                 IsActive = (source, target) => (source.HasBuff2("cardmasterstackparticle")),
-                GetDamage = (source, target) => (float) source.GetSpellDamage(target, SpellSlot.E),
+                GetDamage = (source, target) => (float)source.GetSpellDamage(target, SpellSlot.E),
             };
             AttackPassives.Add(p);
 
@@ -507,7 +507,7 @@ namespace ALL_In_One
             {
                 ChampionName = "Varus",
                 IsActive = (source, target) => (source.HasBuff2("VarusW")),
-                GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.W)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
             };
             AttackPassives.Add(p);
 
@@ -519,7 +519,7 @@ namespace ALL_In_One
             {
                 ChampionName = "Vayne",
                 IsActive = (source, target) => (source.HasBuff2("vaynetumblebonus")),
-                GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.Q)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q)),
             };
             AttackPassives.Add(p);
 
@@ -530,7 +530,7 @@ namespace ALL_In_One
                     (source, target) =>
                         (from buff in target.Buffs where buff.Name == "vaynesilvereddebuff" select buff.Count)
                             .FirstOrDefault() == 2,
-                GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.W)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
             };
             AttackPassives.Add(p);
 
@@ -547,9 +547,8 @@ namespace ALL_In_One
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Magical,
-                                (float) 0.25d * source.FlatMagicDamageMod +
-                                new float[]
-                                { 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 100, 112, 124, 136, 148, 160 }[
+                                (float)0.25d * source.FlatMagicDamageMod +
+                                new float[] { 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 88, 100, 112, 124, 136, 148, 160 }[
                                     source.Level - 1]),
             };
             AttackPassives.Add(p);
@@ -1408,7 +1407,7 @@ namespace ALL_In_One
                                 new double[] { 200, 350, 500  }[level] + 1.3 * source.FlatMagicDamageMod
                     },
                 });
-                
+
             Spells.Add(
                 "Elise", new List<DamageSpell>
                 {
@@ -5580,15 +5579,13 @@ namespace ALL_In_One
                     }
 
                     if (challengingSmite != null)
-
                     {
                         return 54 + 6 * source.Level;
                     }
                 }
 
                 return
-                    new double[]
-                    { 390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000 }[
+                    new double[] { 390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000 }[
                         source.Level - 1];
             }
 
@@ -5679,7 +5676,7 @@ namespace ALL_In_One
                 return CalcPhysicalDamage(source, target, result) * k - reduction;
             }
 
-            var targetAsHero = (Obj_AI_Hero) target;
+            var targetAsHero = (Obj_AI_Hero)target;
 
             //Ninja tabi
             if (Items.HasItem(3047, targetAsHero))
@@ -5753,8 +5750,8 @@ namespace ALL_In_One
             if (hero != null)
             {
                 return (from spell in hero.Spellbook.Spells
-                    where String.Equals(spell.Name, spellName, StringComparison.InvariantCultureIgnoreCase)
-                    select GetDamageSpell(hero, target, spell.Slot)).FirstOrDefault();
+                        where String.Equals(spell.Name, spellName, StringComparison.InvariantCultureIgnoreCase)
+                        select GetDamageSpell(hero, target, spell.Slot)).FirstOrDefault();
             }
 
             return null;
@@ -5967,7 +5964,7 @@ namespace ALL_In_One
                 return k;
             }
 
-            var targetAsHero = (Obj_AI_Hero) target;
+            var targetAsHero = (Obj_AI_Hero)target;
 
             //Defensive masteries:
 
@@ -6013,7 +6010,7 @@ namespace ALL_In_One
             if (source is Obj_AI_Hero && target is Obj_AI_Hero)
             {
                 var mastery =
-                    ((Obj_AI_Hero) target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
+                    ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 65);
                 if (mastery != null && mastery.Points >= 1)
                 {
                     d = d - 1 * mastery.Points;
@@ -6025,7 +6022,7 @@ namespace ALL_In_One
             if (source is Obj_AI_Minion && target is Obj_AI_Hero && source.Team == GameObjectTeam.Neutral)
             {
                 var mastery =
-                    ((Obj_AI_Hero) target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
+                    ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 68);
                 if (mastery != null && mastery.Points >= 1)
                 {
                     d = d - 1 * mastery.Points;
@@ -6038,7 +6035,7 @@ namespace ALL_In_One
             if (source is Obj_AI_Hero && target is Obj_AI_Hero)
             {
                 var mastery =
-                    ((Obj_AI_Hero) target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
+                    ((Obj_AI_Hero)target).Masteries.FirstOrDefault(m => m.Page == MasteryPage.Defense && m.Id == 81);
                 if (mastery != null && mastery.Points == 1)
                 {
                     if (source.IsMelee())

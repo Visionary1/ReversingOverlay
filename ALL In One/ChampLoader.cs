@@ -46,11 +46,11 @@ namespace ALL_In_One
                     champions.Vladimir.Load();
                     break;
                 case "Chogath":
-                    MadeBy(Developer.xcsoft);
+                    MadeBy(Developer.Fakker);
                     champions.Chogath.Load();
                     break;
                 case "Urgot":
-                    MadeBy(Developer.Fakker);
+                    MadeBy(Developer.RL244);
                     champions.Urgot.Load();
                     break;
                 case "Fiora":
@@ -66,11 +66,11 @@ namespace ALL_In_One
                     champions.Nautilus.Load();
                     break;
                 case "Graves":
-                    MadeBy(Developer.xcsoft);
+                    MadeBy(Developer.Fakker);
                     champions.Graves.Load();
                     break;
                 case "Sivir":
-                    MadeBy(Developer.xcsoft);
+                    MadeBy(Developer.Fakker);
                     champions.Sivir.Load();
                     break;
                 case "XinZhao":
@@ -368,6 +368,10 @@ namespace ALL_In_One
                 case "Quinn":
                     MadeBy(Developer.RL244);
                     champions.Quinn.Load();
+                    break;
+                case "Skarner":
+                    MadeBy(Developer.RL244);
+                    champions.Skarner.Load();
                     break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");

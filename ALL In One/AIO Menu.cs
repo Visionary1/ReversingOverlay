@@ -80,6 +80,11 @@ namespace ALL_In_One
                     return MainMenu_Manual.Item("Combo." + DisplayName, ChampUniq).GetValue<bool>();
                 }
 
+                internal static KeyBind getKeyBindValue(string DisplayName, bool ChampUniq = true)
+                {
+                    return MainMenu_Manual.Item("Combo." + DisplayName, ChampUniq).GetValue<KeyBind>();
+                }
+                
                 internal static Slider getSliderValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Combo." + DisplayName, ChampUniq).GetValue<Slider>();
@@ -638,7 +643,7 @@ namespace ALL_In_One
                     return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<StringList>();
                 }
 
-                internal static KeyBind getKeyBindValue(string DisplayName, bool ChampUniq = true) // 헐 오타 ㅋㅋㅋㅋㅋ
+                internal static KeyBind getKeyBindValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<KeyBind>();
                 }

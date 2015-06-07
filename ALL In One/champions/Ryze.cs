@@ -16,6 +16,10 @@ namespace ALL_In_One.champions
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         static Spell Q, W, E, R;
+        static int PassiveCount { get { var buff = AIO_Func.getBuffInstance(Player, "ryzepassivestack"); return buff != null ? buff.Count : 0; } }
+        static float PassiveDuration { get { var buff = AIO_Func.getBuffInstance(Player, "ryzepassivecharged"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float ShieldDuration { get { var buff = AIO_Func.getBuffInstance(Player, "ryzepassiveshield"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
+        static float RDuration { get { var buff = AIO_Func.getBuffInstance(Player, "RyzeR"); return buff != null ? buff.EndTime - Game.ClockTime : 0; } }
 
         public static void Load()
         {
@@ -26,7 +30,7 @@ namespace ALL_In_One.champions
 
             Q.SetSkillshot(0.25f, 50f, 1700f, true, SkillshotType.SkillshotLine);
             W.SetTargetted(0.25f, float.MaxValue);
-            E.SetTargetted(0.25f, 2000f);
+            E.SetTargetted(0.25f, 1400f);
 
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
@@ -50,6 +54,8 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
+            AIO_Menu.Champion.Misc.addItem("Use RL144 CB", false);
+            AIO_Menu.Champion.Misc.addItem("true시 W선마 콤보(RL144). false시 Xcsoft님의 콤보", null);
             AIO_Menu.Champion.Misc.addUseKillsteal();
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
@@ -57,6 +63,9 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Drawings.addQrange();
             AIO_Menu.Champion.Drawings.addWrange();
             AIO_Menu.Champion.Drawings.addErange();
+            AIO_Menu.Champion.Drawings.addItem("P Timer", new Circle(true, Color.Red));
+            AIO_Menu.Champion.Drawings.addItem("R Timer", new Circle(true, Color.Blue));
+
 
             AIO_Menu.Champion.Drawings.addDamageIndicator(getComboDamage);
 
@@ -71,26 +80,49 @@ namespace ALL_In_One.champions
         {
             if (Player.IsDead)
                 return;
-
-            if (Orbwalking.CanMove(10))
+            if(AIO_Menu.Champion.Misc.getBoolValue("Use RL144 CB")) //ryzepassivestack ryzepassivecharged ryzepassiveshield RyzeR RyzeE(Target)
             {
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
-                    Combo();
-                    Q.Collision = !AIO_Menu.Champion.Combo.getBoolValue("Ignore Collision");
+                    AIO_Func.SC(Q,0f,float.MaxValue); //콤보시에는 미니언 충돌 고려 안하고 쏴야 dps가 매우 높음.(패시브 활용)
+                    if(PassiveCount == 4 || PassiveDuration > 0)
+                        AIO_Func.SC(W);
+                    if(!Q.IsReady() && (PassiveCount == 3 || PassiveDuration > 0))
+                        AIO_Func.SC(E);
+                        
+                    var RTarget = TargetSelector.GetTarget(W.Range, W.DamageType, true);
+                    if((PassiveCount == 1 && Q.IsReady() || PassiveCount == 2 && !Q.IsReady() || PassiveDuration > 0) && RTarget != null && AIO_Menu.Champion.Combo.UseR && R.IsReady())
+                        R.Cast();
                 }
                 else
-                    Q.Collision = true;
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 {
-                    Harass();
+                    AIO_Func.SC(Q,0f,0f);
+                    AIO_Func.SC(W);
+                    AIO_Func.SC(E);
                 }
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            }
+            else
+            {
+                if (Orbwalking.CanMove(10))
                 {
-                    Laneclear();
-                    Jungleclear();
+                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                    {
+                        Combo();
+                        Q.Collision = !AIO_Menu.Champion.Combo.getBoolValue("Ignore Collision");
+                    }
+                    else
+                        Q.Collision = true;
+
+                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                    {
+                        Harass();
+                    }
+
+                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                    {
+                        Laneclear();
+                        Jungleclear();
+                    }
                 }
             }
 
@@ -108,6 +140,9 @@ namespace ALL_In_One.champions
             var drawQ = AIO_Menu.Champion.Drawings.Qrange;
             var drawW = AIO_Menu.Champion.Drawings.Wrange;
             var drawE = AIO_Menu.Champion.Drawings.Erange;
+            var drawPTimer = AIO_Menu.Champion.Drawings.getCircleValue("P Timer");
+            var drawRTimer = AIO_Menu.Champion.Drawings.getCircleValue("R Timer");
+            var pos_temp = Drawing.WorldToScreen(Player.Position);
 
             if (Q.IsReady() && drawQ.Active)
                 Render.Circle.DrawCircle(Player.Position, Q.Range, drawQ.Color);
@@ -117,6 +152,11 @@ namespace ALL_In_One.champions
 
             if (E.IsReady() && drawE.Active)
                 Render.Circle.DrawCircle(Player.Position, E.Range, drawE.Color);
+            if (drawPTimer.Active && PassiveDuration > 0)
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawPTimer.Color, "Passive : " + PassiveDuration.ToString("0.00"));
+            if (drawRTimer.Active && RDuration > 0)
+                Drawing.DrawText(pos_temp[0], pos_temp[1], drawRTimer.Color, "R : " + RDuration.ToString("0.00"));
+
         }
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
@@ -290,7 +330,7 @@ namespace ALL_In_One.champions
                 damage += E.GetDamage2(enemy);
 
             if (!Player.IsWindingUp)
-                damage += (float)Player.GetAutoAttackDamage2(enemy, true) + (float)Player.GetAutoAttackDamage2(enemy, false);
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
 
             return damage;
         }

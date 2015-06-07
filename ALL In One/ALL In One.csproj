@@ -55,13 +55,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>C:\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\Users\workstation\Desktop\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>C:\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -165,7 +165,7 @@
     <Compile Include="champions\_Singed.cs" />
     <Compile Include="champions\Sion.cs" />
     <Compile Include="champions\Sivir.cs" />
-    <Compile Include="champions\_Skarner.cs" />
+    <Compile Include="champions\Skarner.cs" />
     <Compile Include="champions\Sona.cs" />
     <Compile Include="champions\Soraka.cs" />
     <Compile Include="champions\Swain.cs" />

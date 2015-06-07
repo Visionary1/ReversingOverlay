@@ -22,13 +22,21 @@ namespace ALL_In_One
 
         internal static void Shield(this Spell spell, float EffectRadius = 0f)
         {
-            if (ShieldTarget != null && ShieldTarget.Distance(Player.ServerPosition) <= spell.Range && spell.IsReady()
-            && AttackTime - Utils.GameTimeTickCount + 250 >= 0)
+            var SR = Math.Max(spell.Range,Player.AttackRange);
+            if(ShieldTarget != null && ShieldTarget.Distance(Player.ServerPosition) <= SR && spell.IsReady()
+            && AttackTime - Utils.GameTimeTickCount +250 >= 0)
             {
-                if (EffectRadius == 0f)
+                if(spell.IsSkillshot)
+                {}
+                else if(false == spell.IsSkillshot)
+                {
+                    if(EffectRadius == 0f)
                     spell.Cast(ShieldTarget);
-                else
-                    return; //차후 추가예정.
+                    else //차후 추가예정.
+                    return;
+                }
+                else if(ShieldTarget.IsMe)
+                spell.Cast();
             }
         }
 
@@ -44,8 +52,8 @@ namespace ALL_In_One
             var Target = args.Target as Obj_AI_Hero;
             if (HeroSender == null)
                 return;
-
-            if (HeroSender != null && !Orbwalking.IsOnHit(args.SData.Name) && Target.IsAlly && !HeroSender.IsAlly && Target.Distance(Player.ServerPosition) <= 1000)
+                
+            if (HeroSender != null && Target != null && !Orbwalking.IsOnHit(args.SData.Name) && Target.IsAlly && !HeroSender.IsAlly && Target.Distance(Player.ServerPosition) <= 1000)
             {
                 ShieldTarget = Target;
                 AttackTime = Utils.GameTimeTickCount;
@@ -465,10 +473,11 @@ namespace ALL_In_One
                         }
                         else
                         {
-                            if (false == spell.IsSkillshot)
+                            LH(spell);
+                            /*if(false == spell.IsSkillshot)
                                 spell.Cast(Minions[0]);
                             else
-                                spell.AOECast(Minions[0]);
+                                spell.AOECast(Minions[0]);*/
                         }
                     }
                 }

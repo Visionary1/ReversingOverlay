@@ -32,7 +32,7 @@ namespace ALL_In_One.champions
             
             AIO_Menu.Champion.Combo.addUseQ();
             AIO_Menu.Champion.Combo.addUseW();
-            AIO_Menu.Champion.Combo.addUseE();
+            AIO_Menu.Champion.Combo.addUseE(false);
             AIO_Menu.Champion.Combo.addUseR();
             Menu.SubMenu("Combo").AddItem(new MenuItem("Combo.Use MR", "Use R(Manual)")).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press, false));
 

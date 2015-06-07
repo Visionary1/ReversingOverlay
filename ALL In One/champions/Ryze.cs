@@ -32,6 +32,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
+            AIO_Menu.Champion.Combo.addItem("Ignore Collision", false);
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
@@ -63,6 +64,7 @@ namespace ALL_In_One.champions
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
+            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -75,10 +77,7 @@ namespace ALL_In_One.champions
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
                     Combo();
-                    Orbwalker.SetAttack(!W.IsReady());
                 }
-                else
-                    Orbwalker.SetAttack(true);
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 {
@@ -96,6 +95,7 @@ namespace ALL_In_One.champions
                 Killsteal();
 
             Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
+            Q.Collision = !AIO_Menu.Champion.Combo.getBoolValue("Ignore Collision");
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -123,7 +123,7 @@ namespace ALL_In_One.champions
                 return;
 
             if (W.CanCast(gapcloser.Sender))
-                W.Cast(gapcloser.Sender);
+                W.CastOnUnit(gapcloser.Sender);
         }
 
         static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -132,7 +132,16 @@ namespace ALL_In_One.champions
                 return;
 
             if (W.CanCast(sender))
-                W.Cast(sender);
+                W.CastOnUnit(sender);
+        }
+
+        static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        {
+            if (!args.Unit.IsMe)
+                return;
+
+            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && W.IsReady())
+                args.Process = false;
         }
 
         static void Combo()

@@ -97,7 +97,7 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
         public static bool Move = true;
         public static int LastMoveCommandT;
         public static Vector3 LastMoveCommandPosition = Vector3.Zero;
-        private static AttackableUnit _lastTarget;
+        public static AttackableUnit _lastTarget;
         private static readonly Obj_AI_Hero Player;
         private static int _delay;
         private static float _minDistance = 400;

@@ -77,7 +77,10 @@ namespace ALL_In_One.champions
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
                     Combo();
+                    Q.Collision = !AIO_Menu.Champion.Combo.getBoolValue("Ignore Collision");
                 }
+                else
+                    Q.Collision = true;
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 {
@@ -95,7 +98,6 @@ namespace ALL_In_One.champions
                 Killsteal();
 
             Q.MinHitChance = AIO_Menu.Champion.Misc.SelectedHitchance;
-            Q.Collision = !AIO_Menu.Champion.Combo.getBoolValue("Ignore Collision");
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -178,7 +180,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
             {
-                var qTarget = AIO_Menu.Champion.Combo.getBoolValue("Ignore Collision") ? TargetSelector.GetTarget(Q.Range, Q.DamageType) : TargetSelector.GetTargetNoCollision(Q);
+                var qTarget = TargetSelector.GetTargetNoCollision(Q);
 
                 if (qTarget != null)
                     Q.Cast(qTarget);

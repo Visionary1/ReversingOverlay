@@ -272,9 +272,8 @@ namespace ALL_In_One
 
         internal static void LH(this Spell spell, float ALPHA = 0f) // For Last hit with skill for farming 사용법은 매우 간단. AIO_Func.LH(Q,0) or AIO_Func(Q,float.MaxValue) 이런식으로. 럭스나 베이가같이 타겟이 둘 가능할 경우엔 AIO_Func.LH(Q,1) 이런식.
         {
-            var M = MinionManager.GetMinions(Math.Max(spell.Range, Orbwalking.GetRealAutoAttackRange(Player)), MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health).FirstOrDefault(m => isKillable(m, spell, 0) && (!isKillable(m, (float)Player.GetAutoAttackDamage2(m, true))
-            || !m.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
-            && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0);
+            var M = MinionManager.GetMinions(Math.Max(spell.Range, Orbwalking.GetRealAutoAttackRange(Player)), MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health).FirstOrDefault(m => isKillable(m, spell, 0) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / spell.Speed), (int)(spell.Delay * 1000 + Game.Ping / 2)) > 0
+            && (m != Orbwalking._lastTarget || m == Orbwalking._lastTarget && !isKillable(m, (float)Player.GetAutoAttackDamage2(m, true))));
             if (spell.IsReady() && M != null)
             {
                 if (spell.IsSkillshot)

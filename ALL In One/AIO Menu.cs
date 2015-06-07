@@ -11,7 +11,7 @@ namespace ALL_In_One
     {
         internal static Menu MainMenu_Manual;
         internal static Orbwalking.Orbwalker Orbwalker;
-        
+
         internal static void initialize()
         {
             MainMenu_Manual = new Menu("ALL In One", "Teamproject_ALLINONE", true);
@@ -30,7 +30,7 @@ namespace ALL_In_One
 
         internal static void addItem(string DisplayName, object Value, bool ChampUniq = false)
         {
-            if(Value == null)
+            if (Value == null)
             {
                 MainMenu_Manual.AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq));
                 return;
@@ -173,12 +173,12 @@ namespace ALL_In_One
                 {
                     return MainMenu_Manual.Item("Harass." + DisplayName, ChampUniq).GetValue<Slider>();
                 }
-                
+
                 internal static void addAuto(bool Enabled = true)
                 {
                     addItem("Auto Harass", Enabled);
                 }
-                
+
                 internal static void addUseQ(bool Enabled = true)
                 {
                     addItem("Use Q", Enabled);
@@ -211,7 +211,7 @@ namespace ALL_In_One
                         return getBoolValue("Auto Harass");
                     }
                 }
-                
+
                 internal static bool UseQ
                 {
                     get
@@ -519,7 +519,7 @@ namespace ALL_In_One
                     }
                 }
             }
-            
+
 
             internal class Flee
             {

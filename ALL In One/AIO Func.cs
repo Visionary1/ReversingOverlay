@@ -299,7 +299,7 @@ namespace ALL_In_One
             }
         }
 
-        internal static void SC(this Spell spell, float ExtraTargetDistance = 150f, float ALPHA = float.MaxValue, float Cost = 1f, float BombRadius = 0f) //
+        internal static void SC(this Spell spell, float ExtraTargetDistance = 150f, float ALPHA = float.MaxValue, float Cost = 1f, float BombRadius = 0f, float 난사 = 0f) //
         { // 
             var target = TargetSelector.GetTarget(Math.Max(spell.Range, Orbwalking.GetRealAutoAttackRange(Player)), (spell.DamageType), true); //
             bool HM = true;
@@ -472,11 +472,15 @@ namespace ALL_In_One
                         }
                         else
                         {
-                            LH(spell);
-                            /*if(false == spell.IsSkillshot)
-                                spell.Cast(Minions[0]);
+                            if(난사 == 0f)
+                                LH(spell);
                             else
-                                spell.AOECast(Minions[0]);*/
+                            {
+                                if(false == spell.IsSkillshot)
+                                    spell.Cast(Minions[0]);
+                                else
+                                    spell.AOECast(Minions[0]);
+                            }
                         }
                     }
                 }

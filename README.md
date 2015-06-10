@@ -17,7 +17,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Bard|　|　|
 |Blitzcrank|✔|rl244|
 |Brand|✔|rl244|
-|Braum|　|　|
+|Braum|✔|rl244|
 |Caitlyn|✔|rl244|
 |Cassiopeia|✔|rl244|
 |Cho'Gath|✔|fakker|
@@ -101,14 +101,14 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Swain|✔|rl244|
 |Syndra|WIP|rl244|
 |Talon|✔|rl244|
-|Taric|　|　|
+|Taric|✔|rl244|
 |Teemo|✔|rl244|
 |Thresh|WIP|rl244|
 |Tristana|✔|rl244|
 |Tryndamere|　|　|
 |Twisted Fate|　|　|
 |Twitch|✔|xcsoft|
-|Udyr|　|　|
+|Udyr|✔|rl244|
 |Urgot|✔|rl244|
 |Varus|✔|rl244|
 |Vayne|✔|rl244|
@@ -127,7 +127,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Zac|　|　|
 |Zed|✔(Incomplete)|xcsoft|
 |Ziggs|　|　|
-|Zilean|　|　|
+|Zilean|✔|rl244|
 |Zyra|✔|rl244|
 
 ![](https://cdn.joduska.me/forum/public/style_emoticons/default/cat_lazy.gif)

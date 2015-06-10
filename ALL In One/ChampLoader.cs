@@ -153,10 +153,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Yasuo.Load();
                     break;
-                /*case "Syndra":
+                case "Syndra":
                     MadeBy(Developer.RL244);// Work In Progress
                     champions.Syndra.Load();
-                    break;*/
+                    break;
                 case "Viktor":
                     MadeBy(Developer.RL244);
                     champions.Viktor.Load();
@@ -372,6 +372,18 @@ namespace ALL_In_One
                 case "Skarner":
                     MadeBy(Developer.RL244);
                     champions.Skarner.Load();
+                    break;
+                case "Zilean":
+                    MadeBy(Developer.RL244);
+                    champions.Zilean.Load();
+                    break;
+                case "Udyr":
+                    MadeBy(Developer.RL244);
+                    champions.Udyr.Load();
+                    break;
+                case "Taric":
+                    MadeBy(Developer.RL244);
+                    champions.Taric.Load();
                     break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");

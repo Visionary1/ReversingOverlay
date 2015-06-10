@@ -86,7 +86,7 @@
     <Compile Include="champions\_Bard.cs" />
     <Compile Include="champions\Blitzcrank.cs" />
     <Compile Include="champions\Brand.cs" />
-    <Compile Include="champions\_Braum.cs" />
+    <Compile Include="champions\Braum.cs" />
     <Compile Include="champions\Caitlyn.cs" />
     <Compile Include="champions\Cassiopeia.cs" />
     <Compile Include="champions\Chogath.cs" />
@@ -171,7 +171,7 @@
     <Compile Include="champions\Swain.cs" />
     <Compile Include="champions\Syndra.cs" />
     <Compile Include="champions\Talon.cs" />
-    <Compile Include="champions\_Taric.cs" />
+    <Compile Include="champions\Taric.cs" />
     <Compile Include="champions\Teemo.cs" />
     <Compile Include="champions\Thresh.cs" />
     <Compile Include="champions\Tristana.cs" />
@@ -179,7 +179,7 @@
     <Compile Include="champions\_Tryndamere.cs" />
     <Compile Include="champions\_TwistedFate.cs" />
     <Compile Include="champions\Twitch.cs" />
-    <Compile Include="champions\_Udyr.cs" />
+    <Compile Include="champions\Udyr.cs" />
     <Compile Include="champions\Urgot.cs" />
     <Compile Include="champions\Varus.cs" />
     <Compile Include="champions\Vayne.cs" />
@@ -197,7 +197,7 @@
     <Compile Include="champions\_Zac.cs" />
     <Compile Include="champions\Zed.cs" />
     <Compile Include="champions\_Ziggs.cs" />
-    <Compile Include="champions\_Zilean.cs" />
+    <Compile Include="champions\Zilean.cs" />
     <Compile Include="champions\Zyra.cs" />
     <Compile Include="ChampLoader.cs" />
     <Compile Include="utility\Activator.cs" />

@@ -97,20 +97,10 @@ namespace ALL_In_One.champions
             R.Range = 900f +R.Level*300f;
             W.Range = 610f +W.Level*20f;
                 AIO_Func.SC(W);
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                    Combo();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    Harass();
-                    
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
-                    Lasthit();
-
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-                {
-                    Laneclear();
-                    Jungleclear();
-                }
+                AIO_Func.SC(Q,QD,0f);
+                AIO_Func.SC(E,ED,0f);
+                if(UltST < UST)
+                AIO_Func.SC(R);
             }
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
@@ -156,16 +146,9 @@ namespace ALL_In_One.champions
                 return;
                 
             AIO_Func.AALcJc(Q);
-            
-            
-            AA();
-        }
-        
-        static void AA()
-        {
             AIO_Func.AACb(Q,QD,0f);
         }
-        
+
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (!AIO_Menu.Champion.Misc.UseAntiGapcloser || Player.IsDead)
@@ -174,100 +157,6 @@ namespace ALL_In_One.champions
             if (E.IsReady()
                 && Player.Distance(gapcloser.Sender.Position) <= E.Range)
                 E.Cast((Vector3)gapcloser.End);
-        }
-
-        
-        static void Combo()
-        {
-
-            if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
-            {
-                var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                if(Qtarget.Distance(Player.ServerPosition) > Orbwalking.GetRealAutoAttackRange(Player))
-                AIO_Func.LCast(Q,Qtarget,QD,0);
-            }
-
-            if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
-            {
-                var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.LCast(E,Etarget,ED);
-            }
-
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady() && UltST < UST)
-            {
-                var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(R,Rtarget);
-            }
-        }
-
-        static void Harass()
-        {
-            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
-                return;
-        
-            if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
-            {
-                var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                if(Qtarget.Distance(Player.ServerPosition) > Orbwalking.GetRealAutoAttackRange(Player))
-                AIO_Func.LCast(Q,Qtarget,QD,0);
-            }
-
-            if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
-            {
-                var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.LCast(E,Etarget,ED);
-            }
-            
-            if (AIO_Menu.Champion.Harass.UseR && R.IsReady() && UltST < UST)
-            {
-                var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(R,Rtarget);
-            }
-            
-        }
-        
-        static void Lasthit()
-        {
-            if (!(Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana))
-                return;
-
-            if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
-                AIO_Func.LH(Q,0f);
-        }
-
-        static void Laneclear()
-        {
-            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
-                return;
-        
-            var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
-
-            if (Minions.Count <= 0)
-                return;
-
-            if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
-                AIO_Func.LH(E,float.MaxValue);
-            if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady() && Minions.Any(x => Orbwalking.InAutoAttackRange(x)))
-                W.Cast();
-            if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
-                AIO_Func.LH(Q,0f);
-        }
-
-        static void Jungleclear()
-        {
-            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
-                return;
-        
-            var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-            if (Mobs.Count <= 0)
-                return;
-
-            if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady() && Mobs.Any(x => Orbwalking.InAutoAttackRange(x)))
-                W.Cast();
-            
-            if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady() && Mobs.Any(x=>x.IsValidTarget(E.Range)))
-                AIO_Func.LCast(E,Mobs[0],ED);
         }
 
         static void KillstealQ()

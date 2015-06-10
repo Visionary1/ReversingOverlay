@@ -192,7 +192,7 @@ namespace ALL_In_One.champions
                 damage += W.GetDamage2(enemy);
                
                 
-            if(!Player.IsWindingUp)
+            if(enemy.InAARange())
                 damage += (float)Player.GetAutoAttackDamage2(enemy, true);
             return damage;
         }

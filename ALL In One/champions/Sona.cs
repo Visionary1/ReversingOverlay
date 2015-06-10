@@ -60,7 +60,6 @@ namespace ALL_In_One.champions
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -117,23 +116,7 @@ namespace ALL_In_One.champions
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
-        
-        static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            var Sender = (Obj_AI_Base) sender;
-            var STarget = (Obj_AI_Base) args.Target;
-            if (!sender.IsMe || Player.IsDead) // 
-                return;
-            if (args.Target.IsMe && !sender.IsAlly && W.IsReady() && Player.HealthPercent < 80 //args.Target.IsMe && AIO_Menu.Champion.Misc.getBoolValue("R Myself Only")
-                && Player.Distance(args.End) < 150 && AIO_Menu.Champion.Combo.UseW)
-                W.Cast();
-            if (!sender.IsAlly && W.IsReady() && Player.HealthPercent < 80 && Player.Distance(args.End) < 150 &&
-                Sender.Distance(Player.ServerPosition) <= 1000f && AIO_Menu.Champion.Combo.UseW)
-                W.Cast();
-            if (!sender.IsAlly && W.IsReady() && Player.HealthPercent < 80 &&
-                Sender.Distance(Player.ServerPosition) <= 700f && AIO_Menu.Champion.Combo.UseW)
-                W.Cast();
-        }
+
         
         static void KillstealQ()
         {

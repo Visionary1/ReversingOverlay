@@ -19,7 +19,7 @@ namespace ALL_In_One.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 1025f, TargetSelector.DamageType.Physical);
+            Q = new Spell(SpellSlot.Q, 1000f, TargetSelector.DamageType.Physical);
             W = new Spell(SpellSlot.W, 2100f);
             E = new Spell(SpellSlot.E, 700f, TargetSelector.DamageType.Physical);
             RQ = new Spell(SpellSlot.Q, 275f, TargetSelector.DamageType.Physical) {Delay = 0.25f}; 
@@ -28,7 +28,7 @@ namespace ALL_In_One.champions
             
             E.SetTargetted(0.25f, 1600f);
             RE.SetTargetted(0.25f, 1600f);
-            Q.SetSkillshot(0.25f, 80f, 1500f, false, SkillshotType.SkillshotLine); //true 했다가 false로 고침. 이는 폭발 반경을 이용하기 위함. 1550하면 상대가 안맞음. 1500이 정확한듯.
+            Q.SetSkillshot(0.25f, 70f, 1500f, false, SkillshotType.SkillshotLine); //true 했다가 false로 고침. 이는 폭발 반경을 이용하기 위함. 1550하면 상대가 안맞음. 1500이 정확한듯.
 
             AIO_Menu.Champion.Flee.addUseR();
             
@@ -103,7 +103,7 @@ namespace ALL_In_One.champions
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee && AIO_Menu.Champion.Flee.UseR)
             {
                 var Rtarget = TargetSelector.GetTarget(1000f, Q.DamageType, true); 
-                if(!Bird && Rtarget != null)
+                if(!Bird && Rtarget != null && R.IsReady())
                 R.Cast();
             }
 

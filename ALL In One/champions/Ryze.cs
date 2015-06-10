@@ -23,12 +23,12 @@ namespace ALL_In_One.champions
 
         public static void Load()
         {
-            Q = new Spell(SpellSlot.Q, 880f, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 900f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 600f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 600f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R);
 
-            Q.SetSkillshot(0.25f, 50f, 1700f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 50f, 1400f, true, SkillshotType.SkillshotLine);
             W.SetTargetted(0.25f, float.MaxValue);
             E.SetTargetted(0.25f, 1400f);
 
@@ -82,16 +82,17 @@ namespace ALL_In_One.champions
                 return;
             if(AIO_Menu.Champion.Misc.getBoolValue("Use RL144 CB")) //ryzepassivestack ryzepassivecharged ryzepassiveshield RyzeR RyzeE(Target)
             {
-                if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Q.Level > 0 && W.Level > 0 && E.Level > 0)
                 {
-                    AIO_Func.SC(Q,0f,float.MaxValue); //콤보시에는 미니언 충돌 고려 안하고 쏴야 dps가 매우 높음.(패시브 활용)
-                    if(PassiveCount == 4 || PassiveDuration > 0)
+                    if(PassiveCount == 1 && R.IsReady() && Q.IsReady() && E.IsReady() || PassiveCount == 4 || PassiveDuration > 0)
                         AIO_Func.SC(W);
+                    if(!(PassiveCount == 3 && E.IsReady()))
+                    AIO_Func.SC(Q,0f,float.MaxValue); //콤보시에는 미니언 충돌 고려 안하고 쏴야 dps가 매우 높음.(패시브 활용)
                     if(!Q.IsReady() && (PassiveCount == 3 || PassiveDuration > 0))
                         AIO_Func.SC(E);
                         
                     var RTarget = TargetSelector.GetTarget(W.Range, W.DamageType, true);
-                    if((PassiveCount == 1 && Q.IsReady() || PassiveCount == 2 && !Q.IsReady() || PassiveDuration > 0) && RTarget != null && AIO_Menu.Champion.Combo.UseR && R.IsReady())
+                    if((PassiveCount == 1 && Q.IsReady() || PassiveCount == 2 && !Q.IsReady() || PassiveDuration > 0 && Player.HealthPercent < 70 || PassiveCount == 4 && !W.IsReady()) && RTarget != null && AIO_Menu.Champion.Combo.UseR && R.IsReady())
                         R.Cast();
                 }
                 else
@@ -182,7 +183,7 @@ namespace ALL_In_One.champions
             if (!args.Unit.IsMe)
                 return;
 
-            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && W.IsReady())
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && W.IsReady())
                 args.Process = false;
         }
 

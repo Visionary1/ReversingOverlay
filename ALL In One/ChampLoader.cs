@@ -385,6 +385,10 @@ namespace ALL_In_One
                     MadeBy(Developer.RL244);
                     champions.Taric.Load();
                     break;
+                case "Braum":
+                    MadeBy(Developer.RL244);
+                    champions.Braum.Load();
+                    break;
                 default:
                     AIO_Func.sendDebugMsg("(ChampLoader) Error");
                     break;

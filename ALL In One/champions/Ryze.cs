@@ -183,7 +183,7 @@ namespace ALL_In_One.champions
             if (!args.Unit.IsMe)
                 return;
 
-            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && W.IsReady())
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && W.IsReady())
                 args.Process = false;
         }
 

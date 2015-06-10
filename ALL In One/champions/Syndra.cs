@@ -12,11 +12,13 @@ using Color = System.Drawing.Color;
 
 namespace ALL_In_One.champions
 {
-    class Syndra// By RL244 WIP
+    class Syndra// By RL244 WIP syndraqremoval syndrawtooltip (<- w들면 저 버프 생김)
     {
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static Menu Menu {get{return AIO_Menu.MainMenu_Manual.SubMenu("Champion");}}
         static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
+        static List<Obj_AI_Base> SyndraQ { get { return ObjectManager.Get<Obj_AI_Base>().Where(x => x.IsAlly && x.Name == "k" && x.Position.Distance(Player.ServerPosition) <= W.Range).ToList(); } }
+        static float ED {get{return Menu.Item("Misc.Etg").GetValue<Slider>().Value; }}
 
         static Spell Q, QE, W, W2, E, R;
 
@@ -40,6 +42,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
             AIO_Menu.Champion.Combo.addUseR();
+            AIO_Menu.Champion.Combo.addItem("QE Cast", new KeyBind('T', KeyBindType.Press));
 
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
@@ -51,20 +54,20 @@ namespace ALL_In_One.champions
 
             AIO_Menu.Champion.Laneclear.addUseQ();
             AIO_Menu.Champion.Laneclear.addUseW(false);
-            AIO_Menu.Champion.Laneclear.addUseE();
+            AIO_Menu.Champion.Laneclear.addUseE(false);
             AIO_Menu.Champion.Laneclear.addIfMana();
             
             AIO_Menu.Champion.Jungleclear.addUseQ();
-            AIO_Menu.Champion.Jungleclear.addUseW(false);
-            AIO_Menu.Champion.Jungleclear.addUseE();
+            AIO_Menu.Champion.Jungleclear.addUseW();
+            AIO_Menu.Champion.Jungleclear.addUseE(false);
             AIO_Menu.Champion.Jungleclear.addIfMana();
 
             AIO_Menu.Champion.Misc.addHitchanceSelector();
 
-            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Etg", "Additional Erange")).SetValue(new Slider(50, 0, 250));
+            Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Etg", "Additional Erange")).SetValue(new Slider(0, 0, 250));
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
             AIO_Menu.Champion.Misc.addItem("KillstealW", true);
-            AIO_Menu.Champion.Misc.addItem("KillstealE", true);
+            AIO_Menu.Champion.Misc.addItem("KillstealE", false);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
             AIO_Menu.Champion.Misc.addUseInterrupter();
@@ -80,6 +83,7 @@ namespace ALL_In_One.champions
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
+            Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
         static void Game_OnUpdate(EventArgs args)
@@ -93,32 +97,26 @@ namespace ALL_In_One.champions
             if(3 == E.Level)
             E.Width = 60f * (float)Math.PI / 180 * 1.5f;
                 
-            if (Orbwalking.CanMove(35))
+            AIO_Func.SC(Q);
+            if(Player.HasBuff("syndrawtooltip"))
+                AIO_Func.SC(W2,0f,float.MaxValue,0f); //w2타는 마나가 안드므로 노코스트처럼 인식시켰음.
+                
+            var Minions = MinionManager.GetMinions(W.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
+            var Mobs = MinionManager.GetMinions(W.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var Wtarget = TargetSelector.GetTarget(W.Range, W.DamageType, true); 
+            var MiniTarget = MinionManager.GetMinions(W.Range, MinionTypes.All, MinionTeam.NotAlly);
+
+            if(W.IsReady() && !Player.HasBuff("syndrawtooltip"))
             {
-                switch (Orbwalker.ActiveMode)
+                if((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseW || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseW && Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana) && Wtarget != null || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && (Minions.Count > 0 && AIO_Menu.Champion.Laneclear.UseW && Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana|| Mobs.Count > 0 && AIO_Menu.Champion.Jungleclear.UseW && Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
                 {
-                    case Orbwalking.OrbwalkingMode.Combo:
-                        Orbwalker.SetAttack(true);
-                        Combo();
-                        break;
-                    case Orbwalking.OrbwalkingMode.Mixed:
-                        Orbwalker.SetAttack(true);
-                        Harass();
-                        break;
-                    case Orbwalking.OrbwalkingMode.LastHit:
-                        Orbwalker.SetAttack(Player.ManaPercent <= AIO_Menu.Champion.Lasthit.IfMana || !AIO_Menu.Champion.Lasthit.UseQ || !Q.IsReady());
-                        Lasthit();
-                        break;
-                    case Orbwalking.OrbwalkingMode.LaneClear:
-                        Orbwalker.SetAttack(true);
-                        Laneclear();
-                        Jungleclear();
-                        break;
-                    case Orbwalking.OrbwalkingMode.None:
-                        Orbwalker.SetAttack(true);
-                        break;
+                    if(SyndraQ.Count > 0)
+                        W.Cast(SyndraQ[0].ServerPosition);
+                    else if (MiniTarget.Count > 0)
+                        W.Cast(MiniTarget[0]);
                 }
             }
+            AIO_Func.SC(E);
 
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealQ"))
                 KillstealQ();
@@ -128,6 +126,25 @@ namespace ALL_In_One.champions
                 KillstealR();
             if (AIO_Menu.Champion.Misc.getBoolValue("KillstealE"))
                 KillstealE();
+                
+                
+            if(AIO_Menu.Champion.Combo.getKeyBindValue("QE Cast").Active)
+                QECast();
+        }
+        
+        static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!sender.IsMe || Player.IsDead)
+                return;
+
+            if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && AIO_Menu.Champion.Combo.UseE || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && AIO_Menu.Champion.Harass.UseE))
+            {
+                if (args.SData.Name == Player.Spellbook.GetSpell(SpellSlot.Q).Name && HeroManager.Enemies.Any(x => x.IsValidTarget(QE.Range)) && E.IsReady())
+                {
+                    var Etarget = TargetSelector.GetTarget(E.Range, E.DamageType);
+                    E.ConeCast(Etarget);
+                }
+            }
         }
 
         static void Drawing_OnDraw(EventArgs args)
@@ -168,130 +185,16 @@ namespace ALL_In_One.champions
                 E.Cast((Vector3)gapcloser.End);
         }
 
-        
-        static void Combo()
+        static void QECast()
         {
-
-            if (AIO_Menu.Champion.Combo.UseQ && Q.IsReady())
+            if(Q.IsReady() && E.IsReady())
             {
-                var Qtarget = TargetSelector.GetTarget(Q.Range, Q.DamageType);
-                AIO_Func.CCast(Q,Qtarget);
-            }
-
-            if (AIO_Menu.Champion.Combo.UseE && E.IsReady())
-            {
-                var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
-            }
-
-            if (AIO_Menu.Champion.Combo.UseW && W.IsReady())
-            {
-                var Wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(W,Wtarget);
-            }
-
-            if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
-            {
-                var Rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                if(AIO_Func.isKillable(Rtarget, R))
-                R.Cast(Rtarget);
+                Q.NMouse();
+                Utility.DelayAction.Add(
+                        (int)(Q.Delay), () => E.NMouse());
             }
         }
-
-        static void Harass()
-        {
-            if (!(Player.ManaPercent > AIO_Menu.Champion.Harass.IfMana))
-                return;
         
-            if (AIO_Menu.Champion.Harass.UseQ && Q.IsReady())
-            {
-                var Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(Q,Qtarget);
-            }
-            
-            if (AIO_Menu.Champion.Harass.UseW && W.IsReady())
-            {
-                var Wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.CCast(W,Wtarget);
-            }
-
-            if (AIO_Menu.Champion.Harass.UseE && E.IsReady())
-            {
-                var Etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                AIO_Func.LCast(E,Etarget,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
-            }
-        }
-
-        static void Lasthit()
-        {
-            if (!(Player.ManaPercent > AIO_Menu.Champion.Lasthit.IfMana))
-                return;
-                
-            if (AIO_Menu.Champion.Lasthit.UseQ && Q.IsReady())
-            AIO_Func.LH(Q,0);
-        }
-        
-        static void Laneclear()
-        {
-            if (!(Player.ManaPercent > AIO_Menu.Champion.Laneclear.IfMana))
-                return;
-        
-            var Minions = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Enemy);
-
-            if (Minions.Count <= 0)
-                return;
-
-            if (AIO_Menu.Champion.Laneclear.UseE && E.IsReady())
-            {
-                var _m = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.E))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / E.Speed), (int)(E.Delay * 1000 + Game.Ping / 2)) > 0);            
-                if (_m != null)
-                AIO_Func.LCast(E,_m,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
-            }
-
-            if (AIO_Menu.Champion.Laneclear.UseW && W.IsReady())
-            {
-                if (Minions.Any(x => x.IsValidTarget(W.Range)))
-                AIO_Func.CCast(W,Minions[0]);
-            }
-            
-            if (AIO_Menu.Champion.Laneclear.UseQ && Q.IsReady())
-            {
-                var _m = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault(m => m.Health < ((Player.GetSpellDamage(m, SpellSlot.Q))) && HealthPrediction.GetHealthPrediction(m, (int)(Player.Distance(m, false) / Q.Speed), (int)(Q.Delay * 1000 + Game.Ping / 2)) > 0);            
-                if (_m != null)
-                AIO_Func.CCast(Q,_m);
-            }
-        }
-
-        static void Jungleclear()
-        {
-            if (!(Player.ManaPercent > AIO_Menu.Champion.Jungleclear.IfMana))
-                return;
-        
-            var Mobs = MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-
-            if (Mobs.Count <= 0)
-                return;
-
-            if (AIO_Menu.Champion.Jungleclear.UseQ && Q.IsReady())
-            {
-                if (Q.CanCast(Mobs.FirstOrDefault()))
-                AIO_Func.CCast(Q,Mobs.FirstOrDefault());
-            }
-
-            if (AIO_Menu.Champion.Jungleclear.UseW && W.IsReady())
-            {
-                if (Mobs.Any(x => x.IsValidTarget(W.Range)))
-                AIO_Func.CCast(W,Mobs[0]);
-            }
-            
-            if (AIO_Menu.Champion.Jungleclear.UseE && E.IsReady())
-            {
-                if (Mobs.Any(x=>x.IsValidTarget(E.Range)))
-                AIO_Func.LCast(E,Mobs[0],Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
-            }
-
-        }
-
         static void KillstealQ()
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
@@ -305,7 +208,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (W.CanCast(target) && AIO_Func.isKillable(target, W))
+                if (W.CanCast(target) && AIO_Func.isKillable(target, W) && Player.HasBuff("syndrawtooltip"))
                 AIO_Func.CCast(W,target);
             }
         }
@@ -314,7 +217,7 @@ namespace ALL_In_One.champions
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (target.IsValidTarget(R.Range) && AIO_Func.isKillable(target, R))
+                if (target.IsValidTarget(R.Range) && AIO_Func.isKillable(target, R.GetDamage2(target) + R.GetDamage2(target,1) * SyndraQ.Count()))
                 R.Cast(target);
             }
         }
@@ -324,7 +227,7 @@ namespace ALL_In_One.champions
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
                 if (E.CanCast(target) && AIO_Func.isKillable(target, E))
-                AIO_Func.LCast(E,target,Menu.Item("Misc.Etg").GetValue<Slider>().Value,float.MaxValue);
+                AIO_Func.LCast(E,target,ED,float.MaxValue);
             }
         }
         

@@ -145,12 +145,7 @@ namespace ALL_In_One.champions
             if (R.IsReady() && drawR.Active)
                 Render.Circle.DrawCircle(Player.Position, R.Range, drawR.Color);
         }
-        
-        static void AA()
-        {
-            AIO_Func.AACb(Q,QD,0f);
-        }
-        
+            
         static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var Target = (Obj_AI_Base)target;
@@ -159,9 +154,7 @@ namespace ALL_In_One.champions
                 return;
 
             AIO_Func.AALcJc(Q,QD,0f);
-
-            
-            AA();
+            AIO_Func.AACb(Q,QD,0f);
         }
         
         static void Combo()
@@ -214,10 +207,13 @@ namespace ALL_In_One.champions
                 damage += W.GetDamage2(enemy);
             
             if (E.IsReady())
-                damage += E.GetDamage2(enemy) + (float)Player.GetAutoAttackDamage2(enemy, false);
+                damage += E.GetDamage2(enemy) + (float)Player.GetAutoAttackDamage2(enemy, true);
                 
             if (R.IsReady())
                 damage += R.GetDamage2(enemy);
+                
+            if(enemy.InAARange())
+                damage += (float)Player.GetAutoAttackDamage2(enemy, true);
                 
             return damage;
         }

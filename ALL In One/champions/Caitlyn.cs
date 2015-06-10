@@ -56,7 +56,7 @@ namespace ALL_In_One.champions
             Menu.SubMenu("Misc").AddItem(new MenuItem("Misc.Qtg", "Additional Qrange")).SetValue(new Slider(25, 0, 150));
 
             AIO_Menu.Champion.Misc.addItem("KillstealQ", true);
-            AIO_Menu.Champion.Misc.addItem("KillstealE", true);
+            AIO_Menu.Champion.Misc.addItem("KillstealE", false);
             AIO_Menu.Champion.Misc.addItem("KillstealR", true);
             AIO_Menu.Champion.Misc.addUseAntiGapcloser();
 
@@ -301,7 +301,7 @@ namespace ALL_In_One.champions
             if (R.IsReady())
                 damage += R.GetDamage2(enemy);
                 
-            if(!Player.IsWindingUp)
+            if(enemy.InAARange())
                 damage += (float)Player.GetAutoAttackDamage2(enemy, true);
             return damage;
         }

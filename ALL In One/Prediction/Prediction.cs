@@ -49,7 +49,7 @@ namespace ALL_In_One
                     }
                     else if (target.IsValidTarget(spell.Range + spell.Width/2)) //사거리 밖 대상에 대해서
                     {
-                        if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range+spell.Width*1/2 && pred.UnitPosition.Distance(target.ServerPosition) < Math.Max(spell.Width,300f))
+                        if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance && Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range+spell.Width*1/2 && pred.UnitPosition.Distance(target.ServerPosition) < Math.Max(spell.Width,400f))
                         {
                             if(Player.ServerPosition.Distance(pred.UnitPosition) <= spell.Range)
                             {
@@ -79,16 +79,21 @@ namespace ALL_In_One
                     var minioncol = collision.Count(x => (HeroOnly == false ? x.IsMinion : (x is Obj_AI_Hero)));
                     SharpDX.Vector2 EditedVec = pred.UnitPosition.To2D() -
                                                SharpDX.Vector2.Normalize(pred.UnitPosition.To2D() - target.ServerPosition.To2D()) * (spell.Width * 2 / 5);
+                    SharpDX.Vector2 EditedVec2 = (pred.UnitPosition.To2D() + target.ServerPosition.To2D()) / 2;
 
                     var collision2 = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { EditedVec });
                     var minioncol2 = collision2.Count(x => (HeroOnly == false ? x.IsMinion : (x is Obj_AI_Hero)));
-
-
+                    var collision3 = spell.GetCollision(Player.ServerPosition.To2D(), new List<SharpDX.Vector2> { EditedVec2 });
+                    var minioncol3 = collision3.Count(x => (HeroOnly == false ? x.IsMinion : (x is Obj_AI_Hero)));
                     if(pred.Hitchance >= AIO_Menu.Champion.Misc.SelectedHitchance)
                     {
-                        if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol2 <= colmini)
+                        if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol2 <= colmini && pred.UnitPosition.Distance(target.ServerPosition) > spell.Width)
                         {
                             spell.Cast(EditedVec);
+                        }
+                        else if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol3 <= colmini && pred.UnitPosition.Distance(target.ServerPosition) > spell.Width / 2)
+                        {
+                            spell.Cast(EditedVec2);
                         }
                         else if (target.IsValidTarget(spell.Range - target.MoveSpeed * (spell.Delay + Player.Distance(target.ServerPosition) / spell.Speed) + alpha) && minioncol <= colmini)
                         {
@@ -233,6 +238,14 @@ namespace ALL_In_One
             spell.Cast(ReverseVec);
         }
         
+        internal static void NMouse(this Spell spell)
+        {
+            SharpDX.Vector2 NVec = Player.ServerPosition.To2D() +
+                                       SharpDX.Vector2.Normalize(Game.CursorPos.To2D() - Player.Position.To2D()) * (spell.Range);
+            if(spell.IsReady())
+            spell.Cast(NVec);
+        }
+        
         internal static void RTarget(this Spell spell, Obj_AI_Base Target)
         {
             SharpDX.Vector2 ReverseVec = Player.ServerPosition.To2D() -
@@ -255,10 +268,6 @@ namespace ALL_In_One
             if (Menu.Item("Flee.If Mana >" + spell.Slot.ToString(), true) != null)
             {
                 FM = Player.ManaPercent > AIO_Menu.Champion.Flee.IfMana;
-            }
-            else
-            {
-                FM = true;
             }
             SharpDX.Vector2 NormalVec = Player.ServerPosition.To2D() +
                                        SharpDX.Vector2.Normalize(Game.CursorPos.To2D() - Player.Position.To2D()) * (spell.Range);

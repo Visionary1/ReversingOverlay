@@ -50,7 +50,7 @@ It's a Early Development Build. So it's still a Work In Progress. (A little lack
 |Kalista|✔|xcsoft|
 |Karma|WIP|rl244|
 |Karthus|✔|xcsoft|
-|Kassadin|　|　|
+|Kassadin|✔|rl244|
 |Katarina|✔|xcsoft|
 |Kayle|✔|rl244|
 |Kennen|　|　|

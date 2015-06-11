@@ -270,7 +270,6 @@ namespace ALL_In_One //Edited Orbwalking.cs for TeamProjects AIO
             if (_missileLaunched && Orbwalker.MissileCheck)
             {
                 return true;
-
             }
 
             return NoCancelChamps.Contains(Player.ChampionName) || (Utils.GameTimeTickCount >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup); // + Game.Ping / 2 임의수정

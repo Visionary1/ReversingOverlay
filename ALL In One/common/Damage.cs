@@ -857,7 +857,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 40, 50, 60, 70, 80 }[level] +
+                                new double[] { 20, 35, 50, 65, 80 }[level] +
                                 1 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)
                     },
                     //R - total
@@ -2148,7 +2148,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 60, 115, 170, 225, 280 }[level] + 1.2 * source.FlatPhysicalDamageMod
+                                new double[] { 70, 120, 170, 220, 270, 320 }[level] + 1.2 * source.FlatPhysicalDamageMod
                     },
                     //Q - Melee
                     new DamageSpell
@@ -2158,7 +2158,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 20, 65, 110, 155, 200 }[level] + 1 * source.FlatPhysicalDamageMod
+                                new double[] { 30, 70, 110, 150, 190, 230 }[level] + 1 * source.FlatPhysicalDamageMod
                     },
                     //Q - Ranged Max Damage
                     new DamageSpell
@@ -2168,7 +2168,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                (new double[] { 60, 115, 170, 225, 280 }[level] + 1.2 * source.FlatPhysicalDamageMod) * 1.4f
+                                (new double[] { 70, 120, 170, 220, 270, 320 }[level] + 1.2 * source.FlatPhysicalDamageMod) * 1.4f
                     },
                     //W - per second
                     new DamageSpell
@@ -2177,7 +2177,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new[] { 25, 42.5, 60, 77.5, 95 }[level] + 0.25 * source.FlatMagicDamageMod
+                                new[] { 25, 40, 55, 70, 85, 100 }[level] + 0.25 * source.FlatMagicDamageMod
                     },
                     //E
                     new DamageSpell
@@ -2186,7 +2186,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 8, 11, 14, 17, 20 }[level] / 100 * target.MaxHealth +
+                                new[] { 8, 10.4, 12.8, 15.2, 17.6, 20 }[level] / 100 * target.MaxHealth +
                                 1 * source.FlatPhysicalDamageMod
                     },
                 });
@@ -2718,17 +2718,13 @@ namespace ALL_In_One
                         DamageType = DamageType.Physical,
                         Damage = (source, target, level) =>
                         {
-                            var buff =
-                                target.Buffs.Find(
-                                    b =>
-                                        b.Caster.NetworkId == source.NetworkId && b.IsValidBuff() &&
-                                        b.DisplayName == "KalistaExpungeMarker");
-                            if (buff != null)
+                            var count = target.GetBuffCount("kalistaexpungemarker");
+                            if (count > 0)
                             {
                                 return (new double[] { 20, 30, 40, 50, 60 }[level] +
                                         0.6 * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)) +
                                        // Base damage of E
-                                       ((buff.Count - 1) *
+                                       ((count - 1) *
                                         (new double[] { 10, 14, 19, 25, 32 }[level] + // Base damage per spear
                                          new double[] { 0.2, 0.225, 0.25, 0.275, 0.3 }[level] *
                                          (source.BaseAttackDamage + source.FlatPhysicalDamageMod)));
@@ -4075,7 +4071,7 @@ namespace ALL_In_One
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                (new double[] { 4, 5.5, 7, 8.5, 10 }[level] + (source.FlatMagicDamageMod / 100)) / 100 *
+                                (new[] { 4, 4.5, 5, 5.5, 6 }[level] + (source.FlatMagicDamageMod / 100)) / 100 *
                                 target.MaxHealth
                     },
                     //W - Aoe per second

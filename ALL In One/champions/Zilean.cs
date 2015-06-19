@@ -29,7 +29,7 @@ namespace ALL_In_One.champions
             AIO_Menu.Champion.Combo.addUseW();
             AIO_Menu.Champion.Combo.addUseE();
 
-            AIO_Menu.Champion.Harass.addAuto();
+            AIO_Menu.Champion.Harass.addAutoHarass();
             AIO_Menu.Champion.Harass.addUseQ();
             AIO_Menu.Champion.Harass.addUseW();
             AIO_Menu.Champion.Harass.addUseE(false);

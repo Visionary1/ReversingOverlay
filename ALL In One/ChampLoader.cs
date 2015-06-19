@@ -13,6 +13,10 @@ namespace ALL_In_One
             Fakker
         }
 
+        /// <summary>
+        /// 전용 챔피언의 클래스를 로드합니다.
+        /// </summary>
+        /// <param name="champName">로드할 클래스의 이름을 기입하십시오.</param>
         internal static void Load(string champName)
         {
             switch (champName)
@@ -401,6 +405,11 @@ namespace ALL_In_One
             Notifications.AddNotification(ObjectManager.Player.ChampionName + " Made By '" + Developer.ToString() + "'.", 4000);
         }
 
+        /// <summary>
+        /// 플레이어의 챔피언의 이름과 같은 이름의 클래스가 있는지 확인합니다.
+        /// </summary>
+        /// <param name="checkNamespace">체크할 네임스페이스를 기입하십시오.</param>
+        /// <returns>플레이어의 챔피언의 이름과 같은 이름의 클래스가 있으면 true, 없으면 false를 반환합니다.</returns>
         internal static bool champSupportedCheck(string checkNamespace)
         {
             try

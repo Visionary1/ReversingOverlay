@@ -9,6 +9,9 @@ namespace ALL_In_One
 {
     class Initializer
     {
+        /// <summary>
+        /// 올인원의 뿌리
+        /// </summary>
         internal static void initialize()
         {
             AIO_Menu.initialize();
@@ -42,7 +45,6 @@ namespace ALL_In_One
             AIO_Func.sendDebugMsg("Early Access.");
 
         }
-
         static void Drawing_OnDraw(EventArgs args)
         {
             if (ObjectManager.Player.IsDead)

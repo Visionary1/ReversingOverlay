@@ -7,27 +7,51 @@ using LeagueSharp.Common;
 
 namespace ALL_In_One
 {
+    /// <summary>
+    /// 올인원 메인메뉴를 간편하게 조작할 수 있는 클래스입니다.
+    /// </summary>
     class AIO_Menu
     {
+        /// <summary>
+        /// 올인원 메인메뉴의 LeagueSharp.Common.Menu형식 객체입니다. 이 객체에 직접 접근하면 LeagueSharp.Common.Menu클래스의 메소드를 이용해 올인원 메뉴를 수정 할 수 있습니다.
+        /// </summary>
         internal static Menu MainMenu_Manual;
         internal static Orbwalking.Orbwalker Orbwalker;
 
+        /// <summary>
+        /// 올인원의 메인메뉴를 만들고 root메뉴에 추가합니다.
+        /// </summary>
         internal static void initialize()
         {
             MainMenu_Manual = new Menu("ALL In One", "Teamproject_ALLINONE", true);
             MainMenu_Manual.AddToMainMenu();
         }
 
+        /// <summary>
+        /// 올인원의 메인메뉴에 서브메뉴를 추가합니다.
+        /// </summary>
+        /// <param name="DisplayName">추가할 서브메뉴의 표기이름을 기입하십시오.</param>
         internal static void addSubMenu(string DisplayName)
         {
             MainMenu_Manual.AddSubMenu(new Menu(DisplayName, DisplayName));
         }
 
+        /// <summary>
+        /// 올인원의 메인메뉴에 서브메뉴를 추가합니다.
+        /// </summary>
+        /// <param name="Name">추가할 서브메뉴의 이름을 기입합니다.</param>
+        /// <param name="DisplayName">추가할 서브메뉴의 표기이름을 기입하십시오.</param>
         internal static void addSubMenu(string Name, string DisplayName)
         {
             MainMenu_Manual.AddSubMenu(new Menu(DisplayName, Name));
         }
 
+        /// <summary>
+        /// 올인원의 메인메뉴에 항목을 추가합니다.
+        /// </summary>
+        /// <param name="DisplayName">추가할 항목의 표기이름을 기입하십시오.</param>
+        /// <param name="Value">항목의 값을 기입하십시오.</param>
+        /// <param name="ChampUniq">이 값을 true로 지정하면 플레이어의 항목의 이름에 챔피언이름을 포함한 항목이 생성됩니다.</param>
         internal static void addItem(string DisplayName, object Value, bool ChampUniq = false)
         {
             if (Value == null)
@@ -39,8 +63,17 @@ namespace ALL_In_One
             MainMenu_Manual.AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq)).SetValue(Value);
         }
 
+        /// <summary>
+        /// 이 클래스를 이용해서 챔피언 메뉴에 접근할 수 있습니다.
+        /// </summary>
         internal class Champion
         {
+            /// <summary>
+            /// 챔피언 메뉴에 항목을 추가합니다.
+            /// </summary>
+            /// <param name="DisplayName">항목의 표기이름을 기입하십시오. 이 함수는 항목의 Name도 DisplayName매개변수의 값으로 설정합니다.</param>
+            /// <param name="Value">항목의 초기값을 기입하십시오.</param>
+            /// <param name="ChampUniq">이 값을 true로 지정하면 항목의 이름에 플레이어의 챔피언이름을 포함한 항목이 생성됩니다.</param>
             internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
             {
                 if (Value == null)
@@ -52,18 +85,33 @@ namespace ALL_In_One
                 MainMenu_Manual.SubMenu("Champion").AddItem(new MenuItem(DisplayName, DisplayName, ChampUniq)).SetValue(Value);
             }
 
+            /// <summary>
+            /// 챔피언 메뉴에 오브워커를 추가합니다.
+            /// </summary>
             internal static void addOrbwalker()
             {
                 Orbwalker = new Orbwalking.Orbwalker(MainMenu_Manual.SubMenu("Champion").AddSubMenu(new Menu("Orbwalker", "Orbwalker")));
             }
 
+            /// <summary>
+            /// 챔피언 메뉴에 타겟셀렉터를 추가합니다.
+            /// </summary>
             internal static void addTargetSelector()
             {
                 TargetSelector.AddToMenu(MainMenu_Manual.SubMenu("Champion").AddSubMenu(new Menu("Target Selector", "Target Selector")));
             }
 
+            /// <summary>
+            /// 이 클래스를 이용해서 Combo 메뉴에 접근할 수 있습니다.
+            /// </summary>
             internal class Combo
             {
+                /// <summary>
+                /// Combo 메뉴에 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DisplayName">항목의 표기이름을 기입하십시오.</param>
+                /// <param name="Value">항목의 초기값을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 항목의 이름에 플레이어의 챔피언이름을 포함한 항목이 생성됩니다.</param>
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
                     if (Value == null)
@@ -75,46 +123,87 @@ namespace ALL_In_One
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Combo").AddItem(new MenuItem("Combo." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
+                /// <summary>
+                /// Combo 메뉴 안에 존재하는 항목의 Boolean값을 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName">값을 가져올 항목의 표기이름을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 플레이어의 챔피언 이름을 포함한 이름을 가진 항목의 값을 가져옵니다.</param>
+                /// <returns>항목의 bool값을 반환합니다.</returns>
                 internal static bool getBoolValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Combo." + DisplayName, ChampUniq).GetValue<bool>();
                 }
 
+                /// <summary>
+                /// Combo 메뉴 안에 존재하는 항목의 LeageuSharp.Common.KeyBind 구조체를 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName"></param>
+                /// <param name="ChampUniq"></param>
+                /// <returns>LeageuSharp.Common.KeyBind 구조체를 반환합니다.</returns>
                 internal static KeyBind getKeyBindValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Combo." + DisplayName, ChampUniq).GetValue<KeyBind>();
                 }
-                
+
+                /// <summary>
+                /// Combo 메뉴 안에 존재하는 항목의 LeageuSharp.Common.Slider 구조체를 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName"></param>
+                /// <param name="ChampUniq"></param>
+                /// <returns>LeageuSharp.Common.Slider 구조체를 반환합니다.</returns>
                 internal static Slider getSliderValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Combo." + DisplayName, ChampUniq).GetValue<Slider>();
                 }
 
+                /// <summary>
+                /// Combo 메뉴에 'Use Q' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseQ(bool Enabled = true)
                 {
                     addItem("Use Q", Enabled);
                 }
 
+                /// <summary>
+                /// Combo 메뉴에 'Use W' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseW(bool Enabled = true)
                 {
                     addItem("Use W", Enabled);
                 }
 
+                /// <summary>
+                /// Combo 메뉴에 'Use E' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseE(bool Enabled = true)
                 {
                     addItem("Use E", Enabled);
                 }
 
+                /// <summary>
+                /// Combo 메뉴에 'Use R' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseR(bool Enabled = true)
                 {
                     addItem("Use R", Enabled);
                 }
 
+                /// <summary>
+                /// Combo 메뉴에 'If Mana >' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DefaultValue">항목의 초기값을 기입하십시오.</param>
                 internal static void addIfMana(int DefaultValue = 0)
                 {
                     addItem("If Mana >", new Slider(DefaultValue));
                 }
 
+                /// <summary>
+                /// 'Use Q' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseQ
                 {
                     get
@@ -123,6 +212,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use W' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseW
                 {
                     get
@@ -131,6 +223,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use E' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseE
                 {
                     get
@@ -139,6 +234,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use R' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseR
                 {
                     get
@@ -147,6 +245,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'If Mana >' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static int IfMana
                 {
                     get
@@ -156,8 +257,17 @@ namespace ALL_In_One
                 }
             }
 
+            /// <summary>
+            /// 이 클래스를 이용해서 Harass 메뉴에 접근할 수 있습니다.
+            /// </summary>
             internal class Harass
             {
+                /// <summary>
+                /// Harass 메뉴에 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DisplayName">항목의 표기이름을 기입하십시오.</param>
+                /// <param name="Value">항목의 초기값을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 항목의 이름에 플레이어의 챔피언이름을 포함한 항목이 생성됩니다.</param>
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
                     if (Value == null)
@@ -169,46 +279,85 @@ namespace ALL_In_One
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Harass").AddItem(new MenuItem("Harass." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
+                /// <summary>
+                /// Harass 메뉴에 존재하는 항목의 Boolean값을 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName">값을 가져올 항목의 표기이름을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 플레이어의 챔피언 이름을 포함한 이름을 가진 항목의 값을 가져옵니다.</param>
+                /// <returns>항목의 bool값을 반환합니다.</returns>
                 internal static bool getBoolValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Harass." + DisplayName, ChampUniq).GetValue<bool>();
                 }
 
+                /// <summary>
+                /// Harass 메뉴에 존재하는 항목의 LeageuSharp.Common.Slider 구조체를 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName"></param>
+                /// <param name="ChampUniq"></param>
+                /// <returns>LeageuSharp.Common.Slider 구조체를 반환합니다.</returns>
                 internal static Slider getSliderValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Harass." + DisplayName, ChampUniq).GetValue<Slider>();
                 }
 
-                internal static void addAuto(bool Enabled = true)
+                /// <summary>
+                /// Harass 메뉴에 'Auto Harass' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
+                internal static void addAutoHarass(bool Enabled = true)
                 {
                     addItem("Auto Harass", Enabled);
                 }
 
+                /// <summary>
+                /// Harass 메뉴에 'Use Q' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseQ(bool Enabled = true)
                 {
                     addItem("Use Q", Enabled);
                 }
 
+                /// <summary>
+                /// Harass 메뉴에 'Use W' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseW(bool Enabled = true)
                 {
                     addItem("Use W", Enabled);
                 }
 
+                /// <summary>
+                /// Harass 메뉴에 'Use E' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseE(bool Enabled = true)
                 {
                     addItem("Use E", Enabled);
                 }
 
+                /// <summary>
+                /// Harass 메뉴에 'Use R' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseR(bool Enabled = true)
                 {
                     addItem("Use R", Enabled);
                 }
 
+                /// <summary>
+                /// Harass 메뉴에 'If Mana >' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DefaultValue">항목의 초기값을 기입하십시오.</param>
                 internal static void addIfMana(int DefaultValue = 60)
                 {
                     addItem("If Mana >", new Slider(DefaultValue));
                 }
 
+                /// <summary>
+                /// 'Auto Harass' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool Auto
                 {
                     get
@@ -217,6 +366,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use Q' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseQ
                 {
                     get
@@ -225,6 +377,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use W' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseW
                 {
                     get
@@ -233,6 +388,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use E' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseE
                 {
                     get
@@ -241,6 +399,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use R' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseR
                 {
                     get
@@ -249,6 +410,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'If Mana >' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static int IfMana
                 {
                     get
@@ -258,8 +422,17 @@ namespace ALL_In_One
                 }
             }
 
+            /// <summary>
+            /// 이 클래스를 이용해서 Lasthit 메뉴에 접근할 수 있습니다.
+            /// </summary>
             internal class Lasthit
             {
+                /// <summary>
+                /// Lasthit 메뉴에 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DisplayName">항목의 표기이름을 기입하십시오.</param>
+                /// <param name="Value">항목의 초기값을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 항목의 이름에 플레이어의 챔피언이름을 포함한 항목이 생성됩니다.</param>
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
                     if (Value == null)
@@ -271,41 +444,75 @@ namespace ALL_In_One
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Lasthit").AddItem(new MenuItem("Lasthit." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
+                /// <summary>
+                /// Lasthit 메뉴 안에 존재하는 항목의 Boolean값을 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName">값을 가져올 항목의 표기이름을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 플레이어의 챔피언 이름을 포함한 이름을 가진 항목의 값을 가져옵니다.</param>
                 internal static bool getBoolValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Lasthit." + DisplayName, ChampUniq).GetValue<bool>();
                 }
 
+                /// <summary>
+                /// Lasthit 메뉴 안에 존재하는 항목의 LeageuSharp.Common.Slider 구조체를 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName"></param>
+                /// <param name="ChampUniq"></param>
+                /// <returns>LeageuSharp.Common.Slider 구조체를 반환합니다.</returns>
                 internal static Slider getSliderValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Lasthit." + DisplayName, ChampUniq).GetValue<Slider>();
                 }
 
+                /// <summary>
+                /// Lasthit 메뉴에 'Use Q' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseQ(bool Enabled = true)
                 {
                     addItem("Use Q", Enabled);
                 }
 
+                /// <summary>
+                /// Lasthit 메뉴에 'Use W' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseW(bool Enabled = true)
                 {
                     addItem("Use W", Enabled);
                 }
 
+                /// <summary>
+                /// Lasthit 메뉴에 'Use E' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseE(bool Enabled = true)
                 {
                     addItem("Use E", Enabled);
                 }
 
+                /// <summary>
+                /// Lasthit 메뉴에 'Use R' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseR(bool Enabled = true)
                 {
                     addItem("Use R", Enabled);
                 }
 
+                /// <summary>
+                /// Lasthit 메뉴에 'If Mana >' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DefaultValue">항목의 초기값을 기입하십시오.</param>
                 internal static void addIfMana(int DefaultValue = 60)
                 {
                     addItem("If Mana >", new Slider(DefaultValue));
                 }
 
+                /// <summary>
+                /// 'Use Q' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseQ
                 {
                     get
@@ -314,6 +521,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use W' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseW
                 {
                     get
@@ -322,6 +532,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use E' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseE
                 {
                     get
@@ -330,6 +543,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use R' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseR
                 {
                     get
@@ -338,6 +554,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'If Mana >' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static int IfMana
                 {
                     get
@@ -347,8 +566,17 @@ namespace ALL_In_One
                 }
             }
 
+            /// <summary>
+            /// 이 클래스를 이용해서 Laneclear 메뉴에 접근할 수 있습니다.
+            /// </summary>
             internal class Laneclear
             {
+                /// <summary>
+                /// Laneclear 메뉴에 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DisplayName">항목의 표기이름을 기입하십시오.</param>
+                /// <param name="Value">항목의 초기값을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 항목의 이름에 플레이어의 챔피언이름을 포함한 항목이 생성됩니다.</param>
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
                     if (Value == null)
@@ -360,41 +588,75 @@ namespace ALL_In_One
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Laneclear").AddItem(new MenuItem("Laneclear." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
+                /// <summary>
+                /// Laneclear 메뉴 안에 존재하는 항목의 Boolean값을 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName">값을 가져올 항목의 표기이름을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 플레이어의 챔피언 이름을 포함한 이름을 가진 항목의 값을 가져옵니다.</param>
                 internal static bool getBoolValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Laneclear." + DisplayName, ChampUniq).GetValue<bool>();
                 }
 
+                /// <summary>
+                /// Laneclear 메뉴 안에 존재하는 항목의 LeageuSharp.Common.Slider 구조체를 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName"></param>
+                /// <param name="ChampUniq"></param>
+                /// <returns>LeageuSharp.Common.Slider 구조체를 반환합니다.</returns>
                 internal static Slider getSliderValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Laneclear." + DisplayName, ChampUniq).GetValue<Slider>();
                 }
 
+                /// <summary>
+                /// Laneclear 메뉴에 'Use Q' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseQ(bool Enabled = true)
                 {
                     addItem("Use Q", Enabled);
                 }
 
+                /// <summary>
+                /// Laneclear 메뉴에 'Use W' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseW(bool Enabled = true)
                 {
                     addItem("Use W", Enabled);
                 }
 
+                /// <summary>
+                /// Laneclear 메뉴에 'Use E' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseE(bool Enabled = true)
                 {
                     addItem("Use E", Enabled);
                 }
 
+                /// <summary>
+                /// Laneclear 메뉴에 'Use R' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseR(bool Enabled = true)
                 {
                     addItem("Use R", Enabled);
                 }
 
-                internal static void addIfMana(int DefaultValue = 60)
+                /// <summary>
+                /// Laneclear 메뉴에 'If Mana >' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DefaultValue">항목의 초기값을 기입하십시오.</param>
+                internal static void addIfMana(int DefaultValue = 0)
                 {
                     addItem("If Mana >", new Slider(DefaultValue));
                 }
 
+                /// <summary>
+                /// 'Use Q' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseQ
                 {
                     get
@@ -403,6 +665,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use W' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseW
                 {
                     get
@@ -411,6 +676,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use E' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseE
                 {
                     get
@@ -419,6 +687,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use R' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseR
                 {
                     get
@@ -427,6 +698,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'If Mana >' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static int IfMana
                 {
                     get
@@ -436,8 +710,17 @@ namespace ALL_In_One
                 }
             }
 
+            /// <summary>
+            /// 이 클래스를 이용해서 Jungleclear 메뉴에 접근할 수 있습니다.
+            /// </summary>
             internal class Jungleclear
             {
+                /// <summary>
+                /// Jungleclear 메뉴에 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DisplayName">항목의 표기이름을 기입하십시오.</param>
+                /// <param name="Value">항목의 초기값을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 항목의 이름에 플레이어의 챔피언이름을 포함한 항목이 생성됩니다.</param>
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
                     if (Value == null)
@@ -449,41 +732,75 @@ namespace ALL_In_One
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Jungleclear").AddItem(new MenuItem("Jungleclear." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
+                /// <summary>
+                /// Jungleclear 메뉴 안에 존재하는 항목의 Boolean값을 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName">값을 가져올 항목의 표기이름을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 플레이어의 챔피언 이름을 포함한 이름을 가진 항목의 값을 가져옵니다.</param>
                 internal static bool getBoolValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Jungleclear." + DisplayName, ChampUniq).GetValue<bool>();
                 }
 
+                /// <summary>
+                /// Jungleclear 메뉴 안에 존재하는 항목의 LeageuSharp.Common.Slider 구조체를 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName"></param>
+                /// <param name="ChampUniq"></param>
+                /// <returns>LeageuSharp.Common.Slider 구조체를 반환합니다.</returns>
                 internal static Slider getSliderValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Jungleclear." + DisplayName, ChampUniq).GetValue<Slider>();
                 }
 
+                /// <summary>
+                /// Jungleclear 메뉴에 'Use Q' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseQ(bool Enabled = true)
                 {
                     addItem("Use Q", Enabled);
                 }
 
+                /// <summary>
+                /// Jungleclear 메뉴에 'Use W' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseW(bool Enabled = true)
                 {
                     addItem("Use W", Enabled);
                 }
 
+                /// <summary>
+                /// Jungleclear 메뉴에 'Use E' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseE(bool Enabled = true)
                 {
                     addItem("Use E", Enabled);
                 }
 
+                /// <summary>
+                /// Jungleclear 메뉴에 'Use R' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseR(bool Enabled = true)
                 {
                     addItem("Use R", Enabled);
                 }
 
-                internal static void addIfMana(int DefaultValue = 20)
+                /// <summary>
+                /// Jungleclear 메뉴에 'If Mana >' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DefaultValue">항목의 초기값을 기입하십시오.</param>
+                internal static void addIfMana(int DefaultValue = 0)
                 {
                     addItem("If Mana >", new Slider(DefaultValue));
                 }
 
+                /// <summary>
+                /// 'Use Q' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseQ
                 {
                     get
@@ -492,6 +809,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use W' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseW
                 {
                     get
@@ -500,6 +820,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use E' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseE
                 {
                     get
@@ -508,6 +831,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use R' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseR
                 {
                     get
@@ -516,6 +842,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'If Mana >' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static int IfMana
                 {
                     get
@@ -525,9 +854,17 @@ namespace ALL_In_One
                 }
             }
 
-
+            /// <summary>
+            /// 이 클래스를 이용해서 Flee 메뉴에 접근할 수 있습니다.
+            /// </summary>
             internal class Flee
             {
+                /// <summary>
+                /// Flee 메뉴에 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DisplayName">항목의 표기이름을 기입하십시오.</param>
+                /// <param name="Value">항목의 초기값을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 항목의 이름에 플레이어의 챔피언이름을 포함한 항목이 생성됩니다.</param>
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
                     if (Value == null)
@@ -539,41 +876,75 @@ namespace ALL_In_One
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Flee").AddItem(new MenuItem("Flee." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
+                /// <summary>
+                /// Flee 메뉴 안에 존재하는 항목의 Boolean값을 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName">값을 가져올 항목의 표기이름을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 플레이어의 챔피언 이름을 포함한 이름을 가진 항목의 값을 가져옵니다.</param>
                 internal static bool getBoolValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Flee." + DisplayName, ChampUniq).GetValue<bool>();
                 }
 
+                /// <summary>
+                /// Flee 메뉴 안에 존재하는 항목의 LeageuSharp.Common.Slider 구조체를 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName"></param>
+                /// <param name="ChampUniq"></param>
+                /// <returns>LeageuSharp.Common.Slider 구조체를 반환합니다.</returns>
                 internal static Slider getSliderValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Flee." + DisplayName, ChampUniq).GetValue<Slider>();
                 }
 
+                /// <summary>
+                /// Flee 메뉴에 'Use Q' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseQ(bool Enabled = true)
                 {
                     addItem("Use Q", Enabled);
                 }
 
+                /// <summary>
+                /// Flee 메뉴에 'Use W' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseW(bool Enabled = true)
                 {
                     addItem("Use W", Enabled);
                 }
 
+                /// <summary>
+                /// Flee 메뉴에 'Use E' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseE(bool Enabled = true)
                 {
                     addItem("Use E", Enabled);
                 }
 
+                /// <summary>
+                /// Flee 메뉴에 'Use R' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseR(bool Enabled = true)
                 {
                     addItem("Use R", Enabled);
                 }
 
-                internal static void addIfMana(int DefaultValue = 10)
+                /// <summary>
+                /// Flee 메뉴에 'If Mana >' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DefaultValue">항목의 초기값을 기입하십시오.</param>
+                internal static void addIfMana(int DefaultValue = 0)
                 {
                     addItem("If Mana >", new Slider(DefaultValue));
                 }
 
+                /// <summary>
+                /// 'Use Q' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseQ
                 {
                     get
@@ -582,6 +953,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use W' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseW
                 {
                     get
@@ -590,6 +964,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use E' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseE
                 {
                     get
@@ -598,6 +975,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use R' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static bool UseR
                 {
                     get
@@ -606,6 +986,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'If Mana >' 항목의 값을 반환합니다.
+                /// </summary>
                 internal static int IfMana
                 {
                     get
@@ -615,8 +998,17 @@ namespace ALL_In_One
                 }
             }
 
+            /// <summary>
+            /// 이 클래스를 이용해서 Misc 메뉴에 접근할 수 있습니다.
+            /// </summary>
             internal class Misc
             {
+                /// <summary>
+                /// Misc 메뉴에 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DisplayName">항목의 표기이름을 기입하십시오.</param>
+                /// <param name="Value">항목의 초기값을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 항목의 이름에 플레이어의 챔피언이름을 포함한 항목이 생성됩니다.</param>
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
                     if (Value == null)
@@ -628,41 +1020,80 @@ namespace ALL_In_One
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Misc").AddItem(new MenuItem("Misc." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
+                /// <summary>
+                /// Misc 메뉴 안에 존재하는 항목의 Boolean값을 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName">값을 가져올 항목의 표기이름을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 플레이어의 챔피언 이름을 포함한 이름을 가진 항목의 값을 가져옵니다.</param>
                 internal static bool getBoolValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<bool>();
                 }
 
+                /// <summary>
+                /// Misc 메뉴 안에 존재하는 항목의 LeageuSharp.Common.Slider 구조체를 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName"></param>
+                /// <param name="ChampUniq"></param>
+                /// <returns>LeageuSharp.Common.Slider 구조체를 반환합니다.</returns>
                 internal static Slider getSliderValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<Slider>();
                 }
 
+                /// <summary>
+                /// Misc 메뉴 안에 존재하는 항목의 LeageuSharp.Common.StringList 구조체를 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName"></param>
+                /// <param name="ChampUniq"></param>
+                /// <returns>LeageuSharp.Common.StringList 구조체를 반환합니다.</returns>
                 internal static StringList getStringListValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<StringList>();
                 }
 
+                /// <summary>
+                /// Misc 메뉴 안에 존재하는 항목의 LeageuSharp.Common.KeyBind 구조체를 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName"></param>
+                /// <param name="ChampUniq"></param>
+                /// <returns>LeageuSharp.Common.KeyBind 구조체를 반환합니다.</returns>
                 internal static KeyBind getKeyBindValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Misc." + DisplayName, ChampUniq).GetValue<KeyBind>();
                 }
 
+                /// <summary>
+                /// Misc 메뉴에 'Use Anti-Gapcloser' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseAntiGapcloser(bool Enabled = true)
                 {
                     addItem("Use Anti-Gapcloser", Enabled);
                 }
 
+                /// <summary>
+                /// Misc 메뉴에 'Use Interrupter' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseInterrupter(bool Enabled = true)
                 {
                     addItem("Use Interrupter", Enabled);
                 }
 
+                /// <summary>
+                /// Misc 메뉴에 'Use Killsteal' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addUseKillsteal(bool Enabled = true)
                 {
                     addItem("Use Killsteal", Enabled);
                 }
 
+                /// <summary>
+                /// Misc 메뉴에 Hitchance Selector를 추가합니다.
+                /// </summary>
+                /// <param name="defaultHitchance">항목의 초기값을 기입하십시오.</param>
                 internal static void addHitchanceSelector(HitChance defaultHitchance = HitChance.High)
                 {
                     int defaultindex;
@@ -689,6 +1120,9 @@ namespace ALL_In_One
                     addItem("Hitchance", new StringList(new string[] { "Low", "Medium", "High", "Very High" }, defaultindex));
                 }
 
+                /// <summary>
+                /// 'Use Anti-Gacploser' 항목의 값을 가져옵니다.
+                /// </summary>
                 internal static bool UseAntiGapcloser
                 {
                     get
@@ -697,6 +1131,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use Interrupter' 항목의 값을 가져옵니다.
+                /// </summary>
                 internal static bool UseInterrupter
                 {
                     get
@@ -705,6 +1142,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'Use Killsteal' 항목의 값을 가져옵니다.
+                /// </summary>
                 internal static bool UseKillsteal
                 {
                     get
@@ -713,6 +1153,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// Hitchance Selector에서 선택된 Hitchance를 가져옵니다.
+                /// </summary>
                 internal static HitChance SelectedHitchance
                 {
                     get
@@ -734,8 +1177,17 @@ namespace ALL_In_One
                 }
             }
 
+            /// <summary>
+            /// 이 클래스를 이용해서 Drawings 메뉴에 접근할 수 있습니다.
+            /// </summary>
             internal class Drawings
             {
+                /// <summary>
+                /// Drawings 메뉴에 항목을 추가합니다.
+                /// </summary>
+                /// <param name="DisplayName">항목의 표기이름을 기입하십시오.</param>
+                /// <param name="Value">항목의 초기값을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 항목의 이름에 플레이어의 챔피언이름을 포함한 항목이 생성됩니다.</param>
                 internal static void addItem(string DisplayName, object Value, bool ChampUniq = true)
                 {
                     if (Value == null)
@@ -747,41 +1199,77 @@ namespace ALL_In_One
                     MainMenu_Manual.SubMenu("Champion").SubMenu("Drawings").AddItem(new MenuItem("Drawings." + DisplayName, DisplayName, ChampUniq)).SetValue(Value);
                 }
 
+                /// <summary>
+                /// Drawings 메뉴 안에 존재하는 항목의 Boolean값을 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName">값을 가져올 항목의 표기이름을 기입하십시오.</param>
+                /// <param name="ChampUniq">이 값을 true로 지정하면 플레이어의 챔피언 이름을 포함한 이름을 가진 항목의 값을 가져옵니다.</param>
                 internal static bool getBoolValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Drawings." + DisplayName, ChampUniq).GetValue<bool>();
                 }
 
+                /// <summary>
+                /// Drawings 메뉴 안에 존재하는 항목의 LeageuSharp.Common.Slider 구조체를 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName"></param>
+                /// <param name="ChampUniq"></param>
+                /// <returns>LeageuSharp.Common.Slider 구조체를 반환합니다.</returns>
                 internal static Slider getSliderValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Drawings." + DisplayName, ChampUniq).GetValue<Slider>();
                 }
 
+                /// <summary>
+                /// Drawings 메뉴 안에 존재하는 항목의 LeagueSharp.Common.Circle 구조체를 가져옵니다.
+                /// </summary>
+                /// <param name="DisplayName"></param>
+                /// <param name="ChampUniq"></param>
+                /// <returns>LeagueSharp.Common.Circle 구조체를 반환합니다.</returns>
                 internal static Circle getCircleValue(string DisplayName, bool ChampUniq = true)
                 {
                     return MainMenu_Manual.Item("Drawings." + DisplayName, ChampUniq).GetValue<Circle>();
                 }
 
+                /// <summary>
+                /// Drawings 메뉴에 'Q Range' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addQrange(bool Enabled = true)
                 {
                     addItem("Q Range", new Circle(Enabled, System.Drawing.Color.FromArgb(127, System.Drawing.Color.SpringGreen)));
                 }
 
+                /// <summary>
+                /// Drawings 메뉴에 'W Range' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addWrange(bool Enabled = true)
                 {
                     addItem("W Range", new Circle(Enabled, System.Drawing.Color.FromArgb(127, System.Drawing.Color.SpringGreen)));
                 }
 
+                /// <summary>
+                /// Drawings 메뉴에 'E Range' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addErange(bool Enabled = true)
                 {
                     addItem("E Range", new Circle(Enabled, System.Drawing.Color.FromArgb(127, System.Drawing.Color.SpringGreen)));
                 }
 
+                /// <summary>
+                /// Drawings 메뉴에 'R Range' 항목을 추가합니다.
+                /// </summary>
+                /// <param name="Enabled">항목의 초기값을 기입하십시오.</param>
                 internal static void addRrange(bool Enabled = true)
                 {
                     addItem("R Range", new Circle(Enabled, System.Drawing.Color.FromArgb(127, System.Drawing.Color.SpringGreen)));
                 }
 
+                /// <summary>
+                /// 'Q Range' 항목의 Circle 구조체를 반환합니다.
+                /// </summary>
                 internal static Circle Qrange
                 {
                     get
@@ -790,6 +1278,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'W Range' 항목의 Circle 구조체를 반환합니다.
+                /// </summary>
                 internal static Circle Wrange
                 {
                     get
@@ -798,6 +1289,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'E Range' 항목의 Circle 구조체를 반환합니다.
+                /// </summary>
                 internal static Circle Erange
                 {
                     get
@@ -806,6 +1300,9 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// 'R Range' 항목의 Circle 구조체를 반환합니다.
+                /// </summary>
                 internal static Circle Rrange
                 {
                     get
@@ -814,6 +1311,10 @@ namespace ALL_In_One
                     }
                 }
 
+                /// <summary>
+                /// Drawings 메뉴에 DamageIndicator(데미지 표시기)를 추가합니다.
+                /// </summary>
+                /// <param name="damage"></param>
                 internal static void addDamageIndicator(DamageIndicator.DamageToUnitDelegate damage)
                 {
                     var drawDamageMenu = new MenuItem("Draw_Damage", "DamageIndicator", true).SetValue(true);

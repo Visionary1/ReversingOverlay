@@ -209,7 +209,7 @@ namespace ALL_In_One.champions
 
             if (AIO_Menu.Champion.Combo.UseR && R.IsReady())
             {
-                if (!Q.IsReady() && !E.IsReady() && Player.HealthPercent <= 98 && Player.CountEnemiesInRange(Q.Range) >= 1)
+                if (!W.IsReady() && !E.IsReady() && Player.CountEnemiesInRange(1000) >= 1)
                     R.Cast();
             }
         }

@@ -365,7 +365,7 @@ namespace ALL_In_One.utility
 
                     if ((Menu.Item("Misc.Cb").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) || (Menu.Item("Misc.Hr").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) || (Menu.Item("Misc.Jc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Mobs.Count > 0) || (Menu.Item("Misc.Lc").GetValue<bool>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Minions.Count > 0))
                     {
-                        var orderdata = OrderDataList.Find(x => x.ChampionName == ObjectManager.Player.ChampionName);
+                        var orderdata = OrderDataList.Find(x => x.ChampionName == AIO_Func.ChampionName);
 
                         if (orderdata != null)
                         {
@@ -405,7 +405,7 @@ namespace ALL_In_One.utility
 
             internal static void Spellbook_OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
             {
-                var orderdata = OrderDataList.Find(x => x.ChampionName == ObjectManager.Player.ChampionName);
+                var orderdata = OrderDataList.Find(x => x.ChampionName == AIO_Func.ChampionName);
 
                 if (orderdata == null || orderdata.CastingOrder != CastingOrder.ItemFirst)
                     return;

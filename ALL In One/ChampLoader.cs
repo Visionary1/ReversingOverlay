@@ -1,11 +1,18 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Security.Permissions;
 
 using LeagueSharp;
 using LeagueSharp.Common;
+
 namespace ALL_In_One
 {
     class ChampLoader
     {
+        private static bool loaded = false;
+
         enum Developer
         {
             xcsoft,
@@ -17,392 +24,137 @@ namespace ALL_In_One
         /// 전용 챔피언의 클래스를 로드합니다.
         /// </summary>
         /// <param name="champName">로드할 클래스의 이름을 기입하십시오.</param>
+        [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
         internal static void Load(string champName)
         {
-            switch (champName)
+            var champions = Assembly.GetExecutingAssembly().GetTypes().Where(x =>
+                    x.Namespace.Contains("champions") && x.IsClass);
+
+            foreach (var champion in champions)
             {
-                case "MasterYi":
-                    MadeBy(Developer.xcsoft);
-                    champions.MasterYi.Load();
-                    break;
-                case "Annie":
-                    MadeBy(Developer.xcsoft);
-                    champions.Annie.Load();
-                    break;
-                case "Garen":
-                    MadeBy(Developer.xcsoft);
-                    champions.Garen.Load();
-                    break;
-                case "Kalista":
-                    MadeBy(Developer.xcsoft);
-                    champions.Kalista.Load();
-                    break;
-                case "Ryze":
-                    MadeBy(Developer.xcsoft);
-                    champions.Ryze.Load();
-                    break;
-                case "Vi":
-                    MadeBy(Developer.xcsoft);
-                    champions.Vi.Load();
-                    break;
-                case "Vladimir":
-                    MadeBy(Developer.xcsoft);
-                    champions.Vladimir.Load();
-                    break;
-                case "Chogath":
-                    MadeBy(Developer.Fakker);
-                    champions.Chogath.Load();
-                    break;
-                case "Urgot":
-                    MadeBy(Developer.RL244);
-                    champions.Urgot.Load();
-                    break;
-                case "Fiora":
-                    MadeBy(Developer.RL244);
-                    champions.Fiora.Load();
-                    break;
-                case "Lulu":
-                    MadeBy(Developer.xcsoft);
-                    champions.Lulu.Load();
-                    break;
-                case "Nautilus":
-                    MadeBy(Developer.xcsoft);
-                    champions.Nautilus.Load();
-                    break;
-                case "Graves":
-                    MadeBy(Developer.Fakker);
-                    champions.Graves.Load();
-                    break;
-                case "Sivir":
-                    MadeBy(Developer.Fakker);
-                    champions.Sivir.Load();
-                    break;
-                case "XinZhao":
-                    MadeBy(Developer.RL244);
-                    champions.XinZhao.Load();
-                    break;
-                case "Katarina":
-                    MadeBy(Developer.xcsoft);
-                    champions.Katarina.Load();
-                    break;
-                case "Veigar":
-                    MadeBy(Developer.RL244);
-                    champions.Veigar.Load();
-                    break;
-                case "Talon":
-                    MadeBy(Developer.RL244);
-                    champions.Talon.Load();
-                    break;
-                /*case "Azir": 
-                    MadeBy(Developer.RL244); // Work In Progress
-                    champions.Azir.Load();
-                    break;*/
-                case "Gangplank":
-                    MadeBy(Developer.RL244);
-                    champions.Gangplank.Load();
-                    break;
-                case "Blitzcrank":
-                    MadeBy(Developer.RL244);
-                    champions.Blitzcrank.Load();
-                    break;
-                case "Brand":
-                    MadeBy(Developer.RL244);
-                    champions.Brand.Load();
-                    break;
-                case "Cassiopeia":
-                    MadeBy(Developer.RL244);
-                    champions.Cassiopeia.Load();
-                    break;
-                case "KogMaw":
-                    MadeBy(Developer.RL244);
-                    champions.KogMaw.Load();
-                    break;
-                case "Zyra":
-                    MadeBy(Developer.RL244);
-                    champions.Zyra.Load();
-                    break;
-                case "Caitlyn":
-                    MadeBy(Developer.RL244);
-                    champions.Caitlyn.Load();
-                    break;
-                case "MissFortune":
-                    MadeBy(Developer.RL244);
-                    champions.MissFortune.Load();
-                    break;
-                case "Tristana":
-                    MadeBy(Developer.RL244);
-                    champions.Tristana.Load();
-                    break;
-                case "Karthus":
-                    MadeBy(Developer.xcsoft);
-                    champions.Karthus.Load();
-                    break;
-                case "Karma":
-                    MadeBy(Developer.RL244);// Work In Progress
-                    champions.Karma.Load();
-                    break;
-                case "Jax":
-                    MadeBy(Developer.RL244);
-                    champions.Jax.Load();
-                    break;
-                case "Darius":
-                    MadeBy(Developer.RL244);
-                    champions.Darius.Load();
-                    break;
-                case "Amumu":
-                    MadeBy(Developer.xcsoft);
-                    champions.Amumu.Load();
-                    break;
-                case "Yasuo":
-                    MadeBy(Developer.RL244);
-                    champions.Yasuo.Load();
-                    break;
-                case "Syndra":
-                    MadeBy(Developer.RL244);// Work In Progress
-                    champions.Syndra.Load();
-                    break;
-                case "Viktor":
-                    MadeBy(Developer.RL244);
-                    champions.Viktor.Load();
-                    break;
-                case "Janna":
-                    MadeBy(Developer.xcsoft);
-                    champions.Janna.Load();
-                    break;
-                case "Nami":
-                    MadeBy(Developer.xcsoft);
-                    champions.Nami.Load();
-                    break;
-                case "Sion":
-                    MadeBy(Developer.xcsoft);
-                    champions.Sion.Load();
-                    break;
-                case "MonkeyKing":
-                    MadeBy(Developer.xcsoft);
-                    champions.MonkeyKing.Load();
-                    break;
-                case "Evelynn":
-                    MadeBy(Developer.RL244);
-                    champions.Evelynn.Load();
-                    break;
-                case "Kassadin":
-                    MadeBy(Developer.RL244);
-                    champions.Kassadin.Load();
-                    break;
-                case "Mordekaiser":
-                    MadeBy(Developer.RL244);
-                    champions.Mordekaiser.Load();
-                    break;
-                case "Trundle":
-                    MadeBy(Developer.RL244);
-                    champions.Trundle.Load();
-                    break;
-                case "Nasus":
-                    MadeBy(Developer.RL244);
-                    champions.Nasus.Load();
-                    break;
-                case "Zed":
-                    MadeBy(Developer.xcsoft); //(Incomplete)
-                    champions.Zed.Load();
-                    break;
-                case "Khazix":
-                    MadeBy(Developer.RL244);
-                    champions.Khazix.Load();
-                    break;
-                case "Shyvana":
-                    MadeBy(Developer.RL244);
-                    champions.Shyvana.Load();
-                    break;
-                case "Jinx":
-                    MadeBy(Developer.xcsoft);
-                    champions.Jinx.Load();
-                    break;
-                case "Yorick":
-                    MadeBy(Developer.RL244);
-                    champions.Yorick.Load();
-                    break;
-                case "Renekton":
-                    MadeBy(Developer.RL244); // Work In Progress
-                    champions.Renekton.Load();
-                    break;
-                case "Rengar":
-                    MadeBy(Developer.RL244);
-                    champions.Rengar.Load();
-                    break;
-                case "Warwick":
-                    MadeBy(Developer.RL244);
-                    champions.Warwick.Load();
-                    break;
-                case "Ezreal":
-                    MadeBy(Developer.RL244);
-                    champions.Ezreal.Load();
-                    break;
-                case "JarvanIV":
-                    MadeBy(Developer.RL244);
-                    champions.JarvanIV.Load();
-                    break;
-                case "Teemo":
-                    MadeBy(Developer.RL244);
-                    champions.Teemo.Load();
-                    break;
-                case "Aatrox":
-                    MadeBy(Developer.RL244);
-                    champions.Aatrox.Load();
-                    break;
-                case "Nunu":
-                    MadeBy(Developer.RL244);
-                    champions.Nunu.Load();
-                    break;
-                case "DrMundo":
-                    MadeBy(Developer.RL244);
-                    champions.DrMundo.Load();
-                    break;
-                case "Volibear":
-                    MadeBy(Developer.RL244);
-                    champions.Volibear.Load();
-                    break;
-                /*case "Riven": 
-                    MadeBy(Developer.RL244);
-                    champions.Riven.Load();
-                    break;*/
-                case "Ahri":
-                    MadeBy(Developer.RL244);
-                    champions.Ahri.Load();
-                    break;
-                case "Corki":
-                    MadeBy(Developer.RL244);
-                    champions.Corki.Load();
-                    break;
-                case "Vayne":
-                    MadeBy(Developer.RL244);
-                    champions.Vayne.Load();
-                    break;
-                case "Kayle":
-                    MadeBy(Developer.RL244);
-                    champions.Kayle.Load();
-                    break;
-                case "Soraka":
-                    MadeBy(Developer.RL244);
-                    champions.Soraka.Load();
-                    break;
-                case "Olaf":
-                    MadeBy(Developer.RL244);
-                    champions.Olaf.Load();
-                    break;
-                case "Diana":
-                    MadeBy(Developer.RL244);
-                    champions.Diana.Load();
-                    break;
-                case "Shen":
-                    MadeBy(Developer.xcsoft);
-                    champions.Shen.Load();
-                    break;
-                case "Orianna":
-                    MadeBy(Developer.xcsoft);
-                    champions.Orianna.Load();
-                    break;
-                case "Sejuani":
-                    MadeBy(Developer.RL244);
-                    champions.Sejuani.Load();
-                    break;
-                case "Galio":
-                    MadeBy(Developer.RL244);
-                    champions.Galio.Load();
-                    break;
-                case "Nocturne":
-                    MadeBy(Developer.RL244);
-                    champions.Nocturne.Load();
-                    break;
-                case "Sona":
-                    MadeBy(Developer.RL244);
-                    champions.Sona.Load();
-                    break;
-                case "Pantheon":
-                    MadeBy(Developer.RL244);
-                    champions.Pantheon.Load();
-                    break;
-                case "Twitch":
-                    MadeBy(Developer.xcsoft);
-                    champions.Twitch.Load();
-                    break;
-                case "Ashe":
-                    MadeBy(Developer.RL244);
-                    champions.Ashe.Load();
-                    break;
-                case "Morgana":
-                    MadeBy(Developer.RL244);
-                    champions.Morgana.Load();
-                    break;
-                case "Alistar":
-                    MadeBy(Developer.RL244);
-                    champions.Alistar.Load();
-                    break;
-                /*case "Thresh": //WIP 쓰래쉬.. 챔프가없엉..아놔.. 100개넘게 챔프있는 아이디에 없는챔이라니..
-                    MadeBy(Developer.RL244);
-                    champions.Thresh.Load();
-                    break;*/
-                case "Swain":
-                    MadeBy(Developer.RL244);
-                    champions.Swain.Load();
-                    break;
-                case "Xerath":
-                    MadeBy(Developer.RL244);
-                    champions.Xerath.Load();
-                    break;
-                case "Varus":
-                    MadeBy(Developer.RL244);
-                    champions.Varus.Load();
-                    break;
-                case "Leona":
-                    MadeBy(Developer.RL244);
-                    champions.Leona.Load();
-                    break;
-                case "Malzahar":
-                    MadeBy(Developer.RL244);
-                    champions.Malzahar.Load();
-                    break;
-                case "Jayce":
-                    MadeBy(Developer.RL244);
-                    champions.Jayce.Load();
-                    break;
-                /*case "Ekko": Work In Progress (Almost done)
-                    MadeBy(Developer.RL244);
-                    champions.Ekko.Load();
-                    break;*/
-                case "Quinn":
-                    MadeBy(Developer.RL244);
-                    champions.Quinn.Load();
-                    break;
-                case "Skarner":
-                    MadeBy(Developer.RL244);
-                    champions.Skarner.Load();
-                    break;
-                case "Zilean":
-                    MadeBy(Developer.RL244);
-                    champions.Zilean.Load();
-                    break;
-                case "Udyr":
-                    MadeBy(Developer.RL244);
-                    champions.Udyr.Load();
-                    break;
-                case "Taric":
-                    MadeBy(Developer.RL244);
-                    champions.Taric.Load();
-                    break;
-                case "Braum":
-                    MadeBy(Developer.RL244);
-                    champions.Braum.Load();
-                    break;
-                default:
-                    AIO_Func.sendDebugMsg("(ChampLoader) Error");
+                if (champion.Name == AIO_Func.ChampionName)
+                {
+                    GetCredit(CreditDictionary[champion.Name]);
+                    champion.GetMethod("Load", BindingFlags.Public | BindingFlags.Static).Invoke(null, null);
+                    loaded = true;
+                }
+
+                if (loaded)
                     break;
             }
+
+            if (!loaded)
+                AIO_Func.sendDebugMsg("(ChampLoader) Error");
         }
 
-        static void MadeBy(Developer Developer)
+        private static Dictionary<string, Developer> CreditDictionary = new Dictionary<string, Developer>()
         {
-            AIO_Func.sendDebugMsg(ObjectManager.Player.ChampionName + " Made By '" + Developer.ToString() + "'.");
-            Notifications.AddNotification(ObjectManager.Player.ChampionName + " Made By '" + Developer.ToString() + "'.", 4000);
+            {"Aatrox", Developer.RL244},
+            {"Ahri", Developer.RL244},
+            {"Alistar", Developer.RL244},
+            {"Amumu", Developer.xcsoft},
+            {"Annie", Developer.xcsoft},
+            {"Ashe", Developer.RL244},
+            // Work In Progress
+            // {"Azir", Developer.RL244},
+            {"Blitzcrank", Developer.RL244},
+            {"Brand", Developer.RL244},
+            {"Braum", Developer.RL244},
+            {"Caitlyn", Developer.RL244},
+            {"Cassiopeia", Developer.RL244},
+            {"Chogath", Developer.Fakker},
+            {"Corki", Developer.RL244},
+            {"Darius", Developer.RL244},
+            {"Diana", Developer.RL244},
+            {"DrMundo", Developer.RL244},
+            // Work In Progress (Almost done)
+            // {"Ekko", Developer.RL244},
+            {"Evelynn", Developer.RL244},
+            {"Ezreal", Developer.RL244},
+            // Not listed originally. I don't know why not listed
+            // {"Fiddlesticks", Developer.RL244},
+            {"Fiora", Developer.RL244},
+            {"Galio", Developer.RL244},
+            {"Gangplank", Developer.RL244},
+            {"Garen", Developer.xcsoft},
+            {"Graves", Developer.Fakker},
+            {"Janna", Developer.xcsoft},
+            {"JarvanIV", Developer.RL244},
+            {"Jax", Developer.RL244},
+            {"Jayce", Developer.RL244},
+            {"Jinx", Developer.xcsoft},
+            {"Kalista", Developer.xcsoft},
+            {"Karma", Developer.RL244}, // Work In Progress
+            {"Karthus", Developer.xcsoft},
+            {"Kassadin", Developer.RL244},
+            {"Katarina", Developer.xcsoft},
+            {"Kayle", Developer.RL244},
+            {"Khazix", Developer.RL244},
+            {"KogMaw", Developer.RL244},
+            {"Leona", Developer.RL244},
+            {"Lulu", Developer.xcsoft},
+            {"Malzahar", Developer.RL244},
+            {"MasterYi", Developer.xcsoft},
+            {"MissFortune", Developer.RL244},
+            {"MonkeyKing", Developer.xcsoft},
+            {"Mordekaiser", Developer.RL244},
+            {"Morgana", Developer.RL244},
+            {"Nami", Developer.xcsoft},
+            {"Nasus", Developer.RL244},
+            {"Nautilus", Developer.xcsoft},
+            {"Nocturne", Developer.RL244},
+            {"Nunu", Developer.RL244},
+            {"Olaf", Developer.RL244},
+            {"Orianna", Developer.xcsoft},
+            {"Pantheon", Developer.RL244},
+            {"Quinn", Developer.RL244},
+            {"Renekton", Developer.RL244}, // Work In Progress
+            {"Rengar", Developer.RL244},
+            // {"Riven", Developer.RL244},
+            {"Ryze", Developer.xcsoft},
+            {"Sejuani", Developer.RL244},
+            {"Shen", Developer.xcsoft},
+            {"Shyvana", Developer.RL244},
+            {"Sion", Developer.xcsoft},
+            {"Sivir", Developer.Fakker},
+            {"Skarner", Developer.RL244},
+            {"Sona", Developer.RL244},
+            {"Soraka", Developer.RL244},
+            {"Swain", Developer.RL244},
+            {"Syndra", Developer.RL244}, // Work In Progress
+            {"Talon", Developer.RL244},
+            {"Taric", Developer.RL244},
+            {"Teemo", Developer.RL244},
+            // WIP 쓰래쉬.. 챔프가없엉..아놔.. 100개넘게 챔프있는 아이디에 없는챔이라니..
+            // {"Thresh", Developer.RL244},
+            {"Tristana", Developer.RL244},
+            {"Trundle", Developer.RL244},
+            {"Twitch", Developer.xcsoft},
+            {"Udyr", Developer.RL244},
+            {"Urgot", Developer.RL244},
+            {"Varus", Developer.RL244},
+            {"Vayne", Developer.RL244},
+            {"Veigar", Developer.RL244},
+            {"Vi", Developer.xcsoft},
+            {"Viktor", Developer.RL244},
+            {"Vladimir", Developer.xcsoft},
+            {"Volibear", Developer.RL244},
+            {"Warwick", Developer.RL244},
+            {"Xerath", Developer.RL244},
+            {"XinZhao", Developer.RL244},
+            {"Yasuo", Developer.RL244},
+            {"Yorick", Developer.RL244},
+            {"Zed", Developer.xcsoft}, //(Incomplete)
+            {"Zilean", Developer.RL244},
+            {"Zyra", Developer.RL244}
+        };
+
+        private static void GetCredit(Developer Developer)
+        {
+            string creditMsg = AIO_Func.ChampionName + " Made By '" + Developer.ToString() + "'.";
+
+            AIO_Func.sendDebugMsg(creditMsg);
+            Notifications.AddNotification(creditMsg, 4000);
         }
 
         /// <summary>
@@ -410,20 +162,26 @@ namespace ALL_In_One
         /// </summary>
         /// <param name="checkNamespace">체크할 네임스페이스를 기입하십시오.</param>
         /// <returns>플레이어의 챔피언의 이름과 같은 이름의 클래스가 있으면 true, 없으면 false를 반환합니다.</returns>
-        internal static bool champSupportedCheck(string checkNamespace)
+        internal static bool champSupportedCheck()
         {
-            try
+            string championName = AIO_Func.ChampionName;
+
+            if (CreditDictionary.ContainsKey(championName))
             {
-                AIO_Func.sendDebugMsg(Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " is supported.");
-                Notifications.AddNotification(Type.GetType(checkNamespace + ObjectManager.Player.ChampionName).Name + " is supported.", 4000);
+                string successMsg = championName + " is supported.";
+
+                AIO_Func.sendDebugMsg(successMsg);
+                Notifications.AddNotification(successMsg, 4000);
                 return true;
             }
-            catch
+            else
             {
-                AIO_Func.sendDebugMsg(ObjectManager.Player.ChampionName + " is not supported.");
-                Notifications.AddNotification(ObjectManager.Player.ChampionName + " is not supported.", 4000);
+                string failedMsg = championName + " is not supported.";
 
-                AIO_Menu.addItem("Sorry, " + ObjectManager.Player.ChampionName + " is not supported", null);
+                AIO_Func.sendDebugMsg(failedMsg);
+                Notifications.AddNotification(failedMsg, 4000);
+
+                AIO_Menu.addItem(failedMsg, null);
                 return false;
             }
         }

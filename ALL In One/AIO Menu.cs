@@ -16,6 +16,7 @@ namespace ALL_In_One
         /// 올인원 메인메뉴의 LeagueSharp.Common.Menu형식 객체입니다. 이 객체에 직접 접근하면 LeagueSharp.Common.Menu클래스의 메소드를 이용해 올인원 메뉴를 수정 할 수 있습니다.
         /// </summary>
         internal static Menu MainMenu_Manual;
+        internal static Menu SubMenu_Champion;
         internal static Orbwalking.Orbwalker Orbwalker;
 
         /// <summary>

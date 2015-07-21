@@ -16,15 +16,16 @@ namespace ALL_In_One
         {
             AIO_Menu.initialize();
 
-            if (!ChampLoader.champSupportedCheck("ALL_In_One.champions."))
+            if (!ChampLoader.champSupportedCheck())
                 return;
 
-            AIO_Menu.addSubMenu("Champion", "AIO: " + ObjectManager.Player.ChampionName);
+            AIO_Menu.addSubMenu("Champion", "AIO: " + AIO_Func.ChampionName);
 
             AIO_Menu.Champion.addOrbwalker();
             AIO_Menu.Champion.addTargetSelector();
 
-            ChampLoader.Load(ObjectManager.Player.ChampionName);
+            ChampLoader.Load(AIO_Func.ChampionName);
+
             AIO_Func.Load();
             utility.Activator.Load();
             utility.SetOrb.Load();
@@ -41,7 +42,7 @@ namespace ALL_In_One
 
             Drawing.OnDraw += Drawing_OnDraw;
             
-            AIO_Func.sendDebugMsg(ObjectManager.Player.ChampionName + " Loaded.");
+            AIO_Func.sendDebugMsg(AIO_Func.ChampionName + " Loaded.");
             AIO_Func.sendDebugMsg("Early Access.");
 
         }

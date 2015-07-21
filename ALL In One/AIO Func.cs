@@ -10,7 +10,8 @@ namespace ALL_In_One
     static class AIO_Func
     {
         internal static Menu Menu { get { return AIO_Menu.MainMenu_Manual.SubMenu("Champion"); } }
-        static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
+        public static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
+        public static string ChampionName { get { return ObjectManager.Player.ChampionName; } }
         static Obj_AI_Hero ShieldTarget;
         static Orbwalking.Orbwalker Orbwalker { get { return AIO_Menu.Orbwalker; } }
         static int AttackTime;

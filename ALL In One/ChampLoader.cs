@@ -87,7 +87,7 @@ namespace ALL_In_One
             {"Karma", Developer.RL244}, // Work In Progress
             {"Karthus", Developer.xcsoft},
             {"Kassadin", Developer.RL244},
-            {"Katarina", Developer.xcsoft},
+            // {"Katarina", Developer.xcsoft},
             {"Kayle", Developer.RL244},
             {"Khazix", Developer.RL244},
             {"KogMaw", Developer.RL244},
@@ -154,7 +154,7 @@ namespace ALL_In_One
             string creditMsg = AIO_Func.ChampionName + " Made By '" + Developer.ToString() + "'.";
 
             AIO_Func.sendDebugMsg(creditMsg);
-            Notifications.AddNotification(creditMsg, 4000);
+            //Notifications.AddNotification(creditMsg, 4000);
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace ALL_In_One
                 string successMsg = championName + " is supported.";
 
                 AIO_Func.sendDebugMsg(successMsg);
-                Notifications.AddNotification(successMsg, 4000);
+                //Notifications.AddNotification(successMsg, 4000);
                 return true;
             }
             else
@@ -179,7 +179,7 @@ namespace ALL_In_One
                 string failedMsg = championName + " is not supported.";
 
                 AIO_Func.sendDebugMsg(failedMsg);
-                Notifications.AddNotification(failedMsg, 4000);
+                //Notifications.AddNotification(failedMsg, 4000);
 
                 AIO_Menu.addItem(failedMsg, null);
                 return false;

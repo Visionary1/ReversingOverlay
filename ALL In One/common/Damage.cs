@@ -167,7 +167,7 @@ namespace ALL_In_One
                                 (target.HasBuff2("quinnw_cosmetic") ? new float[] { 25/35/45/55/65/75/85/95/105/115/125/135/145/155/170/185/200/215 }[source.Level - 1] + 0.5 * source.FlatPhysicalDamageMod : 0)),
             };
             AttackPassives.Add(p);
-            #endregion*/
+            #endregion
             
    #region Kalista // by Visionary
    p = new PassiveDamage
@@ -182,7 +182,7 @@ namespace ALL_In_One
      0.9 * (source.BaseAttackDamage),
    };
    AttackPassives.Add(p);
-   #endregion 
+   #endregion */
    
    
             #region MasterYi // By Rl244

@@ -152,7 +152,7 @@ namespace ALL_In_One
 
             #endregion
 
-
+   
             /*
             #region Quinn // By Rl244
             p = new PassiveDamage
@@ -168,7 +168,23 @@ namespace ALL_In_One
             };
             AttackPassives.Add(p);
             #endregion*/
-
+            
+   #region Kalista // by Visionary
+   p = new PassiveDamage
+   {
+    ChampionName = "Kalista",
+    IsActive = (source, target),
+    GetDamage = 
+    (source, target) => 
+    (float)
+    source.CalcDamage(
+     target, DamageType.Physical,
+     0.9 * (source.GetAutoAttackDamage2),
+   };
+   AttackPassives.Add(p);
+   #endregion 
+   
+   
             #region MasterYi // By Rl244
             p = new PassiveDamage
             {

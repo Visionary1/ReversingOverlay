@@ -179,7 +179,7 @@ namespace ALL_In_One
     (float)
     source.CalcDamage(
      target, DamageType.Physical,
-     0.9 * (source.GetAutoAttackDamage2),
+     0.9 * (source.BaseAttackDamage),
    };
    AttackPassives.Add(p);
    #endregion 
